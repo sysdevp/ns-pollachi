@@ -1,0 +1,7 @@
+$(document).on("keyup","input",function() {
+	var string = $( this).val();
+	var Capitalized = string.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+ 	$(this).val(Capitalized);
+// var Capitalized = string.charAt(0).toUpperCase() + string.slice(1);
+
+});
