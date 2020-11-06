@@ -53,7 +53,7 @@
         </div>
       </form>
     </div>
-    <script src="<?php echo e(asset('assets/js/master/capitalize.js')); ?>"></script>
+    <!-- <script src="<?php echo e(asset('assets/js/master/capitalize.js')); ?>"></script> -->
     <script type="text/javascript">
       $(document).on('input','.name',function(){
 
