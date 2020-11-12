@@ -200,7 +200,7 @@ table, th, td {
           
           <div class="col-md-12">
             
-          <table id="receivable_bill" class="table table-striped table-bordered table-responsive" style="width: 100%;">
+          <table id="receivable_bill" class="table table-striped table-bordered" style="width: 100%;">
                   <thead>
                     <th> S.no </th>
                     <th id="bill_no"> Bill.no </th>

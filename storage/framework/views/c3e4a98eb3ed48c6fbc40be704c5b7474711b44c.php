@@ -232,7 +232,7 @@ table, th, td {
 
         <div class="form-row">
           
-          <table class="table table-striped table-bordered table-responsive" id="payable_party">
+          <table class="table table-striped table-bordered" id="payable_party">
                   <thead>
                     <th> S.no </th>
                     <th id="bill_no"> Bill.no </th>
