@@ -117,7 +117,7 @@
         </div>
 
         <div class="col-md-7 text-right">
-          <button class="btn btn-success update" name="add" type="button">Update</button>
+          <button class="btn btn-success update" name="update" id="update" type="button">Update</button>
         </div>
 
         <div class="col-md-8">
@@ -287,7 +287,6 @@ function browse_items()
         data: { browse_item: browse_item, brand: brand, categories: categories},             
              
         success: function(data){
-          console.log(data);
           $('.row_brand').remove(); 
         $('.row_category').remove(); 
         $(".append_item").html(data);
@@ -297,16 +296,28 @@ function browse_items()
 
 function up_percents()
 {
-  $('.row_category').each(function(key){
+  
+}
+
+$(document).on('click','.update',function(){
+$('.row_category').each(function(key){
     var count = $(this).attr('id');
 
     var selling_price = $('.append_item_selling_price'+count).val();
     var mrp = $('.append_item_mrp'+count).val();
-
     var up_percent = $('.up_percent').val();
 
+    var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
+    var total = parseInt(selling_price) + parseFloat(percentage_val);
+
+    if(parseFloat(total) < parseFloat(mrp))
+    {
+      $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
+      $('.up_percent').val('');
+    }
+
   });
-}
+});
 
 </script>
 @endsection
