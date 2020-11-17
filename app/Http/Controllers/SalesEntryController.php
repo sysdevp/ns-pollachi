@@ -16,6 +16,8 @@ use App\Models\ItemTaxDetails;
 use App\Models\ItemBracodeDetails;
 use App\Models\ExpenseType;
 use App\Models\Tax;
+use App\Models\Location;
+use App\Models\AccountHead;
 use App\Models\Customer;
 use Carbon\Carbon;
 use App\Models\SaleOrder;
@@ -125,13 +127,14 @@ class SalesEntryController extends Controller
         $brand = Brand::all();
         $expense_type = ExpenseType::all();
         $estimation = Estimation::all();
-        $saleorder = SaleOrder::all();
-        $sale_estimation = SaleEstimation::all();
-        $delivery_note = DeliveryNote::all();
+        $saleorder = SaleOrder::where('cancel_status',0)->get();
+        $sale_estimation = SaleEstimation::where('cancel_status',0)->get();
+        $delivery_note = DeliveryNote::where('cancel_status',0)->get();
         $customer = Customer::all();
         $tax = Tax::all();
         $sales_man = SalesMan::all();
-        
+        $account_head = AccountHead::all();
+        $location = Location::all();
 
         // $voucher_num=SaleEntry::orderBy('s_no','DESC')
         //                    ->select('s_no')
@@ -171,7 +174,7 @@ class SalesEntryController extends Controller
         // $voucher_no = str_random(6);
 
         return view('admin.sales_entry.add',compact('date','categories','sale_estimation',
-'delivery_note','voucher_no','supplier','item','agent','brand','expense_type','estimation','saleorder','customer','tax','sales_man'));
+'delivery_note','voucher_no','supplier','item','agent','brand','expense_type','estimation','saleorder','customer','tax','sales_man','account_head','location'));
     }
 
     /**
@@ -238,6 +241,7 @@ class SalesEntryController extends Controller
          $sale_entry->overall_discount = $request->overall_discount;
          $sale_entry->total_net_value = $request->total_price;
          $sale_entry->round_off = $request->round_off;
+         $sale_entry->location = $request->location;
 
          $sale_entry->save();
 
@@ -264,8 +268,12 @@ class SalesEntryController extends Controller
             $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];
             $sale_entry_items->rate_inclusive_tax = $request->inclusive[$i];
             $sale_entry_items->qty = $request->quantity[$i];
+            $sale_entry_items->actual_qty = $request->quantity[$i];
             $sale_entry_items->remaining_qty = $request->quantity[$i];
+            $sale_entry_items->remaining_after_credit = $request->quantity[$i];
             $sale_entry_items->rejected_qty = 0;
+            $sale_entry_items->credited_qty = 0;
+            $sale_entry_items->r_in_credited_qty = 0;
             $sale_entry_items->uom_id = $request->uom[$i];
             $sale_entry_items->discount = $request->discount[$i];
 
@@ -318,6 +326,72 @@ class SalesEntryController extends Controller
                $tax_details->save();
 
             }
+
+
+        $sale_entry_no = $sale_entry->s_no;
+        
+        $sale_entry_print_data = SaleEntry::where('s_no',$sale_entry_no)->first();
+        $address = AddressDetails::where('address_ref_id',$sale_entry_print_data->customer_id)
+                                 ->where('address_table','=','Cus')
+                                 ->first();
+
+        $sale_entry_item_print_data = SaleEntryItem::where('s_no',$sale_entry_no)
+                                                    ->get();
+
+        $sale_entry_expense_print_data = SaleEntryExpense::where('s_no',$sale_entry_no)->get(); 
+
+        $amnt = $sale_entry_print_data->total_net_value;
+
+        //amount in words
+
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.sales_entry.print',compact('sale_entry_print_data','address','sale_entry_item_print_data','sale_entry_expense_print_data','result','points'));
+        }
+
 
         return Redirect::back()->with('success', 'Saved Successfully');
     }
@@ -452,11 +526,13 @@ class SalesEntryController extends Controller
         $brand = Brand::all();
         $expense_type = ExpenseType::all();
         $estimation = Estimation::all();
-        $saleorder = SaleOrder::all();
-        $sale_estimation = SaleEstimation::all();
-        $delivery_note = DeliveryNote::all();
+        $saleorder = SaleOrder::where('cancel_status',0)->get();
+        $sale_estimation = SaleEstimation::where('cancel_status',0)->get();
+        $delivery_note = DeliveryNote::where('cancel_status',0)->get();
         $customer = Customer::all();
         $sales_man = SalesMan::all();
+        $account_head = AccountHead::all();
+        $location = Location::all();
 
         $sale_entry = SaleEntry::where('s_no',$id)->first();
         $sale_entry_items = SaleEntryItem::where('s_no',$id)->get();
@@ -536,7 +612,7 @@ class SalesEntryController extends Controller
         $item_discount_sum = 0;
         foreach($sale_entry_items as $key => $value)  
         {
-            $item_amount[] = $value->qty * $value->rate_exclusive_tax;
+            $item_amount[] = $value->remaining_after_credit * $value->rate_exclusive_tax;
             $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
             $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $value->discount;
 
@@ -550,7 +626,7 @@ class SalesEntryController extends Controller
                                     ->orderBy('s_date','DESC')
                                     ->first();
 
-            $amount = $item_data->qty * $item_data->rate_exclusive_tax;
+            $amount = $item_data->remaining_after_credit * $item_data->rate_exclusive_tax;
             $gst_rs = $amount * $item_data->gst / 100;
             $net_value[] = $amount + $gst_rs - $item_data->discount;
 
@@ -559,7 +635,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location'));
     }
 
     /**
@@ -603,6 +679,7 @@ class SalesEntryController extends Controller
          $sale_entry->overall_discount = $request->overall_discount;
          $sale_entry->total_net_value = $request->total_price;
          $sale_entry->round_off = $request->round_off;
+         $sale_entry->location = $request->location;
 
          $sale_entry->save();
 
@@ -633,6 +710,7 @@ class SalesEntryController extends Controller
             $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];
             $sale_entry_items->rate_inclusive_tax = $request->inclusive[$i];
             $sale_entry_items->qty = $request->quantity[$i];
+            $sale_entry_items->actual_qty = $request->quantity[$i];
             $sale_entry_items->remaining_qty = @$request->remaining_qty[$i];
             $sale_entry_items->rejected_qty = @$request->rejected_item_qty[$i];
             $sale_entry_items->uom_id = $request->uom[$i];
@@ -688,6 +766,72 @@ class SalesEntryController extends Controller
 
             }
 
+
+        $sale_entry_no = $sale_entry->s_no;
+        
+        $sale_entry_print_data = SaleEntry::where('s_no',$sale_entry_no)->first();
+        $address = AddressDetails::where('address_ref_id',$sale_entry_print_data->customer_id)
+                                 ->where('address_table','=','Cus')
+                                 ->first();
+
+        $sale_entry_item_print_data = SaleEntryItem::where('s_no',$sale_entry_no)
+                                                    ->get();
+
+        $sale_entry_expense_print_data = SaleEntryExpense::where('s_no',$sale_entry_no)->get(); 
+
+        $amnt = $sale_entry_print_data->total_net_value;
+
+        //amount in words
+
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.sales_entry.print',compact('sale_entry_print_data','address','sale_entry_item_print_data','sale_entry_expense_print_data','result','points'));
+        }
+
+
         return Redirect::back()->with('success', 'Updated Successfully');
     }
 
@@ -707,19 +851,29 @@ class SalesEntryController extends Controller
         $rejection_in = RejectionIn::where('s_no',$id);
         $rejection_in_item = RejectionInItem::where('s_no',$id);
         $rejection_in_expense = RejectionInExpense::where('s_no',$id);
+
+        $credit_note = CreditNote::where('s_no',$id);
+        $credit_note_item = CreditNoteItem::where('s_no',$id);
+        $credit_note_expense = CreditNoteExpense::where('s_no',$id);
         
         if($sale_entry_data)
         {
             $sale_entry_data->delete();
+            $rejection_in->delete();
+            $credit_note->delete();
         }
          if($sale_entry_item_data)
          {
             $sale_entry_item_data->delete();
+            $rejection_in_item->delete();
+            $credit_note_item->delete();
          }
 
          if($sale_entry_expense_data)
          {
             $sale_entry_expense_data->delete();
+            $rejection_in_expense->delete();
+            $credit_note_expense->delete();
          }
          if($sale_entry_tax_data)
          {
@@ -1581,7 +1735,7 @@ $result=[];
         $item = Item::all();
         $agent = Agent::all();
         $brand = Brand::all();
-        $expense_type = ExpenseType::all();
+        $expense_type = AccountHead::all();
         $estimation =Estimation::all();
 
         // $voucher_num=PurchaseEntry::orderBy('p_no','DESC')
@@ -1608,6 +1762,7 @@ $result=[];
         $sale_estimation_tax = SaleEstimationTax::where('sale_estimation_no',$se_no)->get();
 
         $round_off = $sale_estimation->round_off;
+        $overall_discount = $sale_estimation->overall_discount;
          $total_net_value = $sale_estimation->total_net_value;
          $date=$sale_estimation->sale_estimation_date;
 
@@ -1663,20 +1818,20 @@ $result=[];
         foreach($sale_estimation_expense as $key => $value)  
         {
             $expense_cnt++;
-        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->type) && !empty($value->expense_types->type))<option value="'.$value->expense_types->id.'">'.$value->expense_types->type.'</option>';
+        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->name) && !empty($value->expense_types->name))<option value="'.$value->expense_types->id.'">'.$value->expense_types->name.'</option>';
                 foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-                    $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+                    $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     if($expense_cnt == 0)
     {
         $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>';
         foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-        $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+        $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     $tax_append = "";
@@ -1689,7 +1844,7 @@ $result=[];
             </div>';
     }
 
-        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'expense_cnt'=>$expense_cnt,'date'=>$date,'tax_append' =>$tax_append);
+        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'expense_cnt'=>$expense_cnt,'date'=>$date,'tax_append' =>$tax_append,'overall_discount' => $overall_discount);
         echo json_encode($result_array);exit;
     echo $table_tbody;exit;  
 
@@ -1720,7 +1875,7 @@ echo "<pre>"; print_r($data); exit;
         $item = Item::all();
         $agent = Agent::all();
         $brand = Brand::all();
-        $expense_type = ExpenseType::all();
+        $expense_type = AccountHead::all();
         $estimation =Estimation::all();
 
         // $voucher_num=PurchaseEntry::orderBy('p_no','DESC')
@@ -1747,6 +1902,7 @@ echo "<pre>"; print_r($data); exit;
         $saleorder_tax = SaleOrderTax::where('so_no',$so_no)->get();
 
         $round_off = $saleorder->round_off;
+        $overall_discount = $saleorder->overall_discount;
          $total_net_value = $saleorder->total_net_value;
          $sale_type = $saleorder->sale_type;
          $date_saleorder = $saleorder->so_date;
@@ -1805,20 +1961,20 @@ echo "<pre>"; print_r($data); exit;
         foreach($saleorder_expense as $key => $value)  
         {
             $expense_cnt++;
-        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->type) && !empty($value->expense_types->type))<option value="'.$value->expense_types->id.'">'.$value->expense_types->type.'</option>';
+        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->name) && !empty($value->expense_types->name))<option value="'.$value->expense_types->id.'">'.$value->expense_types->name.'</option>';
                 foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-                    $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+                    $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     if($expense_cnt == 0)
     {
         $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>';
         foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-        $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+        $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     $tax_append = "";
@@ -1831,7 +1987,7 @@ echo "<pre>"; print_r($data); exit;
             </div>';
     }
 
-        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'date_saleorder'=>$date_saleorder,'sale_type'=>$sale_type,'date_estimation'=>$date_estimation,'estimation_no'=>$estimation_no,'expense_cnt'=>$expense_cnt,'tax_append' =>$tax_append);
+        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'date_saleorder'=>$date_saleorder,'sale_type'=>$sale_type,'date_estimation'=>$date_estimation,'estimation_no'=>$estimation_no,'expense_cnt'=>$expense_cnt,'tax_append' =>$tax_append,'overall_discount' => $overall_discount);
         echo json_encode($result_array);exit;
     echo $table_tbody;exit;  
 
@@ -1863,7 +2019,7 @@ echo "<pre>"; print_r($data); exit;
         $item = Item::all();
         $agent = Agent::all();
         $brand = Brand::all();
-        $expense_type = ExpenseType::all();
+        $expense_type = AccountHead::all();
         $estimation =Estimation::all();
 
         // $voucher_num=PurchaseEntry::orderBy('p_no','DESC')
@@ -1890,6 +2046,7 @@ echo "<pre>"; print_r($data); exit;
         $delivery_note_tax = DeliveryNoteTax::where('d_no',$d_no)->get();
 
         $round_off = $delivery_note->round_off;
+        $overall_discount = $delivery_note->overall_discount;
          $total_net_value = $delivery_note->total_net_value;
          $date=$delivery_note->d_date;
 
@@ -1945,20 +2102,20 @@ echo "<pre>"; print_r($data); exit;
         foreach($delivery_note_expense as $key => $value)  
         {
             $expense_cnt++;
-        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->type) && !empty($value->expense_types->type))<option value="'.$value->expense_types->id.'">'.$value->expense_types->type.'</option>';
+        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->name) && !empty($value->expense_types->name))<option value="'.$value->expense_types->id.'">'.$value->expense_types->name.'</option>';
                 foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-                    $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+                    $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     if($expense_cnt == 0)
     {
         $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>';
         foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-        $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+        $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     $tax_append = "";
@@ -1971,7 +2128,7 @@ echo "<pre>"; print_r($data); exit;
             </div>';
     }
 
-        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'expense_cnt'=>$expense_cnt,'date'=>$date,'tax_append' =>$tax_append);
+        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'expense_cnt'=>$expense_cnt,'date'=>$date,'tax_append' =>$tax_append,'overall_discount' => $overall_discount);
         echo json_encode($result_array);exit;
     echo $table_tbody;exit;  
 

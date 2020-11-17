@@ -17,6 +17,8 @@ use App\Models\ItemTaxDetails;
 use App\Models\ItemBracodeDetails;
 use App\Models\ExpenseType;
 use App\Models\Tax;
+use App\Models\Location;
+use App\Models\AccountHead;
 use Carbon\Carbon;
 use App\Models\ReceiptNote; 
 use App\Models\ReceiptNoteItem;
@@ -120,12 +122,13 @@ class ReceiptNoteController extends Controller
         $agent = Agent::all();
         $brand = Brand::all();
         $expense_type = ExpenseType::all();
-        $estimation = Estimation::all();
-        $purchaseorder = Purchase_Order::all();
-        $rejection_out = RejectionOut::where('status',0)->get();
+        $estimation = Estimation::where('status',0)->get();
+        $purchaseorder = Purchase_Order::where('status',0)->get();
+        $rejection_out = RejectionOut::where('cancel_status',0)->get();
         $tax = Tax::all();
+        $account_head = AccountHead::all();
+        $location = Location::all();
         
-
         // $voucher_num=ReceiptNote::orderBy('rn_no','DESC')
         //                    ->select('rn_no')
         //                    ->first();
@@ -163,7 +166,7 @@ class ReceiptNoteController extends Controller
          }
         // $voucher_no = str_random(6);
 
-        return view('admin.receipt_note.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','purchaseorder','rejection_out','tax'));
+        return view('admin.receipt_note.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','purchaseorder','rejection_out','tax','account_head','location'));
     }
 
     /**
@@ -253,6 +256,7 @@ class ReceiptNoteController extends Controller
          $receipt_note->overall_discount = $request->overall_discount;
          $receipt_note->total_net_value = $request->total_price;
          $receipt_note->round_off = $request->round_off;
+         $receipt_note->location = $request->location;
 
          $receipt_note->save();
 
@@ -281,7 +285,8 @@ class ReceiptNoteController extends Controller
             $receipt_note_items->qty = $request->quantity[$i];
             $receipt_note_items->remaining_qty = $request->quantity[$i];
             $receipt_note_items->rejected_qty = 0;
-            $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+            $receipt_note_items->debited_qty = 0;
+            // $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
             $receipt_note_items->uom_id = $request->uom[$i];
             $receipt_note_items->discount = $request->discount[$i];
 
@@ -334,6 +339,72 @@ class ReceiptNoteController extends Controller
                $tax_details->save();
 
             }
+
+
+        $receipt_note_no = $receipt_note->rn_no;
+        
+        $receipt_note_print_data = ReceiptNote::where('rn_no',$receipt_note_no)->first();
+        $address = AddressDetails::where('address_ref_id',$receipt_note_print_data->supplier_id)
+                                 ->where('address_table','=','Supplier')
+                                 ->first();
+
+        $receipt_note_item_print_data = ReceiptNoteItem::where('rn_no',$receipt_note_no)
+                                                    ->get();
+
+        $receipt_note_expense_print_data = ReceiptNoteExpense::where('rn_no',$receipt_note_no)->get(); 
+
+        $amnt = $receipt_note_print_data->total_net_value;
+
+        //amount in words
+
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.receipt_note.print',compact('receipt_note_print_data','address','receipt_note_item_print_data','receipt_note_expense_print_data','result','points'));
+        }
+
 
         return Redirect::back()->with('success', 'Saved Successfully');
     }
@@ -468,9 +539,11 @@ class ReceiptNoteController extends Controller
         $agent = Agent::all();
         $brand = Brand::all();
         $expense_type = ExpenseType::all();
-        $estimation = Estimation::all();
-        $purchaseorders = Purchase_Order::all();
-        $rejection_out = RejectionOut::where('status',0)->get();
+        $estimation = Estimation::where('status',0)->get();
+        $purchaseorders = Purchase_Order::where('status',0)->get();
+        $rejection_out = RejectionOut::where('cancel_status',0)->get();
+        $account_head = AccountHead::all();
+        $location = Location::all();
 
         $receipt_note = ReceiptNote::where('rn_no',$id)->first();
         $receipt_note_items = ReceiptNoteItem::where('rn_no',$id)->get();
@@ -604,7 +677,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorder','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax'));
+        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorder','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location'));
     }
 
     /**
@@ -669,6 +742,7 @@ class ReceiptNoteController extends Controller
          $receipt_note->overall_discount = $request->overall_discount;
          $receipt_note->total_net_value = $request->total_price;
          $receipt_note->round_off = $request->round_off;
+         $receipt_note->location = $request->location;
 
          $receipt_note->save();
 
@@ -701,6 +775,8 @@ class ReceiptNoteController extends Controller
             $receipt_note_items->qty = $request->quantity[$i];
             $receipt_note_items->remaining_qty = $request->quantity[$i];
             $receipt_note_items->rejected_qty = 0;
+            $receipt_note_items->debited_qty = 0;
+            // $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
             $receipt_note_items->uom_id = $request->uom[$i];
             $receipt_note_items->discount = $request->discount[$i];
 
@@ -753,6 +829,73 @@ class ReceiptNoteController extends Controller
                $tax_details->save();
 
             }
+
+
+            $receipt_note_no = $receipt_note->rn_no;
+        
+        $receipt_note_print_data = ReceiptNote::where('rn_no',$receipt_note_no)->first();
+        $address = AddressDetails::where('address_ref_id',$receipt_note_print_data->supplier_id)
+                                 ->where('address_table','=','Supplier')
+                                 ->first();
+
+        $receipt_note_item_print_data = ReceiptNoteItem::where('rn_no',$receipt_note_no)
+                                                    ->get();
+
+        $receipt_note_expense_print_data = ReceiptNoteExpense::where('rn_no',$receipt_note_no)->get(); 
+
+        $amnt = $receipt_note_print_data->total_net_value;
+
+        //amount in words
+
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.receipt_note.print',compact('receipt_note_print_data','address','receipt_note_item_print_data','receipt_note_expense_print_data','result','points'));
+        }
+
+
         return Redirect::back()->with('success', 'Updated Successfully');
     }
 
@@ -1639,7 +1782,7 @@ $result=[];
         $item = Item::all();
         $agent = Agent::all();
         $brand = Brand::all();
-        $expense_type = ExpenseType::all();
+        $expense_type = AccountHead::all();
         $estimation =Estimation::all();
 
         // $voucher_num=ReceiptNote::orderBy('rn_no','DESC')
@@ -1665,7 +1808,8 @@ $result=[];
         $purchaseorder_expense = PurchaseOrderExpense::where('po_no',$po_no)->get();
         $purchaseorder_tax = PurchaseOrderTax::where('po_no',$po_no)->get();
 
-        $round_off = $purchaseorder->round_off;
+         $round_off = $purchaseorder->round_off;
+         $overall_discount = $purchaseorder->overall_discount;
          $total_net_value = $purchaseorder->total_net_value;
          $purchase_type = $purchaseorder->purchase_type;
          $date_purchaseorder = $purchaseorder->po_date;
@@ -1724,20 +1868,20 @@ $result=[];
         foreach($purchaseorder_expense as $key => $value)  
         {
             $expense_cnt++;
-        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->type) && !empty($value->expense_types->type))<option value="'.$value->expense_types->id.'">'.$value->expense_types->type.'</option>';
+        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->name) && !empty($value->expense_types->name))<option value="'.$value->expense_types->id.'">'.$value->expense_types->name.'</option>';
                 foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-                    $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+                    $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     if($expense_cnt == 0)
     {
         $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>';
         foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-        $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+        $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     $tax_append = "";
@@ -1750,7 +1894,7 @@ $result=[];
             </div>';
     }
 
-        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'date_purchaseorder'=>$date_purchaseorder,'purchase_type'=>$purchase_type,'date_estimation'=>$date_estimation,'estimation_no'=>$estimation_no,'expense_cnt'=>$expense_cnt,'tax_append'=>$tax_append);
+        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'date_purchaseorder'=>$date_purchaseorder,'purchase_type'=>$purchase_type,'date_estimation'=>$date_estimation,'estimation_no'=>$estimation_no,'expense_cnt'=>$expense_cnt,'tax_append'=>$tax_append,'overall_discount' => $overall_discount);
         echo json_encode($result_array);exit;
     echo $table_tbody;exit;  
 
@@ -1786,7 +1930,7 @@ echo "<pre>"; print_r($data); exit;
         $item = Item::all();
         $agent = Agent::all();
         $brand = Brand::all();
-        $expense_type = ExpenseType::all();
+        $expense_type = AccountHead::all();
         $estimation =Estimation::all();
 
         // $voucher_num=ReceiptNote::orderBy('rn_no','DESC')
@@ -1813,6 +1957,7 @@ echo "<pre>"; print_r($data); exit;
         $estimation_tax = EstimationTax::where('estimation_no',$estimation_no)->get();
 
         $round_off = $estimation->round_off;
+        $overall_discount = $estimation->overall_discount;
          $total_net_value = $estimation->total_net_value;
          $date_estimation = $estimation->estimation_date;
          $estimation_no = $estimation->estimation_no;
@@ -1869,20 +2014,20 @@ echo "<pre>"; print_r($data); exit;
         foreach($estimation_expense as $key => $value)  
         {
             $expense_cnt++;
-        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->type) && !empty($value->expense_types->type))<option value="'.$value->expense_types->id.'">'.$value->expense_types->type.'</option>';
+        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]">@if(isset($value->expense_types->name) && !empty($value->expense_types->name))<option value="'.$value->expense_types->id.'">'.$value->expense_types->name.'</option>';
                 foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-                    $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+                    $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     if($expense_cnt == 0)
     {
         $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>';
         foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-        $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
+        $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     }
 
     $tax_append = "";
@@ -1895,7 +2040,7 @@ echo "<pre>"; print_r($data); exit;
             </div>';
     }
 
-        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'date_estimation'=>$date_estimation,'estimation_no'=>$estimation_no,'expense_cnt'=>$expense_cnt,'tax_append' =>$tax_append);
+        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'date_estimation'=>$date_estimation,'estimation_no'=>$estimation_no,'expense_cnt'=>$expense_cnt,'tax_append' =>$tax_append,'overall_discount' => $overall_discount);
         echo json_encode($result_array);exit;
     echo $table_tbody;exit;  
 
@@ -1926,7 +2071,7 @@ echo "<pre>"; print_r($data); exit;
         $item = Item::all();
         $agent = Agent::all();
         $brand = Brand::all();
-        $expense_type = ExpenseType::all();
+        $expense_type = AccountHead::all();
         $estimation =Estimation::all();
 
         // $voucher_num=PurchaseEntry::orderBy('p_no','DESC')
@@ -1952,6 +2097,7 @@ echo "<pre>"; print_r($data); exit;
         $rejection_out_expense = RejectionOutExpense::where('r_out_no',$r_out_no)->get();
 
         $round_off = $rejection_out->round_off;
+        $overall_discount = $rejection_out->overall_discount;
          $total_net_value = $rejection_out->total_net_value;
          $date_rejection_out = $rejection_out->r_out_date;
 
@@ -2007,11 +2153,11 @@ echo "<pre>"; print_r($data); exit;
         foreach($rejection_out_expense as $key => $value)  
         {
             $expense_cnt++;
-        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" readonly name="expense_type[]">@if(isset($value->expense_types->type) && !empty($value->expense_types->type))<option value="'.$value->expense_types->id.'">'.$value->expense_types->type.'</option>';
+        $expense_typess.= '<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" readonly name="expense_type[]">@if(isset($value->expense_types->name) && !empty($value->expense_types->name))<option value="'.$value->expense_types->id.'">'.$value->expense_types->name.'</option>';
                 foreach($expense_type as $expense_types){
-                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->type.'</option>';
+                    $expense_typess.='<option value="'.$expense_types->id.'">'.$expense_types->name.'</option>';
                 }
-                    $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" readonly pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br></div></div>' ;
+                    $expense_typess.='</select></div><a href="{{ route("account_head.create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" readonly pattern="[0-9]{0,100}" title="Numbers Only" value="'.$value->expense_amount.'"></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br></div></div>' ;
     }
 
     // if($expense_cnt == 0)
@@ -2023,7 +2169,7 @@ echo "<pre>"; print_r($data); exit;
     //     $expense_typess.='</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>' ;
     // }
 
-        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'expense_cnt'=>$expense_cnt,'date_rejection_out'=>$date_rejection_out);
+        $result_array=array('status'=>$status,'data'=>$table_tbody,'item_amount_sum'=>$item_amount_sum,'item_net_value_sum'=>$item_net_value_sum,'item_gst_rs_sum'=>$item_gst_rs_sum,'item_discount_sum'=>$item_discount_sum,'round_off'=>$round_off,'total_net_value'=>$total_net_value,'expense_typess'=>$expense_typess,'expense_cnt'=>$expense_cnt,'date_rejection_out'=>$date_rejection_out,'overall_discount' => $overall_discount);
         echo json_encode($result_array);exit;
     echo $table_tbody;exit;  
 

@@ -149,6 +149,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <input type="radio" name="sale_type" value="0">
                     <label style="font-family: Times new roman;">Credit Sale</label>
                   </div>
+
+                  <div class="col-md-2">
+                    <label style="font-family: Times new roman;">Company Location</label><br>
+                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location">
+                           <option value="">Choose Location</option>
+                           @foreach($location as $value)
+                           <option value="{{ $value->id }}">{{ $value->name }}</option>
+                           @endforeach
+                        </select>
+                   
+                  </div>
+
                 </div>
                 <br>
     
@@ -531,12 +543,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -584,7 +596,7 @@ table, th, td {
                       </div> -->
 
                        
-                       <div class="row col-md-12 taxes">
+                       <div class="row col-md-12 taxes mb-3">
                         @foreach($tax as $value)
                          <div class="col-md-2">
                            <label style="font-family: Times new roman;">{{ $value->name }}</label>
@@ -598,9 +610,18 @@ table, th, td {
 
                        </div>
 
-                       <div class="col-md-12 text-center mt-5 mb-5">
-                          <input type="submit" class="btn btn-success save" name="save" value="Save">
-                          </div>
+                       <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
+
+                          </p>
+                          
+                        </div>
+
+                      </div>
       </form>
                        
         <script type="text/javascript">
@@ -2366,11 +2387,9 @@ else
 }
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2382,10 +2401,10 @@ var total_net_price=calculate_total_net_price();
 var total_amount=calculate_total_amount();
 var total_gst=calculate_total_gst();
 $("#total_gst").val(total_gst.toFixed(2));
-    $("#igst").val(total_gst.toFixed(2));
-    var half_gst = parseFloat(total_gst)/2;
-    $("#cgst").val(half_gst.toFixed(2));
-    $("#sgst").val(half_gst.toFixed(2));
+$("#igst").val(total_gst.toFixed(2));
+var half_gst = parseFloat(total_gst)/2;
+$("#cgst").val(half_gst.toFixed(2));
+$("#sgst").val(half_gst.toFixed(2));
 var q=calculate_total_discount();
 $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));

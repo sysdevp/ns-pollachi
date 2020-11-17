@@ -19,7 +19,7 @@
       </div>
     </div>
     <!-- card header end@ -->
-    <div class="card-body">
+    <div class="card-body" id="DivIdToPrint">
       <table id="master" class="table table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
@@ -82,6 +82,7 @@
       </table>
 
     </div>
+    
     <!-- card body end@ -->
   </div>
 </div>

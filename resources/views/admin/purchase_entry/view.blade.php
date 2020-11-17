@@ -33,6 +33,7 @@
             <th>Receipt Note No </th>
             <th>Receipt Note Date </th>
             <th>Supplier Name</th>
+            <th>Location </th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
             <th>Total Expense</th>
@@ -59,6 +60,7 @@
               @else
               <td></td>
               @endif
+              <td>{{ @$value->locations->name }}</td>
               <td>{{ $total_discount[$key] }}</td>
               <!-- <td>{{ $value->round_off }}</td> -->
               <td>{{ $expense_total[$key] }}</td>

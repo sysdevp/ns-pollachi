@@ -176,6 +176,17 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     @endif
                   </div>
 
+                  <div class="col-md-2">
+                    <label style="font-family: Times new roman;">Company Location</label><br>
+                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location">
+                           <option value="{{ @$saleorder->location }}">{{ @$saleorder->locations->name }}</option>
+                           @foreach($location as $value)
+                           <option value="{{ $value->id }}">{{ $value->name }}</option>
+                           @endforeach
+                        </select>
+                   
+                  </div>
+
                               </div>
                               <br>
     
@@ -585,17 +596,17 @@ table, th, td {
                   <div class="form-group row">
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
-                         @if(isset($value->expense_types->type) && !empty($value->expense_types->type))
-                           <option value="{{ $value->expense_types->id }}">{{ $value->expense_types->type }}</option>
+                         @if(isset($value->expense_types->name) && !empty($value->expense_types->name))
+                           <option value="{{ $value->expense_types->id }}">{{ $value->expense_types->name }}</option>
                            @else
                            <option value="">Choose Expense Type</option>
                            @endif
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -633,12 +644,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -697,7 +708,7 @@ table, th, td {
                       </div> -->
 
                        
-                       <div class="row col-md-12 taxes">
+                       <div class="row col-md-12 taxes mb-3">
                         @foreach($tax as $value)
                          <div class="col-md-2">
                            <label style="font-family: Times new roman;">{{ $value->taxes->name }}</label>
@@ -713,9 +724,18 @@ table, th, td {
 
 
                        
-                       <div class="col-md-12 text-center mt-5 mb-5">
-                          <input type="submit" class="btn btn-success save" name="save" value="Update">
-                          </div>
+                       <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Update</button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Update & Print</button>
+
+                          </p>
+                          
+                        </div>
+
+                      </div>
       </form>
                        
         <script type="text/javascript">

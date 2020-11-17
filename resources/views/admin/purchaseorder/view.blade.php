@@ -29,6 +29,7 @@
             <th>Estimation No </th>
             <th>Estimation Date </th>
             <th>Supplier Name</th>
+            <th>Location</th>
             <th>Purchase Type</th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
@@ -52,6 +53,13 @@
               @else
               <td></td>
               @endif
+
+              @if(isset($value->locations->name) && !empty($value->locations->name))
+              <td>{{ $value->locations->name }}</td>
+              @else
+              <td></td>
+              @endif
+
               @if($value->purchase_type == 1)
               <td>Cash Purchase</td>
               @else

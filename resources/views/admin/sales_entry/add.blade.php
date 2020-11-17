@@ -250,7 +250,21 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div>
 
                               </div>
-                              <br>
+
+                              <div class="row col-md-12 mb-3">
+
+                                <div class="col-md-2">
+                                  <label style="font-family: Times new roman;">Company Location</label><br>
+                                <select class="js-example-basic-multiple form-control location" 
+                                data-placeholder="Choose Location" id="location" name="location" >
+                                <option value="">Choose Location</option>
+                                  @foreach($location as $key => $value)
+                                  <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                  @endforeach
+                                 </select>
+                                </div>
+                                
+                              </div>
                               
     
       <div class="col-md-8">
@@ -410,7 +424,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
                       </div>
                       </div>
-                      
+                      <input type="hidden" name="actual_qty" value="" id="actual_qty">
 
 
                       <div class="row col-md-12">
@@ -631,12 +645,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -684,7 +698,7 @@ table, th, td {
                       </div> -->
 
                        
-                       <div class="row col-md-12 taxes">
+                       <div class="row col-md-12 taxes mb-3">
                         @foreach($tax as $value)
                          <div class="col-md-2">
                            <label style="font-family: Times new roman;">{{ $value->name }}</label>
@@ -698,9 +712,18 @@ table, th, td {
 
                        </div>
 
-                       <div class="col-md-12 text-center mt-5 mb-5">
-                          <input type="submit" class="btn btn-success save" name="save" value="Save">
-                          </div>
+                       <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
+
+                          </p>
+                          
+                        </div>
+
+                      </div>
       </form>
                        
         <script type="text/javascript">
@@ -1212,6 +1235,7 @@ $(document).on("click",".edit_items",function(){
   var exclusive = $('.exclusive'+id).val();
   var inclusive = $('.inclusive'+id).val(); 
   var quantity = $('.quantity'+id).val();
+  var actual_qty = $('.quantity'+id).val();
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
   var amnt = $('#amnt'+id).val();
@@ -1229,6 +1253,7 @@ $(document).on("click",".edit_items",function(){
   $('.mrp').val(mrp);
   $('.hsn').val(hsn);
   $('.quantity').val(quantity);
+  $('#actual_qty').val(actual_qty);
   $('.tax_rate').val(tax_gst);
   $('.amount').val(amnt);
   $('.net_price').val(net_price);
@@ -1380,6 +1405,7 @@ $(document).on("click",".update_items",function(){
   $('.mrp').val('');
   $('.hsn').val('');
   $('.quantity').val('');
+  $('#actual_qty').val('');
   $('.tax_rate').val('');
   $('#exclusive').val('');
   $('#inclusive').val('');
@@ -1482,6 +1508,15 @@ function item_details_sno(){
   
 function qty()
 {
+
+  var actual_qty= $('#actual_qty').val();
+  var qty = $('.quantity').val();
+  if(parseInt(qty) > parseInt(actual_qty))
+  {
+    alert('Quantity Exceeds!');
+    $('.quantity').val('')
+  }
+
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
 
@@ -2476,11 +2511,9 @@ $('.invoice_val').text(result.item_net_value_sum);
 $('.sale_estimation_date').val(result.date);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2564,11 +2597,9 @@ $('.estimation_date').text(result.date_estimation);
 $('.estimation_no').text(result.estimation_no);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2646,11 +2677,9 @@ $('.invoice_val').text(result.item_net_value_sum);
 $('.d_date').val(result.date);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);

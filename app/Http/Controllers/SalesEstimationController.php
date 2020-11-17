@@ -16,6 +16,7 @@ use App\Models\ItemTaxDetails;
 use App\Models\ItemBracodeDetails;
 use App\Models\ExpenseType;
 use App\Models\Tax;
+use App\Models\AccountHead;
 use App\Models\Customer;
 use App\Models\SalesMan;
 use App\Models\SaleEstimation;
@@ -112,6 +113,7 @@ class SalesEstimationController extends Controller
         $customer = Customer::all();
         $tax = Tax::all();
         $sales_man = SalesMan::all();
+        $account_head = AccountHead::all();
         
 
         $voucher_num=SaleEstimation::orderBy('sale_estimation_no','DESC')
@@ -132,7 +134,7 @@ class SalesEstimationController extends Controller
          
          }
 
-        return view('admin.sales_estimation.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','customer','tax','sales_man'));
+        return view('admin.sales_estimation.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','customer','tax','sales_man','account_head'));
     }
 
     /**
@@ -240,6 +242,72 @@ class SalesEstimationController extends Controller
                        $tax_details->save();
 
                     }
+
+
+        $sale_estimation_num = $sale_estimation->sale_estimation_no;
+        
+        $sale_estimation_print_data = SaleEstimation::where('sale_estimation_no',$sale_estimation_num)->first();
+        $address = AddressDetails::where('address_ref_id',$sale_estimation_print_data->customer_id)
+                                 ->where('address_table','=','Cus')
+                                 ->first();
+
+        $sale_estimation_item_print_data = SaleEstimationItem::where('sale_estimation_no',$sale_estimation_num)
+                                                    ->get();
+
+        $sale_estimation_expense_print_data = SaleEstimationExpense::where('sale_estimation_no',$sale_estimation_num)->get(); 
+
+        $amnt = $sale_estimation_print_data->total_net_value;
+
+        //amount in words
+
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.sales_estimation.print',compact('sale_estimation_print_data','address','sale_estimation_item_print_data','sale_estimation_expense_print_data','result','points'));
+        }
+
 
         return Redirect::back()->with('success', 'Saved Successfully');
     }
@@ -374,6 +442,7 @@ class SalesEstimationController extends Controller
         $expense_type = ExpenseType::all();
         $customer = Customer::all();
         $sales_man = SalesMan::all();
+        $account_head = AccountHead::all();
 
         $sale_estimation = SaleEstimation::where('sale_estimation_no',$id)->first();
         $sale_estimation_item = SaleEstimationItem::where('sale_estimation_no',$id)->get();
@@ -476,7 +545,7 @@ class SalesEstimationController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_estimation.edit',compact('categories','supplier','agent','brand','customer','expense_type','item','sale_estimation','sale_estimation_item','sale_estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man'));
+        return view('admin.sales_estimation.edit',compact('categories','supplier','agent','brand','customer','expense_type','item','sale_estimation','sale_estimation_item','sale_estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head'));
     }
 
     /**
@@ -583,6 +652,73 @@ class SalesEstimationController extends Controller
                        $tax_details->save();
 
                     }
+ 
+
+        $sale_estimation_num = $sale_estimation->sale_estimation_no;
+        
+        $sale_estimation_print_data = SaleEstimation::where('sale_estimation_no',$sale_estimation_num)->first();
+        $address = AddressDetails::where('address_ref_id',$customer_id)
+                                 ->where('address_table','=','Cus')
+                                 ->first();
+
+        $sale_estimation_item_print_data = SaleEstimationItem::where('sale_estimation_no',$sale_estimation_num)
+                                                    ->get();
+
+        $sale_estimation_expense_print_data = SaleEstimationExpense::where('sale_estimation_no',$sale_estimation_num)->get(); 
+
+        $amnt = $sale_estimation_print_data->total_net_value;
+
+        //amount in words
+
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.sales_estimation.print',compact('sale_estimation_print_data','address','sale_estimation_item_print_data','sale_estimation_expense_print_data','result','points'));
+        }
+
+
         return Redirect::back()->with('success', 'Updated Successfully');
     }
 

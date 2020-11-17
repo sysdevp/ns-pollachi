@@ -298,9 +298,13 @@ function browse_items()
 function up_percents()
 {
   $('.row_category').each(function(key){
-    var test = $('.row_category').attr('id');
+    var count = $(this).attr('id');
 
-    alert(key);
+    var selling_price = $('.append_item_selling_price'+count).val();
+    var mrp = $('.append_item_mrp'+count).val();
+
+    var up_percent = $('.up_percent').val();
+
   });
 }
 

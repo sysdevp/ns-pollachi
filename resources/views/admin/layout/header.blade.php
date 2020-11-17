@@ -157,12 +157,12 @@
                         <ul>
                            
                             <li class="dropdown-header">Accounts</li>
-                            @can('expense_list')
+                            <!-- @can('expense_list')
                             <li><a href="{{url('master/expense-type')}}">Expense</a></li>
                             @endcan
                             @can('income_list')
                             <li><a href="{{url('master/income-type')}}">Income</a></li>
-                            @endcan
+                            @endcan -->
                            <!-- @can('gst_master_list')
                             <li><a href="{{url('master/gst-type')}}">Gst</a></li>
                             @endcan -->
@@ -480,6 +480,26 @@
             
             
           </li> -->
+
+          <li class="nav-item dropdown menu-large">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Price Updation
+            </a>
+            <ul class="dropdown-menu megamenu">
+                    <div class="row mx-0">
+                   <li class="col-md-3 dropdown-item">
+                        <ul>
+
+                            <li class="dropdown-header">Price Updation</li>
+                           <li><a href="{{ route('price_updation.index') }}">Mark Up and Mark Down</a></li>
+                            
+                        </ul>
+                    </li>
+
+            </ul>        
+            
+            
+          </li>
 
           <li class="nav-item dropdown menu-large">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

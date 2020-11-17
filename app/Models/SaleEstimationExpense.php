@@ -8,6 +8,6 @@ class SaleEstimationExpense extends Model
 {
     public function expense_types()
     {
-        return $this->belongsTo(ExpenseType::class, 'expense_type', 'id');
+        return $this->belongsTo(AccountHead::class, 'expense_type', 'id');
     }
 }

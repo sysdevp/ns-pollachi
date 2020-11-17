@@ -670,17 +670,17 @@ table, th, td {
                   <div class="form-group row">
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
-                         @if(isset($value->expense_types->type) && !empty($value->expense_types->type))
-                           <option value="{{ $value->expense_types->id }}">{{ $value->expense_types->type }}</option>
+                         @if(isset($value->expense_types->name) && !empty($value->expense_types->name))
+                           <option value="{{ $value->expense_types->id }}">{{ $value->expense_types->name }}</option>
                            @else
                            <option value="">Choose Expense Type</option>
                            @endif
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -718,12 +718,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>

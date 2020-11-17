@@ -32,6 +32,7 @@
             <th>Delivery Note No </th>
             <th>Customer Name</th>
             <th>Sales Man Name</th>
+            <th>Location</th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
             <th>Total Expense</th>
@@ -61,6 +62,7 @@
               @else
               <td></td>
               @endif
+              <td>{{ @$value->locations->name }}</td>
               <td>{{ $total_discount[$key] }}</td>
               <!-- <td>{{ $value->round_off }}</td> -->
               <td>{{ $expense_total[$key] }}</td>

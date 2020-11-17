@@ -10,4 +10,9 @@ class ReceiptNote extends Model
     {
         return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
+
+    public function locations()
+    {
+        return $this->belongsTo(Location::class, 'location', 'id');
+    }
 }

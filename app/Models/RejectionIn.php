@@ -14,4 +14,8 @@ class RejectionIn extends Model
     {
         return $this->belongsTo(SalesMan::class, 'salesman_id', 'id');
     }
+    public function locations()
+    {
+    	return $this->belongsTo(Location::class, 'location', 'id');
+    }
 }

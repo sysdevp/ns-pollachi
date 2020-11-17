@@ -31,6 +31,7 @@
             <th>Rejection In No </th>
             <th>Rejection In Date </th>
             <th>Customer Name</th>
+            <th>Location</th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
             <th>Taxable Value</th>
@@ -54,6 +55,7 @@
               @else
               <td></td>
               @endif
+              <td>{{ @$value->locations->name }}</td>
               <td>{{ $value->overall_discount }}</td>
               <!-- <td>{{ $value->round_off }}</td> -->
               <td></td>

@@ -566,6 +566,15 @@ Route::get('purchase/get_items/{id}', 'PurchaseController@get_items');
    
 /* Purchase End Here  */
 
+/*Price Updation Satrt Here*/
+
+Route::resource('price_updation', 'PriceUpdationController',['middleware' => ['auth']]);
+Route::get('price_updation/change_items/{id}', 'PriceUpdationController@change_items');
+Route::get('price_updation/brand_filter/{id}', 'PriceUpdationController@brand_filter');
+Route::get('price_updation/browse_item/{id}', 'PriceUpdationController@browse_item');
+
+/*Price Updation End Here*/
+
 /* Estimation Start Here  */
 
 Route::resource('estimation', 'EstimationController',['middleware' => ['auth']]);
@@ -584,9 +593,12 @@ Route::get('estimation/item_details/{id}', 'EstimationController@item_details');
 Route::get('estimation/expense_details/{id}', 'EstimationController@expense_details');
 Route::post('estimation/last_purchase_rate/', 'EstimationController@last_purchase_rate');
 Route::get('estimation/delete/{id}', 'EstimationController@destroy');
+Route::post('estimation/print/', 'EstimationController@print_details');
 
 Route::get('estimation/cancel/{id}', 'EstimationController@cancel');
 Route::get('estimation/retrieve/{id}', 'EstimationController@retrieve');
+
+// Route::post('estimation/print/', 'EstimationPrintController@create_page_print');
 
 /* Estimation End Here  */
 
@@ -897,8 +909,9 @@ Route::get('rejection_out/expense_details/{id}', 'RejectionOutController@expense
 Route::post('rejection_out/last_purchase_rate/', 'RejectionOutController@last_purchase_rate');
 Route::post('rejection_out/check_qty/', 'RejectionOutController@check_qty');
 Route::post('rejection_out/change_qty/', 'RejectionOutController@change_qty');
-Route::get('rejection_out/delete/{id}', 'RejectionOutController@destroy');
+Route::get('rejection_out/delete/{id}/{r_out}', 'RejectionOutController@destroy');
 Route::post('rejection_out/p_details/', 'RejectionOutController@p_details');
+Route::post('rejection_out/Get_Location_Details/', 'RejectionOutController@Get_Location_Details');
 Route::post('rejection_out/receipt_details/', 'RejectionOutController@receipt_details');
 
 Route::get('rejection_out/cancel/{id}', 'RejectionOutController@cancel');

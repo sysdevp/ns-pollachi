@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DebitNoteTax extends Model
 {
-    public function taxes() 
+   public function taxes() 
    {
    	return $this->belongsTo(Tax::class,'taxmaster_id','id');
    }

@@ -57,7 +57,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
       {{csrf_field()}}
 
       
-                       <div class="row col-md-12">
+                       <div class="row col-md-12 mb-3">
 
                         <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
@@ -141,7 +141,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
                                 </div>
                                 <br>
-                                <div class="row col-md-12">
+                                <div class="row col-md-12 mb-3">
 
                                   <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Sale Entry Date</label><br>
@@ -215,6 +215,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                   </div>
                                 </div>
 
+                                <div class="col-md-2">
+                                  <label style="font-family: Times new roman;">Company Location</label><br>
+                                <select class="js-example-basic-multiple form-control location" 
+                                data-placeholder="Choose Location" id="location" name="location" >
+                                <option></option>
+                                  @foreach($location as $key => $value)
+                                  <option value="{{ $value->id}}">{{ $value->name }}</option>
+                                  @endforeach
+                                 </select>
+                                 
+                                </div>
+
                                 <!-- <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Estimation No</label><br>
                                   <input type="hidden" name="estimation_no" id="estimation_no">
@@ -238,35 +250,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
 
                               </div>
-                              <br>
-                              <div class="row col-md-12">
-                                <!-- <div class="col-md-4">
-                  <label style="font-family: Times new roman;">Customer Name</label><br>
-                  <div class="form-group row">
-                     <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id">
-                           <option value="">Choose Customer Name</option>
-                           @foreach($customer as $customers)
-                           <option value="{{ $customers->id }}">{{ $customers->name }}</option>
-                           @endforeach
-                        </select>
-                     </div>
-                     <a href="{{ url('master/customer/create')}}" target="_blank">
-                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Supplier"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
-                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_customer_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                  </div>
-               </div>
-                                <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Customer Address</label><br>
-                                  <input type="hidden" name="address_line_1" id="address_line_1">
-                                  
-                                  <div class="address">
-                                    
-                                  </div>
-                                </div> -->
 
-                              </div>
-                              <br>
+
     
       <div class="col-md-8">
                        <div class="form-group row">
@@ -424,7 +409,9 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <label style="font-family: Times new roman;">Quantity</label>
                       <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
                       </div>
+
                       <input type="hidden" class="form-control actual_qty" id="actual_qty" name="actual_qty" value="">
+                      
                       </div>
                       
 
@@ -486,6 +473,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <label style="font-family: Times new roman;">Discount Rs</label>
                         <input type="number" class="form-control discount_rs  required_for_proof_valid" placeholder="Discount Rs" id="discount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" oninput="discount_calc()" name="discount" value="" >
                         </div>
+
                         <div class="col-md-2 display_rejected" style="display: none;">
                         <label style="font-family: Times new roman;">Qty To Be Rejected</label>
                       <input type="number" class="form-control rejected" id="rejected"  placeholder="Qty To Be Rejected" name="rejected" onchange="rejected_qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
@@ -516,12 +504,12 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                        </select>
                         </div>
                     </div>
-                    </div>
+
                       <br>
                                                           
                      <div class="" align="center">
                                    
-                    <input type="button" class="btn btn-success add_items" value="Add More" name="" id="add_items0">  
+                    <input type="button" class="btn btn-success add_items" style="display: none" value="Add More" name="" id="add_items0">  
 
                     <input type="button" style="display: none" class="btn btn-success update_items" value="Update" name="" id="update_items"> 
 
@@ -537,7 +525,7 @@ table, th, td {
              
               <div class="col-md-12" id="middlecol">
                 
-                <table class="table" id="team-list">
+                <table class="table table-responsive" id="team-list">
                   <thead>
                     <th> S.no </th>
                     <th> Item S.no </th>
@@ -546,9 +534,10 @@ table, th, td {
                     <th> HSN</th>
                     <th> MRP</th>
                     <th> Unit Price</th>
-                    <th> Sale Quantity</th>
+                    <th> Total Quantity</th>
                     <th> Rejected Quantity</th>
                     <th> Remaining Quantity</th>
+                    <th> Credited Quantity</th>
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
@@ -588,7 +577,7 @@ table, th, td {
                         <label style="font-family: Times New Roman;">Unit Price: <font class="show_unit_price" style="font-weight: bold;"></font></label>
                       </div>
                       <div class="col-md-3">
-                        <label style="font-family: Times New Roman;">Sale Qty: <font class="show_purchased_qty" style="font-weight: bold;"></font></label>
+                        <label style="font-family: Times New Roman;">Purchased Qty: <font class="show_purchased_qty" style="font-weight: bold;"></font></label>
                       </div>
                       <div class="col-md-3">
                         <label style="font-family: Times New Roman;">Remaining Quantity: <font class="show_quantity" style="font-weight: bold;"></font></label>
@@ -638,6 +627,7 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th></th>
+                      <th></th>
                       <th><label class="total_amount">0</label></th>
                       <th></th>
                       <th></th>
@@ -673,12 +663,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         @foreach($expense_type as $expense_types)
-                        <option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>
+                         @foreach($account_head as $expense_types)
+                        <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ url('master/expense-type/create')}}" target="_blank">
+                     <a href="{{ route('account_head.create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -726,7 +716,7 @@ table, th, td {
                       </div> -->
 
                        
-                       <div class="row col-md-12 taxes">
+                       <div class="row col-md-12 taxes mb-3">
                         @foreach($tax as $value)
                          <div class="col-md-2">
                            <label style="font-family: Times new roman;">{{ $value->name }}</label>
@@ -740,9 +730,18 @@ table, th, td {
 
                        </div>
 
-                       <div class="col-md-12 text-center mt-5 mb-5">
-                          <input type="submit" class="btn btn-success save" name="save" value="Save">
-                          </div>
+                       <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
+
+                          </p>
+                          
+                        </div>
+
+                      </div>
       </form>
                        
         <script type="text/javascript">
@@ -1319,11 +1318,11 @@ $(document).on("click",".edit_items",function(){
 
 });
 
-$(document).on("click",".edit_d_items",function(){
+$(document).on("click",".edit_items",function(){
 
   $('.update_items').show();
   $('.add_items').hide();
-  if($('.d_no').val() != '')
+  if($('.s_no').val() != '' || $('.d_no').val() != '')
   {
   $('#quantity').attr('readonly','readonly');
   $('.display_rejected').show();
@@ -1382,7 +1381,6 @@ $(document).on("click",".edit_d_items",function(){
     $('.discount_percentage').val('');
   $('.discount_rs').val('');
   }
-   item_codes(item_code_id);
 
 });
 
@@ -2860,11 +2858,10 @@ $('.invoice_val').text(result.item_net_value_sum.toFixed(2));
 $('.s_date').val(result.date_sale_entry);
 $('.sale_date').text(result.date_sale_entry);
 $('.taxes').html(result.tax_append);
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
+
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2948,11 +2945,9 @@ $('.invoice_val').text(result.item_net_value_sum.toFixed(2));
 $('.d_date').val(result.date);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
