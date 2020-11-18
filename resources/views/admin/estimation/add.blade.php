@@ -586,70 +586,6 @@ table, th, td {
                        
         <script type="text/javascript">
 
-          function new_page()
-          {
-            var estimation_info = [];
-            var invoice_no = [];
-            var item_code = [];
-            var mrp = [];
-            var exclusive = [];
-            var inclusive = [];
-            var quantity = [];
-            var amnt = [];
-            var input_discount = [];
-            var tax_gst = [];
-            var uom = [];
-            var expense_type = [];
-            var expense_amount = [];
-
-            var length = $('#mytable').length;
-
-            estimation_info[0] = $('.voucher_no').val();
-            estimation_info[1] = $('.voucher_date').val();
-            estimation_info[2] = $('.supplier_id').val(); 
-            estimation_info[3] = $('.agent_id').val();
-            estimation_info[4] = $('.overall_discount').val();
-            estimation_info[5] = $('.total_price').val();
-            estimation_info[6] = $('.round_off').val(); 
-
-            for(var i=0;i<length;i++)
-            {
-
-              invoice_no[i] = $('#invoice'+i).val();
-              item_code[i] = $('.item_code'+i).val();
-              mrp[i] = $('.mrp'+i).val();
-              exclusive[i] = $('.exclusive'+i).val();
-              inclusive[i] = $('.inclusive'+i).val();
-              quantity[i] = $('.quantity'+i).val();
-              amnt[i] = $('#amnt'+i).val();
-              input_discount[i] = $('#input_discount'+i).val();
-              tax_gst[i] = $('.tax_gst'+i).val();
-              uom[i] = $('.uom'+i).val();
-
-            }
-
-            var expense_length = $('.expense').length;
-
-            $('.expense_type').each(function(key){
-              expense_type[key] = $(this).val();
-            });
-
-            $('.expense_amount').each(function(key){
-              expense_amount[key] = $(this).val();
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "{{ url('estimation/print/') }}",
-                data: { estimation_info : estimation_info, invoice_no : invoice_no, item_code : item_code, mrp : mrp, exclusive : exclusive, inclusive, quantity : quantity, amnt : amnt, input_discount : input_discount, tax_gst : tax_gst, uom : uom, expense_type : expense_type, expense_amount : expense_amount, length : length, expense_length : expense_length},
-                success: function(data) 
-                {
-                console.log(data);
-                }
-            });
-
-          }
-
           var i=0;
           var discount_total = 0;
 
@@ -787,6 +723,73 @@ else if(substr[1] < 50)
   $("#round_off").val(symbol);
 }
 }
+
+
+function new_page()
+          {
+            var estimation_info = [];
+            var invoice_no = [];
+            var item_code = [];
+            var mrp = [];
+            var exclusive = [];
+            var inclusive = [];
+            var quantity = [];
+            var amnt = [];
+            var input_discount = [];
+            var tax_gst = [];
+            var uom = [];
+            var expense_type = [];
+            var expense_amount = [];
+
+            var length = $('#mytable').length;
+
+            estimation_info[0] = $('.voucher_no').val();
+            estimation_info[1] = $('.voucher_date').val();
+            estimation_info[2] = $('.supplier_id').val(); 
+            estimation_info[3] = $('.agent_id').val();
+            estimation_info[4] = $('.overall_discount').val();
+            estimation_info[5] = $('.total_price').val();
+            estimation_info[6] = $('.round_off').val(); 
+
+            for(var i=0;i<length;i++)
+            {
+
+              invoice_no[i] = $('#invoice'+i).val();
+              item_code[i] = $('.item_code'+i).val();
+              mrp[i] = $('.mrp'+i).val();
+              exclusive[i] = $('.exclusive'+i).val();
+              inclusive[i] = $('.inclusive'+i).val();
+              quantity[i] = $('.quantity'+i).val();
+              amnt[i] = $('#amnt'+i).val();
+              input_discount[i] = $('#input_discount'+i).val();
+              tax_gst[i] = $('.tax_gst'+i).val();
+              uom[i] = $('.uom'+i).val();
+
+            }
+
+            var expense_length = $('.expense').length;
+
+            $('.expense_type').each(function(key){
+              expense_type[key] = $(this).val();
+            });
+
+            $('.expense_amount').each(function(key){
+              expense_amount[key] = $(this).val();
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('estimation/print/') }}",
+                data: { estimation_info : estimation_info, invoice_no : invoice_no, item_code : item_code, mrp : mrp, exclusive : exclusive, inclusive, quantity : quantity, amnt : amnt, input_discount : input_discount, tax_gst : tax_gst, uom : uom, expense_type : expense_type, expense_amount : expense_amount, length : length, expense_length : expense_length},
+                success: function(data) 
+                {
+                console.log(data);
+                }
+            });
+
+          }
+
+
 function add_items()
 {
   var j=$('#mytable tr:last').attr('class');

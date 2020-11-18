@@ -71,27 +71,29 @@
         <div class="form-row mb-3">
           <div class="col-md-4">
             <label>Mark Up</label>
-                  <input type="radio" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="">
+                  <input type="radio" class="price_updation_up" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="">
                 </div>
           <div class="col-md-4">
             <label>Mark Down</label>
-                  <input type="radio" name="price_updation" onclick="mark_down($(this).val())" value="0">
+                  <input type="radio" name="price_updation" class="price_updation_down" onclick="mark_down($(this).val())" value="0">
           </div>      
             
         </div>
+
+        <input type="hidden" name="tester" value="" id="tester">
 
         <div class="form-row mb-3">
           <div class="col-md-6">
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label up_percent_label">Mark Up %:</label>
               <div class="col-sm-8 up_percent_div">
-                <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" onchange="up_percents()" value="">
+                <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" oninput="up_percents()" value="">
                 
               </div>
 
               <label for="validationCustom01" class="col-sm-4 col-form-label down_percent_label" style="display: none;">Mark Down %:</label>
               <div class="col-sm-8 down_percent_div" style="display: none;">
-                <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" onchange="down_percent()" name="down_percent" value="">
+                <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" oninput="down_percents()" name="down_percent" value="">
                 
               </div>
 
@@ -102,13 +104,13 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label up_rs_label">Mark Up Rs:</label>
               <div class="col-sm-8 up_rs_div">
-                <input type="text" class="form-control up_rs only_allow_digit_and_dot" placeholder="Mark Up Rs" name="up_rs" onchange="up_rs()" value="" >
+                <input type="text" class="form-control up_rs only_allow_digit_and_dot" placeholder="Mark Up Rs" name="up_rs" oninput="up_rupees()" value="" >
                 
               </div>
 
               <label for="validationCustom01" style="display: none;" class="col-sm-4 col-form-label down_rs_label">Mark Down Rs:</label>
               <div class="col-sm-8 down_rs_div" style="display: none;">
-                <input type="text" class="form-control down_rs only_allow_digit_and_dot" placeholder="Mark Down Rs" name="down_rs" onchange="down_rs()" value="">
+                <input type="text" class="form-control down_rs only_allow_digit_and_dot" placeholder="Mark Down Rs" name="down_rs" oninput="down_rupees()" value="">
                 
               </div>
 
@@ -117,7 +119,8 @@
         </div>
 
         <div class="col-md-7 text-right">
-          <button class="btn btn-success update" name="update" id="update" type="button">Update</button>
+          <button class="btn btn-success up_update" name="up_update" id="up_update" type="button">Update</button>
+          <button class="btn btn-success down_update" style="display: none;" name="down_update" id="down_update" type="button">Update</button>
         </div>
 
         <div class="col-md-8">
@@ -181,15 +184,18 @@
   function mark_up(val) 
    {
       
-      $('.up_rs_label').show();
+     $('.up_rs_label').show();
      $('.up_percent_label').show();
      $('.up_rs_div').show();
      $('.up_percent_div').show();
+     $('.up_update').show();
 
      $('.down_rs_label').hide();
      $('.down_percent_label').hide();
      $('.down_rs_div').hide();
      $('.down_percent_div').hide();
+     $('.down_update').hide();
+     $('#tester').val('');
 
    }
 
@@ -199,11 +205,14 @@
      $('.up_percent_label').hide();
      $('.up_rs_div').hide();
      $('.up_percent_div').hide();
+     $('.up_update').hide();
 
      $('.down_rs_label').show();
      $('.down_percent_label').show();
      $('.down_rs_div').show();
      $('.down_percent_div').show();
+     $('.down_update').show();
+     $('#tester').val('');
 
    }
 
@@ -225,6 +234,7 @@
           
         $('.row_brand').remove(); 
         $('.row_category').remove(); 
+        $('#tester').val('');
         $(".append_item").html(data);
         return false;
           
@@ -256,6 +266,7 @@ function brand_check()
         {
           $('.row_category').remove();
           $('.row_brand').remove();
+          $('#tester').val('');
           $(".append_item").html(data);
           return false;
 
@@ -288,7 +299,8 @@ function browse_items()
              
         success: function(data){
           $('.row_brand').remove(); 
-        $('.row_category').remove(); 
+        $('.row_category').remove();
+        $('#tester').val(''); 
         $(".append_item").html(data);
         }
       });
@@ -296,27 +308,241 @@ function browse_items()
 
 function up_percents()
 {
-  
-}
-
-$(document).on('click','.update',function(){
-$('.row_category').each(function(key){
-    var count = $(this).attr('id');
-
-    var selling_price = $('.append_item_selling_price'+count).val();
-    var mrp = $('.append_item_mrp'+count).val();
+  var cnt = $('#tester').val();
+  if(cnt == '')
+  {
+    $('.up_rs').val('');  
+  }
+  else
+  {
+    var selling_price = $('.actual_item_selling_price'+cnt).val();
     var up_percent = $('.up_percent').val();
 
     var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
-    var total = parseInt(selling_price) + parseFloat(percentage_val);
+
+    $('.up_rs').val(parseFloat(percentage_val.toFixed(2)));
+  }
+}
+function up_rupees()
+{
+  var cnt = $('#tester').val();
+  if($('#tester').val() == '')
+  {
+    $('.up_percent').val('');
+  }
+  else
+  {
+    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var up_rs = $('.up_rs').val();
+    var percentage_val = parseFloat(up_rs)*100/parseFloat(selling_price);
+
+   $(".up_percent").val(percentage_val.toFixed(2));
+  }
+}
+  
+
+function down_percents()
+{
+  var cnt = $('#tester').val();
+  if(cnt == '')
+  {
+    $('.down_rs').val('');  
+  }
+  else
+  {
+    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var down_percent = $('.down_percent').val();
+
+    var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
+
+    $('.down_rs').val(parseFloat(percentage_val.toFixed(2)));
+  }
+}
+function down_rupees()
+{
+  var cnt = $('#tester').val();
+  if($('#tester').val() == '')
+  {
+    $('.down_percent').val('');
+  }
+  else
+  {
+    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var down_rs = $('.down_rs').val();
+    var percentage_val = parseFloat(down_rs)*100/parseFloat(selling_price);
+
+   $(".down_percent").val(percentage_val.toFixed(2));
+  }
+}  
+
+
+$(document).on('click','.up_update',function(){
+
+if($('#tester').val() == '')
+{
+    $('.row_category').each(function(key){
+      var count = $(this).attr('id');
+
+      var selling_price = $('.actual_item_selling_price'+count).val();
+      var mrp = $('.append_item_mrp'+count).val();
+      var up_percent = $('.up_percent').val();
+      var up_rs = $('.up_rs').val();
+      if(up_percent != '')
+      {
+        var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
+        var total = parseInt(selling_price) + parseFloat(percentage_val);
+      }
+      else
+      {
+        var total = parseInt(selling_price) + parseFloat(up_rs);
+      }
+      
+      if(parseFloat(total) < parseFloat(mrp))
+      {
+        $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
+        
+      }
+    });
+  $('.up_percent').val('');
+  $('.up_rs').val('');
+}
+
+else
+{
+    var cnt = $('#tester').val();
+    var mrp = $('.append_item_mrp'+cnt).val();
+    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var up_percent = $('.up_percent').val();
+    var up_rs = $('.up_rs').val();
+      if(up_percent != '')
+      {
+        var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
+        var total = parseInt(selling_price) + parseFloat(percentage_val);
+      }
+      else
+      {
+        var total = parseInt(selling_price) + parseFloat(up_rs);
+      }
 
     if(parseFloat(total) < parseFloat(mrp))
     {
-      $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
-      $('.up_percent').val('');
+      $('.item_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
     }
+    $('.up_percent').val('');
+    $('.up_rs').val('');
+}
+$('#tester').val('');
+$('.price_updation_up').attr('checked', 'checked');
+$('.price_updation_down').removeAttr('checked');
+  
+});
 
-  });
+$(document).on('click','.down_update',function(){
+
+if($('#tester').val() == '')
+{
+    $('.row_category').each(function(key){
+      var count = $(this).attr('id');
+
+      var selling_price = $('.actual_item_selling_price'+count).val();
+      var mrp = $('.append_item_mrp'+count).val();
+      var down_percent = $('.down_percent').val();
+      var down_rs = $('.down_rs').val();
+      if(down_percent != '')
+      {
+        var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
+        var total = parseInt(selling_price) - parseFloat(percentage_val);
+      }
+      else
+      {
+        var total = parseInt(selling_price) - parseFloat(down_rs);
+      }
+      
+      if(parseFloat(total) < parseFloat(mrp))
+      {
+        $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
+        
+      }
+    });
+  $('.down_percent').val('');
+  $('.down_rs').val('');
+}
+
+else
+{
+    var cnt = $('#tester').val();
+    var mrp = $('.append_item_mrp'+cnt).val();
+    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var down_percent = $('.down_percent').val();
+    var down_rs = $('.down_rs').val();
+
+      if(down_percent != '')
+      {
+        var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
+        var total = parseInt(selling_price) - parseFloat(percentage_val);
+      }
+      else
+      {
+        var total = parseInt(selling_price) - parseFloat(down_rs);
+      }
+
+    if(parseFloat(total) < parseFloat(mrp))
+    {
+      $('.item_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+    }
+    $('.down_percent').val('');
+    $('.down_rs').val('');
+}
+$('#tester').val('');
+$('.price_updation_up').removeAttr('checked');
+$('.price_updation_down').attr('checked', 'checked');
+  
+});
+
+$(document).on('click','.up',function(){
+
+     $('.up_rs_label').show();
+     $('.up_percent_label').show();
+     $('.up_rs_div').show();
+     $('.up_percent_div').show();
+     $('.up_update').show();
+
+     $('.down_rs_label').hide();
+     $('.down_percent_label').hide();
+     $('.down_rs_div').hide();
+     $('.down_percent_div').hide();
+     $('.down_update').hide();
+
+     $('.price_updation_up').attr('checked', 'checked');
+     $('.price_updation_down').removeAttr('checked');
+
+    $('.up_rs').val('');
+    $('.up_percent').val('');
+    $('.up_percent').focus();
+    $('#tester').val($(this).attr('id'));
+});
+
+$(document).on('click','.down',function(){
+
+     $('.up_rs_label').hide();
+     $('.up_percent_label').hide();
+     $('.up_rs_div').hide();
+     $('.up_percent_div').hide();
+     $('.up_update').hide();
+
+     $('.down_rs_label').show();
+     $('.down_percent_label').show();
+     $('.down_rs_div').show();
+     $('.down_percent_div').show();
+     $('.down_update').show();
+
+     $('.price_updation_up').removeAttr('checked');
+     $('.price_updation_down').attr('checked', 'checked');
+
+    $('.down_rs').val('');
+    $('.down_percent').val('');
+    $('.down_percent').focus();
+    $('#tester').val($(this).attr('id'));
 });
 
 </script>
