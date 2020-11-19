@@ -134,7 +134,7 @@
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table class="table table-responsive table-striped table-bordered">
         <thead>
           <tr>
             <th>S.No</th>
@@ -145,6 +145,10 @@
             <th>HSN</th>
             <th>MRP</th>
             <th>UOM</th>
+            <th>Last Purchase Cost</th>
+            <th>Tax</th>
+            <th>Mark Up(Rs)</th>
+            <th>Mark Down(Rs)</th>
             <th>Selling Price</th>
             <th>Action</th>
           </tr>
@@ -152,6 +156,10 @@
         <tbody class="append_item" id="myTable">
         </tbody>
         <tfoot>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
               <th></th>
               <th></th>
               <th></th>
@@ -231,7 +239,7 @@
         data: { categories: categories, brand: brand },             
              
         success: function(data){ 
-          
+          console.log(data);
         $('.row_brand').remove(); 
         $('.row_category').remove(); 
         $('#tester').val('');
@@ -315,7 +323,7 @@ function up_percents()
   }
   else
   {
-    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_percent = $('.up_percent').val();
 
     var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
@@ -332,7 +340,7 @@ function up_rupees()
   }
   else
   {
-    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_rs = $('.up_rs').val();
     var percentage_val = parseFloat(up_rs)*100/parseFloat(selling_price);
 
@@ -350,7 +358,7 @@ function down_percents()
   }
   else
   {
-    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var down_percent = $('.down_percent').val();
 
     var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
@@ -367,7 +375,7 @@ function down_rupees()
   }
   else
   {
-    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var down_rs = $('.down_rs').val();
     var percentage_val = parseFloat(down_rs)*100/parseFloat(selling_price);
 
@@ -383,7 +391,7 @@ if($('#tester').val() == '')
     $('.row_category').each(function(key){
       var count = $(this).attr('id');
 
-      var selling_price = $('.actual_item_selling_price'+count).val();
+      var selling_price = $('.actual_last_purchase_cost'+count).val();
       var mrp = $('.append_item_mrp'+count).val();
       var up_percent = $('.up_percent').val();
       var up_rs = $('.up_rs').val();
@@ -395,12 +403,16 @@ if($('#tester').val() == '')
       else
       {
         var total = parseInt(selling_price) + parseFloat(up_rs);
+        var percentage_val = parseFloat(up_rs);
       }
       
-      if(parseFloat(total) < parseFloat(mrp))
+      if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
       {
         $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
-        
+        $('.mark_up'+count).text(parseFloat(percentage_val.toFixed(2)));
+        $('.append_mark_up'+count).val(parseFloat(percentage_val.toFixed(2)));
+        $('.mark_down'+count).text('');
+        $('.append_mark_down'+count).val('');
       }
     });
   $('.up_percent').val('');
@@ -411,7 +423,7 @@ else
 {
     var cnt = $('#tester').val();
     var mrp = $('.append_item_mrp'+cnt).val();
-    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_percent = $('.up_percent').val();
     var up_rs = $('.up_rs').val();
       if(up_percent != '')
@@ -422,11 +434,20 @@ else
       else
       {
         var total = parseInt(selling_price) + parseFloat(up_rs);
+        var percentage_val = parseFloat(up_rs);
       }
 
-    if(parseFloat(total) < parseFloat(mrp))
+    if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
     {
       $('.item_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+      $('.mark_up'+cnt).text(parseFloat(percentage_val.toFixed(2)));
+      $('.append_mark_up'+cnt).val(parseFloat(percentage_val.toFixed(2)));
+      $('.mark_down'+cnt).text('');
+      $('.append_mark_down'+cnt).val('');
+    }
+    else
+    {
+      alert('Selling Price Exceeds MRP!!');
     }
     $('.up_percent').val('');
     $('.up_rs').val('');
@@ -444,7 +465,7 @@ if($('#tester').val() == '')
     $('.row_category').each(function(key){
       var count = $(this).attr('id');
 
-      var selling_price = $('.actual_item_selling_price'+count).val();
+      var selling_price = $('.actual_last_purchase_cost'+count).val();
       var mrp = $('.append_item_mrp'+count).val();
       var down_percent = $('.down_percent').val();
       var down_rs = $('.down_rs').val();
@@ -456,12 +477,16 @@ if($('#tester').val() == '')
       else
       {
         var total = parseInt(selling_price) - parseFloat(down_rs);
+        var percentage_val = parseFloat(down_rs);
       }
       
-      if(parseFloat(total) < parseFloat(mrp))
+      if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
       {
         $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
-        
+        $('.mark_down'+count).text(parseFloat(percentage_val.toFixed(2)));
+        $('.append_mark_down'+count).val(parseFloat(percentage_val.toFixed(2)));
+        $('.mark_up'+count).text('');
+        $('.append_mark_up'+count).val('');
       }
     });
   $('.down_percent').val('');
@@ -472,7 +497,7 @@ else
 {
     var cnt = $('#tester').val();
     var mrp = $('.append_item_mrp'+cnt).val();
-    var selling_price = $('.actual_item_selling_price'+cnt).val();
+    var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var down_percent = $('.down_percent').val();
     var down_rs = $('.down_rs').val();
 
@@ -484,11 +509,20 @@ else
       else
       {
         var total = parseInt(selling_price) - parseFloat(down_rs);
+        var percentage_val = parseFloat(down_rs);
       }
 
-    if(parseFloat(total) < parseFloat(mrp))
+    if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
     {
       $('.item_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+      $('.mark_down'+cnt).text(parseFloat(percentage_val.toFixed(2)));
+      $('.append_mark_down'+cnt).val(parseFloat(percentage_val.toFixed(2)));
+      $('.mark_up'+cnt).text('');
+      $('.append_mark_up'+cnt).val('');
+    }
+    else
+    {
+      alert('Selling Price Exceeds MRP!!');
     }
     $('.down_percent').val('');
     $('.down_rs').val('');
