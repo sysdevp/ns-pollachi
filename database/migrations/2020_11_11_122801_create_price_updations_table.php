@@ -15,13 +15,19 @@ class CreatePriceUpdationsTable extends Migration
     {
         Schema::create('price_updations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('item_id');
-            $table->bigInteger('brand_id');
-            $table->bigInteger('category_id');
-            $table->decimal('mark_up', 10,2);
-            $table->decimal('mark_down', 10,2);
-            $table->decimal('unit_price', 10,2);
-            $table->float('tax_rate', 10,2);
+            $table->date('date')->nullable();
+            $table->bigInteger('item_id')->nullable();
+            $table->bigInteger('brand_id')->nullable();
+            $table->bigInteger('category_id')->nullable();
+            $table->bigInteger('uom_id')->nullable();
+            $table->decimal('mark_up_rs', 10,2)->nullable();
+            $table->decimal('mark_up_percent', 10,2)->nullable();
+            $table->decimal('mark_down_rs', 10,2)->nullable();
+            $table->decimal('mark_down_percent', 10,2)->nullable();
+            $table->decimal('unit_price', 10,2)->nullable();
+            $table->float('tax_rate', 10,2)->nullable();
+            $table->decimal('selling_price', 10,2)->nullable();
+            $table->boolean('status')->nullable()->comment = '1=>Active,0=>Not Active ';
             $table->timestamps();
         });
     }

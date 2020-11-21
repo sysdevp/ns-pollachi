@@ -24,6 +24,14 @@
         <div class="form-row">
           <div class="col-md-6">
                   <div class="form-group row">
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Date :</label>
+                     <div class="col-sm-6">
+                      <input type="date" name="date" class="form-control" readonly id="date" value="{{$date}}">
+                     </div>
+                  </div>
+               </div>
+          <div class="col-md-6">
+                  <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">Category :</label>
                      <div class="col-sm-6">
                       <select class="js-example-basic-multiple col-12 form-control custom-select category_id" name="category_id" onchange="categories_check()" id="category_id">
@@ -35,6 +43,8 @@
                      </div>
                   </div>
                </div>
+        </div>
+        <div class="form-row">
 
           <div class="col-md-6">
                   <div class="form-group row">
@@ -50,9 +60,7 @@
                      </div>
                   </div>
                </div>
-          
-        </div>
-        <div class="form-row">
+
           <div class="col-md-6">
                   <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">Item Name :</label>
@@ -134,7 +142,7 @@
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table class="table table-responsive table-striped table-bordered">
+      <table class="table table-responsive table-striped table-bordered" height=250>
         <thead>
           <tr>
             <th>S.No</th>
@@ -147,15 +155,21 @@
             <th>UOM</th>
             <th>Last Purchase Cost</th>
             <th>Tax</th>
+            <th>Mark Up(%)</th>
             <th>Mark Up(Rs)</th>
+            <th>Mark Down(%)</th>
             <th>Mark Down(Rs)</th>
-            <th>Selling Price</th>
+            <th>Last Selling Price</th>
+            <th>Updated Selling Price</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody class="append_item" id="myTable">
         </tbody>
         <tfoot>
+              <th></th>
+              <th></th>
+              <th></th>
               <th></th>
               <th></th>
               <th></th>
@@ -326,7 +340,7 @@ function up_percents()
     var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_percent = $('.up_percent').val();
 
-    var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
+    var percentage_val = parseFloat(selling_price) * parseFloat(up_percent) / 100;
 
     $('.up_rs').val(parseFloat(percentage_val.toFixed(2)));
   }
@@ -361,7 +375,7 @@ function down_percents()
     var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var down_percent = $('.down_percent').val();
 
-    var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
+    var percentage_val = parseFloat(selling_price) * parseFloat(down_percent) / 100;
 
     $('.down_rs').val(parseFloat(percentage_val.toFixed(2)));
   }
@@ -397,23 +411,49 @@ if($('#tester').val() == '')
       var up_rs = $('.up_rs').val();
       if(up_percent != '')
       {
-        var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
-        var total = parseInt(selling_price) + parseFloat(percentage_val);
+        var percentage_val = parseFloat(selling_price) * parseFloat(up_percent) / 100;
+        var percent = parseFloat(up_percent);
+        var total = parseFloat(selling_price) + parseFloat(percentage_val);
+        var value = 1;
       }
       else
       {
-        var total = parseInt(selling_price) + parseFloat(up_rs);
+        var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
+        var value = 0;
       }
       
       if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
       {
-        $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
-        $('.mark_up'+count).text(parseFloat(percentage_val.toFixed(2)));
-        $('.append_mark_up'+count).val(parseFloat(percentage_val.toFixed(2)));
-        $('.mark_down'+count).text('');
-        $('.append_mark_down'+count).val('');
+        if(value == 1)
+        {
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_up_percent'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_up_percent'+count).val(parseFloat(percent.toFixed(2)));
+          $('.mark_up_rs'+count).text('');
+          $('.append_mark_up_rs'+count).val('');
+          $('.mark_down_percent'+count).text('');
+          $('.append_mark_down_percent'+count).val('');
+          $('.mark_down_rs'+count).text('');
+          $('.append_mark_down_rs'+count).val('');
+        }
+       else
+       {
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_up_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_up_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_up_percent'+count).text('');
+          $('.append_mark_up_percent'+count).val('');
+          $('.mark_down_percent'+count).text('');
+          $('.append_mark_down_percent'+count).val('');
+          $('.mark_down_rs'+count).text('');
+          $('.append_mark_down_rs'+count).val('');
+       }
+        
       }
+      
     });
   $('.up_percent').val('');
   $('.up_rs').val('');
@@ -426,24 +466,25 @@ else
     var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_percent = $('.up_percent').val();
     var up_rs = $('.up_rs').val();
-      if(up_percent != '')
-      {
-        var percentage_val = parseInt(selling_price) * parseFloat(up_percent) / 100;
-        var total = parseInt(selling_price) + parseFloat(percentage_val);
-      }
-      else
-      {
-        var total = parseInt(selling_price) + parseFloat(up_rs);
-        var percentage_val = parseFloat(up_rs);
-      }
+      
+    var total = parseFloat(selling_price) + parseFloat(up_rs);
 
     if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
     {
-      $('.item_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
-      $('.mark_up'+cnt).text(parseFloat(percentage_val.toFixed(2)));
-      $('.append_mark_up'+cnt).val(parseFloat(percentage_val.toFixed(2)));
-      $('.mark_down'+cnt).text('');
-      $('.append_mark_down'+cnt).val('');
+
+
+          $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+          $('.mark_up_percent'+cnt).text(up_percent);
+          $('.append_mark_up_percent'+cnt).val(up_percent);
+          $('.mark_up_rs'+cnt).text(up_rs);
+          $('.append_mark_up_rs'+cnt).val(up_rs);
+          $('.mark_down_percent'+cnt).text('');
+          $('.append_mark_down_percent'+cnt).val('');
+          $('.mark_down_rs'+cnt).text('');
+          $('.append_mark_down_rs'+cnt).val('');
+
+
     }
     else
     {
@@ -471,22 +512,46 @@ if($('#tester').val() == '')
       var down_rs = $('.down_rs').val();
       if(down_percent != '')
       {
-        var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
-        var total = parseInt(selling_price) - parseFloat(percentage_val);
+        var percentage_val = parseFloat(selling_price) * parseFloat(down_percent) / 100;
+        var total = parseFloat(selling_price) - parseFloat(percentage_val);
+        var percent = parseFloat(down_percent);
+        var value = 1;
       }
       else
       {
-        var total = parseInt(selling_price) - parseFloat(down_rs);
+        var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
+        var value = 0;
       }
       
       if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
       {
-        $('.item_selling_price'+count).text(parseFloat(total.toFixed(2)));
-        $('.mark_down'+count).text(parseFloat(percentage_val.toFixed(2)));
-        $('.append_mark_down'+count).val(parseFloat(percentage_val.toFixed(2)));
-        $('.mark_up'+count).text('');
-        $('.append_mark_up'+count).val('');
+        if(value == 1)
+        {
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_percent'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_down_percent'+count).val(parseFloat(percent.toFixed(2)));
+          $('.mark_down_rs'+count).text('');
+          $('.append_mark_down_rs'+count).val('');
+          $('.mark_up_percent'+count).text('');
+          $('.append_mark_up_percent'+count).val('');
+          $('.mark_up_rs'+count).text('');
+          $('.append_mark_rs_percent'+count).val('');
+        }
+       else
+       {
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_down_percent'+count).text('');
+          $('.append_mark_down_percent'+count).val('');
+          $('.mark_up_percent'+count).text('');
+          $('.append_mark_up_percent'+count).val('');
+          $('.mark_up_rs'+count).text('');
+          $('.append_mark_up_rs'+count).val('');
+       }
       }
     });
   $('.down_percent').val('');
@@ -501,28 +566,37 @@ else
     var down_percent = $('.down_percent').val();
     var down_rs = $('.down_rs').val();
 
-      if(down_percent != '')
-      {
-        var percentage_val = parseInt(selling_price) * parseFloat(down_percent) / 100;
-        var total = parseInt(selling_price) - parseFloat(percentage_val);
-      }
-      else
-      {
-        var total = parseInt(selling_price) - parseFloat(down_rs);
-        var percentage_val = parseFloat(down_rs);
-      }
+      
+    var total = parseFloat(selling_price) - parseFloat(down_rs);
+    var percentage_val = parseFloat(down_rs);
+      
 
-    if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
+    if(parseFloat(total.toFixed(2)) >= parseFloat(selling_price))
     {
-      $('.item_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
-      $('.mark_down'+cnt).text(parseFloat(percentage_val.toFixed(2)));
-      $('.append_mark_down'+cnt).val(parseFloat(percentage_val.toFixed(2)));
-      $('.mark_up'+cnt).text('');
-      $('.append_mark_up'+cnt).val('');
+      $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+      $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+      $('.mark_down_percent'+cnt).text(down_percent);
+      $('.append_mark_down_percent'+cnt).val(down_percent);
+      $('.mark_down_rs'+cnt).text(down_rs);
+      $('.append_mark_down_rs'+cnt).val(down_rs);
+      $('.mark_up_percent'+cnt).text('');
+      $('.append_mark_up_percent'+cnt).val('');
+      $('.mark_up_rs'+cnt).text('');
+      $('.append_mark_up_rs'+cnt).val('');
     }
     else
     {
-      alert('Selling Price Exceeds MRP!!');
+      alert('Less Than Last Purchase Cost!!');
+      $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+      $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+      $('.mark_down_percent'+cnt).text(down_percent);
+      $('.append_mark_down_percent'+cnt).val(down_percent);
+      $('.mark_down_rs'+cnt).text(down_rs);
+      $('.append_mark_down_rs'+cnt).val(down_rs);
+      $('.mark_up_percent'+cnt).text('');
+      $('.append_mark_up_percent'+cnt).val('');
+      $('.mark_up_rs'+cnt).text('');
+      $('.append_mark_up_rs'+cnt).val('');
     }
     $('.down_percent').val('');
     $('.down_rs').val('');

@@ -11,6 +11,7 @@ use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
 use App\Models\PurchaseEntryExpense;
 use App\Models\PurchaseEntryTax;
+use Illuminate\Support\Facades\Redirect;
 
 class PriceUpdationController extends Controller
 {
@@ -21,7 +22,7 @@ class PriceUpdationController extends Controller
      */
     public function index()
     {
-        $updations = PriceUpdation::all();
+        $updations = PriceUpdation::where('status',1)->get();
         return View('admin.price_updation.view',compact('updations'));
     }
 
@@ -35,8 +36,9 @@ class PriceUpdationController extends Controller
         $category = Category::all();
         $brand = Brand::all();
         $item = Item::all();
+        $date = date('Y-m-d');
 
-        return view('admin.price_updation.add',compact('category','brand','item'));
+        return view('admin.price_updation.add',compact('category','brand','item','date'));
     }
 
     /**
@@ -47,7 +49,41 @@ class PriceUpdationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $count = $request->table_count;
+        $date = $request->date;
+
+        foreach ($request->item_id as $key => $value) 
+        {
+            $updations = PriceUpdation::where('item_id',$value)->where('status',1)->first();
+            if($updations != '')
+            {
+                $updations->status = 0;
+                $updations->save();
+            }
+            
+
+            $insert = new PriceUpdation();
+
+            $insert->date = $date;
+            $insert->item_id = $request->item_id[$key];
+            $insert->brand_id = $request->brand_id[$key];
+            $insert->category_id = $request->category_id[$key];
+            $insert->uom_id = $request->uom_id[$key];
+            $insert->mark_up_rs = $request->mark_up_rs[$key];
+            $insert->mark_down_rs = $request->mark_down_rs[$key];
+            $insert->mark_up_percent = $request->mark_up_percent[$key];
+            $insert->mark_down_percent = $request->mark_down_percent[$key];
+            $insert->unit_price = $request->last_purchase_cost[$key];
+            $insert->tax_rate = $request->tax[$key];
+            $insert->selling_price = $request->updated_selling_price[$key];
+
+            $insert->save(); 
+
+        }
+
+        return Redirect::back()->with('success','Saved Successfullly');
+
     }
 
     /**
@@ -156,6 +192,8 @@ class PriceUpdationController extends Controller
         }else if($categories !="" && $brand != "" && $brand != "no_val" ){
             $item=Item::whereIn('category_id',$category_id)->where('brand_id',$brand)->get();
         }
+
+        $table_count = count($item);
        
         foreach($item as $key=>$value){
             if($value->brand_id != 0)
@@ -170,6 +208,14 @@ class PriceUpdationController extends Controller
             $item_data = PurchaseEntryItem::where('item_id',$value->id)
                                     ->orderBy('p_date','DESC')
                                     ->first();
+
+            $last_selling_price = PriceUpdation::where('item_id',$value->id)
+                                    ->where('status',1)
+                                    ->orderBy('date','DESC')
+                                    ->select('selling_price')
+                                    ->first();
+
+                                                            
 
             $unit_price = @$item_data->rate_exclusive_tax;
             $tax = @$item_data->gst;
@@ -186,7 +232,7 @@ class PriceUpdationController extends Controller
                 }
                 $barcode=implode(",",$barcode_array);
             }
-             $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class="append_mark_up'.$key.'"><font class="mark_up'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down'.$key.'"><font class="mark_down'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" value="'.$value->default_selling_price.'" class="actual_item_selling_price'.$key.'"><input type="hidden" value="'.$value->default_selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.$value->default_selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
+            $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font><input type="hidden" name="table_count" value="'.$table_count.'"></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'" name="item_id[]"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'" name="item_code[]"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'" name="item_name[]"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'" name="brand_id[]"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'" name="category_id[]"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'" name="hsn[]"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'" name="mrp[]"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'" name="uom_id[]"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'" name="tax[]"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class="append_mark_up_percent'.$key.'" name="mark_up_percent[]"><font class="mark_up_percent'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_up_rs'.$key.'" name="mark_up_rs[]"><font class="mark_up_rs'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down_percent'.$key.'" name="mark_down_percent[]"><font class="mark_down_percent'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down_rs'.$key.'" name="mark_down_rs[]"><font class="mark_down_rs'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="actual_item_selling_price'.$key.'" name="last_selling_price[]"><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.@$last_selling_price->selling_price.'</font></td><td><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="actual_updated_selling_price'.$key.'"><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="append_updated_selling_price'.$key.'" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price'.$key.'">'.@$last_selling_price->selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
 
             }
          return $result;
@@ -208,6 +254,8 @@ class PriceUpdationController extends Controller
             $item=Item::whereIn('category_id',$category_id)->where('brand_id',$brand)->get();
         }
 
+        $table_count = count($item);
+
         foreach($item as $key=>$value){
             if($value->brand_id != 0)
             {
@@ -221,6 +269,12 @@ class PriceUpdationController extends Controller
             $item_data = PurchaseEntryItem::where('item_id',$value->id)
                                     ->orderBy('p_date','DESC')
                                     ->first();
+
+            $last_selling_price = PriceUpdation::where('item_id',$value->id)
+                                    ->where('status',1)
+                                    ->orderBy('date','DESC')
+                                    ->select('selling_price')
+                                    ->first();                        
 
             $unit_price = @$item_data->rate_exclusive_tax;
             $tax = @$item_data->gst;
@@ -237,7 +291,7 @@ class PriceUpdationController extends Controller
                 }
                 $barcode=implode(",",$barcode_array);
             }
-             $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class="append_mark_up'.$key.'"><font class="mark_up'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down'.$key.'"><font class="mark_down'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" value="'.$value->default_selling_price.'" class="actual_item_selling_price'.$key.'"><input type="hidden" value="'.$value->default_selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.$value->default_selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
+            $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font><input type="hidden" name="table_count" value="'.$table_count.'"></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'" name="item_id[]"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'" name="item_code[]"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'" name="item_name[]"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'" name="brand_id[]"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'" name="category_id[]"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'" name="hsn[]"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'" name="mrp[]"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'" name="uom_id[]"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'" name="tax[]"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class="append_mark_up_percent'.$key.'" name="mark_up_percent[]"><font class="mark_up_percent'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_up_rs'.$key.'" name="mark_up_rs[]"><font class="mark_up_rs'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down_percent'.$key.'" name="mark_down_percent[]"><font class="mark_down_percent'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down_rs'.$key.'" name="mark_down_rs[]"><font class="mark_down_rs'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="actual_item_selling_price'.$key.'" name="last_selling_price[]"><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.@$last_selling_price->selling_price.'</font></td><td><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="actual_updated_selling_price'.$key.'"><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="append_updated_selling_price'.$key.'" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price'.$key.'">'.@$last_selling_price->selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
 
             }
          return $result;
@@ -267,6 +321,8 @@ class PriceUpdationController extends Controller
         else if($brand !="" && $brand != "no_val" && $browse_item != ""){
             $item=Item::where('id',$browse_item)->where('brand_id',$brand)->get();
         }
+
+        $table_count = count($item);
     
     foreach ($item as $key => $value) 
     {
@@ -282,6 +338,12 @@ class PriceUpdationController extends Controller
             $item_data = PurchaseEntryItem::where('item_id',$value->id)
                                     ->orderBy('p_date','DESC')
                                     ->first();
+
+            $last_selling_price = PriceUpdation::where('item_id',$value->id)
+                                    ->where('status',1)
+                                    ->orderBy('date','DESC')
+                                    ->select('selling_price')
+                                    ->first();                        
                                     
             $unit_price = @$item_data->rate_exclusive_tax;
             $tax = @$item_data->gst;
@@ -298,7 +360,7 @@ class PriceUpdationController extends Controller
                 }
                 $barcode=implode(",",$barcode_array);
             }
-        $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class="append_mark_up'.$key.'"><font class="mark_up'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down'.$key.'"><font class="mark_down'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" value="'.$value->default_selling_price.'" class="actual_item_selling_price'.$key.'"><input type="hidden" value="'.$value->default_selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.$value->default_selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
+            $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font><input type="hidden" name="table_count" value="'.$table_count.'"></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'" name="item_id[]"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'" name="item_code[]"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'" name="item_name[]"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'" name="brand_id[]"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'" name="category_id[]"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'" name="hsn[]"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'" name="mrp[]"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'" name="uom_id[]"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'" name="tax[]"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class="append_mark_up_percent'.$key.'" name="mark_up_percent[]"><font class="mark_up_percent'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_up_rs'.$key.'" name="mark_up_rs[]"><font class="mark_up_rs'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down_percent'.$key.'" name="mark_down_percent[]"><font class="mark_down_percent'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" class="append_mark_down_rs'.$key.'" name="mark_down_rs[]"><font class="mark_down_rs'.$key.'" style="font-family: Times new roman;"></font></td><td><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="actual_item_selling_price'.$key.'" name="last_selling_price[]"><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.@$last_selling_price->selling_price.'</font></td><td><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="actual_updated_selling_price'.$key.'"><input type="hidden" value="'.@$last_selling_price->selling_price.'" class="append_updated_selling_price'.$key.'" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price'.$key.'">'.@$last_selling_price->selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
         
     }
     return $result;
