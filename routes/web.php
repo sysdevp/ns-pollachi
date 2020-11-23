@@ -572,6 +572,7 @@ Route::resource('price_updation', 'PriceUpdationController',['middleware' => ['a
 Route::get('price_updation/change_items/{id}', 'PriceUpdationController@change_items');
 Route::get('price_updation/brand_filter/{id}', 'PriceUpdationController@brand_filter');
 Route::get('price_updation/browse_item/{id}', 'PriceUpdationController@browse_item');
+Route::get('price_updation/delete/{id}', 'PriceUpdationController@destroy');
 
 /*Price Updation End Here*/
 

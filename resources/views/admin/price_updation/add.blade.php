@@ -411,6 +411,8 @@ if($('#tester').val() == '')
       var up_rs = $('.up_rs').val();
       if(up_percent != '')
       {
+        var disc_rate = parseFloat(up_percent)/100;
+        var disc_val_exclusive = parseFloat(selling_price)*parseFloat(disc_rate);
         var percentage_val = parseFloat(selling_price) * parseFloat(up_percent) / 100;
         var percent = parseFloat(up_percent);
         var total = parseFloat(selling_price) + parseFloat(percentage_val);
@@ -418,6 +420,7 @@ if($('#tester').val() == '')
       }
       else
       {
+        var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
         var value = 0;
@@ -431,8 +434,8 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_up_percent'+count).text(parseFloat(percent.toFixed(2)));
           $('.append_mark_up_percent'+count).val(parseFloat(percent.toFixed(2)));
-          $('.mark_up_rs'+count).text('');
-          $('.append_mark_up_rs'+count).val('');
+          $('.mark_up_rs'+count).text(parseFloat(disc_val_exclusive.toFixed(2)));
+          $('.append_mark_up_rs'+count).val(parseFloat(disc_val_exclusive.toFixed(2)));
           $('.mark_down_percent'+count).text('');
           $('.append_mark_down_percent'+count).val('');
           $('.mark_down_rs'+count).text('');
@@ -444,8 +447,8 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_up_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
           $('.append_mark_up_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
-          $('.mark_up_percent'+count).text('');
-          $('.append_mark_up_percent'+count).val('');
+          $('.mark_up_percent'+count).text(parseFloat(disc_amount_exclusive.toFixed(2)));
+          $('.append_mark_up_percent'+count).val(parseFloat(disc_amount_exclusive.toFixed(2)));
           $('.mark_down_percent'+count).text('');
           $('.append_mark_down_percent'+count).val('');
           $('.mark_down_rs'+count).text('');
@@ -512,6 +515,8 @@ if($('#tester').val() == '')
       var down_rs = $('.down_rs').val();
       if(down_percent != '')
       {
+        var disc_rate = parseFloat(down_percent)/100;
+        var disc_val_exclusive = parseFloat(selling_price)*parseFloat(disc_rate);
         var percentage_val = parseFloat(selling_price) * parseFloat(down_percent) / 100;
         var total = parseFloat(selling_price) - parseFloat(percentage_val);
         var percent = parseFloat(down_percent);
@@ -519,6 +524,7 @@ if($('#tester').val() == '')
       }
       else
       {
+        var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
         var value = 0;
@@ -532,12 +538,12 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+count).text(parseFloat(percent.toFixed(2)));
           $('.append_mark_down_percent'+count).val(parseFloat(percent.toFixed(2)));
-          $('.mark_down_rs'+count).text('');
-          $('.append_mark_down_rs'+count).val('');
+          $('.mark_down_rs'+count).text(parseFloat(disc_val_exclusive.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(disc_val_exclusive.toFixed(2)));
           $('.mark_up_percent'+count).text('');
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
-          $('.append_mark_rs_percent'+count).val('');
+          $('.append_mark_up_rs'+count).val('');
         }
        else
        {
@@ -545,8 +551,8 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
           $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
-          $('.mark_down_percent'+count).text('');
-          $('.append_mark_down_percent'+count).val('');
+          $('.mark_down_percent'+count).text(parseFloat(disc_amount_exclusive.toFixed(2)));
+          $('.append_mark_down_percent'+count).val(parseFloat(disc_amount_exclusive.toFixed(2)));
           $('.mark_up_percent'+count).text('');
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');

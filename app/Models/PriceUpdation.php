@@ -19,4 +19,8 @@ class PriceUpdation extends Model
     {
     	return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+    public function uom()
+    {
+    	return $this->belongsTo(Uom::class, 'uom_id', 'id');
+    }
 }

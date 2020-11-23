@@ -26,6 +26,7 @@ class CreatePriceUpdationsTable extends Migration
             $table->decimal('mark_down_percent', 10,2)->nullable();
             $table->decimal('unit_price', 10,2)->nullable();
             $table->float('tax_rate', 10,2)->nullable();
+            $table->decimal('last_selling_price', 10,2)->nullable();
             $table->decimal('selling_price', 10,2)->nullable();
             $table->boolean('status')->nullable()->comment = '1=>Active,0=>Not Active ';
             $table->timestamps();
