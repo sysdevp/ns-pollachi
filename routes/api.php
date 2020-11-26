@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+use App\Http\controllers\MobileController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,3 +18,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('app-login', 'MobileController@login');
+Route::post('app-employee', 'MobileController@employee');
+Route::post('app-sale_order', 'MobileController@sale_order');
+Route::post('app-test', 'MobileController@test');

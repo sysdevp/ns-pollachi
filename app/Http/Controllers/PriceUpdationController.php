@@ -7,6 +7,11 @@ use App\Models\PriceUpdation;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Item;
+use App\Models\PurchaseEntry;
+use App\Models\PurchaseEntryItem;
+use App\Models\PurchaseEntryExpense;
+use App\Models\PurchaseEntryTax;
+use Illuminate\Support\Facades\Redirect;
 
 class PriceUpdationController extends Controller
 {
@@ -17,7 +22,7 @@ class PriceUpdationController extends Controller
      */
     public function index()
     {
-        $updations = PriceUpdation::all();
+        $updations = PriceUpdation::where('status',1)->get();
         return View('admin.price_updation.view',compact('updations'));
     }
 
@@ -31,8 +36,9 @@ class PriceUpdationController extends Controller
         $category = Category::all();
         $brand = Brand::all();
         $item = Item::all();
+        $date = date('Y-m-d');
 
-        return view('admin.price_updation.add',compact('category','brand','item'));
+        return view('admin.price_updation.add',compact('category','brand','item','date'));
     }
 
     /**
@@ -43,7 +49,36 @@ class PriceUpdationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $count = $request->table_count;
+        $date = date('Y-m-d');
+
+        foreach ($request->item_id as $key => $value) 
+        {
+            $updations = PriceUpdation::where('item_id',$value)->where('status',1)->first();
+            if($updations != '')
+            {
+                $updations->status = 0;
+                $updations->save();
+            }
+            
+
+            $insert = new PriceUpdation();
+
+            $insert->date = $date;
+            $insert->effective_from = $request->effective_from;
+            $insert->item_id = $request->item_id[$key];
+            $insert->mark_up_value = $request->mark_up_rs[$key];
+            $insert->mark_down_value = $request->mark_down_rs[$key];
+            $insert->mark_up_type = $request->mark_up_percent[$key];
+            $insert->mark_down_type = $request->mark_down_percent[$key];
+
+            $insert->save(); 
+
+        }
+
+        return Redirect::back()->with('success','Saved Successfully');
+
     }
 
     /**
@@ -55,6 +90,55 @@ class PriceUpdationController extends Controller
     public function show($id)
     {
         //
+        $updations = PriceUpdation::find($id);
+
+        $item_data = PurchaseEntryItem::where('item_id',$updations->item_id)
+                                    ->orderBy('p_date','DESC')
+                                    ->latest()
+                                    ->first();
+
+        $unit_price = @$item_data->rate_exclusive_tax;
+
+        if(@$updations->mark_up_type == '')
+            {
+                $up_type = '';
+            }
+            else if(@$updations->mark_up_type == 1)
+            {
+                $percentage_val = $unit_price * @$updations->mark_up_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Percentage';
+            }
+            else if(@$updations->mark_up_type == 2)
+            {
+                $total = $unit_price + @$updations->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Rupee';
+            }
+            if(@$updations->mark_down_type == '')
+            {
+                @$down_type = '';
+            }
+            else if(@$updations->mark_down_type == 1)
+            {
+                $percentage_val = $unit_price * @$updations->mark_down_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                @$down_type = 'Percentage';
+            }
+            else if(@$updations->mark_down_type == 2)
+            {
+               $total = $unit_price + @$updations->mark_down_value; 
+               @$selling_price = number_format($total, 2, '.', ',');
+               @$down_type = 'Rupee';
+            }
+
+            // echo $selling_price; exit();
+
+        return view('admin.price_updation.show',compact('updations','selling_price','up_type','down_type'));
+
+
     }
 
     /**
@@ -65,7 +149,54 @@ class PriceUpdationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $updations = PriceUpdation::find($id);
+        $category = Category::all();
+        $brand = Brand::all();
+        $item = Item::all();
+
+        $item_data = PurchaseEntryItem::where('item_id',$updations->item_id)
+                                    ->orderBy('p_date','DESC')
+                                    ->latest()
+                                    ->first();
+
+        $unit_price = @$item_data->rate_exclusive_tax;
+
+        if(@$updations->mark_up_type == '')
+            {
+                $up_type = '';
+            }
+            else if(@$updations->mark_up_type == 1)
+            {
+                $percentage_val = $unit_price * @$updations->mark_up_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Percentage';
+            }
+            else if(@$updations->mark_up_type == 2)
+            {
+                $total = $unit_price + @$updations->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Rupee';
+            }
+            if(@$updations->mark_down_type == '')
+            {
+                @$down_type = '';
+            }
+            else if(@$updations->mark_down_type == 1)
+            {
+                $percentage_val = $unit_price * @$updations->mark_down_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                @$down_type = 'Percentage';
+            }
+            else if(@$updations->mark_down_type == 2)
+            {
+               $total = $unit_price + @$updations->mark_down_value; 
+               @$selling_price = number_format($total, 2, '.', ',');
+               @$down_type = 'Rupee';
+            }
+
+        return view('admin.price_updation.edit',compact('updations','category','brand','item','up_type','down_type','selling_price'));
     }
 
     /**
@@ -77,7 +208,18 @@ class PriceUpdationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $update = PriceUpdation::find($id);
+
+        $update->date = $date;
+        $update->item_id = $request->item_id;
+        $update->mark_up_value = $request->mark_up_rs;
+        $update->mark_down_value = $request->mark_down_r;
+        $update->mark_up_type = $request->mark_up_percent;
+        $update->mark_down_type = $request->mark_down_percent;
+
+        $update->save();
+
+        return Redirect::back()->with('success', 'Updated Successfully');
     }
 
     /**
@@ -89,6 +231,11 @@ class PriceUpdationController extends Controller
     public function destroy($id)
     {
         //
+        $delete = PriceUpdation::find($id);
+
+        $delete->status = '0';
+        $delete->save();
+
     }
 
     function child_category($array)
@@ -152,6 +299,8 @@ class PriceUpdationController extends Controller
         }else if($categories !="" && $brand != "" && $brand != "no_val" ){
             $item=Item::whereIn('category_id',$category_id)->where('brand_id',$brand)->get();
         }
+
+        $table_count = count($item);
        
         foreach($item as $key=>$value){
             if($value->brand_id != 0)
@@ -162,7 +311,59 @@ class PriceUpdationController extends Controller
             {
                 $barnd_name='Not Applicable';
             }
+
+            $item_data = PurchaseEntryItem::where('item_id',$value->id)
+                                    ->orderBy('p_date','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $last_selling_price = PriceUpdation::where('item_id',$value->id)
+                                    ->where('status',1)
+                                    ->orderBy('date','DESC')
+                                    ->latest()
+                                    ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                    ->first();
+
+                                     
+            $unit_price = @$item_data->rate_exclusive_tax;
+            $tax = @$item_data->gst;
+
+            if(@$last_selling_price->mark_up_type == '')
+            {
+                $up_type = '';
+            }
+            else if(@$last_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $unit_price * @$last_selling_price->mark_up_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Percentage';
+            }
+            else if(@$last_selling_price->mark_up_type == 2)
+            {
+                $total = $unit_price + @$last_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Rupee';
+            }
+            else if(@$last_selling_price->mark_down_type == '')
+            {
+                $down_type = '';
+            }
+            else if(@$last_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $unit_price * @$last_selling_price->mark_down_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $down_type = 'Percentage';
+            }
+            else if(@$last_selling_price->mark_down_type == 2)
+            {
+               $total = $unit_price + @$last_selling_price->mark_down_value; 
+               @$selling_price = number_format($total, 2, '.', ',');
+               $down_type = 'Rupee';
+            }
             
+
             $category_name=isset($value->category->name) ? $value->category->name : "";
             $uom_id=isset($value->uom->id) ? $value->uom->id : "";
             $uom_name=isset($value->uom->name) ? $value->uom->name : "";
@@ -175,7 +376,7 @@ class PriceUpdationController extends Controller
                 }
                 $barcode=implode(",",$barcode_array);
             }
-             $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" value="'.$value->default_selling_price.'" class="actual_item_selling_price'.$key.'"><input type="hidden" value="'.$value->default_selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.$value->default_selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-info  text-white rounded show_items" id="'.$key.'" aria-hidden="true"></i><i class="fa fa-level-down px-2 py-1 bg-success  text-white rounded edit_items" id="'.$key.'" aria-hidden="true"></i></td></tr>';
+            $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font><input type="hidden" name="table_count" value="'.$table_count.'"></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'" name="item_id[]"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'" name="item_code[]"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'" name="item_name[]"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'" name="brand_id[]"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'" name="category_id[]"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'" name="hsn[]"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'" name="mrp[]"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'" name="uom_id[]"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'" name="tax[]"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class=" form-control append_mark_up_percent'.$key.'" name="mark_up_percent[]" value="'.@$last_selling_price->mark_up_type.'"><font class="mark_up_percent'.$key.'" style="font-family: Times new roman;">'.@$up_type.'</font></td><td><input type="hidden" class="form-control append_mark_up_rs'.$key.'" name="mark_up_rs[]" value="'.@$last_selling_price->mark_up_value.'"><font class="mark_up_rs'.$key.'" style="font-family: Times new roman;">'.@$last_selling_price->mark_up_value.'</font></td><td><input type="hidden" class="form-control append_mark_down_percent'.$key.'" name="mark_down_percent[]" value="'.@$last_selling_price->mark_down_type.'"><font class="mark_down_percent'.$key.'" style="font-family: Times new roman;">'.@$down_type.'</font></td><td><input type="hidden" class="form-control append_mark_down_rs'.$key.'" name="mark_down_rs[]" value="'.@$last_selling_price->mark_down_value.'"><font class="mark_down_rs'.$key.'" style="font-family: Times new roman;">'.@$last_selling_price->mark_down_value.'</font></td><td><input type="hidden" value="'.@$selling_price.'" class="actual_item_selling_price'.$key.'" name="last_selling_price[]"><input type="hidden" value="'.@$selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.@$selling_price.'</font></td><td><input type="hidden" value="'.@$selling_price.'" class="actual_updated_selling_price'.$key.'"><input type="hidden" value="'.@$selling_price.'" class="append_updated_selling_price'.$key.'" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price'.$key.'">'.@$selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
 
             }
          return $result;
@@ -197,6 +398,8 @@ class PriceUpdationController extends Controller
             $item=Item::whereIn('category_id',$category_id)->where('brand_id',$brand)->get();
         }
 
+        $table_count = count($item);
+
         foreach($item as $key=>$value){
             if($value->brand_id != 0)
             {
@@ -206,7 +409,61 @@ class PriceUpdationController extends Controller
             {
                 $barnd_name='Not Applicable';
             }
-            
+
+            $item_data = PurchaseEntryItem::where('item_id',$value->id)
+                                    ->orderBy('p_date','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $last_selling_price = PriceUpdation::where('item_id',$value->id)
+                                    ->where('status',1)
+                                    ->orderBy('date','DESC')
+                                    ->latest()
+                                    ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                    ->first(); 
+
+                                    // return $last_selling_price->mark_up_percent;                       
+
+            $unit_price = @$item_data->rate_exclusive_tax;
+            $tax = @$item_data->gst;
+
+
+            if(@$last_selling_price->mark_up_type == '')
+            {
+                $up_type = '';
+            }
+            else if(@$last_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $unit_price * @$last_selling_price->mark_up_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Percentage';
+            }
+            else if(@$last_selling_price->mark_up_type == 2)
+            {
+                $total = $unit_price + @$last_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Rupee';
+            }
+            else if(@$last_selling_price->mark_down_type == '')
+            {
+                $down_type = '';
+            }
+            else if(@$last_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $unit_price * @$last_selling_price->mark_down_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $down_type = 'Percentage';
+            }
+            else if(@$last_selling_price->mark_down_type == 2)
+            {
+               $total = $unit_price + @$last_selling_price->mark_down_value; 
+               @$selling_price = number_format($total, 2, '.', ',');
+               $down_type = 'Rupee';
+            }
+
+
             $category_name=isset($value->category->name) ? $value->category->name : "";
             $uom_id=isset($value->uom->id) ? $value->uom->id : "";
             $uom_name=isset($value->uom->name) ? $value->uom->name : "";
@@ -219,7 +476,8 @@ class PriceUpdationController extends Controller
                 }
                 $barcode=implode(",",$barcode_array);
             }
-             $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" value="'.$value->default_selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.$value->default_selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-info  text-white rounded show_items" id="'.$key.'" aria-hidden="true"></i><i class="fa fa-level-down px-2 py-1 bg-success  text-white rounded edit_items" id="'.$key.'" aria-hidden="true"></i></td></tr>';
+
+            $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font><input type="hidden" name="table_count" value="'.$table_count.'"></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'" name="item_id[]"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'" name="item_code[]"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'" name="item_name[]"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'" name="brand_id[]"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'" name="category_id[]"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'" name="hsn[]"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'" name="mrp[]"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'" name="uom_id[]"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'" name="tax[]"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class=" form-control append_mark_up_percent'.$key.'" name="mark_up_percent[]" value="'.@$last_selling_price->mark_up_type.'"><font class="mark_up_percent'.$key.'" style="font-family: Times new roman;">'.@$up_type.'</font></td><td><input type="hidden" class="form-control append_mark_up_rs'.$key.'" name="mark_up_rs[]" value="'.@$last_selling_price->mark_up_value.'"><font class="mark_up_rs'.$key.'" style="font-family: Times new roman;">'.@$last_selling_price->mark_up_value.'</font></td><td><input type="hidden" class="form-control append_mark_down_percent'.$key.'" name="mark_down_percent[]" value="'.@$last_selling_price->mark_down_type.'"><font class="mark_down_percent'.$key.'" style="font-family: Times new roman;">'.@$down_type.'</font></td><td><input type="hidden" class="form-control append_mark_down_rs'.$key.'" name="mark_down_rs[]" value="'.@$last_selling_price->mark_down_value.'"><font class="mark_down_rs'.$key.'" style="font-family: Times new roman;">'.@$last_selling_price->mark_down_value.'</font></td><td><input type="hidden" value="'.@$selling_price.'" class="actual_item_selling_price'.$key.'" name="last_selling_price[]"><input type="hidden" value="'.@$selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.@$selling_price.'</font></td><td><input type="hidden" value="'.@$selling_price.'" class="actual_updated_selling_price'.$key.'"><input type="hidden" value="'.@$selling_price.'" class="append_updated_selling_price'.$key.'" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price'.$key.'">'.@$selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
 
             }
          return $result;
@@ -249,6 +507,8 @@ class PriceUpdationController extends Controller
         else if($brand !="" && $brand != "no_val" && $browse_item != ""){
             $item=Item::where('id',$browse_item)->where('brand_id',$brand)->get();
         }
+
+        $table_count = count($item);
     
     foreach ($item as $key => $value) 
     {
@@ -260,6 +520,58 @@ class PriceUpdationController extends Controller
             {
                 $barnd_name='Not Applicable';
             }
+
+            $item_data = PurchaseEntryItem::where('item_id',$value->id)
+                                    ->orderBy('p_date','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $last_selling_price = PriceUpdation::where('item_id',$value->id)
+                                    ->where('status',1)
+                                    ->orderBy('date','DESC')
+                                    ->latest()
+                                    ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                    ->first();                        
+                                    
+            $unit_price = @$item_data->rate_exclusive_tax;
+            $tax = @$item_data->gst;
+
+
+            if(@$last_selling_price->mark_up_type == '')
+            {
+                $up_type = '';
+            }
+            else if(@$last_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $unit_price * @$last_selling_price->mark_up_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Percentage';
+            }
+            else if(@$last_selling_price->mark_up_type == 2)
+            {
+                $total = $unit_price + @$last_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $up_type = 'Rupee';
+            }
+            else if(@$last_selling_price->mark_down_type == '')
+            {
+                $down_type = '';
+            }
+            else if(@$last_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $unit_price * @$last_selling_price->mark_down_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+                $down_type = 'Percentage';
+            }
+            else if(@$last_selling_price->mark_down_type == 2)
+            {
+               $total = $unit_price + @$last_selling_price->mark_down_value; 
+               @$selling_price = number_format($total, 2, '.', ',');
+               $down_type = 'Rupee';
+            }
+
             
             $category_name=isset($value->category->name) ? $value->category->name : "";
             $uom_id=isset($value->uom->id) ? $value->uom->id : "";
@@ -273,7 +585,7 @@ class PriceUpdationController extends Controller
                 }
                 $barcode=implode(",",$barcode_array);
             }
-        $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" value="'.$value->default_selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.$value->default_selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-info  text-white rounded show_items" id="'.$key.'" aria-hidden="true"></i><i class="fa fa-level-down px-2 py-1 bg-success  text-white rounded edit_items" id="'.$key.'" aria-hidden="true"></i></td></tr>';
+            $result .='<tr class="row_category" id="'.++$key.'"><td><font style="font-family: Times new roman;">'.$key.'</font><input type="hidden" name="table_count" value="'.$table_count.'"></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'" name="item_id[]"><input type="hidden" value="'.$value->code.'" class="actual_item_code'.$key.'" name="item_code[]"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font class="item_code'.$key.'" style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="actual_item_name'.$key.'" name="item_name[]"><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font class="item_name'.$key.'" style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="actual_item_brand_name'.$key.'" name="brand_id[]"><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font class="item_brand_name'.$key.'" style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="actual_item_category_name'.$key.'" name="category_id[]"><input type="hidden" value="'.$value->category_id.'" class="append_item_category_name'.$key.'"><font class="item_category_name'.$key.'" style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$value->hsn.'" class="actual_item_hsn'.$key.'" name="hsn[]"><input type="hidden" value="'.$value->hsn.'" class="append_item_hsn'.$key.'"><font style="font-family: Times new roman;" class="item_hsn'.$key.'">'.$value->hsn.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="actual_item_mrp'.$key.'" name="mrp[]"><input type="hidden" value="'.$value->mrp.'" class="append_item_mrp'.$key.'"><font class="item_mrp'.$key.'" style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="actual_item_uom'.$key.'" name="uom_id[]"><input type="hidden" value="'.$uom_id.'" class="append_item_uom'.$key.'"><font class="item_uom'.$key.'" style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" class="actual_last_purchase_cost'.$key.'" value="'.$unit_price.'" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost'.$key.'" value="'.$unit_price.'"><font class="last_purchase_cost'.$key.'">'.$unit_price.'</font></td><td><input type="hidden" class="tax'.$key.'" value="'.$tax.'" name="tax[]"><font class="tax'.$key.'">'.$tax.'</font></td><td><input type="hidden" class=" form-control append_mark_up_percent'.$key.'" name="mark_up_percent[]" value="'.@$last_selling_price->mark_up_type.'"><font class="mark_up_percent'.$key.'" style="font-family: Times new roman;">'.@$up_type.'</font></td><td><input type="hidden" class="form-control append_mark_up_rs'.$key.'" name="mark_up_rs[]" value="'.@$last_selling_price->mark_up_value.'"><font class="mark_up_rs'.$key.'" style="font-family: Times new roman;">'.@$last_selling_price->mark_up_value.'</font></td><td><input type="hidden" class="form-control append_mark_down_percent'.$key.'" name="mark_down_percent[]" value="'.@$last_selling_price->mark_down_type.'"><font class="mark_down_percent'.$key.'" style="font-family: Times new roman;">'.@$down_type.'</font></td><td><input type="hidden" class="form-control append_mark_down_rs'.$key.'" name="mark_down_rs[]" value="'.@$last_selling_price->mark_down_value.'"><font class="mark_down_rs'.$key.'" style="font-family: Times new roman;">'.@$last_selling_price->mark_down_value.'</font></td><td><input type="hidden" value="'.@$selling_price.'" class="actual_item_selling_price'.$key.'" name="last_selling_price[]"><input type="hidden" value="'.@$selling_price.'" class="append_item_selling_price'.$key.'"><font style="font-family: Times new roman;" class="item_selling_price'.$key.'">'.@$selling_price.'</font></td><td><input type="hidden" value="'.@$selling_price.'" class="actual_updated_selling_price'.$key.'"><input type="hidden" value="'.@$selling_price.'" class="append_updated_selling_price'.$key.'" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price'.$key.'">'.@$selling_price.'</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>';
         
     }
     return $result;
