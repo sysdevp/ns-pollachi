@@ -967,6 +967,7 @@ Route::resource('pos','PosController',['middleware' => ['auth']]);
 /*Payment Request Start Here*/
 
 Route::resource('payment_request','PaymentRequestController',['middleware' => ['auth']]);
+//Route::resource('store', 'PaymentRequestController@store')->middleware('permission:payment_request');
 
 /*Payment Request End Here*/
 

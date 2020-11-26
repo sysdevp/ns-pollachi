@@ -35,7 +35,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Date :</label>
               <div class="col-sm-8">
-                <input type="date" class="form-control date" placeholder="Date" value="<?php echo e($date); ?>" name="date" value="" >
+                <input type="date" class="form-control date" placeholder="Date" value="<?php echo e($date); ?>" name="request_date" value="" >
                 
               </div>
             </div>
@@ -66,8 +66,8 @@
               <div class="col-sm-8">
                 <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
                   <option value="">Ledger</option>
-                           <option value="">Pending</option>
-                           <option value="">Advance</option>
+                           <option value="1">Pending</option>
+                           <option value="2">Advance</option>
                         </select>
               </div>
             </div>
@@ -109,8 +109,8 @@
     </div>
 
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" disabled="" type="submit">Submit</button>
-          <button class="btn btn-warning" name="add" disabled="" type="submit">Cancel</button>
+          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-warning" name="add" type="cancel">Cancel</button>
         </div>
         <div class="col-md-7 text-right">
           

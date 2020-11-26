@@ -25,36 +25,34 @@
             <th>Request Date</th>
             <th>Bill No</th>
             <th>Bill Date</th>
-            <th>Taxable Value</th>
-            <th>Tax Value</th>
-            <th>Net Value</th>
-            <th>Paid Amount</th>
-            <th>Paid Date</th>
+            <th>Request Amount</th>
            <th>Action </th>
           </tr>
         </thead>
-        <tbody>
+       <tbody>
+		 <?php $__currentLoopData = $payment_request; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
+              <td><?php echo e($key+1); ?></td>
+			  <?php if(isset($value->supplier_det->name) && !empty($value->supplier_det->name)): ?>
+              <td><?php echo e($value->supplier_det->name); ?></td>
+              <?php else: ?>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <?php endif; ?>
+              <td><?php echo e($value->request_no); ?></td>
+              <td><?php echo e($value->request_date); ?></td>
+              <td><?php echo e($value->purchase_id); ?></td>
+              <td><?php echo e($value->purchase_id); ?></td>
+              <td><?php echo e($value->request_amount); ?></td>
+              
               <td> 
-                <!-- <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+                <a href="" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a> 
 
                 
               </td>
             </tr>
-         
+         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
 

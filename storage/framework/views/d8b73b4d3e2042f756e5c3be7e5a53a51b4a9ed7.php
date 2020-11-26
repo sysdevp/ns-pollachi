@@ -32,25 +32,26 @@
           </tr>
         </thead>
         <tbody>
+		 <?php $__currentLoopData = $payment_request; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td><?php echo e($key+1); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
               <td> 
-                <!-- <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+                <a href="" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a> 
 
                 
               </td>
             </tr>
-         
+         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
 
