@@ -158,12 +158,12 @@
                         <ul>
                            
                             <li class="dropdown-header">Accounts</li>
-                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('expense_list')): ?>
+                            <!-- <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('expense_list')): ?>
                             <li><a href="<?php echo e(url('master/expense-type')); ?>">Expense</a></li>
                             <?php endif; ?>
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('income_list')): ?>
                             <li><a href="<?php echo e(url('master/income-type')); ?>">Income</a></li>
-                            <?php endif; ?>
+                            <?php endif; ?> -->
                            <!-- <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('gst_master_list')): ?>
                             <li><a href="<?php echo e(url('master/gst-type')); ?>">Gst</a></li>
                             <?php endif; ?> -->
@@ -481,6 +481,26 @@
             
             
           </li> -->
+
+          <li class="nav-item dropdown menu-large">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Price Updation
+            </a>
+            <ul class="dropdown-menu megamenu">
+                    <div class="row mx-0">
+                   <li class="col-md-3 dropdown-item">
+                        <ul>
+
+                            <li class="dropdown-header">Price Updation</li>
+                           <li><a href="<?php echo e(route('price_updation.index')); ?>">Mark Up and Mark Down</a></li>
+                            
+                        </ul>
+                    </li>
+
+            </ul>        
+            
+            
+          </li>
 
           <li class="nav-item dropdown menu-large">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
