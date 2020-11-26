@@ -24,9 +24,9 @@
         <div class="form-row">
           <div class="col-md-6">
                   <div class="form-group row">
-                    <label for="validationCustom01" class="col-sm-4 col-form-label">Date :</label>
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">With Effect From :</label>
                      <div class="col-sm-6">
-                      <input type="date" name="date" class="form-control" readonly id="date" value="{{$date}}">
+                      <input type="date" name="effective_from" class="form-control" value="{{$date}}">
                      </div>
                   </div>
                </div>
@@ -155,10 +155,10 @@
             <th>UOM</th>
             <th>Last Purchase Cost</th>
             <th>Tax</th>
-            <th>Mark Up(%)</th>
-            <th>Mark Up(Rs)</th>
-            <th>Mark Down(%)</th>
-            <th>Mark Down(Rs)</th>
+            <th>Mark Up  Type</th>
+            <th>Mark Up Value</th>
+            <th>Mark Down Type</th>
+            <th>Mark Down Value</th>
             <th>Last Selling Price</th>
             <th>Updated Selling Price</th>
             <th>Action</th>
@@ -286,6 +286,7 @@ function brand_check()
              
         success: function(data)
         {
+          console.log(data);
           $('.row_category').remove();
           $('.row_brand').remove();
           $('#tester').val('');
@@ -331,35 +332,28 @@ function browse_items()
 function up_percents()
 {
   var cnt = $('#tester').val();
-  if(cnt == '')
-  {
     $('.up_rs').val('');  
-  }
-  else
-  {
+
     var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_percent = $('.up_percent').val();
 
     var percentage_val = parseFloat(selling_price) * parseFloat(up_percent) / 100;
 
-    $('.up_rs').val(parseFloat(percentage_val.toFixed(2)));
-  }
+    // $('.up_rs').val(parseFloat(percentage_val.toFixed(2)));
+  
 }
 function up_rupees()
 {
   var cnt = $('#tester').val();
-  if($('#tester').val() == '')
-  {
+  
     $('.up_percent').val('');
-  }
-  else
-  {
+ 
     var selling_price = $('.actual_last_purchase_cost'+cnt).val();
     var up_rs = $('.up_rs').val();
     var percentage_val = parseFloat(up_rs)*100/parseFloat(selling_price);
 
-   $(".up_percent").val(percentage_val.toFixed(2));
-  }
+   // $(".up_percent").val(percentage_val.toFixed(2));
+  
 }
   
 
@@ -377,7 +371,7 @@ function down_percents()
 
     var percentage_val = parseFloat(selling_price) * parseFloat(down_percent) / 100;
 
-    $('.down_rs').val(parseFloat(percentage_val.toFixed(2)));
+    // $('.down_rs').val(parseFloat(percentage_val.toFixed(2)));
   }
 }
 function down_rupees()
@@ -393,7 +387,7 @@ function down_rupees()
     var down_rs = $('.down_rs').val();
     var percentage_val = parseFloat(down_rs)*100/parseFloat(selling_price);
 
-   $(".down_percent").val(percentage_val.toFixed(2));
+   // $(".down_percent").val(percentage_val.toFixed(2));
   }
 }  
 
@@ -423,7 +417,7 @@ if($('#tester').val() == '')
         var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
-        var value = 0;
+        var value = 2;
       }
       
       if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
@@ -432,14 +426,15 @@ if($('#tester').val() == '')
         {
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
-          $('.mark_up_percent'+count).text(parseFloat(percent.toFixed(2)));
-          $('.append_mark_up_percent'+count).val(parseFloat(percent.toFixed(2)));
-          $('.mark_up_rs'+count).text(parseFloat(disc_val_exclusive.toFixed(2)));
-          $('.append_mark_up_rs'+count).val(parseFloat(disc_val_exclusive.toFixed(2)));
+          $('.mark_up_percent'+count).text('Percentage');
+          $('.append_mark_up_percent'+count).val(parseInt(value));
+          $('.mark_up_rs'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_up_rs'+count).val(parseFloat(percent.toFixed(2)));
           $('.mark_down_percent'+count).text('');
           $('.append_mark_down_percent'+count).val('');
           $('.mark_down_rs'+count).text('');
           $('.append_mark_down_rs'+count).val('');
+          $(this).css('color', 'green');
         }
        else
        {
@@ -447,14 +442,21 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_up_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
           $('.append_mark_up_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
-          $('.mark_up_percent'+count).text(parseFloat(disc_amount_exclusive.toFixed(2)));
-          $('.append_mark_up_percent'+count).val(parseFloat(disc_amount_exclusive.toFixed(2)));
+          $('.mark_up_percent'+count).text('Rupee');
+          $('.append_mark_up_percent'+count).val(parseInt(value));
           $('.mark_down_percent'+count).text('');
           $('.append_mark_down_percent'+count).val('');
           $('.mark_down_rs'+count).text('');
           $('.append_mark_down_rs'+count).val('');
+          $(this).css('color', 'green');
+
        }
         
+      }
+
+      else
+      {
+        $(this).css('color', 'red');
       }
       
     });
@@ -465,30 +467,59 @@ if($('#tester').val() == '')
 else
 {
     var cnt = $('#tester').val();
-    var mrp = $('.append_item_mrp'+cnt).val();
+
     var selling_price = $('.actual_last_purchase_cost'+cnt).val();
-    var up_percent = $('.up_percent').val();
-    var up_rs = $('.up_rs').val();
-      
-    var total = parseFloat(selling_price) + parseFloat(up_rs);
+      var mrp = $('.append_item_mrp'+cnt).val();
+      var up_percent = $('.up_percent').val();
+      var up_rs = $('.up_rs').val();
+      if(up_percent != '')
+      {
+        var disc_rate = parseFloat(up_percent)/100;
+        var disc_val_exclusive = parseFloat(selling_price)*parseFloat(disc_rate);
+        var percentage_val = parseFloat(selling_price) * parseFloat(up_percent) / 100;
+        var percent = parseFloat(up_percent);
+        var total = parseFloat(selling_price) + parseFloat(percentage_val);
+        var value = 1;
+      }
+      else
+      {
+        var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
+        var total = parseFloat(selling_price) + parseFloat(up_rs);
+        var percentage_val = parseFloat(up_rs);
+        var value = 2;
+      }
 
     if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
-    {
-
-
+      {
+        if(value == 1)
+        {
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
-          $('.mark_up_percent'+cnt).text(up_percent);
-          $('.append_mark_up_percent'+cnt).val(up_percent);
-          $('.mark_up_rs'+cnt).text(up_rs);
-          $('.append_mark_up_rs'+cnt).val(up_rs);
+          $('.mark_up_percent'+cnt).text('Percentage');
+          $('.append_mark_up_percent'+cnt).val(parseInt(value));
+          $('.mark_up_rs'+cnt).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_up_rs'+cnt).val(parseFloat(percent.toFixed(2)));
+          $('.mark_down_percent'+cnt).text('');
+          $('.append_mark_down_percent'+cnt).val('');
+          $('.mark_down_rs'+cnt).text('');
+          $('.append_mark_down_rs'+cnt).val('');
+        }
+       else
+       {
+          $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+          $('.mark_up_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_up_rs'+cnt).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_up_percent'+cnt).text('Rupee');
+          $('.append_mark_up_percent'+cnt).val(parseInt(value));
           $('.mark_down_percent'+cnt).text('');
           $('.append_mark_down_percent'+cnt).val('');
           $('.mark_down_rs'+cnt).text('');
           $('.append_mark_down_rs'+cnt).val('');
 
-
-    }
+       }
+        
+      }
     else
     {
       alert('Selling Price Exceeds MRP!!');
@@ -527,23 +558,24 @@ if($('#tester').val() == '')
         var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
-        var value = 0;
+        var value = 2;
       }
       
-      if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
+      if(parseFloat(total.toFixed(2)) >= parseFloat(selling_price))
       {
         if(value == 1)
         {
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
-          $('.mark_down_percent'+count).text(parseFloat(percent.toFixed(2)));
-          $('.append_mark_down_percent'+count).val(parseFloat(percent.toFixed(2)));
-          $('.mark_down_rs'+count).text(parseFloat(disc_val_exclusive.toFixed(2)));
-          $('.append_mark_down_rs'+count).val(parseFloat(disc_val_exclusive.toFixed(2)));
+          $('.mark_down_percent'+count).text('Percentage');
+          $('.append_mark_down_percent'+count).val(parseInt(value));
+          $('.mark_down_rs'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(percent.toFixed(2)));
           $('.mark_up_percent'+count).text('');
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
           $('.append_mark_up_rs'+count).val('');
+          $(this).css('color','green');
         }
        else
        {
@@ -551,12 +583,44 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
           $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
-          $('.mark_down_percent'+count).text(parseFloat(disc_amount_exclusive.toFixed(2)));
-          $('.append_mark_down_percent'+count).val(parseFloat(disc_amount_exclusive.toFixed(2)));
+          $('.mark_down_percent'+count).text('Rupee');
+          $('.append_mark_down_percent'+count).val(parseInt(value));
           $('.mark_up_percent'+count).text('');
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
           $('.append_mark_up_rs'+count).val('');
+          $(this).css('color','green');
+       }
+      }
+      else
+      {
+        if(value == 1)
+        {
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_percent'+count).text('Percentage');
+          $('.append_mark_down_percent'+count).val(parseInt(value));
+          $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_up_percent'+count).text('');
+          $('.append_mark_up_percent'+count).val('');
+          $('.mark_up_rs'+count).text('');
+          $('.append_mark_up_rs'+count).val('');
+          // $(this).css('color','red');
+        }
+       else
+       {
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_down_percent'+count).text('Rupee');
+          $('.append_mark_down_percent'+count).val(parseInt(value));
+          $('.mark_up_percent'+count).text('');
+          $('.append_mark_up_percent'+count).val('');
+          $('.mark_up_rs'+count).text('');
+          $('.append_mark_up_rs'+count).val('');
+          // $(this).css('color','red');
        }
       }
     });
@@ -573,36 +637,87 @@ else
     var down_rs = $('.down_rs').val();
 
       
-    var total = parseFloat(selling_price) - parseFloat(down_rs);
-    var percentage_val = parseFloat(down_rs);
+    if(down_percent != '')
+      {
+        var disc_rate = parseFloat(down_percent)/100;
+        var disc_val_exclusive = parseFloat(selling_price)*parseFloat(disc_rate);
+        var percentage_val = parseFloat(selling_price) * parseFloat(down_percent) / 100;
+        var total = parseFloat(selling_price) - parseFloat(percentage_val);
+        var percent = parseFloat(down_percent);
+        var value = 1;
+      }
+      else
+      {
+        var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
+        var total = parseFloat(selling_price) - parseFloat(down_rs);
+        var percentage_val = parseFloat(down_rs);
+        var value = 2;
+      }
       
 
     if(parseFloat(total.toFixed(2)) >= parseFloat(selling_price))
-    {
-      $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
-      $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
-      $('.mark_down_percent'+cnt).text(down_percent);
-      $('.append_mark_down_percent'+cnt).val(down_percent);
-      $('.mark_down_rs'+cnt).text(down_rs);
-      $('.append_mark_down_rs'+cnt).val(down_rs);
-      $('.mark_up_percent'+cnt).text('');
-      $('.append_mark_up_percent'+cnt).val('');
-      $('.mark_up_rs'+cnt).text('');
-      $('.append_mark_up_rs'+cnt).val('');
-    }
+      {
+        if(value == 1)
+        {
+          $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_percent'+cnt).text('Percentage');
+          $('.append_mark_down_percent'+cnt).val(parseInt(value));
+          $('.mark_down_rs'+cnt).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_down_rs'+cnt).val(parseFloat(percent.toFixed(2)));
+          $('.mark_up_percent'+cnt).text('');
+          $('.append_mark_up_percent'+cnt).val('');
+          $('.mark_up_rs'+cnt).text('');
+          $('.append_mark_up_rs'+cnt).val('');
+          $(this).css('color','green');
+        }
+       else
+       {
+          $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_down_rs'+cnt).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_down_percent'+cnt).text('Rupee');
+          $('.append_mark_down_percent'+cnt).val(parseInt(value));
+          $('.mark_up_percent'+cnt).text('');
+          $('.append_mark_up_percent'+cnt).val('');
+          $('.mark_up_rs'+cnt).text('');
+          $('.append_mark_up_rs'+cnt).val('');
+          $(this).css('color','green');
+       }
+      }
     else
     {
-      alert('Less Than Last Purchase Cost!!');
-      $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
-      $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
-      $('.mark_down_percent'+cnt).text(down_percent);
-      $('.append_mark_down_percent'+cnt).val(down_percent);
-      $('.mark_down_rs'+cnt).text(down_rs);
-      $('.append_mark_down_rs'+cnt).val(down_rs);
-      $('.mark_up_percent'+cnt).text('');
-      $('.append_mark_up_percent'+cnt).val('');
-      $('.mark_up_rs'+cnt).text('');
-      $('.append_mark_up_rs'+cnt).val('');
+      if(value == 1)
+        {
+          alert('Less Than Last Purchase Cost!!');
+          $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_percent'+cnt).text('Percentage');
+          $('.append_mark_down_percent'+cnt).val(parseInt(value));
+          $('.mark_down_rs'+cnt).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_down_rs'+cnt).val(parseFloat(percent.toFixed(2)));
+          $('.mark_up_percent'+cnt).text('');
+          $('.append_mark_up_percent'+cnt).val('');
+          $('.mark_up_rs'+cnt).text('');
+          $('.append_mark_up_rs'+cnt).val('');
+          // $(this).css('color','red');
+        }
+       else
+       {
+          alert('Less Than Last Purchase Cost!!');
+          $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
+          $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_down_rs'+cnt).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_down_percent'+cnt).text('Rupee');
+          $('.append_mark_down_percent'+cnt).val(parseInt(value));
+          $('.mark_up_percent'+cnt).text('');
+          $('.append_mark_up_percent'+cnt).val('');
+          $('.mark_up_rs'+cnt).text('');
+          $('.append_mark_up_rs'+cnt).val('');
+          // $(this).css('color','red');
+       }
     }
     $('.down_percent').val('');
     $('.down_rs').val('');
