@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Models\ReceiptRequest;
+
+use Illuminate\Support\Facades\Redirect;
 
 class ReceiptRequestController extends Controller
 {
@@ -14,7 +17,8 @@ class ReceiptRequestController extends Controller
      */
     public function index()
     {
-        return view('admin.receipt_request.view');
+       $receipt_request=ReceiptRequest::all();
+       return view('admin.receipt_request.view',compact('receipt_request'));
     }
 
     /**
@@ -37,7 +41,22 @@ class ReceiptRequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $payment_request = new ReceiptRequest();
+        $payment_request->request_no       = $request->receipt_no;
+        $payment_request->request_date      =  "2020-11-21";
+        $payment_request->supplier_id      = $request->supplier_id;
+        $payment_request->ledger = $request->nature;
+        $payment_request->sales_id =  1;
+        $payment_request->request_amount =  5000;
+        $payment_request->active_status = 1;
+        $payment_request->created_by = 0;
+        $payment_request->updated_by = 0;
+
+        if ($payment_request->save()) {
+            return Redirect::back()->with('success', 'Successfully created');
+        } else {
+            return Redirect::back()->with('failure', 'Something Went Wrong..!');
+        }
     }
 
     /**

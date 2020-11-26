@@ -18,7 +18,7 @@
     <!-- card header end@ -->
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('payment_request.store')}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('payment_process.store')}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -65,7 +65,12 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Payment Request No : </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control request_no" placeholder="Request No" name="request_no" value="">
+				<select class="js-example-basic-multiple col-12 form-control custom-select request_no"  name="request_no" id="request_no">
+                           <option value="">Choose Payment Request No</option>
+                           @foreach($payment_req as $payment_reqs)
+                           <option value="{{ $payment_reqs->id }}">{{ $payment_reqs->request_no }}</option>
+                           @endforeach
+                        </select>
               </div>
             </div>
           </div>
@@ -78,8 +83,8 @@
               <div class="col-sm-8">
                 <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
                            <option value="">Ledger</option>
-                           <option value="">Pending</option>
-                           <option value="">Advance</option>
+                           <option value="1">Pending</option>
+                           <option value="2">Advance</option>
                         </select>
               </div>
             </div>
@@ -127,8 +132,8 @@
               <div class="col-sm-8">
                 <select class="js-example-basic-multiple col-12 form-control custom-select mode"  name="mode" id="mode">
                            <option value="">Choose Mode</option>
-                           <option value="">Cash</option>
-                           <option value="">Bank</option>
+                           <option value="1">Cash</option>
+                           <option value="2">Bank</option>
                         </select>
               </div>
             </div>
@@ -148,8 +153,8 @@
         <br>
 
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" disabled="" type="submit">Submit</button>
-          <button class="btn btn-warning" name="add" disabled="" type="submit">Cancel</button>
+          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-warning" name="add" type="submit">Cancel</button>
         </div>
         <div class="col-md-7 text-right">
           

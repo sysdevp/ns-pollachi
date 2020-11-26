@@ -17,7 +17,7 @@
     <!-- card header end@ -->
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('payment_request.store')); ?>" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('receipt_request.store')); ?>" enctype="multipart/form-data">
       <?php echo e(csrf_field()); ?>
 
 
@@ -66,8 +66,8 @@
               <div class="col-sm-8">
                 <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
                   <option value="">Ledger</option>
-                           <option value="">Pending</option>
-                           <option value="">Advance</option>
+                           <option value="1">Pending</option>
+                           <option value="2">Advance</option>
                         </select>
               </div>
             </div>
@@ -109,8 +109,8 @@
     </div>
 
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" disabled="" type="submit">Submit</button>
-          <button class="btn btn-warning" name="add" disabled="" type="submit">Cancel</button>
+          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-warning" name="add" type="submit">Cancel</button>
         </div>
         <div class="col-md-7 text-right">
           

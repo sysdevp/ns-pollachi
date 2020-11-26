@@ -245,7 +245,19 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div>
 
                               </div> -->
-                              <br>
+                              <div class="row col-md-12 mb-3">
+                              <div class="col-md-2">
+                                  <label style="font-family: Times new roman;">Company Location</label><br>
+                                <select class="js-example-basic-multiple form-control location" 
+                                data-placeholder="Choose Location" id="location" name="location" >
+                                <option value="">Choose Location</option>
+                                <?php $__currentLoopData = $location; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($value->id); ?>"><?php echo e($value->name); ?></option>
+                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                 </select>
+                                 
+                                </div>
+                                </div>
     
       <div class="col-md-8">
                        <div class="form-group row">
@@ -519,7 +531,7 @@ table, th, td {
              
               <div class="col-md-12" id="middlecol">
                 
-                <table class="table" id="team-list">
+                <table class="table table-responsive" id="team-list">
                   <thead>
                     <th> S.no </th>
                     <th> Item S.no </th>
@@ -528,9 +540,10 @@ table, th, td {
                     <th> HSN</th>
                     <th> MRP</th>
                     <th> Unit Price</th>
-                    <th> Purchase Quantity</th>
+                    <th> Total Quantity</th>
                     <th> Rejected Quantity</th>
                     <th> Remaining Quantity</th>
+                    <th> Debited Quantity</th>
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
@@ -620,6 +633,7 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th></th>
+                      <th></th>
                       <th><label class="total_amount">0</label></th>
                       <th></th>
                       <th></th>
@@ -655,12 +669,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         <?php $__currentLoopData = $expense_type; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $expense_types): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($expense_types->id); ?>"><?php echo e($expense_types->type); ?></option>
+                         <?php $__currentLoopData = $account_head; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $expense_types): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($expense_types->id); ?>"><?php echo e($expense_types->name); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                      </div>
-                     <a href="<?php echo e(url('master/expense-type/create')); ?>" target="_blank">
+                     <a href="<?php echo e(route('account_head.create')); ?>" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -708,7 +722,7 @@ table, th, td {
                       </div> -->
 
                        
-                       <div class="row col-md-12 taxes">
+                       <div class="row col-md-12 taxes mb-3">
                         <?php $__currentLoopData = $tax; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                          <div class="col-md-2">
                            <label style="font-family: Times new roman;"><?php echo e($value->name); ?></label>
@@ -722,9 +736,18 @@ table, th, td {
 
                        </div>
 
-                       <div class="col-md-12 text-center mt-5 mb-5">
-                          <input type="submit" class="btn btn-success save" name="save" value="Save">
-                          </div>
+                       <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
+
+                          </p>
+                          
+                        </div>
+
+                      </div>
       </form>
                        
         <script type="text/javascript">
@@ -1232,6 +1255,73 @@ $(document).on("click",".remove_items",function(){
 
 
   
+});
+
+$(document).on("click",".edit_items",function(){
+
+  $('.update_items').show();
+  $('.add_items').hide();
+  if($('.p_no').val() != '')
+  {
+  $('#quantity').attr('readonly','readonly');
+  $('.display_rejected').show();
+  $('.display_remarks').show();
+  }
+
+  var id = $(this).attr("id");
+  $('#dummy_table_id').val(id);
+  var invoice_no = $('.invoice_no'+id).val(); 
+  var item_code_id = $('.item_code'+id).val();
+  var item_code_name = $('.items'+id).text(); 
+  var item_name = $('.item_name'+id).val();
+  var hsn = $('.hsn'+id).val(); 
+  var mrp = $('.mrp'+id).val();
+  var discount_val = $('.discount_val'+id).val(); 
+  var exclusive = $('.exclusive'+id).val();
+  var inclusive = $('.inclusive'+id).val(); 
+  var quantity = $('.quantity'+id).val();
+  var rejected_qty = $('#rejected_quantity'+id).val();
+  var actual_qty = $('#actual_quantity'+id).val();
+  var uom = $('.uom'+id).val(); 
+  var uom_name = $('.font_uom'+id).text();
+  var amnt = $('#amnt'+id).val();
+  var tax = $('#tax'+id).val(); 
+  var tax_gst = $('.tax_gst'+id).val();
+  var net_price = $('#net_price'+id).val(); 
+  var last_purchase_rate = $('.last_purchase'+id).text();
+  var remarks = $('.font_remarks'+id).text(); 
+
+  $('.exclusive_rate').val(exclusive);
+  $('.inclusive_rate').val(inclusive);
+  $('.item_sno').val(invoice_no);
+  $('.items_codes').val(item_code_id);
+  $('.item_name').val(item_name);
+  $('.item_code').val(item_code_name);
+  $('.mrp').val(mrp);
+  $('.hsn').val(hsn);
+  $('.quantity').val(quantity);
+  $('.rejected').val(rejected_qty);
+  $('.actual_qty').val(actual_qty);
+  $('.tax_rate').val(tax_gst);
+  $('.amount').val(amnt);
+  $('.net_price').val(net_price);
+  $('.gst').val(tax);
+  $('.uom').val(uom);
+  $('.uom_name').val(uom_name);
+  $('#last_purchase_rate').val(last_purchase_rate);
+  $('.remarks').val(remarks);
+
+  var disc_value = parseFloat(discount_val)/parseFloat(quantity);
+   $('.discount_rs').val(disc_value.toFixed(2));
+   discount_calc();
+   
+  if(discount_val == 0)
+  {
+    $('.discount_percentage').val('');
+  $('.discount_rs').val('');
+  }
+   // item_codes(item_code_id);
+
 });
 
 $(document).on("click",".edit_items",function(){
@@ -1776,11 +1866,6 @@ function item_details_sno(){
   
 function qty()
 {
-
-
-
-
-
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
 
@@ -2775,11 +2860,10 @@ $('.no_items').text(result.status);
 $('.invoice_val').text(result.item_net_value_sum.toFixed(2));
 $('.purchase_date').text(result.date_purchaseorder);
 $('.p_date').val(result.purchase_entry_date);
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
+
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2882,11 +2966,9 @@ $('.estimation_date').text(result.date_estimation);
 $('.estimation_no').text(result.estimation_no);
 $('.receipt_date').val(result.receipt_note_date);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
