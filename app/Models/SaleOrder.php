@@ -18,4 +18,16 @@ class SaleOrder extends Model
     {
     	return $this->belongsTo(Location::class, 'location', 'id');
     }
+     public function sale_order_expense_det()
+    {
+        return $this->belongsTo(SaleOrderExpense::class, 'so_no', 'so_no');
+    }
+     public function sale_order_items_det()
+    {
+        return $this->belongsTo(SaleOrderItem::class, 'so_no', 'so_no');
+    }
+     public function sale_order_tax_det()
+    {
+        return $this->belongsTo(SaleOrderTax::class, 'so_no', 'so_no');
+    }
 }

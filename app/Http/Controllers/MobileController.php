@@ -95,33 +95,40 @@ class MobileController extends Controller
         try
         {
             $sale_order = SaleOrder::all();
-            //$sale_order_item = SaleOrderItem::all();
-            //$sale_order_expense = SaleOrderExpense::all();
-            //$sale_order_tax = SaleOrderTax::all();
 
-            $data[] = SaleOrder::join('sale_order_items','sale_orders.so_no','=','sale_order_items.so_no')
-                              ->join('sale_order_expenses','sale_orders.so_no','=','sale_order_expenses.so_no')
-                              ->join('sale_order_taxes','sale_orders.so_no','=','sale_order_taxes.so_no')
-                              ->select('sale_order_items.*','sale_order_expenses.*')
-                              ->get();
-                // $sale_order_item = SaleOrderItem::whereJsonContains('so_no',$value->so_no)->get();
-                //$response['sale_order_expense'] = SaleOrderExpense::where('so_no',$value->so_no)->get();
-                //$response['sale_order_item'] = SaleOrderItem::where('so_no',$value->so_no)->get();
+            //$data[] = SaleOrder::join('sale_order_items','sale_orders.so_no','=','sale_order_items.so_no')
+              //                ->join('sale_order_expenses','sale_orders.so_no','=','sale_order_expenses.so_no')
+               //               ->join('sale_order_taxes','sale_orders.so_no','=','sale_order_taxes.so_no')
+               //               ->select('sale_order_items.*','sale_order_expenses.*')
+               //  
+               //             ->get();
+            $response_data = [];
             
-           // echo "<pre>"; print_r($data); exit();
-            echo json_encode($data);exit;
-            $response['status'] = 'Success';
-            $response['msg'] = "";
-            $response['sale_order'] = $sale_order;
-            //$response['sale_order_item'] = $sale_order_item;
-            //$response['sale_order_expense'] = $sale_order_expense;
-            //$response['sale_order_tax'] = $sale_order_tax;
-            foreach ($sale_order_item as $key => $value) 
-            {
-                $response['items'] = Item::where('id', $value->item_id)->get();
+            foreach($sale_order as $sale_orders){
+                $sale_order_item = [];
+                $sale_order_item['so_no']=$sale_orders->so_no;
+                $sale_order_item['so_date']=$sale_orders->so_date;
+                $sale_exp_det = [];
+
+                $sale_order_expenses = SaleOrderExpense::where('so_no',$sale_orders->so_no)->get();
+
+                foreach($sale_order_expenses as $sale_order_expense)
+                { 
+                  $exp_det = [];
+                  $exp_det['expense_type']=$sale_order_expense->expense_type;
+                  $exp_det['expense_amount']=$sale_order_expense->expense_amount;
+                 array_push($sale_exp_det,$exp_det);
+            
             }
-            return response()->json($response,200);
-            echo json_encode($response);
+            $sale_order_item['sales_expenses'] = $sale_exp_det;
+             array_push($response_data,$sale_order_item);   
+            }
+
+             
+              
+           
+            return response()->json($response_data,200);
+            
         }
 
         catch(Exception $e)
