@@ -606,7 +606,7 @@ if($('#tester').val() == '')
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
           $('.append_mark_up_rs'+count).val('');
-          // $(this).css('color','red');
+          $(this).css('color','red');
         }
        else
        {
@@ -620,7 +620,7 @@ if($('#tester').val() == '')
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
           $('.append_mark_up_rs'+count).val('');
-          // $(this).css('color','red');
+          $(this).css('color','red');
        }
       }
     });
@@ -669,7 +669,7 @@ else
           $('.append_mark_up_percent'+cnt).val('');
           $('.mark_up_rs'+cnt).text('');
           $('.append_mark_up_rs'+cnt).val('');
-          $(this).css('color','green');
+          // $(this).css('color','green');
         }
        else
        {
@@ -683,7 +683,7 @@ else
           $('.append_mark_up_percent'+cnt).val('');
           $('.mark_up_rs'+cnt).text('');
           $('.append_mark_up_rs'+cnt).val('');
-          $(this).css('color','green');
+          // $(this).css('color','green');
        }
       }
     else
