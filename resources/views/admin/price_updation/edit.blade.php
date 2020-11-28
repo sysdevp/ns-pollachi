@@ -27,7 +27,7 @@
                   <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">With Effect From :</label>
                      <div class="col-sm-6">
-                      <input type="date" name="effective_from" class="form-control"  readonly id="effective_from" value="{{ $updations->effective_from }}">
+                      <input type="date" name="effective_from" class="form-control" id="effective_from" value="{{ $updations->effective_from }}">
                      </div>
                   </div>
                </div>
@@ -70,7 +70,7 @@
         </div>
         <br>
         <div class="form-row mb-3">
-          @if($updations->mark_up_rs != '' || $updations->mark_up_percent != '')
+          @if($updations->mark_up_type != '')
           <div class="col-md-4">
             <label>Mark Up</label>
                   <input type="radio" class="price_updation_up" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="">
@@ -99,6 +99,7 @@
         <div class="form-row mb-3">
           <div class="col-md-6">
             <div class="form-group row">
+              @if($updations->mark_up_type != '')
               <label for="validationCustom01" class="col-sm-4 col-form-label up_percent_label">Mark Up %:</label>
               <div class="col-sm-8 up_percent_div">
                 <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" oninput="up_percents()" value="">
@@ -110,12 +111,27 @@
                 <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" oninput="down_percents()" name="down_percent" value="">
                 
               </div>
+              @else
+
+              <label for="validationCustom01" style="display: none;" class="col-sm-4 col-form-label up_percent_label">Mark Up %:</label>
+              <div class="col-sm-8 up_percent_div" style="display: none;">
+                <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" oninput="up_percents()" value="">
+                
+              </div>
+
+              <label for="validationCustom01" class="col-sm-4 col-form-label down_percent_label">Mark Down %:</label>
+              <div class="col-sm-8 down_percent_div">
+                <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" oninput="down_percents()" name="down_percent" value="">
+                
+              </div>
+              @endif
 
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group row">
+              @if($updations->mark_up_type != '')
               <label for="validationCustom01" class="col-sm-4 col-form-label up_rs_label">Mark Up Rs:</label>
               <div class="col-sm-8 up_rs_div">
                 <input type="text" class="form-control up_rs only_allow_digit_and_dot" placeholder="Mark Up Rs" name="up_rs" oninput="up_rupees()" value="" >
@@ -127,6 +143,20 @@
                 <input type="text" class="form-control down_rs only_allow_digit_and_dot" placeholder="Mark Down Rs" name="down_rs" oninput="down_rupees()" value="">
                 
               </div>
+              @else
+
+              <label for="validationCustom01"  style="display: none;" class="col-sm-4 col-form-label up_rs_label">Mark Up Rs:</label>
+              <div class="col-sm-8 up_rs_div" style="display: none;">
+                <input type="text" class="form-control up_rs only_allow_digit_and_dot" placeholder="Mark Up Rs" name="up_rs" oninput="up_rupees()" value="" >
+                
+              </div>
+
+              <label for="validationCustom01" class="col-sm-4 col-form-label down_rs_label">Mark Down Rs:</label>
+              <div class="col-sm-8 down_rs_div">
+                <input type="text" class="form-control down_rs only_allow_digit_and_dot" placeholder="Mark Down Rs" name="down_rs" oninput="down_rupees()" value="">
+                
+              </div>
+              @endif
 
             </div>
           </div>
@@ -172,7 +202,7 @@
           </tr>
         </thead>
         <tbody class="append_item" id="myTable">
-          <tr class="row_category" id="1"><td><font style="font-family: Times new roman;">1</font><input type="hidden" name="table_count" value="1"></td><td><input type="hidden" value="{{@$updations->item_id}}" class="append_item_id1" name="item_id[]"><input type="hidden" value="{{ @$updations->tem->code }}" class="actual_item_code1" name="item_code[]"><input type="hidden" value="{{$updations->item->code}}" class="append_item_code1"><font class="item_code1" style="font-family: Times new roman;">{{@$updations->item->code}}</font></td><td><input type="hidden" value="{{@$updations->item->name}}" class="actual_item_name1" name="item_name[]"><input type="hidden" value="{{@$updations->item->name}}" class="append_item_name1"><font class="item_name1" style="font-family: Times new roman;">{{@$updations->item->name}}</font></td><td><input type="hidden" value="{{@$updations->item->brand->id}}" class="actual_item_brand_name1" name="brand_id[]"><input type="hidden" value="{{@$updations->item->brand->id}}" class="append_item_brand_name1"><font class="item_brand_name1" style="font-family: Times new roman;">{{@$brand_name }}</font></td><td><input type="hidden" value="{{@$updations->item->categories->id}}" class="actual_item_category_name1" name="category_id[]"><input type="hidden" value="{{@$updations->item->categories->id}}" class="append_item_category_name1"><font class="item_category_name1" style="font-family: Times new roman;">{{@$updations->item->categories->name}}</font></td><td><input type="hidden" value="{{@$updations->item->hsn}}" class="actual_item_hsn1" name="hsn[]"><input type="hidden" value="{{@$updations->item->hsn}}" class="append_item_hsn1"><font style="font-family: Times new roman;" class="item_hsn1">{{@$updations->item->hsn}}</font></td><td><input type="hidden" value="{{@$updations->item->mrp}}" class="actual_item_mrp1" name="mrp[]"><input type="hidden" value="{{@$updations->item->mrp}}" class="append_item_mrp1"><font class="item_mrp1" style="font-family: Times new roman;">{{$updations->item->mrp}}</font></td><td><input type="hidden" value="{{@$updations->item->uom->id}}" class="actual_item_uom1" name="uom_id[]"><input type="hidden" value="{{@$updations->item->uom->id}}" class="append_item_uom1"><font class="item_uom1" style="font-family: Times new roman;">{{ @$updations->item->uom->name }}</font></td><td><input type="hidden" class="actual_last_purchase_cost1" value="{{@$unit_price}}" name="last_purchase_cost[]"><input type="hidden" class="append_last_purchase_cost1" value="{{@$unit_price}}"><font class="last_purchase_cost1">{{@$unit_price}}</font></td><td><input type="hidden" class="tax1" value="{{@$tax}}" name="tax[]"><font class="tax1">{{@$tax}}</font></td><td><input type="hidden" class=" form-control append_mark_up_percent1" name="mark_up_percent[]" value="{{@$updated_selling_price->mark_up_type}}"><font class="mark_up_percent1" style="font-family: Times new roman;">{{@$up_type}}</font></td><td><input type="hidden" class="form-control append_mark_up_rs1" name="mark_up_rs[]" value="{{@$updated_selling_price->mark_up_value}}"><font class="mark_up_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_up_value}}</font></td><td><input type="hidden" class="form-control append_mark_down_percent1" name="mark_down_percent[]" value="{{@$updated_selling_price->mark_down_type}}"><font class="mark_down_percent1" style="font-family: Times new roman;">{{@$down_type}}</font></td><td><input type="hidden" class="form-control append_mark_down_rs1" name="mark_down_rs[]" value="{{@$updated_selling_price->mark_down_value}}"><font class="mark_down_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_down_value}}</font></td><td><input type="hidden" value="{{@$last_selling_price}}" class="actual_item_selling_price1" name="last_selling_price[]"><input type="hidden" value="{{@$last_selling_price}}" class="append_item_selling_price1"><font style="font-family: Times new roman;" class="item_selling_price1">{{@$last_selling_price}}</font></td><td><input type="hidden" value="{{@$selling_price}}" class="actual_updated_selling_price1"><input type="hidden" value="{{@$selling_price}}" class="append_updated_selling_price1" name="updated_selling_price[]"><font style="font-family: Times new roman;" class="updated_selling_price1">{{@$selling_price}}</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="'.$key.'" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="'.$key.'" aria-hidden="true"></i></td></tr>
+          <tr class="row_category" id="1"><td><font style="font-family: Times new roman;">1</font><input type="hidden" name="table_count" value="1"></td><td><input type="hidden" value="{{@$updations->item_id}}" class="append_item_id1" name="item_id"><input type="hidden" value="{{ @$updations->tem->code }}" class="actual_item_code1" name="item_code"><input type="hidden" value="{{$updations->item->code}}" class="append_item_code1"><font class="item_code1" style="font-family: Times new roman;">{{@$updations->item->code}}</font></td><td><input type="hidden" value="{{@$updations->item->name}}" class="actual_item_name1" name="item_name"><input type="hidden" value="{{@$updations->item->name}}" class="append_item_name1"><font class="item_name1" style="font-family: Times new roman;">{{@$updations->item->name}}</font></td><td><input type="hidden" value="{{@$updations->item->brand->id}}" class="actual_item_brand_name1" name="brand_id"><input type="hidden" value="{{@$updations->item->brand->id}}" class="append_item_brand_name1"><font class="item_brand_name1" style="font-family: Times new roman;">{{@$brand_name }}</font></td><td><input type="hidden" value="{{@$updations->item->categories->id}}" class="actual_item_category_name1" name="category_id"><input type="hidden" value="{{@$updations->item->categories->id}}" class="append_item_category_name1"><font class="item_category_name1" style="font-family: Times new roman;">{{@$updations->item->categories->name}}</font></td><td><input type="hidden" value="{{@$updations->item->hsn}}" class="actual_item_hsn1" name="hsn"><input type="hidden" value="{{@$updations->item->hsn}}" class="append_item_hsn1"><font style="font-family: Times new roman;" class="item_hsn1">{{@$updations->item->hsn}}</font></td><td><input type="hidden" value="{{@$updations->item->mrp}}" class="actual_item_mrp1" name="mrp"><input type="hidden" value="{{@$updations->item->mrp}}" class="append_item_mrp1"><font class="item_mrp1" style="font-family: Times new roman;">{{$updations->item->mrp}}</font></td><td><input type="hidden" value="{{@$updations->item->uom->id}}" class="actual_item_uom1" name="uom_id"><input type="hidden" value="{{@$updations->item->uom->id}}" class="append_item_uom1"><font class="item_uom1" style="font-family: Times new roman;">{{ @$updations->item->uom->name }}</font></td><td><input type="hidden" class="actual_last_purchase_cost1" value="{{@$unit_price}}" name="last_purchase_cost"><input type="hidden" class="append_last_purchase_cost1" value="{{@$unit_price}}"><font class="last_purchase_cost1">{{@$unit_price}}</font></td><td><input type="hidden" class="tax1" value="{{@$tax}}" name="tax"><font class="tax1">{{@$tax}}</font></td><td><input type="hidden" class=" form-control append_mark_up_percent1" name="mark_up_percent" value="{{@$updated_selling_price->mark_up_type}}"><font class="mark_up_percent1" style="font-family: Times new roman;">{{@$up_type}}</font></td><td><input type="hidden" class="form-control append_mark_up_rs1" name="mark_up_rs" value="{{@$updated_selling_price->mark_up_value}}"><font class="mark_up_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_up_value}}</font></td><td><input type="hidden" class="form-control append_mark_down_percent1" name="mark_down_percent" value="{{@$updated_selling_price->mark_down_type}}"><font class="mark_down_percent1" style="font-family: Times new roman;">{{@$down_type}}</font></td><td><input type="hidden" class="form-control append_mark_down_rs1" name="mark_down_rs" value="{{@$updated_selling_price->mark_down_value}}"><font class="mark_down_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_down_value}}</font></td><td><input type="hidden" value="{{@$last_selling_price}}" class="actual_item_selling_price1" name="last_selling_price"><input type="hidden" value="{{@$last_selling_price}}" class="append_item_selling_price1"><font style="font-family: Times new roman;" class="item_selling_price1">{{@$last_selling_price}}</font></td><td><input type="hidden" value="{{@$selling_price}}" class="actual_updated_selling_price1"><input type="hidden" value="{{@$selling_price}}" class="append_updated_selling_price1" name="updated_selling_price"><font style="font-family: Times new roman;" class="updated_selling_price1">{{@$selling_price}}</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="1" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="1" aria-hidden="true"></i></td></tr>
         </tbody>
         <tfoot>
               <th></th>
@@ -614,7 +644,7 @@ if($('#tester').val() == '')
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
           $('.append_mark_up_rs'+count).val('');
-          // $(this).css('color','red');
+          $(this).css('color','red');
         }
        else
        {
@@ -628,7 +658,7 @@ if($('#tester').val() == '')
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
           $('.append_mark_up_rs'+count).val('');
-          // $(this).css('color','red');
+          $(this).css('color','red');
        }
       }
     });
@@ -677,7 +707,7 @@ else
           $('.append_mark_up_percent'+cnt).val('');
           $('.mark_up_rs'+cnt).text('');
           $('.append_mark_up_rs'+cnt).val('');
-          $(this).css('color','green');
+          // $(this).css('color','green');
         }
        else
        {
@@ -691,7 +721,7 @@ else
           $('.append_mark_up_percent'+cnt).val('');
           $('.mark_up_rs'+cnt).text('');
           $('.append_mark_up_rs'+cnt).val('');
-          $(this).css('color','green');
+          // $(this).css('color','green');
        }
       }
     else
