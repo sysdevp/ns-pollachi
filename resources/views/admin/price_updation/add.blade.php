@@ -126,8 +126,6 @@
           </div>
         </div>
 
-        <input type="text" name="" value="" id="row_count">
-
         <div class="col-md-7 text-right">
           <button class="btn btn-success up_update" name="up_update" id="up_update" type="button">Update</button>
           <button class="btn btn-success down_update" style="display: none;" name="down_update" id="down_update" type="button">Update</button>
@@ -157,10 +155,10 @@
             <th>UOM</th>
             <th>Last Purchase Cost</th>
             <th>Tax</th>
-            <th>Mark Up (%)</th>
-            <th>Mark Up (Rs)</th>
-            <th>Mark Down (%)</th>
-            <th>Mark Down (Rs)</th>
+            <th>Mark Up  Type</th>
+            <th>Mark Up Value</th>
+            <th>Mark Down Type</th>
+            <th>Mark Down Value</th>
             <th>Last Selling Price</th>
             <th>Updated Selling Price</th>
             <th>Action</th>
@@ -775,35 +773,6 @@ $(document).on('click','.down',function(){
     $('.down_percent').focus();
     $('#tester').val($(this).attr('id'));
 });
-
-function table_mark_up_percent(key)
-{
-  $('.append_mark_up_rs'+key).val('');
-  $('.append_mark_down_percent'+key).val('');
-  $('.append_mark_down_rs'+key).val('');
-
-}
-function table_mark_up_rs(key)
-{
-  
-  $('.append_mark_up_percent'+key).val('');
-  $('.append_mark_down_percent'+key).val('');
-  $('.append_mark_down_rs'+key).val('');
-
-}
-function table_mark_down_percent(key)
-{
-  $('.append_mark_up_percent'+key).val('');
-  $('.append_mark_up_rs'+key).val('');
-  $('.append_mark_down_rs'+key).val('');
-}
-function table_mark_down_rs(key)
-{
-  $('.append_mark_up_percent'+key).val('');
-  $('.append_mark_up_rs'+key).val('');
-  $('.append_mark_down_percent'+key).val('');
-
-}
 
 </script>
 @endsection
