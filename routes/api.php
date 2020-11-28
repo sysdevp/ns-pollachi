@@ -20,5 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('app-login', 'MobileController@login');
 Route::post('app-employee', 'MobileController@employee');
-Route::post('app-sale_order', 'MobileController@sale_order');
+Route::post('app-sale-order', 'MobileController@sale_order');
+Route::post('app-sale-entry-view', 'MobileController@sale_entry_view');
 Route::post('app-test', 'MobileController@test');

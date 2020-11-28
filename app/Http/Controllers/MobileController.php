@@ -14,6 +14,13 @@ use App\Models\SaleOrder;
 use App\Models\SaleOrderExpense;
 use App\Models\SaleOrderTax;
 use App\Models\Item;
+use App\Models\Tax;
+use App\Models\Customer;
+use App\Models\SaleEntry;
+use App\Models\SaleEntryItem;
+use App\Models\SaleEntryExpense;
+use App\Models\SaleEntryTax;
+use App\Models\SalesMan;
 
 class MobileController extends Controller
 {
@@ -105,23 +112,158 @@ class MobileController extends Controller
             $response_data = [];
             
             foreach($sale_order as $sale_orders){
-                $sale_order_item = [];
-                $sale_order_item['so_no']=$sale_orders->so_no;
-                $sale_order_item['so_date']=$sale_orders->so_date;
+                $so_item = [];
+				$cus_name = Customer::where('id',$sale_orders->customer_id)->select('name', 'phone_no')->get();
+				$sale_orders->customer_name = $cus_name[0]->name;
+				$sale_orders->mobile_no = $cus_name[0]->phone_no;
+				$emp_name = SalesMan::where('id',$sale_orders->salesman_id)->select('name', 'phone_no')->get();
+				$sale_orders->salesman_name = $emp_name[0]->name;
+				$sale_orders->salesman_mobile_no = $emp_name[0]->phone_no;
                 $sale_exp_det = [];
-
+                $sale_exp_tax = [];
+                
                 $sale_order_expenses = SaleOrderExpense::where('so_no',$sale_orders->so_no)->get();
 
                 foreach($sale_order_expenses as $sale_order_expense)
                 { 
                   $exp_det = [];
+				  $exp_det['expense_id']=$sale_order_expense->id;
                   $exp_det['expense_type']=$sale_order_expense->expense_type;
                   $exp_det['expense_amount']=$sale_order_expense->expense_amount;
                  array_push($sale_exp_det,$exp_det);
             
             }
-            $saleorder_expense['sales_expenses'] = $sale_exp_det;
-             array_push($response_data,$saleorder_expense);   
+			
+			$sale_order_items = SaleOrderItem::where('so_no',$sale_orders->so_no)->get();
+
+                foreach($sale_order_items as $sale_order_item)
+                { 
+                  $item_det = [];
+				  $item_det['item_id']=$sale_order_item->id;
+                  $item_name = Item::where('id',$sale_order_item->item_id)->pluck('name');
+                  $item_det['item_name']=$item_name[0];
+                  $item_det['mrp']=$sale_order_item->mrp;
+                  $item_det['gst']=$sale_order_item->gst;
+                  $item_det['rate_exclusive_tax']=$sale_order_item->rate_exclusive_tax;
+                  $item_det['rate_inclusive_tax']=$sale_order_item->rate_inclusive_tax;
+                  $item_det['qty']=$sale_order_item->qty;
+                  $item_det['uom_id']=$sale_order_item->uom_id;
+                  $item_det['discount']=$sale_order_item->discount;
+                 array_push($so_item,$item_det);
+            
+            }
+			
+			 $sale_order_taxes = SaleOrderTax::where('so_no',$sale_orders->so_no)->get();
+
+                foreach($sale_order_taxes as $sale_order_tax)
+                { 
+                  $exp_tax = [];
+				  $exp_tax['tax_id']=$sale_order_tax->id;
+				  $tax_name = Tax::where('id',$sale_order_tax->taxmaster_id)->pluck('name');
+                  $exp_tax['tax_name']=isset($tax_name[0]) ? $tax_name[0] : false;
+                  $exp_tax['value']=$sale_order_tax->value;
+                 array_push($sale_exp_tax,$exp_tax);
+            
+            }
+			
+            $sale_orders['sale_order_expenses'] = $sale_exp_det;
+            $sale_orders['sale_order_items'] = $so_item;
+            $sale_orders['sale_order_tax'] = $sale_exp_tax;
+             array_push($response_data,$sale_orders);   
+            }
+
+             
+              
+           
+            return response()->json($response_data,200);
+            
+        }
+
+        catch(Exception $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+        }
+
+    }
+	
+	public function sale_entry_view()
+    {
+
+        try
+        {
+            $sale_order = SaleEntry::all();
+
+            //$data[] = SaleOrder::join('sale_order_items','sale_orders.so_no','=','sale_order_items.so_no')
+              //                ->join('sale_order_expenses','sale_orders.so_no','=','sale_order_expenses.so_no')
+               //               ->join('sale_order_taxes','sale_orders.so_no','=','sale_order_taxes.so_no')
+               //               ->select('sale_order_items.*','sale_order_expenses.*')
+               //  
+               //             ->get();
+            $response_data = [];
+            
+            foreach($sale_order as $sale_orders){
+				
+                $so_item = [];
+				$cus_name = Customer::where('id',$sale_orders->customer_id)->select('name', 'phone_no')->get();
+				$sale_orders->customer_name = $cus_name[0]->name;
+				$sale_orders->mobile_no = $cus_name[0]->phone_no;
+				$emp_name = SalesMan::where('id',$sale_orders->salesman_id)->select('name', 'phone_no')->get();
+				$sale_orders->salesman_name = $emp_name[0]->name;
+				$sale_orders->salesman_mobile_no = $emp_name[0]->phone_no;
+                $sale_exp_det = [];
+                $sale_exp_tax = [];
+                
+                $sale_order_expenses = SaleEntryExpense::where('s_no',$sale_orders->s_no)->get();
+
+                foreach($sale_order_expenses as $sale_order_expense)
+                { 
+				
+                  $exp_det = [];
+				  $exp_det['expense_id']=$sale_order_expense->id;
+                  $exp_det['expense_type']=$sale_order_expense->expense_type;
+                  $exp_det['expense_amount']=$sale_order_expense->expense_amount;
+                 array_push($sale_exp_det,$exp_det);
+            
+            }
+			
+			$sale_order_items = SaleEntryItem::where('s_no',$sale_orders->s_no)->get();
+
+                foreach($sale_order_items as $sale_order_item)
+                { 
+                  $item_det = [];
+				  $item_det['item_id']=$sale_order_item->id;
+                  $item_name = Item::where('id',$sale_order_item->item_id)->pluck('name');
+                  $item_det['item_name']=$item_name[0];
+                  $item_det['mrp']=$sale_order_item->mrp;
+                  $item_det['gst']=$sale_order_item->gst;
+                  $item_det['rate_exclusive_tax']=$sale_order_item->rate_exclusive_tax;
+                  $item_det['rate_inclusive_tax']=$sale_order_item->rate_inclusive_tax;
+                  $item_det['qty']=$sale_order_item->qty;
+                  $item_det['uom_id']=$sale_order_item->uom_id;
+                  $item_det['discount']=$sale_order_item->discount;
+                 array_push($so_item,$item_det);
+            
+            }
+			
+			 $sale_order_taxes = SaleEntryTax::where('s_no',$sale_orders->s_no)->get();
+
+                foreach($sale_order_taxes as $sale_order_tax)
+                { 
+                  $exp_tax = [];
+				  $exp_tax['tax_id']=$sale_order_tax->id;
+				  $tax_name = Tax::where('id',$sale_order_tax->taxmaster_id)->pluck('name');
+                  $exp_tax['tax_name']=isset($tax_name[0]) ? $tax_name[0] : false;
+                  $exp_tax['value']=$sale_order_tax->value;
+                 array_push($sale_exp_tax,$exp_tax);
+            
+            }
+			
+            $sale_orders['sale_order_expenses'] = $sale_exp_det;
+            $sale_orders['sale_order_items'] = $so_item;
+            $sale_orders['sale_order_tax'] = $sale_exp_tax;
+             array_push($response_data,$sale_orders);   
             }
 
              
