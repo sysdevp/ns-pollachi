@@ -120,8 +120,8 @@ class MobileController extends Controller
                  array_push($sale_exp_det,$exp_det);
             
             }
-            $sale_order_item['sales_expenses'] = $sale_exp_det;
-             array_push($response_data,$sale_order_item);   
+            $saleorder_expense['sales_expenses'] = $sale_exp_det;
+             array_push($response_data,$saleorder_expense);   
             }
 
              
