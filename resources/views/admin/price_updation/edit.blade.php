@@ -105,19 +105,7 @@
                 <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" oninput="up_percents()" value="">
                 
               </div>
-
-              <label for="validationCustom01" class="col-sm-4 col-form-label down_percent_label" style="display: none;">Mark Down %:</label>
-              <div class="col-sm-8 down_percent_div" style="display: none;">
-                <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" oninput="down_percents()" name="down_percent" value="">
-                
-              </div>
               @else
-
-              <label for="validationCustom01" style="display: none;" class="col-sm-4 col-form-label up_percent_label">Mark Up %:</label>
-              <div class="col-sm-8 up_percent_div" style="display: none;">
-                <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" oninput="up_percents()" value="">
-                
-              </div>
 
               <label for="validationCustom01" class="col-sm-4 col-form-label down_percent_label">Mark Down %:</label>
               <div class="col-sm-8 down_percent_div">
@@ -138,18 +126,7 @@
                 
               </div>
 
-              <label for="validationCustom01" style="display: none;" class="col-sm-4 col-form-label down_rs_label">Mark Down Rs:</label>
-              <div class="col-sm-8 down_rs_div" style="display: none;">
-                <input type="text" class="form-control down_rs only_allow_digit_and_dot" placeholder="Mark Down Rs" name="down_rs" oninput="down_rupees()" value="">
-                
-              </div>
               @else
-
-              <label for="validationCustom01"  style="display: none;" class="col-sm-4 col-form-label up_rs_label">Mark Up Rs:</label>
-              <div class="col-sm-8 up_rs_div" style="display: none;">
-                <input type="text" class="form-control up_rs only_allow_digit_and_dot" placeholder="Mark Up Rs" name="up_rs" oninput="up_rupees()" value="" >
-                
-              </div>
 
               <label for="validationCustom01" class="col-sm-4 col-form-label down_rs_label">Mark Down Rs:</label>
               <div class="col-sm-8 down_rs_div">
