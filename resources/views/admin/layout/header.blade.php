@@ -319,7 +319,7 @@
  -->
           <li class="nav-item dropdown menu-large">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Transactions
+              Transactions 
             </a>
             <ul class="dropdown-menu megamenu">
                     <div class="row mx-0">
