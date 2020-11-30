@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SellingPriceSetup;
+use Illuminate\Support\Facades\Redirect;
 
 class SellingPriceSetupController extends Controller
 {
@@ -15,8 +16,16 @@ class SellingPriceSetupController extends Controller
      */
     public function index()
     {
-        $selling_price_setup = SellingPriceSetup::all();
-        return view('admin.settings.selling_price_setup',compact('selling_price_setup'));
+        $selling_price_setup = SellingPriceSetup::first();
+        if($selling_price_setup != '')
+        {
+            $count = 1;
+        }
+        else
+        {
+            $count = 0;
+        }
+        return view('admin.settings.selling_price_setup',compact('selling_price_setup','count'));
     }
 
     /**
