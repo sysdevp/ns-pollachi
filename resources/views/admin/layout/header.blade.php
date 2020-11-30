@@ -619,26 +619,64 @@
             
           </li>
 
-          <li class="nav-item dropdown menu-large">
+          <!-- <li class="nav-item dropdown menu-large">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Settings
+              Stock Reports
             </a>
             <ul class="dropdown-menu megamenu">
                     <div class="row mx-0">
                    <li class="col-md-3 dropdown-item">
                         <ul>
 
-                            <li class="dropdown-header">selling Price</li>
-                           <li><a href="{{ route('selling-price-setup.index') }}">Selling Price Setup</a></li>
+                            <li class="dropdown-header">Stock Reports</li>
+                           <li><a href="{{ route('daybook.index') }}">Stock Summary</a></li>
+                           <li><a href="{{ route('daybook.index') }}">Stock Ageing</a></li>
+                            
                         </ul>
                     </li>
                     
             </ul>        
             
             
-          </li>
+          </li> -->
+
+
+
+          <!-- <li class="nav-item dropdown menu-large">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              POS
+            </a>
+            <ul class="dropdown-menu megamenu">
+                    <div class="row mx-0">
+                   <li class="col-md-3 dropdown-item">
+                        <ul>
+                            <li class="dropdown-header">POS</li>
+                           
+                            <li><a href="{{ route('pos.index') }}">POS</a></li>
+                        </ul>
+                    </li>
+            </ul>        
+            
+          </li> -->
+
+
+
 
           
+          <!--<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Reports
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  " href="#">Disabled</a>
+          </li> -->
         </ul>
         <ul class="navbar-nav ml-auto login">
         <li class="nav-item dropdown">

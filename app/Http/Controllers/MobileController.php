@@ -281,4 +281,33 @@ class MobileController extends Controller
         }
 
     }
+	
+	public function list_customer(Request $request)
+    {
+
+        try
+        {
+            
+             $customers = Customer::all();
+            
+            foreach($customers as $customer)
+            {
+                
+                $response['status'] = 'Success';
+                $response['msg'] = "";
+                $response['data'] = $customers;
+                return response()->json($response,200);
+                echo json_encode($response['data']);
+            }
+        }
+
+        catch(Exception $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+        }
+
+    	
+    }
 }

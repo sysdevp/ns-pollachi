@@ -23,3 +23,4 @@ Route::post('app-employee', 'MobileController@employee');
 Route::post('app-sale-order', 'MobileController@sale_order');
 Route::post('app-sale-entry-view', 'MobileController@sale_entry_view');
 Route::post('app-test', 'MobileController@test');
+Route::post('list-customers', 'MobileController@list_customer');
