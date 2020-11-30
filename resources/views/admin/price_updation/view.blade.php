@@ -27,13 +27,12 @@
             <th>Category</th>
             <th>HSN</th>
             <th>MRP</th>
+            <th>Mark Up Type</th>
+            <th>Mark Up Value</th>
+            <th>Mark Down Type</th>
+            <th>Mark Down Value</th>
+            <th>Last Purchase Cost</th>
             <th>Selling Price</th>
-            <th>Mark Up(%)</th>
-            <th>Mark Up(Rs)</th>
-            <th>Mark Down(%)</th>
-            <th>Mark Down(Rs)</th>
-            <th>Unit Price</th>
-            <th>Tax Rate</th>
            <th>Action </th>
           </tr>
         </thead>
@@ -46,18 +45,29 @@
               @if($value->brand_id == 0)
               <td>Not Applicable</td>
               @else
-              <td>{{ @$value->brand->name }}</td>
+              <td>{{ @$value->item->brand->name }}</td>
               @endif
-              <td>{{ @$value->category->name }}</td>
+              <td>{{ @$value->item->categories->name }}</td>
               <td>{{ @$value->item->hsn }}</td>
               <td>{{ @$value->item->mrp }}</td>
-              <td>{{ $value->selling_price }}</td>
-              <td>{{ $value->mark_up_percent }}</td>
-              <td>{{ $value->mark_up_rs }}</td>
-              <td>{{ $value->mark_down_percent }}</td>
-              <td>{{ $value->mark_down_rs }}</td>
-              <td>{{ $value->unit_price }}</td>
-              <td>{{ $value->tax_rate }}</td>
+              @if($value->mark_up_type == 1)
+              <td>Percentage</td>
+              @elseif($value->mark_up_type == 2)
+              <td>Rupee</td>
+              @else
+              <td></td>
+              @endif
+              <td>{{ $value->mark_up_value }}</td>
+              @if($value->mark_down_type == 1)
+              <td>Percentage</td>
+              @elseif($value->mark_down_type == 2)
+              <td>Rupee</td>
+              @else
+              <td></td>
+              @endif
+              <td>{{ $value->mark_down_value }}</td>
+              <td>{{ $last_purchase_cost[$key] }}</td>
+              <td>{{ $selling_price[$key] }}</td>
               <td> 
                 <a href="{{ route('price_updation.show',$value->id) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{ route('price_updation.edit',$value->id) }}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>

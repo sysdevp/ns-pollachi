@@ -936,6 +936,8 @@ Route::resource('daybook','DayBookController',['middleware' => ['auth']]);
 
 /*Day Book End Here*/
 
+Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']]);
+
 /*Individual Ledger Start Here*/
 
 Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);

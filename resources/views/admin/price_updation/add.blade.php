@@ -424,6 +424,7 @@ if($('#tester').val() == '')
       {
         if(value == 1)
         {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_up_percent'+count).text('Percentage');
@@ -438,6 +439,7 @@ if($('#tester').val() == '')
         }
        else
        {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_up_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
@@ -456,7 +458,39 @@ if($('#tester').val() == '')
 
       else
       {
-        $(this).css('color', 'red');
+
+        if(value == 1)
+        {
+          $('#row_check'+count).val(2);
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_up_percent'+count).text('Percentage');
+          $('.append_mark_up_percent'+count).val(parseInt(value));
+          $('.mark_up_rs'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_up_rs'+count).val(parseFloat(percent.toFixed(2)));
+          $('.mark_down_percent'+count).text('');
+          $('.append_mark_down_percent'+count).val('');
+          $('.mark_down_rs'+count).text('');
+          $('.append_mark_down_rs'+count).val('');
+          $(this).css('color', 'red');
+        }
+       else
+       {
+          $('#row_check'+count).val(2);
+          $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
+          $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
+          $('.mark_up_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
+          $('.append_mark_up_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_up_percent'+count).text('Rupee');
+          $('.append_mark_up_percent'+count).val(parseInt(value));
+          $('.mark_down_percent'+count).text('');
+          $('.append_mark_down_percent'+count).val('');
+          $('.mark_down_rs'+count).text('');
+          $('.append_mark_down_rs'+count).val('');
+          $(this).css('color', 'red');
+
+       }
+
       }
       
     });
@@ -493,6 +527,7 @@ else
       {
         if(value == 1)
         {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_up_percent'+cnt).text('Percentage');
@@ -506,6 +541,7 @@ else
         }
        else
        {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_up_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -523,6 +559,7 @@ else
     else
     {
       alert('Selling Price Exceeds MRP!!');
+      $('#row_check'+cnt).val(1);
     }
     $('.up_percent').val('');
     $('.up_rs').val('');
@@ -565,6 +602,7 @@ if($('#tester').val() == '')
       {
         if(value == 1)
         {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+count).text('Percentage');
@@ -579,6 +617,7 @@ if($('#tester').val() == '')
         }
        else
        {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
@@ -596,6 +635,7 @@ if($('#tester').val() == '')
       {
         if(value == 1)
         {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+count).text('Percentage');
@@ -610,6 +650,7 @@ if($('#tester').val() == '')
         }
        else
        {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+count).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
@@ -659,6 +700,7 @@ else
       {
         if(value == 1)
         {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+cnt).text('Percentage');
@@ -673,6 +715,7 @@ else
         }
        else
        {
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -691,6 +734,7 @@ else
       if(value == 1)
         {
           alert('Less Than Last Purchase Cost!!');
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+cnt).text('Percentage');
@@ -706,6 +750,7 @@ else
        else
        {
           alert('Less Than Last Purchase Cost!!');
+          $('#row_check'+count).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
