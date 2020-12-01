@@ -21,6 +21,7 @@ use App\Models\SaleEntryItem;
 use App\Models\SaleEntryExpense;
 use App\Models\SaleEntryTax;
 use App\Models\SalesMan;
+use App\Models\AddressDetails;
 
 class MobileController extends Controller
 {
@@ -292,13 +293,24 @@ class MobileController extends Controller
             
             foreach($customers as $customer)
             {
-                
-                $response['status'] = 'Success';
+				$cus_add = [];
+                $customer_address_details = AddressDetails::where('address_ref_id', $customer->id)->where('address_table', 'Cus')->get();
+				$customer['address_line_1'] = $customer_address_details[0]->address_line_1;
+				$customer['address_line_2'] = $customer_address_details[0]->address_line_2;
+				$customer['land_mark'] = $customer_address_details[0]->land_mark;
+				$customer['state_name'] = $customer_address_details[0]->state->name;
+				$customer['district_name'] = $customer_address_details[0]->district->name;
+				//$customer['city_name'] = $customer_address_details[0]->city->name;
+				$customer['postal_code'] = $customer_address_details[0]->postal_code;
+				
+				 
+               
+            }
+			    $response['status'] = 'Success';
                 $response['msg'] = "";
                 $response['data'] = $customers;
                 return response()->json($response,200);
-                echo json_encode($response['data']);
-            }
+                
         }
 
         catch(Exception $e)
