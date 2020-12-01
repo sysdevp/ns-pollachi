@@ -150,7 +150,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                
               </div>
               
-                      <div class="cat" id="cat" style="display: none;" title="Search Here" >
+                      <div class="cat" id="cat" style="display: none;" title="Search Here">
                         <div class="row col-md-8">
 
                           <div class="col-md-4">
