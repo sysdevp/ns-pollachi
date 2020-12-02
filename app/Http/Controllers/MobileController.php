@@ -21,6 +21,10 @@ use App\Models\SaleEntryItem;
 use App\Models\SaleEntryExpense;
 use App\Models\SaleEntryTax;
 use App\Models\SalesMan;
+use App\Models\SaleEstimation;
+use App\Models\Estimation_Item;
+use App\Models\SaleEstimationItem;
+use App\Models\SaleEstimationTax;
 use App\Models\AddressDetails;
 use App\Models\BankDetails;
 
@@ -323,7 +327,42 @@ class MobileController extends Controller
 
     	
     }
+    
+    public function sale_estimations()
+    {
+
+        try
+        {
+            $sale_estimation = SaleEstimation::all();
+            $response_data = [];
+            $estimation_data = [];
+            foreach($sale_estimation as $estimation_data)
+            {
+
+                              //  print_r($estimation_data->id);
+
+                              $estimation_data['sale_estimation_items'] = SaleEstimationItem::where('sale_estimation_no',$estimation_data->sale_estimation_no)->get();
+                              $estimation_data['sale_estimation_taxes'] = SaleEstimationTax::where('sale_estimation_no',$estimation_data->sale_estimation_no)->get();
+
+                array_push($response_data,$estimation_data);   
+
+
+            }
+            
+            return response()->json($response_data,200);
+
+        }
+
+        catch(Exception $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+        }
+
+    }
 	
+
 	public function store_customer(CustomerRequest $request)
     {
         $customer_id = "";
