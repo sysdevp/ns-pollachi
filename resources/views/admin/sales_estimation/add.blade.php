@@ -333,7 +333,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                     <div class="col-md-2">
                         <label style="font-family: Times new roman;">Quantity</label>
-                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
+                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" pattern="[0-9]{0,100}" title="Numbers Only" value="">
                       </div>
                       </div>
                       
@@ -344,7 +344,9 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <label style="font-family: Times new roman;">Tax Rate%</label>
                       <input type="number" class="form-control tax_rate  required_for_proof_valid"  placeholder="Tax Rate%" oninput="gst_calc()" name="tax_rate" value="" id="tax_rate">
                       </div>
-                      <input type="hidden" class="form-control gst  required_for_proof_valid" readonly="" placeholder="Tax Rate" name="gst" value="" id="gst">
+                      <input type="hidden" class="form-control gst" name="gst" value="" id="gst">
+
+                      <input type="hidden" class="form-control" name="gst" value="" id="selling_price_type">
 
                       <div class="col-md-2">
                         <label style="font-family: Times new roman;">Rate Exclusive Tax</label>
@@ -1522,11 +1524,11 @@ function calc_exclusive()
   
   else
   {
-    if(quantity == 0)
-    {
-      quantity =1;
-      $('#quantity').val(1);
-    }
+    // if(quantity == 0)
+    // {
+    //   quantity =1;
+    //   $('#quantity').val(1);
+    // }
   
       var total = parseInt(quantity)*parseFloat(rate_exclusive);
     
@@ -1938,7 +1940,8 @@ else
         data: { id: item_code },             
                         
         success: function(data){ 
-          //console.log(data);
+          // console.log(data.selling_price_type);
+          // return false;
               $('.uom_exclusive').children('option').remove();
               $('.uom_inclusive').children('option').remove();
              // $('.uom_inclusive').children('option:not(:first)').remove();
@@ -1952,6 +1955,8 @@ else
              uom_name =data[0].uom_name;
              igst =data[1].igst;
              barcode = data[2].barcode;
+             selling_price = data.selling_price;
+             selling_price_type = data.selling_price_type;
 
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
@@ -1997,12 +2002,15 @@ else
                        
              $('#item_code').val(code);
              $('#items_codes').val(id);
-            $('#item_name').val(name);
+             $('#item_name').val(name);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
-              $('#uom_name').val(uom_name);
+             $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
+             $('#exclusive').val(selling_price);
+             $('#inclusive').val(selling_price);
+             $('#selling_price_type').val(selling_price_type);
 
              
              $('#cat').dialog('close');
@@ -2024,7 +2032,7 @@ else
               var rate = parseFloat(tax_rate)/100;
               var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
               var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-              $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+              // $('#inclusive').val(gst_rate_inclusive.toFixed(2));
               var net_val = parseFloat(total)*parseFloat(rate);
       
               $('.gst').val(net_val.toFixed(2));

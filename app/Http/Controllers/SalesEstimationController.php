@@ -19,10 +19,13 @@ use App\Models\Tax;
 use App\Models\AccountHead;
 use App\Models\Customer;
 use App\Models\SalesMan;
+use App\Models\PurchaseEntryItem;
 use App\Models\SaleEstimation;
 use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationExpense;
 use App\Models\SaleEstimationTax;
+use App\Models\PriceUpdation;
+use App\Models\SellingPriceSetup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 
@@ -822,12 +825,14 @@ $count=0;
     public function getdata(Request $request,$id)
     {
         $id=$request->id;
+
         $items=Item::where('id',$id)->first();
 
         $data[]=Item::join('uoms','uoms.id','=','items.uom_id')
                     ->where('items.id','=',$id)
-                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc')
+                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc','default_selling_price')
                     ->first();
+
 
         if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
         {
@@ -840,7 +845,6 @@ $count=0;
                                         ->where('tax_master_id','!=',$tax_master_cgst->id)
                                         ->where('tax_master_id','!=',$tax_master_sgst->id)
                                         ->first('valid_from');
-                                        // return $tax_date; exit;
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
                                 ->where('valid_from',$tax_date->valid_from)
@@ -887,7 +891,8 @@ $count=0;
                                 ->sum('value');
 
 
-            /* start dynamic tax value */                    
+            /* start dynamic tax value */
+
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
                                 ->where('valid_from',$tax_date->valid_from)
                                 ->get();
@@ -909,16 +914,7 @@ $count=0;
         $data[] =ItemBracodeDetails::where('item_id','=',$id)
                                     ->select('barcode')
                                     ->first();
-        if($data[1]=='')  
-        {
-            $data[1]=0;
-        } 
-        else if($data[2]=='')  
-        {
-            $data[2]='';
-        }  
-
-        //return $items->item_type;
+ 
 
         if($items->item_type != 'Parent')
         {
@@ -940,8 +936,8 @@ $count=0;
 
         $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
-        return $data;
+        $data[]=$result;   
+
         }
         else
         {
@@ -963,9 +959,71 @@ $count=0;
 
         $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
-        return $data;
+        $data[]=$result;   
+        
     }
+
+        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+
+        if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
+        {
+            $item_data = PurchaseEntryItem::where('item_id',$id)
+                                    ->orderBy('p_date','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $updated_selling_price = PriceUpdation::where('item_id',$id)
+                                        ->where('status',1)
+                                        ->orderBy('updated_at','DESC')
+                                        ->latest()
+                                        ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                        ->first();
+
+            $unit_price = @$item_data->rate_exclusive_tax;
+            $tax = @$item_data->gst;
+
+            if(@$updated_selling_price == '')
+            {
+                $data['selling_price'] = @$items->default_selling_price;
+            }
+            else
+            {
+
+            if(@$updated_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $unit_price * @$updated_selling_price->mark_up_value / 100;
+                $total = $unit_price + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_up_type == 2)
+            {
+                $total = $unit_price + @$updated_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            if(@$updated_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $unit_price * @$updated_selling_price->mark_down_value / 100;
+                $total = $unit_price - $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_down_type == 2)
+            {
+               $total = $unit_price - @$updated_selling_price->mark_down_value;
+               @$selling_price = number_format($total, 2, '.', ',');
+            }
+
+            $data['selling_price'] = @$selling_price;
+        }
+        }  
+        else
+        {
+            $data['selling_price'] = @$items->default_selling_price;
+        }
+
+        $data['selling_price_type'] = $selling_price_setup->setup;
+
+        return $data;
+
     }
 
 

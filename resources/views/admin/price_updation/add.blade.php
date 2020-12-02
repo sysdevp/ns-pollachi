@@ -159,7 +159,6 @@
             <th>Mark Up Value</th>
             <th>Mark Down Type</th>
             <th>Mark Down Value</th>
-            <th>Last Selling Price</th>
             <th>Updated Selling Price</th>
             <th>Action</th>
           </tr>
@@ -167,7 +166,6 @@
         <tbody class="append_item" id="myTable">
         </tbody>
         <tfoot>
-              <th></th>
               <th></th>
               <th></th>
               <th></th>

@@ -302,9 +302,7 @@ class MobileController extends Controller
 				$customer['district_name'] = @$customer_address_details[0]->district->name;
 				//$customer['city_name'] = $customer_address_details[0]->city->name;
 				$customer['postal_code'] = $customer_address_details[0]->postal_code;
-				
 				 
-               
             }
 			    $response['status'] = 'Success';
                 $response['msg'] = "";
