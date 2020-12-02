@@ -27,6 +27,11 @@ use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationTax;
 use App\Models\AddressDetails;
 use App\Models\BankDetails;
+use App\Models\Bank;
+use App\Models\Bankbranch;
+use App\Models\AccountType;
+use App\Models\AddressType;
+
 
 class MobileController extends Controller
 {
@@ -361,8 +366,84 @@ class MobileController extends Controller
         }
 
     }
-	
+    public function sales_order_no() //get sales_order last id
+    {
+        try
+        {
+            $response_data = [];
 
+            $get_id = SaleOrder::orderBy('id','desc')->pluck('id');
+
+            $count = $get_id->count();
+            $response_data['id'] = ($count > 0)?$get_id[0]+1:"1";
+    
+            return response()->json($response_data,200);
+
+        }
+        catch(Exception $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+            
+        }
+
+    }
+    public function banks()
+    {
+        try
+        {
+         $response_data = [];
+        $bank = Bank::where('active_status','1')->select('id','name','code')->get();
+        foreach($bank as $bank_data)
+        {
+            $response_data['bank'] = $bank_data;
+            $response_data['bankbranches'] = Bankbranch::where('bank_id',$bank_data->id)->select('id','branch','ifsc')->get();
+
+        }   
+        return response()->json($response_data,200);
+
+        }
+        catch(Exception $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+
+        }
+    }
+    public function account_types()
+    {
+        try
+        {
+            $response_data=[];
+            $response_data = AccountType::where('active_status','1')->select('id','name')->get();
+            return response()->json($response_data,200);
+        }
+        catch(Expection $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+
+        }
+    }
+    public function address_type()
+    {
+        try
+        {
+            $response_data=[];
+            $response_data = AddressType::where('active_status','1')->select('id','name')->get();
+            return response()->json($response_data,200);
+        }
+        catch(Expection $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+
+        }
+    }
 	public function store_customer(CustomerRequest $request)
     {
         $customer_id = "";

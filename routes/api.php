@@ -25,5 +25,10 @@ Route::post('app-sale-entry-view', 'MobileController@sale_entry_view');
 Route::post('app-test', 'MobileController@test');
 Route::post('list-customers', 'MobileController@list_customer');
 Route::post('add-customers', 'MobileController@store_customer');
+
 Route::post('app-sale-estimations', 'MobileController@sale_estimations');
+Route::post('app-sale-order-no', 'MobileController@sales_order_no');
+Route::post('app-banks', 'MobileController@banks');
+Route::post('app-account-types', 'MobileController@account_types');
+Route::post('app-address-type', 'MobileController@address_type');
 
