@@ -1931,6 +1931,7 @@ if(append_value == 1)
 }
 else
 {
+  
   var row_id=$('#last').val();
 
       $.ajax({  
