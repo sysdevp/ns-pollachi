@@ -21,7 +21,12 @@ use App\Models\SaleEntryItem;
 use App\Models\SaleEntryExpense;
 use App\Models\SaleEntryTax;
 use App\Models\SalesMan;
+use App\Models\SaleEstimation;
+use App\Models\Estimation_Item;
+use App\Models\SaleEstimationItem;
+use App\Models\SaleEstimationTax;
 use App\Models\AddressDetails;
+use App\Models\BankDetails;
 
 class MobileController extends Controller
 {
@@ -319,5 +324,132 @@ class MobileController extends Controller
         }
 
     	
+    }
+    
+    public function sale_estimations()
+    {
+
+        try
+        {
+            $sale_estimation = SaleEstimation::all();
+            $response_data = [];
+            $estimation_data = [];
+            foreach($sale_estimation as $estimation_data)
+            {
+
+                              //  print_r($estimation_data->id);
+
+                              $estimation_data['sale_estimation_items'] = SaleEstimationItem::where('sale_estimation_no',$estimation_data->sale_estimation_no)->get();
+                              $estimation_data['sale_estimation_taxes'] = SaleEstimationTax::where('sale_estimation_no',$estimation_data->sale_estimation_no)->get();
+
+                array_push($response_data,$estimation_data);   
+
+
+            }
+            
+            return response()->json($response_data,200);
+
+        }
+
+        catch(Exception $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+        }
+
+    }
+	
+
+	public function store_customer(CustomerRequest $request)
+    {
+        $customer_id = "";
+        if ($request->customer_type == 0) {
+            $customer_supplier_dets = new CustomerSupplier();
+            $customer_supplier_dets->name = $request->name;
+            $customer_supplier_dets->type = "Customer";
+            $customer_supplier_dets->save();
+            $customer_id = $customer_supplier_dets->id;
+        } else {
+            $customer_id = $request->exist_customer_name;
+        }
+
+        $customer = new Customer();
+        $customer->company_name = isset($request->company_name) ? ($request->company_name) : '';
+        $customer->name = isset($request->name) ? ($request->name) : '';
+        $customer->customer_type = isset($request->customer_type) ? ($request->customer_type) : '';
+        $customer->customer_id = isset($request->customer_id) ? ($request->customer_id) : '';
+        $customer->salutation = isset($request->salutation) ? ($request->salutation) : '';
+        $customer->phone_no = isset($request->phone_no) ? ($request->phone_no) : '';
+        $customer->whatsapp_no = isset($request->whatsapp_no) ? ($request->whatsapp_no) : '';
+        $customer->email = isset($request->email) ? ($request->email) : '';
+        $customer->pan_card = isset($request->pan_card) ? ($request->pan_card) : '';
+        $customer->gst_no = isset($request->gst_no) ? ($request->gst_no) : '';
+        $customer->max_credit_limit = isset($request->max_credit_limit) ? ($request->max_credit_limit) : '';
+        $customer->max_credit_days = isset($request->max_credit_days) ? ($request->max_credit_days) : '';
+        $customer->opening_balance = isset($request->opening_balance) ? ($request->opening_balance) : '';
+        $customer->remark = isset($request->remark) ? ($request->remark) : '';
+        $customer->price_level = isset($request->price_level) ? ($request->price_level) : '';
+        $customer->created_by = 0;
+        $customer->updated_by = 0;
+        $now = Carbon::now()->toDateTimeString();
+
+        if ($customer->save()) {
+
+            $batch_insert_array = array();
+            foreach ($request->address_type_id as $key => $value) {
+                $data_to_store = array(
+                    'address_table' => "Cus",
+                    'address_type_id' => $request->address_type_id[$key],
+                    'address_ref_id' => $customer->id,
+                    'address_line_1' => $request->address_line_1[$key],
+                    'address_line_2' => $request->address_line_2[$key],
+                    'land_mark' => $request->land_mark[$key],
+                    'country_id' => 1,
+                    'state_id' => $request->state_id[$key],
+                    'district_id' => $request->district_id[$key],
+                    'city_id' => $request->city_id[$key],
+                    'postal_code' => $request->postal_code[$key],
+                    'created_by' => 0,
+                    'updated_by' => 0,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                );
+                $batch_insert_array[] = $data_to_store;
+            }
+            $batch_insert_for_bank_details = [];
+            if ($request->has('bank_id')) {
+                foreach ($request->bank_id as $bank_key => $bank_value) {
+                    $bank_details_array = array(
+                        'ref_table' => "Cus",
+                        'bank_id' => $request->bank_id[$bank_key],
+                        'bank_ref_id' => $customer->id,
+                        'branch_id' => $request->branch_id[$bank_key],
+                        'account_type_id' => $request->account_type_id[$bank_key],
+                        'ifsc' => $request->ifsc[$bank_key],
+                        'account_holder_name' => $request->account_holder_name[$bank_key],
+                        'account_no' => $request->account_no[$bank_key],
+                        'created_by' => 0,
+                        'updated_by' => 0,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    );
+                    $batch_insert_for_bank_details[] = $bank_details_array;
+                }
+            }
+
+
+
+            if (count($batch_insert_for_bank_details) > 0) {
+                BankDetails::insert($batch_insert_for_bank_details);
+            }
+            if (count($batch_insert_array) > 0) {
+                AddressDetails::insert($batch_insert_array);
+            }
+
+            return Redirect::back()->with('success', 'Successfully created');
+        } else {
+            return Redirect::back()->with('failure', 'Something Went Wrong..!');
+        }
     }
 }
