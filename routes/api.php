@@ -31,4 +31,7 @@ Route::post('app-sale-order-no', 'MobileController@sales_order_no');
 Route::post('app-banks', 'MobileController@banks');
 Route::post('app-account-types', 'MobileController@account_types');
 Route::post('app-address-type', 'MobileController@address_type');
+Route::post('app-states', 'MobileController@states');
+Route::post('app-district', 'MobileController@district');
+Route::post('app-city', 'MobileController@city');
 
