@@ -31,6 +31,9 @@ use App\Models\Bank;
 use App\Models\Bankbranch;
 use App\Models\AccountType;
 use App\Models\AddressType;
+use App\Models\State;
+use App\Models\District;
+use App\Models\City;
 
 
 class MobileController extends Controller
@@ -344,7 +347,10 @@ class MobileController extends Controller
 
                               //  print_r($estimation_data->id);
 
-                              $estimation_data['sale_estimation_items'] = SaleEstimationItem::where('sale_estimation_no',$estimation_data->sale_estimation_no)->get();
+                              $estimation_data['sale_estimation_items'] = SaleEstimationItem::where('sale_estimation_no',$estimation_data->sale_estimation_no)
+                                                                            ->join('items', 'sale_estimation_items.item_id', '=', 'items.id')
+                                                                            ->select('sale_estimation_items.*', 'items.name')
+                                                                            ->get();
                               $estimation_data['sale_estimation_taxes'] = SaleEstimationTax::where('sale_estimation_no',$estimation_data->sale_estimation_no)->get();
 
                 array_push($response_data,$estimation_data);   
@@ -433,6 +439,56 @@ class MobileController extends Controller
             $response_data=[];
             $response_data = AddressType::where('active_status','1')->select('id','name')->get();
             return response()->json($response_data,200);
+        }
+        catch(Expection $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+
+        }
+    }
+    public function states()
+    {
+        try
+        {   $response_data   = [];
+            $response_data   = State::where('active_status','1')->select('id','name')->get();
+            return response()->json($response_data,200);
+
+        }
+        catch(Expection $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+
+        }
+    }
+    public function district(Request $request)
+    {
+        //print_r($request->id);exit;
+        try
+        {   $response_data   = [];
+            $response_data   = District::where('state_id',$request->state_id)->where('active_status','1')->select('id','name','state_id')->get();
+            return response()->json($response_data,200);
+
+        }
+        catch(Expection $e)
+        {
+            $response['status'] = 'Error';
+            $response['msg'] = \Lang::get('api.global_error');
+            return response()->json($response, 401);
+
+        }
+    }
+    public function city(Request $request)
+    {
+        //print_r($request->id);exit;
+        try
+        {   $response_data   = [];
+            $response_data   = City::where('district_id',$request->district_id)->where('active_status','1')->select('id','name','state_id','district_id')->get();
+            return response()->json($response_data,200);
+
         }
         catch(Expection $e)
         {
