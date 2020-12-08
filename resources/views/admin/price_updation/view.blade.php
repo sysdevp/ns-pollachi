@@ -21,17 +21,18 @@
         <thead>
           <tr>
             <th>S.No</th>
+            <th>With Effective From </th>
             <th>Item Code </th>
             <th>Item Name </th>
             <th>Brand Name </th>
             <th>Category</th>
             <th>HSN</th>
             <th>MRP</th>
+            <th>Last Purchase Cost</th>
             <th>Mark Up Type</th>
             <th>Mark Up Value</th>
             <th>Mark Down Type</th>
             <th>Mark Down Value</th>
-            <th>Last Purchase Cost</th>
             <th>Selling Price</th>
            <th>Action </th>
           </tr>
@@ -40,6 +41,7 @@
           @foreach($updations as $key => $value)
             <tr>
               <td>{{ $key+1 }}</td>
+              <td>{{ $value->effective_from }}</td>
               <td>{{ @$value->item->code }}</td>
               <td>{{ @$value->item->name }}</td>
               @if($value->brand_id == 0)
@@ -50,6 +52,7 @@
               <td>{{ @$value->item->categories->name }}</td>
               <td>{{ @$value->item->hsn }}</td>
               <td>{{ @$value->item->mrp }}</td>
+              <td>{{ @$last_purchase_cost[$key] }}</td>
               @if($value->mark_up_type == 1)
               <td>Percentage</td>
               @elseif($value->mark_up_type == 2)
@@ -66,7 +69,6 @@
               <td></td>
               @endif
               <td>{{ $value->mark_down_value }}</td>
-              <td>{{ $last_purchase_cost[$key] }}</td>
               <td>{{ $selling_price[$key] }}</td>
               <td> 
                 <a href="{{ route('price_updation.show',$value->id) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>

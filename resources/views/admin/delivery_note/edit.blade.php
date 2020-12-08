@@ -988,6 +988,31 @@ else if(substr[1] < 50)
 }
 function add_items()
 {
+
+  /*for table Net Value Calculation*/
+
+  var rate_exclusive = $('#exclusive').val();
+  var rate_inclusive = $('#inclusive').val();
+  var quantity = $('#quantity').val();
+  var tax_rate = $('.tax_rate').val();
+  var total = parseInt(quantity)*parseFloat(rate_exclusive);
+  $('#amount').val(total.toFixed(2));
+  if(tax_rate == '')
+  {
+    $('#net_price').val(total.toFixed(2));
+  }
+  var rate = parseFloat(tax_rate)/100;
+  var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+  var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+  var net_val = parseFloat(total)*parseFloat(rate);
+
+  $('.gst').val(net_val.toFixed(2));
+
+  var total_net_val = parseFloat(total)+parseFloat(net_val);
+  $('#net_price').val(total_net_val.toFixed(2)); 
+
+  /*for table Net Value Calculation*/
+
   var j=$('#mytable tr:last').attr('class');
  var l=parseInt(i)+1;
  var voucher_date=$('.voucher_date').val();
@@ -1384,8 +1409,8 @@ $(document).on("click",".edit_items",function(){
   $('.uom_name').val(uom_name);
   $('#last_purchase_rate').val(last_purchase_rate);
   var disc_value = parseFloat(discount_val)/parseFloat(quantity);
-   $('.discount_rs').val(disc_value.toFixed(2));
-   discount_calc();
+  $('.discount_rs').val(disc_value.toFixed(2));
+  discount_calc();
    
   if(discount_val == 0)
   {
@@ -1639,15 +1664,23 @@ function qty()
   }
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
-
-  if(rate_exclusive == '' && rate_inclusive == '')
+  var quantity = $('#quantity').val();
+  var tax_rate = $('.tax_rate').val();
+  var total = parseInt(quantity)*parseFloat(rate_exclusive);
+  $('#amount').val(total.toFixed(2));
+  if(tax_rate == '')
   {
+    $('#net_price').val(total.toFixed(2));
+  }
+  var rate = parseFloat(tax_rate)/100;
+  var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+  var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+  var net_val = parseFloat(total)*parseFloat(rate);
 
-  }
-  else
-  {
-    calc_exclusive();
-  }
+  $('.gst').val(net_val.toFixed(2));
+
+  var total_net_val = parseFloat(total)+parseFloat(net_val);
+  $('#net_price').val(total_net_val.toFixed(2));
 }
 
 
@@ -1909,7 +1942,7 @@ function discount_calc()
 
    $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
 
-  calc_exclusive();
+  qty();
   var amount = $(".amount").val();
   var discounts = parseInt(quantity)*parseFloat(discount);
   $('#discounts').val(discounts.toFixed(2));
@@ -1962,7 +1995,7 @@ function discount_calc1()
   var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
 
   $(".discount_rs").val(disc_val_exclusive.toFixed(2));
-  calc_exclusive();
+  qty();
   var amount = $(".amount").val();
   var discounts = parseInt(quantity)*parseFloat(disc_val_exclusive.toFixed(2));
   $('#discounts').val(discounts.toFixed(2));
@@ -1990,11 +2023,11 @@ if(append_value == 1)
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('delivery_note/getdata/{id}') }}",
+        url: "{{ url('sale_order/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
-          //alert(data);
+
              // $('.uom_exclusive').children('option:(:first)').remove();
              // $('.uom_inclusive').children('option:(:first)').remove();
              $('.uom_exclusive').children('option').remove();
@@ -2010,6 +2043,8 @@ if(append_value == 1)
              uom_name =data[0].uom_name;
              igst =data[1].igst;
              barcode = data[2].barcode;
+             selling_price = data.selling_price;
+             selling_price_type = data.selling_price_type;
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
@@ -2050,56 +2085,64 @@ if(append_value == 1)
               }
               
              }
+
+             var rate=parseFloat(igst)/100+1;
+             var actual_tax = parseFloat(igst)/100;
+             var inclusive_rate = parseFloat(selling_price)/parseFloat(rate);
                        
              //$('#item_code').val(code);
+             $('#item_code').val(code);
              $('#items_codes').val(id);
-            $('#item_name').val(name);
+             $('#item_name').val(name);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
-              $('#uom_name').val(uom_name);
+             $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
+             $('#exclusive').val(inclusive_rate.toFixed(2));
+             $('#inclusive').val(selling_price);
+             $('#selling_price_type').val(selling_price_type);
 
              
              $('.item_display').dialog('close');
              $('#quantity').focus();
 
-             if($('#quantity').val() != '')
-             {
+            //  if($('#quantity').val() != '')
+            //  {
               
-              var rate_exclusive = $('#exclusive').val();
-              var rate_inclusive = $('#inclusive').val();
-              var quantity = $('#quantity').val();
-              var tax_rate = $('.tax_rate').val();
-              var total = parseInt(quantity)*parseFloat(rate_exclusive);
-              $('#amount').val(total.toFixed(2));
-              if(tax_rate == '')
-              {
-                $('#net_price').val(total.toFixed(2));
-              }
+            //   var rate_exclusive = $('#exclusive').val();
+            //   var rate_inclusive = $('#inclusive').val();
+            //   var quantity = $('#quantity').val();
+            //   var tax_rate = $('.tax_rate').val();
+            //   var total = parseInt(quantity)*parseFloat(rate_exclusive);
+            //   $('#amount').val(total.toFixed(2));
+            //   if(tax_rate == '')
+            //   {
+            //     $('#net_price').val(total.toFixed(2));
+            //   }
               
-              var rate = parseFloat(tax_rate)/100;
-              var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-              var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-              $('#inclusive').val(gst_rate_inclusive.toFixed(2));
-              var net_val = parseFloat(total)*parseFloat(rate);
+            //   var rate = parseFloat(tax_rate)/100;
+            //   var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+            //   var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+            //   $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+            //   var net_val = parseFloat(total)*parseFloat(rate);
       
-              $('.gst').val(net_val.toFixed(2));
+            //   $('.gst').val(net_val.toFixed(2));
 
-              var total_net_val = parseFloat(total)+parseFloat(net_val);
-              $('#net_price').val(total_net_val.toFixed(2));
-             }
-            else
-            {
+            //   var total_net_val = parseFloat(total)+parseFloat(net_val);
+            //   $('#net_price').val(total_net_val.toFixed(2));
+            //  }
+            // else
+            // {
 
-            }
+            // }
         }
 
     });
 
       $.ajax({
            type: "POST",
-            url: "{{ url('delivery_note/last_purchase_rate/') }}",
+            url: "{{ url('sale_order/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              $('#last_purchase_rate').val(data);
@@ -2114,7 +2157,7 @@ else
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('delivery_note/getdata/{id}') }}",
+        url: "{{ url('sale_order/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
@@ -2132,6 +2175,9 @@ else
              uom_name =data[0].uom_name;
              igst =data[1].igst;
              barcode = data[2].barcode;
+             selling_price = data.selling_price;
+             selling_price_type = data.selling_price_type;
+             
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
@@ -2173,55 +2219,55 @@ else
               }
               
              }
+
+             var rate=parseFloat(igst)/100+1;
+             var actual_tax = parseFloat(igst)/100;
+             var inclusive_rate = parseFloat(selling_price)/parseFloat(rate);
                        
              $('#item_code').val(code);
              $('#items_codes').val(id);
-            $('#item_name').val(name);
+             $('#item_name').val(name);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
-              $('#uom_name').val(uom_name);
+             $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
+             $('#exclusive').val(inclusive_rate.toFixed(2));
+             $('#inclusive').val(selling_price);
+             $('#selling_price_type').val(selling_price_type);
 
              
              $('#cat').dialog('close');
              $('#quantity').focus();
-
-             if($('#quantity').val() != '')
-             {
               
-              var rate_exclusive = $('#exclusive').val();
-              var rate_inclusive = $('#inclusive').val();
-              var quantity = $('#quantity').val();
-              var tax_rate = $('.tax_rate').val();
-              var total = parseInt(quantity)*parseFloat(rate_exclusive);
-              $('#amount').val(total.toFixed(2));
-              if(tax_rate == '')
-              {
-                $('#net_price').val(total.toFixed(2));
-              }
-              var rate = parseFloat(tax_rate)/100;
-              var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-              var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-              $('#inclusive').val(gst_rate_inclusive.toFixed(2));
-              var net_val = parseFloat(total)*parseFloat(rate);
+              // var rate_exclusive = $('#exclusive').val();
+              // var rate_inclusive = $('#inclusive').val();
+              // var quantity = $('#quantity').val();
+              // var tax_rate = $('.tax_rate').val();
+              // var total = parseInt(quantity)*parseFloat(rate_exclusive);
+              // $('#amount').val(total.toFixed(2));
+              // if(tax_rate == '')
+              // {
+              //   $('#net_price').val(total.toFixed(2));
+              // }
+              // var rate = parseFloat(tax_rate)/100;
+              // var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+              // var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+              // $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+              // var net_val = parseFloat(total)*parseFloat(rate);
       
-              $('.gst').val(net_val.toFixed(2));
+              // $('.gst').val(net_val.toFixed(2));
 
-              var total_net_val = parseFloat(total)+parseFloat(net_val);
-              $('#net_price').val(total_net_val.toFixed(2));
-             }
-            else
-            {
-
-            }
+              // var total_net_val = parseFloat(total)+parseFloat(net_val);
+              // $('#net_price').val(total_net_val.toFixed(2));
+             
         }
 
     });
 
       $.ajax({
            type: "POST",
-            url: "{{ url('delivery_note/last_purchase_rate/') }}",
+            url: "{{ url('sale_order/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              // console.log(data);
@@ -2633,11 +2679,9 @@ $('.no_items').text(result.status);
 $('.invoice_val').text(result.item_net_value_sum);
 $('.sale_estimation_date').val(result.date);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2720,11 +2764,9 @@ $('.estimation_date').text(result.date_estimation);
 $('.estimation_no').text(result.estimation_no);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2803,11 +2845,9 @@ $('.invoice_val').text(result.item_net_value_sum);
 $('.r_in_date').val(result.date_rejection_in);
 $('.sale_date').text(result.date_sale_entry);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);

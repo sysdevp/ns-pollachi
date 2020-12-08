@@ -79,7 +79,7 @@
         <div class="form-row mb-3">
           <div class="col-md-4">
             <label>Mark Up</label>
-                  <input type="radio" class="price_updation_up" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="">
+                  <input type="radio" class="price_updation_up" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="checked">
                 </div>
           <div class="col-md-4">
             <label>Mark Down</label>
@@ -201,9 +201,23 @@
 
 <script type="text/javascript">
 
-  function mark_up(val) 
+  $("form").submit(function(e)
+  {
+      var length = $('.row_category').length;
+      if(length == 0)
+      {
+        alert('Choose Any Item!');
+        e.preventDefault();
+      }
+      else
+      {
+
+      }    
+  });
+
+   function mark_up(val) 
    {
-      
+
      $('.up_rs_label').show();
      $('.up_percent_label').show();
      $('.up_rs_div').show();
@@ -237,32 +251,32 @@
    }
 
    function categories_check()
-{
-  var  categories=$('.category_id').val();
-  var  brand=$('.brand_id').val();
-  if(brand == '')
-  {
-    brand ='no_val';
-  }
-  $.ajax({  
-        
-        type: "GET",
-        url: "{{ url('price_updation/change_items/{id}') }}",
-        data: { categories: categories, brand: brand },             
-             
-        success: function(data){ 
-          console.log(data);
-        $('.row_brand').remove(); 
-        $('.row_category').remove(); 
-        $('#tester').val('');
-        $(".append_item").html(data);
-        return false;
-          
-        }
+   {
+      var  categories=$('.category_id').val();
+      var  brand=$('.brand_id').val();
+      if(brand == '')
+      {
+        brand ='no_val';
+      }
+      $.ajax({  
+            
+            type: "GET",
+            url: "{{ url('price_updation/change_items/{id}') }}",
+            data: { categories: categories, brand: brand },             
+                 
+            success: function(data){ 
+              console.log(data);
+            $('.row_brand').remove(); 
+            $('.row_category').remove(); 
+            $('#tester').val('');
+            $(".append_item").html(data);
+            return false;
+              
+            }
 
 
-    });
-}
+        });
+   }
 
 function brand_check()
 {
@@ -336,8 +350,6 @@ function up_percents()
     var up_percent = $('.up_percent').val();
 
     var percentage_val = parseFloat(selling_price) * parseFloat(up_percent) / 100;
-
-    // $('.up_rs').val(parseFloat(percentage_val.toFixed(2)));
   
 }
 function up_rupees()
@@ -350,7 +362,6 @@ function up_rupees()
     var up_rs = $('.up_rs').val();
     var percentage_val = parseFloat(up_rs)*100/parseFloat(selling_price);
 
-   // $(".up_percent").val(percentage_val.toFixed(2));
   
 }
   
@@ -369,7 +380,6 @@ function down_percents()
 
     var percentage_val = parseFloat(selling_price) * parseFloat(down_percent) / 100;
 
-    // $('.down_rs').val(parseFloat(percentage_val.toFixed(2)));
   }
 }
 function down_rupees()
@@ -385,7 +395,6 @@ function down_rupees()
     var down_rs = $('.down_rs').val();
     var percentage_val = parseFloat(down_rs)*100/parseFloat(selling_price);
 
-   // $(".down_percent").val(percentage_val.toFixed(2));
   }
 }  
 
@@ -410,12 +419,16 @@ if($('#tester').val() == '')
         var total = parseFloat(selling_price) + parseFloat(percentage_val);
         var value = 1;
       }
-      else
+      else if(up_rs != '')
       {
         var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
         var value = 2;
+      }
+      else if(up_percent == '' && up_rs == '')
+      {
+        alert('Please Provide Any Value');
       }
       
       if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
@@ -513,19 +526,23 @@ else
         var total = parseFloat(selling_price) + parseFloat(percentage_val);
         var value = 1;
       }
-      else
+      else if(up_rs != '')
       {
         var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
         var value = 2;
       }
+      else if(up_percent == '' && up_rs == '')
+      {
+        alert('Please Provide Any Value');
+      }
 
     if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
       {
         if(value == 1)
         {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_up_percent'+cnt).text('Percentage');
@@ -539,7 +556,7 @@ else
         }
        else
        {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_up_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -563,7 +580,7 @@ else
     $('.up_rs').val('');
 }
 $('#tester').val('');
-$('.price_updation_up').attr('checked', 'checked');
+$('.price_updation_up').attr('checked');
 $('.price_updation_down').removeAttr('checked');
   
 });
@@ -588,12 +605,16 @@ if($('#tester').val() == '')
         var percent = parseFloat(down_percent);
         var value = 1;
       }
-      else
+      else if(down_rs != '')
       {
         var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
         var value = 2;
+      }
+      else if(down_percent == '' && down_rs == '')
+      {
+        alert('Please Provide Any Value');
       }
       
       if(parseFloat(total.toFixed(2)) >= parseFloat(selling_price))
@@ -638,8 +659,8 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+count).text('Percentage');
           $('.append_mark_down_percent'+count).val(parseInt(value));
-          $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
-          $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_down_rs'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(percent.toFixed(2)));
           $('.mark_up_percent'+count).text('');
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
@@ -685,12 +706,16 @@ else
         var percent = parseFloat(down_percent);
         var value = 1;
       }
-      else
+      else if(down_rs != '')
       {
         var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
         var value = 2;
+      }
+      else if(down_percent == '' && down_rs == '')
+      {
+        alert('Please Provide Any Value');
       }
       
 
@@ -698,7 +723,7 @@ else
       {
         if(value == 1)
         {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+cnt).text('Percentage');
@@ -713,7 +738,7 @@ else
         }
        else
        {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -732,7 +757,7 @@ else
       if(value == 1)
         {
           alert('Less Than Last Purchase Cost!!');
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+cnt).text('Percentage');
@@ -748,7 +773,7 @@ else
        else
        {
           alert('Less Than Last Purchase Cost!!');
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -767,7 +792,7 @@ else
 }
 $('#tester').val('');
 $('.price_updation_up').removeAttr('checked');
-$('.price_updation_down').attr('checked', 'checked');
+$('.price_updation_down').attr('checked');
   
 });
 
@@ -785,7 +810,7 @@ $(document).on('click','.up',function(){
      $('.down_percent_div').hide();
      $('.down_update').hide();
 
-     $('.price_updation_up').attr('checked', 'checked');
+     $('.price_updation_up').attr('checked');
      $('.price_updation_down').removeAttr('checked');
 
     $('.up_rs').val('');
@@ -809,7 +834,7 @@ $(document).on('click','.down',function(){
      $('.down_update').show();
 
      $('.price_updation_up').removeAttr('checked');
-     $('.price_updation_down').attr('checked', 'checked');
+     $('.price_updation_down').attr('checked');
 
     $('.down_rs').val('');
     $('.down_percent').val('');

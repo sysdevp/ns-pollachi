@@ -26,6 +26,10 @@ use App\Models\Customer;
 use App\Models\SalesMan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\PriceUpdation;
+use App\Models\SellingPriceSetup;
+use App\Models\PurchaseEntryItem;
+use App\Models\PurchaseOrderItem;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderTax;
 use App\Models\SaleOrderItem;
@@ -425,7 +429,7 @@ class SalesOrderController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = SaleOrderItem::where('item_id',$value->item_id)
-                                    ->orderBy('so_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -550,7 +554,7 @@ class SalesOrderController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = SaleOrderItem::where('item_id',$value->item_id)
-                                    ->orderBy('so_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -859,12 +863,14 @@ class SalesOrderController extends Controller
     public function getdata(Request $request,$id)
     {
         $id=$request->id;
+
         $items=Item::where('id',$id)->first();
 
         $data[]=Item::join('uoms','uoms.id','=','items.uom_id')
                     ->where('items.id','=',$id)
-                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc')
+                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc','default_selling_price')
                     ->first();
+
 
         if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
         {
@@ -877,7 +883,6 @@ class SalesOrderController extends Controller
                                         ->where('tax_master_id','!=',$tax_master_cgst->id)
                                         ->where('tax_master_id','!=',$tax_master_sgst->id)
                                         ->first('valid_from');
-                                        // return $tax_date; exit;
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
                                 ->where('valid_from',$tax_date->valid_from)
@@ -923,7 +928,9 @@ class SalesOrderController extends Controller
                                 ->where('tax_master_id','!=',$tax_master_sgst->id)
                                 ->sum('value');
 
-            /* start dynamic tax value */                    
+
+            /* start dynamic tax value */
+
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
                                 ->where('valid_from',$tax_date->valid_from)
                                 ->get();
@@ -936,7 +943,7 @@ class SalesOrderController extends Controller
 
             $cnt = count($tax_master);               
 
-            /* end dynamic tax value */                    
+            /* end dynamic tax value */                     
 
             $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
 
@@ -945,16 +952,7 @@ class SalesOrderController extends Controller
         $data[] =ItemBracodeDetails::where('item_id','=',$id)
                                     ->select('barcode')
                                     ->first();
-        if($data[1]=='')  
-        {
-            $data[1]=0;
-        } 
-        else if($data[2]=='')  
-        {
-            $data[2]='';
-        }  
-
-        //return $items->item_type;
+ 
 
         if($items->item_type != 'Parent')
         {
@@ -976,8 +974,8 @@ class SalesOrderController extends Controller
 
         $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
-        return $data;
+        $data[]=$result;   
+
         }
         else
         {
@@ -999,9 +997,75 @@ class SalesOrderController extends Controller
 
         $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
-        return $data;
+        $data[]=$result;   
+        
     }
+
+        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+
+        if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
+        {
+            $item_data = PurchaseEntryItem::where('item_id',$id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $updated_selling_price = PriceUpdation::where('item_id',$id)
+                                        ->where('status',1)
+                                        ->whereDate('effective_from', '<=', Carbon::now())
+                                        ->orderBy('updated_at','DESC')
+                                        ->latest()
+                                        ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                        ->first();
+
+            $unit_price = @$item_data->rate_inclusive_tax;
+            $discount = @$item_data->discount / @$item_data->qty;
+            $item_rate = $unit_price - $discount;
+
+            $tax = @$item_data->gst;
+
+            if(@$updated_selling_price == '')
+            {
+                $data['selling_price'] = @$items->default_selling_price;
+            }
+            else
+            {
+
+            if(@$updated_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $item_rate * @$updated_selling_price->mark_up_value / 100;
+                $total = $item_rate + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_up_type == 2)
+            {
+                $total = $item_rate + @$updated_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            if(@$updated_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $item_rate * @$updated_selling_price->mark_down_value / 100;
+                $total = $item_rate - $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_down_type == 2)
+            {
+               $total = $item_rate - @$updated_selling_price->mark_down_value;
+               @$selling_price = number_format($total, 2, '.', ',');
+            }
+
+            $data['selling_price'] = @$selling_price;
+        }
+        }  
+        else
+        {
+            $data['selling_price'] = @$items->default_selling_price;
+        }
+
+        $data['selling_price_type'] = $selling_price_setup->setup;
+
+        return $data;
+
     }
 
     public function remove_data(Request $request,$id)
@@ -1595,8 +1659,8 @@ $result=[];
     {
         $id = $request->id;
 
-        $item_data = PurchaseOrderItem::where('item_id',$id)
-                                    ->orderBy('po_date','DESC')
+        $item_data = SaleOrderItem::where('item_id',$id)
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -1671,7 +1735,7 @@ $result=[];
 
 
             $item_data = SaleEstimationItem::where('item_id',$value->item_id)
-                                    ->orderBy('sale_estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;

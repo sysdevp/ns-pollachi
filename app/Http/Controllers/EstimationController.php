@@ -438,7 +438,7 @@ class EstimationController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = Estimation_Item::where('item_id',$value->item_id)
-                                    ->orderBy('estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -560,7 +560,7 @@ class EstimationController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = Estimation_Item::where('item_id',$value->item_id)
-                                    ->orderBy('estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -1628,7 +1628,7 @@ $result=[];
         $id = $request->id;
 
         $item_data = Estimation_Item::where('item_id',$id)
-                                    ->orderBy('estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;

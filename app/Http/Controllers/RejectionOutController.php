@@ -525,7 +525,7 @@ class RejectionOutController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = RejectionOutItem::where('item_id',$value->item_id)
-                                    ->orderBy('r_out_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -649,7 +649,7 @@ class RejectionOutController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = RejectionOutItem::where('item_id',$value->item_id)
-                                    ->orderBy('r_out_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -1664,7 +1664,7 @@ $result=[];
         $id = $request->id;
 
         $item_data = RejectionOutItem::where('item_id',$id)
-                                    ->orderBy('r_out_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -1753,7 +1753,7 @@ $result=[];
 
 
             $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
-                                    ->orderBy('p_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->rejected_qty * $item_data->rate_exclusive_tax;
@@ -1970,7 +1970,7 @@ echo "<pre>"; print_r($data); exit;
 
 
             $item_data = ReceiptNoteItem::where('item_id',$value->item_id)
-                                    ->orderBy('rn_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->rejected_qty * $item_data->rate_exclusive_tax;

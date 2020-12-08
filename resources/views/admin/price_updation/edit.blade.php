@@ -73,7 +73,7 @@
           @if($updations->mark_up_type != '')
           <div class="col-md-4">
             <label>Mark Up</label>
-                  <input type="radio" class="price_updation_up" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="">
+                  <input type="radio" class="price_updation_up" name="price_updation" onclick="mark_up($(this).val())" value="1" checked="checked">
           </div>
           <div class="col-md-4">
             <label>Mark Down</label>
@@ -88,7 +88,7 @@
             </div>
           <div class="col-md-4">
             <label>Mark Down</label>
-              <input type="radio" name="price_updation" class="price_updation_down" onclick="mark_down($(this).val())" value="0" checked="">
+              <input type="radio" name="price_updation" class="price_updation_down" onclick="mark_down($(this).val())" value="0" checked="checked">
           </div>
           @endif
             
@@ -111,8 +111,19 @@
                 <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" oninput="down_percents()" name="down_percent" value="">
                 
               </div>
-              @else
+              @elseif($updations->mark_down_type != '')
 
+              <label for="validationCustom01" style="display: none;" class="col-sm-4 col-form-label up_percent_label">Mark Up %:</label>
+              <div class="col-sm-8 up_percent_div" style="display: none;">
+                <input type="text" class="form-control up_percent only_allow_digit_and_dot " placeholder="Mark Up %" name="up_percent" oninput="up_percents()" value="">
+                
+              </div>
+
+              <label for="validationCustom01" class="col-sm-4 col-form-label down_percent_label">Mark Down %:</label>
+              <div class="col-sm-8 down_percent_div">
+                <input type="text" class="form-control down_percent only_allow_digit_and_dot" placeholder="Mark Down %" oninput="down_percents()" name="down_percent" value="">
+                
+              </div>
               @endif
 
             </div>
@@ -133,7 +144,19 @@
                 
               </div>
 
-              @else
+              @elseif($updations->mark_down_type != '')
+
+              <label for="validationCustom01" style="display: none;" class="col-sm-4 col-form-label up_rs_label">Mark Up Rs:</label>
+              <div class="col-sm-8 up_rs_div" style="display: none;">
+                <input type="text" class="form-control up_rs only_allow_digit_and_dot" placeholder="Mark Up Rs" name="up_rs" oninput="up_rupees()" value="" >
+                
+              </div>
+
+              <label for="validationCustom01" class="col-sm-4 col-form-label down_rs_label">Mark Down Rs:</label>
+              <div class="col-sm-8 down_rs_div">
+                <input type="text" class="form-control down_rs only_allow_digit_and_dot" placeholder="Mark Down Rs" name="down_rs" oninput="down_rupees()" value="">
+                
+              </div>
 
               @endif
 
@@ -146,6 +169,8 @@
           <button class="btn btn-success up_update" name="up_update" id="up_update" type="button">Update</button>
           <button class="btn btn-success down_update" style="display: none;" name="down_update" id="down_update" type="button">Update</button>
           @else
+          <button class="btn btn-success up_update" style="display: none;" name="up_update" id="up_update" type="button">Update</button>
+          <button class="btn btn-success down_update" name="down_update" id="down_update" type="button">Update</button>
           @endif
         </div>
 
@@ -177,14 +202,13 @@
             <th>Mark Up Value</th>
             <th>Mark Down Type</th>
             <th>Mark Down Value</th>
-            <th>Last Selling Price</th>
             <th>Updated Selling Price</th>
             <th>Action</th>
           </tr>
           </tr>
         </thead>
         <tbody class="append_item" id="myTable">
-          <tr class="row_category" id="1"><input type="hidden" name="row_check[]" value="1" id="row_check1"><td><font style="font-family: Times new roman;">1</font><input type="hidden" name="table_count" value="1"></td><td><input type="hidden" value="{{@$updations->item_id}}" class="append_item_id1" name="item_id"><input type="hidden" value="{{ @$updations->tem->code }}" class="actual_item_code1" name="item_code"><input type="hidden" value="{{$updations->item->code}}" class="append_item_code1"><font class="item_code1" style="font-family: Times new roman;">{{@$updations->item->code}}</font></td><td><input type="hidden" value="{{@$updations->item->name}}" class="actual_item_name1" name="item_name"><input type="hidden" value="{{@$updations->item->name}}" class="append_item_name1"><font class="item_name1" style="font-family: Times new roman;">{{@$updations->item->name}}</font></td><td><input type="hidden" value="{{@$updations->item->brand->id}}" class="actual_item_brand_name1" name="brand_id"><input type="hidden" value="{{@$updations->item->brand->id}}" class="append_item_brand_name1"><font class="item_brand_name1" style="font-family: Times new roman;">{{@$brand_name }}</font></td><td><input type="hidden" value="{{@$updations->item->categories->id}}" class="actual_item_category_name1" name="category_id"><input type="hidden" value="{{@$updations->item->categories->id}}" class="append_item_category_name1"><font class="item_category_name1" style="font-family: Times new roman;">{{@$updations->item->categories->name}}</font></td><td><input type="hidden" value="{{@$updations->item->hsn}}" class="actual_item_hsn1" name="hsn"><input type="hidden" value="{{@$updations->item->hsn}}" class="append_item_hsn1"><font style="font-family: Times new roman;" class="item_hsn1">{{@$updations->item->hsn}}</font></td><td><input type="hidden" value="{{@$updations->item->mrp}}" class="actual_item_mrp1" name="mrp"><input type="hidden" value="{{@$updations->item->mrp}}" class="append_item_mrp1"><font class="item_mrp1" style="font-family: Times new roman;">{{$updations->item->mrp}}</font></td><td><input type="hidden" value="{{@$updations->item->uom->id}}" class="actual_item_uom1" name="uom_id"><input type="hidden" value="{{@$updations->item->uom->id}}" class="append_item_uom1"><font class="item_uom1" style="font-family: Times new roman;">{{ @$updations->item->uom->name }}</font></td><td><input type="hidden" class="actual_last_purchase_cost1" value="{{@$unit_price}}" name="last_purchase_cost"><input type="hidden" class="append_last_purchase_cost1" value="{{@$unit_price}}"><font class="last_purchase_cost1">{{@$unit_price}}</font></td><td><input type="hidden" class="tax1" value="{{@$tax}}" name="tax"><font class="tax1">{{@$tax}}</font></td><td><input type="hidden" class=" form-control append_mark_up_percent1" name="mark_up_percent" value="{{@$updated_selling_price->mark_up_type}}"><font class="mark_up_percent1" style="font-family: Times new roman;">{{@$up_type}}</font></td><td><input type="hidden" class="form-control append_mark_up_rs1" name="mark_up_rs" value="{{@$updated_selling_price->mark_up_value}}"><font class="mark_up_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_up_value}}</font></td><td><input type="hidden" class="form-control append_mark_down_percent1" name="mark_down_percent" value="{{@$updated_selling_price->mark_down_type}}"><font class="mark_down_percent1" style="font-family: Times new roman;">{{@$down_type}}</font></td><td><input type="hidden" class="form-control append_mark_down_rs1" name="mark_down_rs" value="{{@$updated_selling_price->mark_down_value}}"><font class="mark_down_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_down_value}}</font></td><td><input type="hidden" value="{{@$last_selling_price}}" class="actual_item_selling_price1" name="last_selling_price"><input type="hidden" value="{{@$last_selling_price}}" class="append_item_selling_price1"><font style="font-family: Times new roman;" class="item_selling_price1">{{@$last_selling_price}}</font></td><td><input type="hidden" value="{{@$selling_price}}" class="actual_updated_selling_price1"><input type="hidden" value="{{@$selling_price}}" class="append_updated_selling_price1" name="updated_selling_price"><font style="font-family: Times new roman;" class="updated_selling_price1">{{@$selling_price}}</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="1" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="1" aria-hidden="true"></i></td></tr>
+          <tr class="row_category" id="1"><input type="hidden" name="row_check" value="1" id="row_check1"><td><font style="font-family: Times new roman;">1</font><input type="hidden" name="table_count" value="1"></td><td><input type="hidden" value="{{@$updations->item_id}}" class="append_item_id1" name="item_id"><input type="hidden" value="{{ @$updations->tem->code }}" class="actual_item_code1" name="item_code"><input type="hidden" value="{{$updations->item->code}}" class="append_item_code1"><font class="item_code1" style="font-family: Times new roman;">{{@$updations->item->code}}</font></td><td><input type="hidden" value="{{@$updations->item->name}}" class="actual_item_name1" name="item_name"><input type="hidden" value="{{@$updations->item->name}}" class="append_item_name1"><font class="item_name1" style="font-family: Times new roman;">{{@$updations->item->name}}</font></td><td><input type="hidden" value="{{@$updations->item->brand->id}}" class="actual_item_brand_name1" name="brand_id"><input type="hidden" value="{{@$updations->item->brand->id}}" class="append_item_brand_name1"><font class="item_brand_name1" style="font-family: Times new roman;">{{@$brand_name }}</font></td><td><input type="hidden" value="{{@$updations->item->categories->id}}" class="actual_item_category_name1" name="category_id"><input type="hidden" value="{{@$updations->item->categories->id}}" class="append_item_category_name1"><font class="item_category_name1" style="font-family: Times new roman;">{{@$updations->item->categories->name}}</font></td><td><input type="hidden" value="{{@$updations->item->hsn}}" class="actual_item_hsn1" name="hsn"><input type="hidden" value="{{@$updations->item->hsn}}" class="append_item_hsn1"><font style="font-family: Times new roman;" class="item_hsn1">{{@$updations->item->hsn}}</font></td><td><input type="hidden" value="{{@$updations->item->mrp}}" class="actual_item_mrp1" name="mrp"><input type="hidden" value="{{@$updations->item->mrp}}" class="append_item_mrp1"><font class="item_mrp1" style="font-family: Times new roman;">{{$updations->item->mrp}}</font></td><td><input type="hidden" value="{{@$updations->item->uom->id}}" class="actual_item_uom1" name="uom_id"><input type="hidden" value="{{@$updations->item->uom->id}}" class="append_item_uom1"><font class="item_uom1" style="font-family: Times new roman;">{{ @$updations->item->uom->name }}</font></td><td><input type="hidden" class="actual_last_purchase_cost1" value="{{@$item_rate}}" name="last_purchase_cost"><input type="hidden" class="append_last_purchase_cost1" value="{{@$item_rate}}"><font class="last_purchase_cost1">{{@$item_rate}}</font></td><td><input type="hidden" class="tax1" value="{{@$tax}}" name="tax"><font class="tax1">{{@$tax}}</font></td><td><input type="hidden" class=" form-control append_mark_up_percent1" name="mark_up_percent" value="{{@$updated_selling_price->mark_up_type}}"><font class="mark_up_percent1" style="font-family: Times new roman;">{{@$up_type}}</font></td><td><input type="hidden" class="form-control append_mark_up_rs1" name="mark_up_rs" value="{{@$updated_selling_price->mark_up_value}}"><font class="mark_up_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_up_value}}</font></td><td><input type="hidden" class="form-control append_mark_down_percent1" name="mark_down_percent" value="{{@$updated_selling_price->mark_down_type}}"><font class="mark_down_percent1" style="font-family: Times new roman;">{{@$down_type}}</font></td><td><input type="hidden" class="form-control append_mark_down_rs1" name="mark_down_rs" value="{{@$updated_selling_price->mark_down_value}}"><font class="mark_down_rs1" style="font-family: Times new roman;">{{@$updated_selling_price->mark_down_value}}</font></td><td><input type="hidden" value="{{@$selling_price}}" class="actual_updated_selling_price1"><input type="hidden" value="{{@$selling_price}}" class="append_updated_selling_price1" name="updated_selling_price"><font style="font-family: Times new roman;" class="updated_selling_price1">{{@$selling_price}}</font></td><td><i class="fa fa-level-up px-2 py-1 bg-danger text-white rounded up" id="1" aria-hidden="true"></i>&nbsp;<i class="fa fa-level-down px-2 py-1 bg-warning  text-white rounded down" id="1" aria-hidden="true"></i></td></tr>
         </tbody>
         <tfoot>
               <th></th>
@@ -203,7 +227,7 @@
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
+              
               
             </tfoot>
       </table>
@@ -222,6 +246,8 @@
 </div>
 
 <script type="text/javascript">
+
+  // document.addEventListener('contextmenu', event => event.preventDefault());
 
   function mark_up(val) 
    {
@@ -432,12 +458,16 @@ if($('#tester').val() == '')
         var total = parseFloat(selling_price) + parseFloat(percentage_val);
         var value = 1;
       }
-      else
+      else if(up_rs != '')
       {
         var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
         var value = 2;
+      }
+      else if(up_percent == '' && up_rs == '')
+      {
+        alert('Please Provide Any Value');
       }
       
       if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
@@ -535,19 +565,23 @@ else
         var total = parseFloat(selling_price) + parseFloat(percentage_val);
         var value = 1;
       }
-      else
+      else if(up_rs != '')
       {
         var disc_amount_exclusive = parseFloat(up_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) + parseFloat(up_rs);
         var percentage_val = parseFloat(up_rs);
         var value = 2;
       }
+      else if(up_percent == '' && up_rs == '')
+      {
+        alert('Please Provide Any Value');
+      }
 
     if(parseFloat(total.toFixed(2)) <= parseFloat(mrp) || parseFloat(mrp) == 0)
       {
         if(value == 1)
         {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_up_percent'+cnt).text('Percentage');
@@ -561,7 +595,7 @@ else
         }
        else
        {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_up_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -585,7 +619,7 @@ else
     $('.up_rs').val('');
 }
 $('#tester').val('');
-$('.price_updation_up').attr('checked', 'checked');
+$('.price_updation_up').attr('checked');
 $('.price_updation_down').removeAttr('checked');
   
 });
@@ -610,12 +644,16 @@ if($('#tester').val() == '')
         var percent = parseFloat(down_percent);
         var value = 1;
       }
-      else
+      else if(down_rs != '')
       {
         var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
         var value = 2;
+      }
+      else if(down_percent == '' && down_rs == '')
+      {
+        alert('Please Provide Any Value');
       }
       
       if(parseFloat(total.toFixed(2)) >= parseFloat(selling_price))
@@ -660,8 +698,8 @@ if($('#tester').val() == '')
           $('.append_updated_selling_price'+count).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+count).text('Percentage');
           $('.append_mark_down_percent'+count).val(parseInt(value));
-          $('.mark_down_rs'+count).text(parseFloat(percentage_val.toFixed(2)));
-          $('.append_mark_down_rs'+count).val(parseFloat(percentage_val.toFixed(2)));
+          $('.mark_down_rs'+count).text(parseFloat(percent.toFixed(2)));
+          $('.append_mark_down_rs'+count).val(parseFloat(percent.toFixed(2)));
           $('.mark_up_percent'+count).text('');
           $('.append_mark_up_percent'+count).val('');
           $('.mark_up_rs'+count).text('');
@@ -707,12 +745,16 @@ else
         var percent = parseFloat(down_percent);
         var value = 1;
       }
-      else
+      else if(down_rs != '')
       {
         var disc_amount_exclusive = parseFloat(down_rs)*100/parseFloat(selling_price);
         var total = parseFloat(selling_price) - parseFloat(down_rs);
         var percentage_val = parseFloat(down_rs);
         var value = 2;
+      }
+      else if(down_percent == '' && down_rs == '')
+      {
+        alert('Please Provide Any Value');
       }
       
 
@@ -720,7 +762,7 @@ else
       {
         if(value == 1)
         {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+cnt).text('Percentage');
@@ -735,7 +777,7 @@ else
         }
        else
        {
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -754,7 +796,7 @@ else
       if(value == 1)
         {
           alert('Less Than Last Purchase Cost!!');
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_percent'+cnt).text('Percentage');
@@ -770,7 +812,7 @@ else
        else
        {
           alert('Less Than Last Purchase Cost!!');
-          $('#row_check'+count).val(1);
+          $('#row_check'+cnt).val(1);
           $('.updated_selling_price'+cnt).text(parseFloat(total.toFixed(2)));
           $('.append_updated_selling_price'+cnt).val(parseFloat(total.toFixed(2)));
           $('.mark_down_rs'+cnt).text(parseFloat(percentage_val.toFixed(2)));
@@ -789,7 +831,7 @@ else
 }
 $('#tester').val('');
 $('.price_updation_up').removeAttr('checked');
-$('.price_updation_down').attr('checked', 'checked');
+$('.price_updation_down').attr('checked');
   
 });
 
@@ -807,7 +849,7 @@ $(document).on('click','.up',function(){
      $('.down_percent_div').hide();
      $('.down_update').hide();
 
-     $('.price_updation_up').attr('checked', 'checked');
+     $('.price_updation_up').attr('checked');
      $('.price_updation_down').removeAttr('checked');
 
     $('.up_rs').val('');
@@ -831,7 +873,7 @@ $(document).on('click','.down',function(){
      $('.down_update').show();
 
      $('.price_updation_up').removeAttr('checked');
-     $('.price_updation_down').attr('checked', 'checked');
+     $('.price_updation_down').attr('checked');
 
     $('.down_rs').val('');
     $('.down_percent').val('');

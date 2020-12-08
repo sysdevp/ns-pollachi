@@ -370,7 +370,7 @@ class MobileController extends Controller
         {
             $response_data = [];
 
-            $get_id = SaleOrder::orderBy('id','desc')->pluck('id');
+            $get_id = SaleOrder::orderBy('id','desc')->pluck('so_no');
 
             $count = $get_id->count();
             $response_data['id'] = ($count > 0)?$get_id[0]+1:"1";

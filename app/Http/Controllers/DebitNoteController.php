@@ -469,7 +469,7 @@ class DebitNoteController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = DebitNoteItem::where('item_id',$value->item_id)
-                                    ->orderBy('dn_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -594,7 +594,7 @@ class DebitNoteController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = DebitNoteItem::where('item_id',$value->item_id)
-                                    ->orderBy('dn_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -1726,7 +1726,7 @@ $result=[];
         $id = $request->id;
 
         $item_data = DebitNoteItem::where('item_id',$id)
-                                    ->orderBy('dn_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -1809,7 +1809,7 @@ $result=[];
 
 
             $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
-                                    ->orderBy('p_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
             $item_sum = $item_data->rejected_qty + $item_data->debited_qty;
             $item_remaining_qty = $item_data->actual_qty - $item_sum;
@@ -1974,7 +1974,7 @@ echo "<pre>"; print_r($data); exit;
 
 
             $item_data = RejectionOutItem::where('item_id',$value->item_id)
-                                    ->orderBy('r_out_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
             $last_purchase_amount = $item_data->rejected_qty;        
 

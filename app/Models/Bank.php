@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Bank extends Model
 {
     use SoftDeletes;
+    public function bankbranchzz()
+    {
+    	return $this->belongsTo(Bankbranch::class,'bank_id');
+    }
 }

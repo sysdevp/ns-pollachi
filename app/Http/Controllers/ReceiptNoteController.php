@@ -1762,7 +1762,7 @@ $result=[];
         $id = $request->id;
 
         $item_data = ReceiptNoteItem::where('item_id',$id)
-                                    ->orderBy('rn_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -1840,7 +1840,7 @@ $result=[];
 
 
             $item_data = PurchaseOrderItem::where('item_id',$value->item_id)
-                                    ->orderBy('po_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -1986,7 +1986,7 @@ echo "<pre>"; print_r($data); exit;
 
 
             $item_data = Estimation_Item::where('item_id',$value->item_id)
-                                    ->orderBy('estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -2125,7 +2125,7 @@ echo "<pre>"; print_r($data); exit;
 
 
             $item_data = RejectionOutItem::where('item_id',$value->item_id)
-                                    ->orderBy('r_out_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->rejected_qty * $item_data->rate_exclusive_tax;

@@ -414,7 +414,7 @@ class SalesEstimationController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = SaleEstimationItem::where('item_id',$value->item_id)
-                                    ->orderBy('sale_estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -536,7 +536,7 @@ class SalesEstimationController extends Controller
             $item_discount_sum = $item_discount_sum + $value->discount;
 
             $item_data = SaleEstimationItem::where('item_id',$value->item_id)
-                                    ->orderBy('sale_estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -968,18 +968,22 @@ $count=0;
         if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
         {
             $item_data = PurchaseEntryItem::where('item_id',$id)
-                                    ->orderBy('p_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->latest()
                                     ->first();
 
             $updated_selling_price = PriceUpdation::where('item_id',$id)
                                         ->where('status',1)
+                                        ->whereDate('effective_from', '<=', Carbon::now())
                                         ->orderBy('updated_at','DESC')
                                         ->latest()
                                         ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                         ->first();
 
-            $unit_price = @$item_data->rate_exclusive_tax;
+            $unit_price = @$item_data->rate_inclusive_tax;
+            $discount = @$item_data->discount / @$item_data->qty;
+            $item_rate = $unit_price - $discount;
+
             $tax = @$item_data->gst;
 
             if(@$updated_selling_price == '')
@@ -991,24 +995,24 @@ $count=0;
 
             if(@$updated_selling_price->mark_up_type == 1)
             {
-                $percentage_val = $unit_price * @$updated_selling_price->mark_up_value / 100;
-                $total = $unit_price + $percentage_val;
+                $percentage_val = $item_rate * @$updated_selling_price->mark_up_value / 100;
+                $total = $item_rate + $percentage_val;
                 @$selling_price = number_format($total, 2, '.', ',');
             }
             else if(@$updated_selling_price->mark_up_type == 2)
             {
-                $total = $unit_price + @$updated_selling_price->mark_up_value;
+                $total = $item_rate + @$updated_selling_price->mark_up_value;
                 @$selling_price = number_format($total, 2, '.', ',');
             }
             if(@$updated_selling_price->mark_down_type == 1)
             {
-                $percentage_val = $unit_price * @$updated_selling_price->mark_down_value / 100;
-                $total = $unit_price - $percentage_val;
+                $percentage_val = $item_rate * @$updated_selling_price->mark_down_value / 100;
+                $total = $item_rate - $percentage_val;
                 @$selling_price = number_format($total, 2, '.', ',');
             }
             else if(@$updated_selling_price->mark_down_type == 2)
             {
-               $total = $unit_price - @$updated_selling_price->mark_down_value;
+               $total = $item_rate - @$updated_selling_price->mark_down_value;
                @$selling_price = number_format($total, 2, '.', ',');
             }
 
@@ -1244,70 +1248,6 @@ $count=0;
          return $result;
         
 
-
-
-
-
-        
-        // if($brand != 'no_val')
-        // {
-        //     $items = Item::join('brands','brands.id','=','items.brand_id')
-        //              ->join('categories','categories.id','=','items.category_id')
-        //              ->where('items.category_id','=',$categories)
-        //              ->where('items.brand_id','=',$brand)
-        //              ->select('items.id as item_id','items.code as item_code','items.name as item_name','brands.id as brand_id','brands.name as brand_name','items.ptc','categories.id as categories_id','categories.name as category_name')
-        //              ->get();
-
-        // foreach ($items as $key => $value) {
-        //      $item_id=$value->item_id;
-
-        //      $data[] =ItemBracodeDetails::where('item_bracode_details.item_id','=',$item_id)
-        //                                 ->select('barcode')
-        //                                 ->get();
-        //          }  
-
-        //      $data[] = $items;
-        // }
-        // else
-        // {
-        //     $items = Item::join('categories','categories.id','=','items.category_id')
-        //              ->where('items.category_id','=',$categories)
-        //              ->select('items.id as item_id','items.code as item_code','items.name as item_name','items.brand_id','items.ptc','categories.id as categories_id','categories.name as category_name')
-        //              ->get();
-
-        //              $items_1 = Item::all();
-        //             // ->select('items.id as item_id','items.code as item_code','items.name as item_name','items.brand_id','items.ptc','categories.id as categories_id','categories.name as category_name')
-                    
-
-        //              print_r($items_1); exit;
-
-
-        // // foreach ($items as $key => $values) {
-        // //                   if(isset($value->brand->name)  && !empty($value->brand->name)){
-        // //      $data[]=$value->brand->name;
-        // //     }
-        // //              }             
-
-        // foreach ($items as $key => $value) {
-        //      $item_id=$value->item_id;
-
-        //     //  if(isset($value->brand->name)  && !empty($value->brand->name)){
-        //     //  $brand_name=$value->brand->name;
-        //     // }
-        //      $data[] =ItemBracodeDetails::where('item_bracode_details.item_id','=',$item_id)
-        //                                 ->select('barcode')
-        //                                 ->get();
-        //         // $data[$key]=$brand_name;
-        //          }  
-
-        //      $data[] = $items;
-        // }
-        
-          
-                   
-
-        //   return $data;
-
     }
 
     public function brand_filter(Request $request)
@@ -1497,7 +1437,6 @@ $result=[];
 
         $item = Item::join('item_bracode_details','item_bracode_details.item_id','=','items.id')
                     ->where('items.code','=',$id)
-                    // ->orWhere('items.ptc','=',$id)
                     ->orWhere('item_bracode_details.barcode','=',$id)
                     ->select('*','items.id as item_id')
                     ->get();
@@ -1507,8 +1446,6 @@ $result=[];
                     {
                         $item_id= $value->item_id;
                     }
-                   
-                   // $data[] = $this->uom_selection($item_id);
                    
                    
 
@@ -1619,7 +1556,7 @@ $result=[];
         $id = $request->id;
 
         $item_data = SaleEstimationItem::where('item_id',$id)
-                                    ->orderBy('sale_estimation_date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;
