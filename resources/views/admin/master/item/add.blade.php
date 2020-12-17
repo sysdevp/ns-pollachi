@@ -24,7 +24,7 @@
                   <div class="form-group row">
                      <label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <span class="mandatory">*</span></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Item Name" name="name" value="{{old('name')}}" required>
+                        <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Item Name" name="name" value="{{old('name')}}" required>
                         <span class="mandatory"> {{ $errors->first('name')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Item Name
@@ -725,6 +725,7 @@
 </div>
 <!-- <script src="{{asset('assets/js/master/add_more_item_tax_details.js')}}"></script> -->
 <script src="{{asset('assets/js/master/add_more_barcode_details.js')}}"></script>
+<script src="{{asset('assets/js/master/capitalize.js')}}"></script>
 <script src="{{asset('assets/js/master/add_more_opening_details.js')}}"></script>
 <script>
 

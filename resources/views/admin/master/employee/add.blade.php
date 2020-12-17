@@ -40,7 +40,7 @@
               </select>
               <span class="mandatory"> {{ $errors->first('salutation')  }} </span>
             </div>
-            <input type="text" class="form-control required_for_valid only_allow_alp_numeric name" name="name" error-data="Employee Name Field is required" aria-label="Text input with dropdown button" value={{old('name')}}>
+            <input type="text" class="form-control required_for_valid only_allow_alp_numeric name caps" name="name" error-data="Employee Name Field is required" aria-label="Text input with dropdown button" value={{old('name')}}>
             
             <div class="invalid-feedback">
               Enter valid Employee Name
@@ -137,7 +137,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Father's Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control father_name only_allow_alp_numeric required_for_valid" error-data="Enter valid Father's Name" placeholder="Father's Name" name="father_name" value="{{old('father_name')}}">
+                <input type="text" class="form-control father_name only_allow_alp_numeric required_for_valid caps" error-data="Enter valid Father's Name" placeholder="Father's Name" name="father_name" value="{{old('father_name')}}">
                 <span class="mandatory"> {{ $errors->first('father_name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Father's Name
@@ -516,7 +516,7 @@
         </div>
       </form>
     </div>
-    <!-- <script src="{{asset('assets/js/master/capitalize.js')}}"></script> -->
+    <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
     <!-- card body end@ -->
   </div>
 </div>
