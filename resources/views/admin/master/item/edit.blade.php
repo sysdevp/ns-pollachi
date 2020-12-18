@@ -801,7 +801,6 @@ $(document).on("submit",".submit_form2",function(){
 
 var i = 0;
 var j =$('#opening_cnt').val();
-alert(j);
 var cnt = 0;
 function add_item_tax_details() {
    i++;
