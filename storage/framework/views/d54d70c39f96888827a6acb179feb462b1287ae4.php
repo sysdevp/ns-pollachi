@@ -34,7 +34,7 @@
               <div class="form-group row">
                 <label for="validationCustom01" class="col-sm-4 col-form-label">Company Name<span class="mandatory">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp company_name required_for_valid"  error-data="Enter valid Company Name" placeholder="Company Name" name="company_name" value="<?php echo e(old('company_name')); ?>" >
+                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp company_name required_for_valid caps"  error-data="Enter valid Company Name" placeholder="Company Name" name="company_name" value="<?php echo e(old('company_name')); ?>" >
                   <span class="mandatory"> <?php echo e($errors->first('company_name')); ?> </span>
                   <div class="invalid-feedback">
                     Enter valid Company Name
@@ -105,7 +105,7 @@
                     </select>
                     <span class="mandatory"> <?php echo e($errors->first('salutation')); ?> </span>
                   </div>
-                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp name" name="name" error-data="Customer Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value=<?php echo e(old('name')); ?>>
+                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp name caps" name="name" error-data="Customer Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value=<?php echo e(old('name')); ?>>
 
                   <div class="invalid-feedback">
                     Enter valid Supplier Name

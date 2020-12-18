@@ -26,7 +26,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Tax Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name" placeholder="Tax Name" name="name" value="" required>
+                <input type="text" class="form-control name caps" placeholder="Tax Name" name="name" value="" required>
               
               </div>
             </div>
@@ -47,6 +47,7 @@
         </div>
       </form>
     </div>
+    <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
     <script>
       $(document).on('input','.name',function(){
 

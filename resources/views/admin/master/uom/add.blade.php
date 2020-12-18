@@ -26,7 +26,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Name<span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Name" name="name" value="{{old('name')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Name" name="name" value="{{old('name')}}" required>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Name
@@ -72,7 +72,7 @@
         </div>
       </form>
     </div>
-    <!-- <script src="{{asset('assets/js/master/capitalize.js')}}"></script> -->
+    <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
     <!-- card body end@ -->
   </div>
 </div>
