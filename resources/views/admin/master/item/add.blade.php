@@ -473,18 +473,26 @@
                   <div class="row mb-3 opening_row">
 
                      <div class="col-md-2">
-                  <!-- <div class="form-group row"> -->
+                     <label for="validationCustom01" class="">Location</label>
+                       <select class="js-example-basic-multiple col-12 form-control custom-select location select2-hidden-accessible" name="location[]" id="location" data-select2-id="location" tabindex="-1" aria-hidden="true">
+                           <option value="" data-select2-id="6">Choose Location</option>
+                           @foreach($location as $key => $value)
+                           <option value="{{$value->id}}">{{$value->name}}</option>
+                           @endforeach
+                        </select>
+                       <span class="mandatory"> {{ $errors->first('location')}} </span>
+                     <div class="invalid-feedback">
+                           Enter valid Location
+                     </div>
+               </div>
+
+                     <div class="col-md-1">
                      <label for="validationCustom01" class="">Batch No</label>
-                     <!-- <div class="col-sm-8"> -->
                        <input type="text" placeholder="Batch No" required="" name="batch_no[]" class="form-control batch_no mandatory" >
                        <span class="mandatory"> {{ $errors->first('batch_no')}} </span>
                      <div class="invalid-feedback">
                            Enter valid Batch No
                      </div>
-
-                     <!-- /div>
-                     
-                  </div> -->
                </div>
 
                   <div class="col-md-2">
@@ -511,7 +519,7 @@
                   </div> -->
                </div>
 
-                                 <div class="col-md-2">
+                                 <div class="col-md-1">
                   <!-- <div class="form-group row"> -->
                      <label for="validationCustom01" class="">Amount</label>
                      <!-- <div class="col-sm-8"> -->
@@ -726,7 +734,7 @@
 <!-- <script src="{{asset('assets/js/master/add_more_item_tax_details.js')}}"></script> -->
 <script src="{{asset('assets/js/master/add_more_barcode_details.js')}}"></script>
 <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
-<script src="{{asset('assets/js/master/add_more_opening_details.js')}}"></script>
+<!-- <script src="{{asset('assets/js/master/add_more_opening_details.js')}}"></script> -->
 <script>
 
 $(document).on("submit",".submit_form2",function(){
@@ -754,6 +762,9 @@ $(document).on("submit",".submit_form2",function(){
 
 
 var i = 0;
+var j =$('#opening_cnt').val();
+alert(j);
+var cnt = 0;
 function add_item_tax_details() {
    i++;
     var item_tax_dets = "";
@@ -807,6 +818,280 @@ function add_item_tax_details() {
     s_no();
     //common_igst_calculation();
 }
+
+$(document).on('click','#add_opening',function(){
+
+   
+/*Current Date*/
+   var d = new Date();
+
+   var month = d.getMonth()+1;
+   var day = d.getDate();
+
+   var output = ((''+day).length<2 ? '0' : '') + day + '/' +
+       ((''+month).length<2 ? '0' : '') + month + '/' +
+       d.getFullYear();
+
+/*Current Date*/   
+
+   
+   $('.location').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Select Location');
+         key.preventDefault();
+         
+      }
+
+   });   
+
+   $('.batch_no').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Enter Batch No');
+         key.preventDefault();
+         $(this).closest($('.opening_row')).remove();
+         
+      }
+
+   });
+
+   $('.quantity').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Enter Quantity No');
+         key.preventDefault();
+         
+      }
+
+   });
+
+   $('.rate').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Enter Rate No');
+         key.preventDefault();
+         
+
+      }
+
+   });
+
+   var opening_details = "";
+
+   opening_details+= '<div class="row mb-3 opening_row">\
+   <div class="col-md-2">\
+                     <label for="validationCustom01" class="">Location</label>\
+                       <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location[]" id="location" data-select2-id="location" tabindex="-1" aria-hidden="true">\
+                           <option value="" data-select2-id="6">Choose Location</option>\
+                           @foreach($location as $key => $value)\
+                           <option value="{{$value->id}}">{{$value->name}}</option>\
+                           @endforeach\
+                        </select>\
+                       <span class="mandatory"> </span>\
+                     <div class="invalid-feedback">\
+                           Enter valid Location\
+                     </div>\
+               </div>\
+                     <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Batch No</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" placeholder="Batch No" required="" name="batch_no[]" class="form-control batch_no" >\
+                     <span class="mandatory"> </span>\
+                     <div class="invalid-feedback">\
+                           Enter valid Batch No\
+                     </div>\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+                  <div class="col-md-2">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Opening Quantity<span class="mandatory">*</span></label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" required="" placeholder="Opening Quantity" name="quantity[]" class="form-control quantity mandatory" >\
+                     <!-- </div> -->\
+                     <span class="mandatory"> </span>\
+                     <div class="invalid-feedback">\
+                           Enter valid Quantity\
+                     </div>\
+                  <!-- </div> -->\
+               </div>\
+                                 <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Rate</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" placeholder="Rate" name="rate[]" class="form-control rate" >\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+                                 <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Amount</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" name="amount[]" readonly placeholder="Amount" class="form-control amount" >\
+                     <!-- </div>\
+                     \
+                  </div> -->\
+               </div>\
+                                 <div class="col-md-2">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Applicable Date</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="date" name="applicable_date[]" value="" class="form-control applicable_date" >\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+               <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">W/B</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <select class="form-control" name="black_or_white[]">\
+                          <option value="1">W</option>\
+                          <option value="0">B</option>\
+                       </select>\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+               <div class="col-md-2 mt-4">\
+                  <input type="button" id="add_opening" class="btn btn-success mb-3" name="" value="+">\
+                  <input type="button" id="remove_opening" class="btn btn-danger mb-3" name="" value="-">\
+               </div>\
+            </div>';
+$("select").select2();
+$('.openings').append(opening_details);
+++j;
+$('#opening_cnt').val(j);
+});
+
+
+$(document).on('change','.batch_no',function(){
+var batch = Array();
+   $('.batch_no').each(function(key){
+
+      batch.push($(this).val());
+   });
+
+   for(var m=0;m<batch.length;m++)
+   {
+      var first = batch[m];
+
+      for(var n=m+1;n<=batch.length;n++)
+      {
+         var second = batch[n];
+
+         if(typeof second == 'undefined')
+         {
+
+         }
+         else
+         {
+            if(first == second)
+            {
+               alert('uesd');
+               $(this).val('');
+               $(this).focus();
+            }  
+            else
+            {
+
+            }
+         }
+      }
+   }
+
+});
+
+$(document).on('change','.applicable_date',function(){
+var applicable_date = Array();
+
+   $('.applicable_date').each(function(key){
+
+      applicable_date.push($(this).val());
+   });
+
+   for(var m=0;m<applicable_date.length;m++)
+   {
+      var first = applicable_date[m];
+
+      for(var n=m+1;n<=applicable_date.length;n++)
+      {
+         var second = applicable_date[n];
+
+         if(typeof second == 'undefined')
+         {
+
+         }
+         else
+         {
+            if(first == second)
+            {
+               alert('uesd');
+               $(this).val('');
+               $(this).focus();
+            }  
+            else
+            {
+
+            }
+         }
+      }
+   }
+
+});
+
+
+
+
+$(document).on('click','#remove_opening',function (){
+
+   var count = $('.opening_cnt').val();
+   if(count == 1)
+   {
+      alert('Atleast One Row Present!');
+   }
+   else
+   {
+      $(this).closest($('.opening_row')).remove();
+      $('#opening_cnt').val(--j);
+   }
+
+
+});
+
+$(document).on('input','.rate',function(){
+var quantity = $(this).closest($('.opening_row')).find('.quantity').val();
+var rate = $(this).closest($('.opening_row')).find('.rate').val();
+if(quantity == '')
+{
+   alert('Enter Quantity First');
+   $(this).closest($('.opening_row')).find('.rate').val('');
+}
+else
+{
+   var amount = parseInt(quantity)*parseFloat(rate);
+   $(this).closest($('.opening_row')).find('.amount').val(parseFloat(amount).toFixed(2));
+}
+
+});
+
+$(document).on('input','.quantity',function(){
+   var quantity = $(this).closest($('.opening_row')).find('.quantity').val();
+    var rate = $(this).closest($('.opening_row')).find('.rate').val();
+
+   if(rate != '')
+   {
+      $(this).closest($('.opening_row')).find('.rate').val('');
+      $(this).closest($('.opening_row')).find('.amount').val('');
+   }
+});
+
+
+
  
 $(document).on('change','.valid_from',function(){
 var valid_from = Array();

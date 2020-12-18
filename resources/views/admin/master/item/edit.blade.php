@@ -1,7 +1,6 @@
 @extends('admin.layout.app')
 @section('content')
 <div class="col-12 body-sec">
-  <div class="card container px-0">
     <!-- card header start@ -->
     <div class="card-header px-2">
       <div class="row">
@@ -477,10 +476,24 @@
                   </div>
                   
                   <div class="col-md-12 openings">
-                    @for($k = 0; $k < $opening_count; $k++)
+                    @for($k = 0; $k < @$opening_count; $k++)
                   <div class="row mb-3 opening_row">
 
-                     <div class="col-md-2">
+                    <div class="col-md-2">
+                     <label for="validationCustom01" class="">Location</label>
+                       <select class="js-example-basic-multiple col-12 form-control custom-select location select2-hidden-accessible" name="location[]" id="location" data-select2-id="location" tabindex="-1" aria-hidden="true">
+                           <option value="{{ @$opening_data[$k][0]['location'] }}" data-select2-id="6">{{ @$opening_data[$k][0]['name'] }}</option>
+                           @foreach($location as $key => $value)
+                           <option value="{{$value->id}}">{{$value->name}}</option>
+                           @endforeach
+                        </select>
+                       <span class="mandatory"> {{ $errors->first('location')}} </span>
+                     <div class="invalid-feedback">
+                           Enter valid Location
+                     </div>
+               </div>
+
+                     <div class="col-md-1">
                      <label for="validationCustom01" class="">Batch No</label>
                        <input type="text" placeholder="Batch No" required="" name="batch_no[]" value="{{ @$opening_data[$k][0]['batch_no'] }}" class="form-control mandatory" >
                        <span class="mandatory"> </span>
@@ -503,7 +516,7 @@
                        <input type="text" placeholder="Rate" value="{{ @$opening_data[$k][0]['rate'] }}" id="rate" name="rate[]" class="form-control rate" >
                </div>
 
-                                 <div class="col-md-2">
+                                 <div class="col-md-1">
                      <label for="validationCustom01" class="">Amount</label>
                        <input type="text" name="amount[]" value="{{ @$opening_data[$k][0]['amount'] }}" readonly="" id="amount" placeholder="Amount" class="form-control amount" >
                </div>
@@ -757,24 +770,52 @@
 </div>
 
 <!-- <script src="{{asset('assets/js/master/add_more_item_tax_details.js')}}"></script> -->
-<!-- <script src="{{asset('assets/js/master/capitalize.js')}}"></script> -->
+<script src="{{asset('assets/js/master/capitalize.js')}}"></script>
 <script src="{{asset('assets/js/master/add_more_barcode_details.js')}}"></script>
-<script src="{{asset('assets/js/master/add_more_opening_details.js')}}"></script>
+<!-- <script src="{{asset('assets/js/master/add_more_opening_details.js')}}"></script> -->
 <script>
 
-var count = $('#count').val();
+$(document).on("submit",".submit_form2",function(){
+  var error_count=barcode_validation();
+  if(error_count == 0){
+   return true;
+  }else{
+    return false;
+  }
+});
+
+      $(document).on('input','.hsn ',function(e){
+         e.preventDefault();
+        $(this).val($(this).val().replace(/[^0-9]/gi, ''));
+        if($(this).val().replace(/[^0-9]/gi, '').length > 6)
+        {
+         return false
+        }
+        else
+        {
+          
+        }
+
+      });
+
+
+var i = 0;
+var j =$('#opening_cnt').val();
+alert(j);
+var cnt = 0;
 function add_item_tax_details() {
+   i++;
     var item_tax_dets = "";
     item_tax_dets += '<tr class="row_count">\
                         <td class="s_no">1</td>\
                         @foreach($tax as $key => $value)\
                         <td>\
                            <div class="col-sm-12">\
-                              <input type="text" class="form-control {{$value->name}}_id only_allow_digit_and_dot common" name="{{$value->name}}_id[]"  placeholder="{{$value->name}}"  required>\
+                              <input type="text" class="form-control {{$value->name}}_id only_allow_digit_and_dot common" name="{{$value->name}}_id[]"  placeholder="{{$value->name}}" value="0" id="{{$value->name}}_id'+i+'"  required>\
                               <input type="hidden" name="{{$value->name}}[]" id="{{$value->name}}[]" value="{{ $value->id }}">\
                               <span class="mandatory">  </span>\
                               <div class="invalid-feedback">\
-                                 Enter valid IGST\
+                                 Enter valid {{$value->name}}\
                               </div>\
                            </div>\
                         </td>\
@@ -802,11 +843,10 @@ function add_item_tax_details() {
 
     $(".append_row").append(item_tax_dets);
     $(".append_row").length;
-    count++;
-    $('#count').val(count);
+    $('#count').val($(".row_count").length);
     var currentDate = new Date();
     $('.valid_from').datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd-mm-yyyy",
         todayHighlight: true,
         startDate: currentDate,
         endDate: '',
@@ -817,6 +857,280 @@ function add_item_tax_details() {
     //common_igst_calculation();
 }
 
+$(document).on('click','#add_opening',function(){
+
+   
+/*Current Date*/
+   var d = new Date();
+
+   var month = d.getMonth()+1;
+   var day = d.getDate();
+
+   var output = ((''+day).length<2 ? '0' : '') + day + '/' +
+       ((''+month).length<2 ? '0' : '') + month + '/' +
+       d.getFullYear();
+
+/*Current Date*/   
+
+   
+   $('.location').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Select Location');
+         key.preventDefault();
+         
+      }
+
+   });   
+
+   $('.batch_no').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Enter Batch No');
+         key.preventDefault();
+         $(this).closest($('.opening_row')).remove();
+         
+      }
+
+   });
+
+   $('.quantity').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Enter Quantity No');
+         key.preventDefault();
+         
+      }
+
+   });
+
+   $('.rate').each(function(key){
+
+      if($(this).val() == '')
+      {
+         alert('Enter Rate No');
+         key.preventDefault();
+         
+
+      }
+
+   });
+
+   var opening_details = "";
+
+   opening_details+= '<div class="row mb-3 opening_row">\
+   <div class="col-md-2">\
+                     <label for="validationCustom01" class="">Location</label>\
+                       <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location[]" id="location" data-select2-id="location" tabindex="-1" aria-hidden="true">\
+                           <option value="" data-select2-id="6">Choose Location</option>\
+                           @foreach($location as $key => $value)\
+                           <option value="{{$value->id}}">{{$value->name}}</option>\
+                           @endforeach\
+                        </select>\
+                       <span class="mandatory"> </span>\
+                     <div class="invalid-feedback">\
+                           Enter valid Location\
+                     </div>\
+               </div>\
+                     <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Batch No</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" placeholder="Batch No" required="" name="batch_no[]" class="form-control batch_no" >\
+                     <span class="mandatory"> </span>\
+                     <div class="invalid-feedback">\
+                           Enter valid Batch No\
+                     </div>\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+                  <div class="col-md-2">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Opening Quantity<span class="mandatory">*</span></label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" required="" placeholder="Opening Quantity" name="quantity[]" class="form-control quantity mandatory" >\
+                     <!-- </div> -->\
+                     <span class="mandatory"> </span>\
+                     <div class="invalid-feedback">\
+                           Enter valid Quantity\
+                     </div>\
+                  <!-- </div> -->\
+               </div>\
+                                 <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Rate</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" placeholder="Rate" name="rate[]" class="form-control rate" >\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+                                 <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Amount</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="text" name="amount[]" readonly placeholder="Amount" class="form-control amount" >\
+                     <!-- </div>\
+                     \
+                  </div> -->\
+               </div>\
+                                 <div class="col-md-2">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">Applicable Date</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <input type="date" name="applicable_date[]" value="" class="form-control applicable_date" >\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+               <div class="col-md-1">\
+                  <!-- <div class="form-group row"> -->\
+                     <label for="validationCustom01" class="">W/B</label>\
+                     <!-- <div class="col-sm-8"> -->\
+                       <select class="form-control" name="black_or_white[]">\
+                          <option value="1">W</option>\
+                          <option value="0">B</option>\
+                       </select>\
+                     <!-- /div>\
+                  </div> -->\
+               </div>\
+               <div class="col-md-2 mt-4">\
+                  <input type="button" id="add_opening" class="btn btn-success mb-3" name="" value="+">\
+                  <input type="button" id="remove_opening" class="btn btn-danger mb-3" name="" value="-">\
+               </div>\
+            </div>';
+$("select").select2();
+$('.openings').append(opening_details);
+++j;
+$('#opening_cnt').val(j);
+});
+
+
+$(document).on('change','.batch_no',function(){
+var batch = Array();
+   $('.batch_no').each(function(key){
+
+      batch.push($(this).val());
+   });
+
+   for(var m=0;m<batch.length;m++)
+   {
+      var first = batch[m];
+
+      for(var n=m+1;n<=batch.length;n++)
+      {
+         var second = batch[n];
+
+         if(typeof second == 'undefined')
+         {
+
+         }
+         else
+         {
+            if(first == second)
+            {
+               alert('uesd');
+               $(this).val('');
+               $(this).focus();
+            }  
+            else
+            {
+
+            }
+         }
+      }
+   }
+
+});
+
+$(document).on('change','.applicable_date',function(){
+var applicable_date = Array();
+
+   $('.applicable_date').each(function(key){
+
+      applicable_date.push($(this).val());
+   });
+
+   for(var m=0;m<applicable_date.length;m++)
+   {
+      var first = applicable_date[m];
+
+      for(var n=m+1;n<=applicable_date.length;n++)
+      {
+         var second = applicable_date[n];
+
+         if(typeof second == 'undefined')
+         {
+
+         }
+         else
+         {
+            if(first == second)
+            {
+               alert('uesd');
+               $(this).val('');
+               $(this).focus();
+            }  
+            else
+            {
+
+            }
+         }
+      }
+   }
+
+});
+
+
+
+
+$(document).on('click','#remove_opening',function (){
+
+   var count = $('.opening_cnt').val();
+   if(count == 1)
+   {
+      alert('Atleast One Row Present!');
+   }
+   else
+   {
+      $(this).closest($('.opening_row')).remove();
+      $('#opening_cnt').val(--j);
+   }
+
+
+});
+
+$(document).on('input','.rate',function(){
+var quantity = $(this).closest($('.opening_row')).find('.quantity').val();
+var rate = $(this).closest($('.opening_row')).find('.rate').val();
+if(quantity == '')
+{
+   alert('Enter Quantity First');
+   $(this).closest($('.opening_row')).find('.rate').val('');
+}
+else
+{
+   var amount = parseInt(quantity)*parseFloat(rate);
+   $(this).closest($('.opening_row')).find('.amount').val(parseFloat(amount).toFixed(2));
+}
+
+});
+
+$(document).on('input','.quantity',function(){
+   var quantity = $(this).closest($('.opening_row')).find('.quantity').val();
+    var rate = $(this).closest($('.opening_row')).find('.rate').val();
+
+   if(rate != '')
+   {
+      $(this).closest($('.opening_row')).find('.rate').val('');
+      $(this).closest($('.opening_row')).find('.amount').val('');
+   }
+});
+
+
+
+ 
 $(document).on('change','.valid_from',function(){
 var valid_from = Array();
 
@@ -855,28 +1169,33 @@ console.log($(this).val());
     }
   }
 
-});
+});   
 
-function s_no() {
-    $(".s_no").each(function(key) {
-        $(this).html(key + 1)
-    });
+function confirm_barcode()
+{
+   barcode_validation();
 }
+
+function testing(val)
+{
+    var value = $('#num'+val).val();
+     test($('.barcode').val(),value);
+}
+
    
    $(document).on("click", ".remove_tax_details", function() {
     var $tr = $(this).closest("tr");
     if ($(".remove_tax_details").length > 1) {
         $(this).closest("tr").remove();
         s_no();
-        count--;
-        $('#count').val(count);
+        i--;
+        $('#count').val($(".row_count").length);
     } else {
         alert("Atleast One Row Present");
     }
 });
 
-  
-  $(document).on("input", ".common", function() {
+   $(document).on("input", ".common", function() {
 
       var common=$(this).val();
    //newfun($(this).attr('id'),common);
@@ -888,10 +1207,12 @@ function s_no() {
       //alert('hi');
     var gst_lower = $(this).attr('class').split(' ')[1].slice(0,-3).toLowerCase();
     var gst_upper = $(this).attr('class').split(' ')[1].slice(0,-3).toUpperCase();
-    var gst=tax_name.substr(0,1).toUpperCase()+tax_name.substr(1);
+    var gst = tax_name.substr(0,1).toUpperCase()+tax_name.substr(1);
+
     var igst_upper = $(this).closest("tr").find("."+gst_upper+"_id").val();
     var igst_lower = $(this).closest("tr").find("."+gst_lower+"_id").val();
     var igst = $(this).closest("tr").find("."+gst+"_id").val();
+
     var half_lower = parseFloat(igst_lower)/2;
     var half_upper = parseFloat(igst_upper)/2;
     var half = parseFloat(igst)/2;
@@ -916,282 +1237,300 @@ function s_no() {
  }
    });
 
+   // $(document).on("change", ".valid_from", function() {
+   //    var valid_from = new Array();
+   //    $('.valid_from').each(function(key){
+   //       //alert(key);
+   //    valid_from = $(this).val();
+   //  });
+   //  console.log(valid_from);
+   // });
 
-$(document).on("click",".add_tax_details",function(){
-  add_item_tax_details();
-});
+   function calc_gst(half,half_upper,half_lower)
+   {
 
-$(document).on("click",".add_barcode_details",function(){
+      $(this).closest("tr").find(".cgst").val(cgst);
+   }
+
+   function s_no() {
+    $(".s_no").each(function(key) {
+        $(this).html(key + 1)
+    });
+}
+
+   $(document).on("click",".add_tax_details",function(){
+     add_item_tax_details();
+   });
+   
+   $(document).on("click",".add_barcode_details",function(){
      add_barcode_details();
    });
+   
+   
+   
+   $(document).ready(function(){
 
-$(document).ready(function(){
-  s_no();
-  minimum_sales_qty();
-  item_type();
-  var currentDate = new Date();
-    $('.valid_from,.common_effective_from').datepicker({
-    format: "dd-mm-yyyy",
-    todayHighlight: true,
-    startDate: currentDate,
-    endDate: '',
-    setDate: currentDate,
-    autoclose: true
-    });
-});
-  $(".name").keyup(function(){
-    $(".print_name_in_english").val($(this).val());
-  });
+     s_no();
+     item_type();
 
-/* Repack */
-function item_type()
-{
-  $(".weight_in_grams").removeAttr("required");
-  $(".bulk_item_id").removeAttr('required');
+     var is_minimum_sales_qty_applicable=$(".is_minimum_sales_qty_applicable:checked").val();
 
-  /* Item Type Parent  */
-  $(".child_unit").removeAttr("required");
-  $(".child_item_id").removeAttr('required');
-
-  var item_type=$(".item_type").val();
-  if(item_type == "Bulk")
-  {
-    $(".weight_in_grams").attr('required', 'required');
-  }
-
-  if(item_type == "Repack")
-  {
-    $(".weight_in_grams").attr('required', 'required');
-    $(".bulk_item_id").attr('required', 'required');
-    $(".bulk_item_div").css("display","block");
-    get_category_based_item($(".category_1").val(),$(".category_2").val(),$(".category_3").val(),item_id="")
-  }else
-  {
-    $(".bulk_item_div").css("display","none");
-  }
-
-  if(item_type == "Parent")
-  {
-    $(".child_unit").attr('required', 'required');
-    $(".child_item_id").attr('required', 'required');
-    $(".child_div").css("display","block");
-    //get_category_based_item($(".category_1").val(),$(".category_2").val(),$(".category_3").val(),item_id="")
-  }else
-  {
-    $(".child_div").css("display","none");
-  }
-  
-  $("select").select2();
-
-}
+     var currentDate = new Date();
+       $('.valid_from,.common_effective_from').datepicker({
+       format: "dd-mm-yyyy",
+       todayHighlight: true,
+       startDate: currentDate,
+       endDate: '',
+       setDate: currentDate,
+       autoclose: true
+       });
+   });
+   
+   
+   
+     $(".name").keyup(function(){
+       $(".print_name_in_english").val($(this).val());
+     });
+   
+   /* Repack */
+   function item_type()
+   {
+     $(".weight_in_grams").removeAttr("required");
+     $(".bulk_item_id").removeAttr('required');
+   
+     /* Item Type Parent  */
+     $(".child_unit").removeAttr("required");
+     $(".child_item_id").removeAttr('required');
+     $(".uom_for_repack_item").removeAttr('required');
 
 
-$(document).on("change",".item_type",function(){
-  item_type();
 
-});
+   
+     var item_type=$(".item_type").val();
+     if(item_type == "Bulk")
+     {
+       $(".weight_in_grams").attr('required', 'required');
+     }
+   
+     if(item_type == "Repack")
+     {
+       $(".weight_in_grams").attr('required', 'required');
+       $(".bulk_item_id").attr('required', 'required');
+       $(".bulk_item_div").css("display","block");
+       get_category_based_item($(".category_1").val(),$(".category_2").val(),$(".category_3").val(),item_id="")
+     }else
+     {
+       $(".bulk_item_div").css("display","none");
+     }
+   
+     if(item_type == "Parent")
+     {
+
+       $(".child_unit").attr('required', 'required');
+       $(".child_item_id").attr('required', 'required');
+       $(".uom_for_repack_item").attr('required', 'required');
+       $(".child_div").css("display","block");
+       //get_category_based_item($(".category_1").val(),$(".category_2").val(),$(".category_3").val(),item_id="")
+     }else
+     {
+       $(".child_div").css("display","none");
+     }
+
+     
+    
+
+    $("select").select2();
 
 
-$(document).on("click",".remove_existing_barcode",function(){
-  var item_barcode_details_id=$(this).closest("tr").find(".item_barcode_details_id").val();
-  var $tr=$(this).closest("tr");
-  $.ajax({
-              type: "post",
-              url: "{{ url('master/item/remove-item-barcode-details')}}",
-              data: {item_barcode_details_id:item_barcode_details_id},
-              success: function (res)
-              {
-               if(res == 1){
-                $tr.remove();
-               }else{
-                 alert("Something Went Wrong!..");
-               }
-                
-              }
-          });
-});
-
-function get_category_based_item(category_one_id,category_two_id,category_three_id,item_id)
-{
- 
-  $.ajax({
-              type: "post",
-              url: "{{ url('common/get-category-based-bulk-item')}}",
-              data: {category_one_id:category_one_id,category_two_id: category_two_id, category_three_id:category_three_id,item_id:item_id},
-              success: function (res)
-              {
-                result = JSON.parse(res);
-                $(".bulk_item_id").html(result.option);
-              }
-          });
-
-}
-  function get_category_one_based_category_two(category_one_id,category_two_id)
- {
-   $.ajax({
-               type: "post",
-               url: "{{ url('common/get-category-one-based-category-two')}}",
-               data: {category_one_id: category_one_id, category_two_id:category_two_id},
-               success: function (res)
-               {
-                 result = JSON.parse(res);
-                 $(".category_2").html(result.option);
-                 //$(".category_3").html("<option value=''>Choose Category 3</option>");
-               }
-           });
- 
- }
- 
- function get_category_two_based_category_three(category_two_id,category_three_id)
- {
-   $.ajax({
-               type: "post",
-               url: "{{ url('common/get-category-two-based-category-three')}}",
-               data: {category_two_id: category_two_id, category_three_id:category_three_id},
-               success: function (res)
-               {
-                 result = JSON.parse(res);
-                 $(".category_3").html(result.option);
-               }
-           });
- 
- }
- 
- $(document).on("change",".category_1",function(){
-   if($(this).val() != ""){
-     get_category_one_based_category_two($(this).val(),category_two_id ="");
-   }
- });
- 
- $(document).on("change",".category_2",function(){
-   if($(this).val() != ""){
-     get_category_two_based_category_three($(this).val(),category_three_id ="");
-   } 
- });
-
- $(document).on("change",".category_3",function(){
-  if($(this).val() != ""){
-     get_category_based_item($(".category_1").val(),$(".category_2").val(),$(this).val(),item_id="");
-  }
-});
-
-$(document).on("click",".refresh_category_id",function(){
-   var category_dets=refresh_category_master_details();
-   $(".category_id").html(category_dets);
-});
-$(document).on("click",".refresh_uom_id",function(){
-   var uom_dets=refresh_uom_master_details();
-   $(".uom_id").html(uom_dets);
-});
-
-$(document).on("click",".refresh_item_id",function(){
-   var item_dets=refresh_item_master_details();
-   $(".bulk_item_id").html(item_dets);
-});
-
-$(document).on("click",".refresh_brand_id",function(){
-   var brand_dets=refresh_brand_master_details();
-   $(".brand_id").html(brand_dets);
-});
-
-$(document).on("click",".refresh_child_item_id",function(){
-  var category_id=$(".category_id").val();
-   var child_item_dets=refresh_child_item_master_details(category_id);
-   $(".child_item_id").html(child_item_dets);
-});
-
- 
- $(document).on("click",".is_expiry_date",function(){
-   var is_expiry_date=$(".is_expiry_date:checked").val();
-   console.log("is_expiry_date == " + is_expiry_date);
-   if(is_expiry_date == 1){
-     $(".expiry_date_div").css("display","block");
-   }else{
-     $(".expiry_date_div").css("display","none");
-   }
- });
- 
- $(document).ready(function(){
-  item_type();
-   var old_expiry_date="{{ old('is_expiry_date')}}";
-   var is_expiry_date="";
-   is_expiry_date="{{ $item->is_expiry_date }}";
-   if(old_expiry_date != ""){
-     is_expiry_date=old_expiry_date;
+   
    }
    
-   if(is_expiry_date == 1){
-     $(".expiry_date_div").css("display","block");
-   }else{
-     $(".expiry_date_div").css("display","none");
+   
+   $(document).on("change",".item_type",function(){
+     item_type();
+   
+   });
+   
+   function get_category_based_item(category_one_id,category_two_id,category_three_id,item_id)
+   {
+     $.ajax({
+                 type: "post",
+                 url: "{{ url('common/get-category-based-bulk-item')}}",
+                 data: {category_one_id:category_one_id,category_two_id: category_two_id, category_three_id:category_three_id,item_id:item_id},
+                 success: function (res)
+                 {
+                   result = JSON.parse(res);
+                   $(".bulk_item_id").html(result.option);
+                 }
+             });
+   
    }
    
+   
+     
+   
+    function get_category_one_based_category_two(category_one_id,category_two_id)
+   {
+     $.ajax({
+                 type: "post",
+                 url: "{{ url('common/get-category-one-based-category-two')}}",
+                 data: {category_one_id: category_one_id, category_two_id:category_two_id},
+                 success: function (res)
+                 {
+                   result = JSON.parse(res);
+                   $(".category_2").html(result.option);
+                   $(".category_3").html("<option value=''>Choose Category 3</option>");
+                 }
+             });
+   
+   }
+   
+   function get_category_two_based_category_three(category_two_id,category_three_id)
+   {
+     $.ajax({
+                 type: "post",
+                 url: "{{ url('common/get-category-two-based-category-three')}}",
+                 data: {category_two_id: category_two_id, category_three_id:category_three_id},
+                 success: function (res)
+                 {
+                   result = JSON.parse(res);
+                   $(".category_3").html(result.option);
+                 }
+             });
+   
+   }
+   
+   
+   
+   $(document).on("click",".is_expiry_date",function()
+   {
+     var is_expiry_date=$(".is_expiry_date:checked").val();
+     console.log("is_expiry_date == " + is_expiry_date);
+     if(is_expiry_date == 1){
+       $(".expiry_date_div").css("display","block");
+     }else{
+       $(".expiry_date_div").css("display","none");
+     }
+   });
+   
+   
+   
+   
+   $(document).on("click",".is_minimum_sales_qty_applicable",function()
+   {
+     var is_minimum_sales_qty_applicable=$(".is_minimum_sales_qty_applicable:checked").val();
+     $(".minimum_sales_qty").removeAttr("required");
+     $(".minimum_sales_price").removeAttr("required");
+     $(".uom_for_minimum_sales_item").removeAttr("required");
 
-   /* Category Based Subcategory Ajax Start Here */
-   var category_1="";
-   var category_2="";
-   var category_3="";
-  
+     
+     
 
-   var new_category_1=$(".category_1").val();
-   var new_category_2="{{ $item->category_2}}";
-   var new_category_3="{{ $item->category_3}}";
-   var new_bulk_item_id="{{ $item->bulk_item_id}}";
-   var old_category_1="{{ old('category_1') }}";
-   var old_category_2="{{ old('category_2') }}";
-   var old_category_3="{{ old('category_3') }}";
-   var old_bulk_item_id="{{ old('bulk_item_id') }}";
+     if(is_minimum_sales_qty_applicable == 1){
+      $(".minimum_sales_qty").attr('required', 'required');
+      $(".minimum_sales_price").attr('required', 'required');
+      $(".uom_for_minimum_sales_item").attr('required', 'required');
 
+       $(".minimum_sales_div").css("display","block");
+     }else{
+       $(".minimum_sales_qty").removeAttr("required");
+       $(".minimum_sales_price").removeAttr("required");
+      $(".uom_for_minimum_sales_item").removeAttr("required");
+       $(".minimum_sales_div").css("display","none");
+     }
+    $("select").select2();
+   });
+   
+   
+   $(document).on("click",".refresh_category_id",function(){
+      var category_dets=refresh_category_master_details();
+      $(".category_id").html(category_dets);
+   });
+   
+   $(document).on("click",".refresh_uom_id",function(){
+      var uom_dets=refresh_uom_master_details();
+      $(".uom_id").html(uom_dets);
+   });
 
-   category_1=old_category_1 !="" ? old_category_1 : new_category_1;
-   category_2=old_category_2 !="" ? old_category_2 : new_category_2;
-   category_3=old_category_3 !="" ? old_category_3 : new_category_3;
-   bulk_item_id=old_bulk_item_id !="" ? old_bulk_item_id : new_bulk_item_id;
-if(category_1 !=""){
-  get_category_one_based_category_two(category_1,category_2);
- 
+   $(document).on("click",".refresh_uom_for_repack_item_id",function(){
+      var uom_dets=refresh_uom_master_details();
+      $(".uom_for_repack_item").html(uom_dets);
+   });
 
-}
-
-if(category_2 !=""){
-  get_category_two_based_category_three(category_2,category_3);
-}
-get_category_based_item(category_1,category_2,category_3,bulk_item_id);
-  
-  
-
-
-   /* Category Based Subcategory Ajax End Here */
-
-});
-
-
-function minimum_sales_qty(){
-  var is_minimum_sales_qty_applicable=$(".is_minimum_sales_qty_applicable:checked").val();
-  $(".minimum_sales_qty").removeAttr("required");
-  $(".minimum_sales_price").removeAttr("required");
-  if(is_minimum_sales_qty_applicable == 1){
-    $(".minimum_sales_qty").attr('required', 'required');
-  $(".minimum_sales_price").attr('required', 'required');
-    $(".minimum_sales_div").css("display","block");
-  }else{
-    $(".minimum_sales_qty").val("");
-    $(".minimum_sales_price").val("");
-    $(".minimum_sales_qty").removeAttr("required");
-    $(".minimum_sales_price").removeAttr("required");
-    $(".minimum_sales_div").css("display","none");
-  }
-  $("select").select2();
-
-}
-
-$(document).on("click",".is_minimum_sales_qty_applicable",function()
-{
-  minimum_sales_qty();
-});
+   $(document).on("click",".refresh_uom_for_minimum_sales_item_id",function(){
+      var uom_dets=refresh_uom_master_details();
+      $(".uom_for_minimum_sales_item").html(uom_dets);
+   });
 
 
+   
 
- </script>
+   
+   
+   $(document).on("click",".refresh_item_id",function(){
+      var item_dets=refresh_item_master_details();
+      $(".bulk_item_id").html(item_dets);
+   });
+   
+   $(document).on("click",".refresh_brand_id",function(){
+      var brand_dets=refresh_brand_master_details();
+      $(".brand_id").html(brand_dets);
+   });
+   
+   $(document).on("click",".refresh_child_item_id",function(){
+     var category_id=$(".category_id").val();
+      var child_item_dets=refresh_child_item_master_details(category_id);
+      $(".child_item_id").html(child_item_dets);
+   });
+
+   $(document).on("click",".refresh_supplier_id",function(){
+      var supplier_dets=refresh_supplier_master_details();
+      $(".supplier_id").html(supplier_dets);
+   });
+
+   
+   
+   
+   
+   
+   
+   
+   $(document).ready(function()
+   {
+    var old_expiry_date="{{ old('is_expiry_date')}}";
+     var is_expiry_date="";
+     is_expiry_date=$(".is_expiry_date :checked").val();
+     if(old_expiry_date != "")
+     {
+       is_expiry_date=old_expiry_date;
+     }
+     
+     if(is_expiry_date == 1){
+       $(".expiry_date_div").css("display","block");
+     }else{
+       $(".expiry_date_div").css("display","none");
+     }
+   
+     var category_one_id=$(".category_1").val();
+     var category_two_id="{{ old('category_2')}}";
+     var category_three_id="{{ old('category_3')}}";
+     var bulk_item_id="{{ old('bulk_item_id')}}";
+   
+     item_type();
+   
+     if(category_one_id !="")
+     {
+       get_category_one_based_category_two(category_one_id,category_two_id);
+       get_category_based_item(category_one_id,category_two_id,category_three_id,bulk_item_id);
+     }
+   
+     if(category_two_id !="")
+     {
+       get_category_two_based_category_three(category_two_id,category_three_id); 
+     }
+   
+   });
+   
+</script>
 
 @endsection
