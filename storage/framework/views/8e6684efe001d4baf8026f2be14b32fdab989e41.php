@@ -591,6 +591,7 @@
                         <ul>
 
                             <li class="dropdown-header">Stock Reports</li>
+                            <li><a href="<?php echo e(route('stock-report.index')); ?>">Stock Report</a></li>
                            <li><a href="<?php echo e(route('stock_summary.index')); ?>">Stock Summary</a></li>
                            <li><a href="<?php echo e(route('stock_ageing.index')); ?>">Stock Ageing</a></li>
                             
@@ -612,6 +613,25 @@
                             <li class="dropdown-header">GST Report</li>
                            <li><a href="<?php echo e(route('gst_report.index')); ?>">GST Report</a></li>
                             
+                        </ul>
+                    </li>
+                    
+            </ul>        
+            
+            
+          </li>
+
+          <li class="nav-item dropdown menu-large">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Settings
+            </a>
+            <ul class="dropdown-menu megamenu">
+                    <div class="row mx-0">
+                   <li class="col-md-3 dropdown-item">
+                        <ul>
+
+                            <li class="dropdown-header">Selling Price</li>
+                           <li><a href="<?php echo e(route('selling-price-setup.index')); ?>">Selling Price Setup</a></li>
                         </ul>
                     </li>
                     

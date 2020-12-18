@@ -406,6 +406,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">Item Name</label>
                       <input type="text" class="form-control item_name  required_for_proof_valid" id="item_name" placeholder="Item Name" name="item_name" readonly="" id="item_name" value="">
+					  
                     </div>
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">MRP</label>
