@@ -11,6 +11,7 @@ use App\Models\ReceiptNoteItem;
 use App\Models\DeliveryNoteItem;
 use App\Models\RejectionOutItem;
 use App\Models\RejectionInItem;
+use App\Models\StockChange;
 use App\Models\Item;
 use DB;
 
@@ -80,13 +81,15 @@ class StockReportController extends Controller
                             ->where('rejection_ins.status','=',0)
                             ->where('rejection_ins.location','=',$l_value->id)
                             ->sum('rejection_in_items.remaining_qty');
+							
+		$stock_changes = StockChange::where('item_id','=',$value->item_id)->where('location_id','=',$l_value->id)->sum('quantity');
 
                             
 
         $purchase_total_qty =  $purchase_entry_items + $receipt_note_items + $rejection_out_items;
         $sale_total_qty =  $sale_entry_items + $delivery_note_items + $rejection_in_items; 
 
-        $total_qty = $purchase_total_qty - $sale_total_qty;
+        $total_qty = $purchase_total_qty - $sale_total_qty + $stock_changes;
                             
                             // echo "<pre>"; print_r($total_qty);
                                                

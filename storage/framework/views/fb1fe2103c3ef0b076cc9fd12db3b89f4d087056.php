@@ -28,6 +28,7 @@
             <th>Estimation No </th>
             <th>Estimation Date </th>
             <th>Supplier Name</th>
+            <th>Location</th>
             <th>Purchase Type</th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
@@ -51,6 +52,13 @@
               <?php else: ?>
               <td></td>
               <?php endif; ?>
+
+              <?php if(isset($value->locations->name) && !empty($value->locations->name)): ?>
+              <td><?php echo e($value->locations->name); ?></td>
+              <?php else: ?>
+              <td></td>
+              <?php endif; ?>
+
               <?php if($value->purchase_type == 1): ?>
               <td>Cash Purchase</td>
               <?php else: ?>
