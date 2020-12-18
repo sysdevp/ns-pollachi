@@ -77,6 +77,17 @@ var applicable_date = Array();
 });
 
 $(document).on('click','#add_opening',function(){
+/*Current Date*/
+	var d = new Date();
+
+	var month = d.getMonth()+1;
+	var day = d.getDate();
+
+	var output = ((''+day).length<2 ? '0' : '') + day + '/' +
+	    ((''+month).length<2 ? '0' : '') + month + '/' +
+	    d.getFullYear();
+
+/*Current Date*/	    
 
 	$('.batch_no').each(function(key){
 
@@ -161,7 +172,7 @@ $(document).on('click','#add_opening',function(){
                   <!-- <div class="form-group row"> -->\
                      <label for="validationCustom01" class="">Applicable Date</label>\
                      <!-- <div class="col-sm-8"> -->\
-                       <input type="date" name="applicable_date[]" class="form-control applicable_date" >\
+                       <input type="date" name="applicable_date[]" value="" class="form-control applicable_date" >\
                      <!-- /div>\
                   </div> -->\
                </div>\

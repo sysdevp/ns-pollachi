@@ -1685,12 +1685,20 @@ $result=[];
         $item_data = RejectionInItem::where('item_id',$id)
                                     ->orderBy('r_in_date','DESC')
                                     ->first();
+        if($item_data == '')
+        {
+            $net_value = 0;
+            return $net_value;
+        }
+        else
+        {
+            $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
+            $gst_rs = $amount * $item_data->gst / 100;
+            $net_value = $amount + $gst_rs - $item_data->discount; 
 
-        $amount = $item_data->qty * $item_data->rate_exclusive_tax;
-        $gst_rs = $amount * $item_data->gst / 100;
-        $net_value = $amount + $gst_rs - $item_data->discount; 
-
-        return $net_value;                          
+            return $net_value;
+        }
+                          
     }
 
     public function s_details(Request $request)

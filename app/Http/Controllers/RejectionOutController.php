@@ -514,23 +514,28 @@ class RejectionOutController extends Controller
         $item_discount_sum = 0;
         foreach($rejection_out_items as $key => $value)  
         {
-            $item_amount[] = $value->remaining_qty * $value->rate_exclusive_tax;
+            $item_amount[] = $value->rejected_qty * $value->rate_exclusive_tax;
             $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
-            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $value->discount;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
 
 
             $item_amount_sum = $item_amount_sum + $item_amount[$key];         
             $item_net_value_sum = $item_net_value_sum + $item_net_value[$key];
             $item_gst_rs_sum = $item_gst_rs_sum + $item_gst_rs[$key];
-            $item_discount_sum = $item_discount_sum + $value->discount;
+            $discount_sum = $value->discount + $value->overall_disc;
+            $item_discount_sum = $item_discount_sum + $discount_sum;
 
             $item_data = RejectionOutItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
                                     ->first();
 
-            $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
+            $amount = $item_data->rejected_qty * $item_data->rate_exclusive_tax;
             $gst_rs = $amount * $item_data->gst / 100;
-            $net_value[] = $amount + $gst_rs - $item_data->discount;
+            $total_discount = $item_data->discount + $item_data->overall_disc;
+            $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
+
+            $net_value[] = $sum / $item_data->rejected_qty;
 
         }     
 
@@ -1666,12 +1671,21 @@ $result=[];
         $item_data = RejectionOutItem::where('item_id',$id)
                                     ->orderBy('updated_at','DESC')
                                     ->first();
+        if($item_data == '')
+        {
+            $net_value = 0;
+            return $net_value;
+        }  
+        else
+        {
+            $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
+            $gst_rs = $amount * $item_data->gst / 100;
+            $net_value = $amount + $gst_rs - $item_data->discount; 
 
-        $amount = $item_data->qty * $item_data->rate_exclusive_tax;
-        $gst_rs = $amount * $item_data->gst / 100;
-        $net_value = $amount + $gst_rs - $item_data->discount; 
+            return $net_value;
+        }                                  
 
-        return $net_value;                          
+                                  
     }
 
 

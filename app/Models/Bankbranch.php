@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Bankbranch extends Model
 {
 
-public function bank(){
-    return $this->belongsTo(Bank::class,'id','bank_id');
+public function bank()
+{
+    return $this->belongsTo(Bank::class,'bank_id','id');
 }
 }

@@ -1729,11 +1729,21 @@ $result=[];
                                     ->orderBy('updated_at','DESC')
                                     ->first();
 
-        $amount = $item_data->qty * $item_data->rate_exclusive_tax;
-        $gst_rs = $amount * $item_data->gst / 100;
-        $net_value = $amount + $gst_rs - $item_data->discount; 
+        if($item_data == '')
+        {
+            $net_value = 0;
+            return $net_value;
+        } 
+        else
+        {
+            $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
+            $gst_rs = $amount * $item_data->gst / 100;
+            $net_value = $amount + $gst_rs - $item_data->discount; 
 
-        return $net_value;                          
+            return $net_value;
+        }                                   
+
+                                  
     }
 
 

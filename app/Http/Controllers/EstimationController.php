@@ -70,12 +70,13 @@ class EstimationController extends Controller
 
             $item_amount = $value->qty * $value->rate_exclusive_tax;
             $item_gst_rs = $item_amount * $value->gst / 100;
-            $item_net_value = $item_amount + $item_gst_rs - $value->discount;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value = $item_amount + $item_gst_rs - $item_discount;
 
             $item_net_value_total += $item_net_value;
             $item_gst_rs_total += $item_gst_rs;
             $item_amount_total += $item_amount;
-            $discount += $value->discount;
+            $discount += $item_discount;
 
 
             }
@@ -229,6 +230,8 @@ class EstimationController extends Controller
             $estimation_items->qty = $request->quantity[$i];
             $estimation_items->uom_id = $request->uom[$i];
             $estimation_items->discount = $request->discount[$i];
+            $estimation_items->overall_disc = $request->overall_disc[$i];
+            $estimation_items->expenses = $request->expenses[$i];
 
             $estimation_items->save();
         }
@@ -429,13 +432,15 @@ class EstimationController extends Controller
         {
             $item_amount[] = $value->qty * $value->rate_exclusive_tax;
             $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
-            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $value->discount;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
 
 
             $item_amount_sum = $item_amount_sum + $item_amount[$key];         
             $item_net_value_sum = $item_net_value_sum + $item_net_value[$key];
             $item_gst_rs_sum = $item_gst_rs_sum + $item_gst_rs[$key];
-            $item_discount_sum = $item_discount_sum + $value->discount;
+            $discount_sum = $value->discount + $value->overall_disc;
+            $item_discount_sum = $item_discount_sum + $discount_sum;
 
             $item_data = Estimation_Item::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
@@ -443,7 +448,10 @@ class EstimationController extends Controller
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
             $gst_rs = $amount * $item_data->gst / 100;
-            $net_value[] = $amount + $gst_rs - $item_data->discount;
+            $total_discount = $item_data->discount + $item_data->overall_disc;
+            $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
+
+            $net_value[] = $sum / $item_data->qty;
 
         }     
 
@@ -551,13 +559,15 @@ class EstimationController extends Controller
         {
             $item_amount[] = $value->qty * $value->rate_exclusive_tax;
             $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
-            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $value->discount;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
 
 
             $item_amount_sum = $item_amount_sum + $item_amount[$key];         
             $item_net_value_sum = $item_net_value_sum + $item_net_value[$key];
             $item_gst_rs_sum = $item_gst_rs_sum + $item_gst_rs[$key];
-            $item_discount_sum = $item_discount_sum + $value->discount;
+            $discount_sum = $value->discount + $value->overall_disc;
+            $item_discount_sum = $item_discount_sum + $discount_sum;
 
             $item_data = Estimation_Item::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
@@ -565,7 +575,10 @@ class EstimationController extends Controller
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
             $gst_rs = $amount * $item_data->gst / 100;
-            $net_value[] = $amount + $gst_rs - $item_data->discount;
+            $total_discount = $item_data->discount + $item_data->overall_disc;
+            $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
+
+            $net_value[] = $sum / $item_data->qty;
 
         }     
 
@@ -636,6 +649,8 @@ class EstimationController extends Controller
             $estimation_items->qty = $request->quantity[$i];
             $estimation_items->uom_id = $request->uom[$i];
             $estimation_items->discount = $request->discount[$i];
+            $estimation_items->overall_disc = $request->overall_disc[$i];
+            $estimation_items->expenses = $request->expenses[$i];
 
             $estimation_items->save();
         }
@@ -1633,9 +1648,12 @@ $result=[];
 
         $amount = $item_data->qty * $item_data->rate_exclusive_tax;
         $gst_rs = $amount * $item_data->gst / 100;
-        $net_value = $amount + $gst_rs - $item_data->discount; 
+        $total_discount = $item_data->discount + $item_data->overall_disc;
+        $net_value = $amount + $gst_rs - $total_discount + $item_data->expenses; 
 
-        return $net_value;                          
+        $value = $net_value / $item_data->qty; 
+
+        return $value;                          
     }
 
     public function cancel($id)

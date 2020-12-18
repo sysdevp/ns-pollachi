@@ -525,7 +525,7 @@
                   <!-- <div class="form-group row"> -->
                      <label for="validationCustom01" class="">Applicable Date</label>
                      <!-- <div class="col-sm-8"> -->
-                       <input type="date" name="applicable_date[]" class="form-control applicable_date" >
+                       <input type="date" name="applicable_date[]" value="{{ $date }}" class="form-control applicable_date" >
                      <!-- /div>
                      
                   </div> -->

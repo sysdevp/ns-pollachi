@@ -29,7 +29,8 @@
         </thead>
         <tbody>
           
-          @foreach($bank_branch as $key=>$value)
+          
+          @foreach($bank_branch as $key=> $value)
             <tr>
               <td>{{ $key+1 }}</td>
              <td>{{ isset($value->bank->name) && !empty($value->bank->name) ? $value->bank->name : ""}}</td>
