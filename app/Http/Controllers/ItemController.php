@@ -82,8 +82,9 @@ class ItemController extends Controller
         $uom = Uom::all();
         $tax = Tax::all();
         $language = Language::all();
+        $date = date('Y-m-d');
         $bulk_item = Item::where('item_type', 'Bulk')->get();
-        return view('admin.master.item.add', compact('supplier', 'brand', 'category', 'bulk_item', 'uom', 'language', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3','tax'));
+        return view('admin.master.item.add', compact('supplier', 'brand', 'category', 'bulk_item', 'uom', 'language', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3','tax','date'));
     }
 
     /**

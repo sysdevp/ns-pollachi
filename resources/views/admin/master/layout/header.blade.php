@@ -590,7 +590,6 @@
                         <ul>
 
                             <li class="dropdown-header">Stock Reports</li>
-                            <li><a href="{{ route('stock-report.index') }}">Stock Report</a></li>
                            <li><a href="{{ route('stock_summary.index') }}">Stock Summary</a></li>
                            <li><a href="{{ route('stock_ageing.index') }}">Stock Ageing</a></li>
                             
@@ -720,9 +719,9 @@
   </div>
   </div>
     <!-- end.!@ -->
-	
-	
-	
+  
+  
+  
     @if ($message=Session::get('success'))
    
     <!-- <div class="alert alert-success alert-dismissible fade show container py-1 mt-2 mb-0" role="alert"> -->

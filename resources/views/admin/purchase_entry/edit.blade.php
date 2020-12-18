@@ -546,7 +546,9 @@ table, th, td {
                     <th> Quantity</th>
                     <th> UOM</th>
                     <th> Amount</th>
-                    <th> Discount</th>
+                    <th> Item Discount</th>
+                    <th> Overall Discount</th>
+                    <th> Expense</th>
                     <th> Tax Rs</th>
                     <th> Net Value</th>
                     <th style="background-color: #FAF860;"> Last Purchase Rate(LPR)</th>
@@ -564,7 +566,7 @@ table, th, td {
                   @foreach($purchase_entry_items as $key => $value)
                   
 
-                  <tr id="row{{ $key }}" class="{{ $key }} tables"><td><span class="item_s_no"> {{ $key+1 }} </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no{{ $key }}" type="hidden" id="invoice{{ $key }}" value="{{ $value->item_sno }}" name="invoice_sno[]"><font class="item_no{{ $key }}">{{ $value->item_sno }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code{{ $key }}" value="{{ $value->item_id }}" name="item_code[]"><font class="items{{ $key }}">{{ $value->item->code }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name{{ $key }}" type="hidden" value="{{ $value->item->name }}" name="item_name[]"><font class="font_item_name{{ $key }}">{{ $value->item->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn{{ $key }}" type="hidden" value="{{ $value->item->hsn }}" name="hsn[]"><font class="font_hsn{{ $key }}">{{ $value->item->hsn }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp{{ $key }}" value="{{ $value->mrp }}" name="mrp[]"><font class="font_mrp{{ $key }}">{{ $value->mrp }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive{{ $key }}" value="{{ $value->rate_exclusive_tax }}" name="exclusive[]"><font class="font_exclusive{{ $key }}">{{ $value->rate_exclusive_tax }}</font><input type="hidden" class="inclusive{{ $key }}" value="{{ $value->rate_inclusive_tax }}" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity{{ $key }}" value="{{ $value->qty }}" name="quantity[]"><font class="font_quantity{{ $key }}">{{ $value->qty }}</font><input type="hidden" class="remaining_qty" id="remaining_qty{{$key}}" value="{{ $value->remaining_qty }}" name="remaining_qty[]"><input type="hidden" class="rejected_quantity" name="rejected_item_qty[]" id="rejected_quantity{{$key}}" value="{{ $value->rejected_qty }}"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom{{ $key }}" value="{{ $value->uom->id }}" name="uom[]"><font class="font_uom{{ $key }}">{{ $value->uom->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt{{ $key }}" value="{{ $item_amount[$key] }}" name="amount[]"><font class="font_amount{{ $key }}"> {{$item_amount[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts {{ $key }}" value="{{ $value->discount }}" id="input_discount{{ $key }}" ><input class="discount_val{{ $key }}" type="hidden" value="{{ $value->discount }}" name="discount[]"><font class="font_discount" id="font_discount{{ $key }}">{{ $value->discount }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax{{ $key }}" value="{{$item_gst_rs[$key]}}" name="gst[]"><input type="hidden" class="tax_gst{{ $key }}"  value="{{ $value->gst }}" name="tax_rate[]"><font class="font_gst{{ $key }}"> {{$item_gst_rs[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price{{ $key }}" value="{{ $item_net_value[$key] }}" name="net_price[]"><font class="font_net_price{{ $key }}">{{ $item_net_value[$key] }}</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase{{ $key }}">{{ $net_value[$key] }}</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="{{ $key }}" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="{{ $key }}" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="{{ $key }}" aria-hidden="true"></i></td></tr>
+                  <tr id="row{{ $key }}" class="{{ $key }} tables"><td><span class="item_s_no"> {{ $key+1 }} </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no{{ $key }}" type="hidden" id="invoice{{ $key }}" value="{{ $value->item_sno }}" name="invoice_sno[]"><font class="item_no{{ $key }}">{{ $value->item_sno }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code{{ $key }}" value="{{ $value->item_id }}" name="item_code[]"><font class="items{{ $key }}">{{ $value->item->code }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name{{ $key }}" type="hidden" value="{{ $value->item->name }}" name="item_name[]"><font class="font_item_name{{ $key }}">{{ $value->item->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn{{ $key }}" type="hidden" value="{{ $value->item->hsn }}" name="hsn[]"><font class="font_hsn{{ $key }}">{{ $value->item->hsn }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp{{ $key }}" value="{{ $value->mrp }}" name="mrp[]"><font class="font_mrp{{ $key }}">{{ $value->mrp }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive{{ $key }}" value="{{ $value->rate_exclusive_tax }}" name="exclusive[]"><font class="font_exclusive{{ $key }}">{{ $value->rate_exclusive_tax }}</font><input type="hidden" class="inclusive{{ $key }}" value="{{ $value->rate_inclusive_tax }}" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity{{ $key }}" value="{{ $value->qty }}" name="quantity[]"><font class="font_quantity{{ $key }}">{{ $value->qty }}</font><input type="hidden" class="remaining_qty" id="remaining_qty{{$key}}" value="{{ $value->remaining_qty }}" name="remaining_qty[]"><input type="hidden" class="rejected_quantity" name="rejected_item_qty[]" id="rejected_quantity{{$key}}" value="{{ $value->rejected_qty }}"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom{{ $key }}" value="{{ $value->uom->id }}" name="uom[]"><font class="font_uom{{ $key }}">{{ $value->uom->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt{{ $key }}" value="{{ $item_amount[$key] }}" name="amount[]"><font class="font_amount{{ $key }}"> {{$item_amount[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts {{ $key }}" value="{{ $value->discount }}" id="input_discount{{ $key }}" ><input class="discount_val{{ $key }}" type="hidden" value="{{ $value->discount }}" name="discount[]"><font class="font_discount" id="font_discount{{ $key }}">{{ $value->discount }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc{{$key}}" value="{{$value->overall_disc}}" name="overall_disc[]"><font class="font_overall_disc{{$key}}">{{$value->overall_disc}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses {{$key}}" id="expenses{{$key}}" value="{{$value->expenses}}" name="expenses[]"><font class="font_expenses{{$key}}">{{$value->expenses}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax{{ $key }}" value="{{$item_gst_rs[$key]}}" name="gst[]"><input type="hidden" class="tax_gst{{ $key }}"  value="{{ $value->gst }}" name="tax_rate[]"><font class="font_gst{{ $key }}"> {{$item_gst_rs[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price{{ $key }}" value="{{ $item_net_value[$key] }}" name="net_price[]"><font class="font_net_price{{ $key }}">{{ $item_net_value[$key] }}</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase{{ $key }}">{{ $net_value[$key] }}</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="{{ $key }}" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="{{ $key }}" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="{{ $key }}" aria-hidden="true"></i></td></tr>
 
                   @endforeach
 
@@ -628,6 +630,8 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th><label class="total_amount">{{$item_amount_sum}}</label></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th><label class="total_net_price">{{$item_net_value_sum}}</label></th>
@@ -812,7 +816,7 @@ table, th, td {
       </form>
                        
         <script type="text/javascript">
-          var i=$('#counts').val();
+          var i=1;
           var discount_total = 0;
 
 function calculate_total_net_price(){
@@ -821,6 +825,13 @@ function calculate_total_net_price(){
     total_net_price=parseFloat(total_net_price)+parseFloat($(this).val());
   });
   return total_net_price;
+}
+function calculate_total_qty(){
+  var total_qty=0;
+  $(".table_qty").each(function(){
+    total_qty=parseFloat(total_qty)+parseFloat($(this).val());
+  });
+  return total_qty;
 }
 function calculate_total_amount(){
   var total_amount=0;
@@ -840,20 +851,15 @@ function calculate_total_gst(){
 function calculate_total_discount()
 {
   var q=0;
-  if($(".overall_discount").val() == '' || $(".overall_discount").val() == 0)
-  {
+  var r=0;
     $(".input_discounts").each(function(){
     q = parseFloat(q)+parseFloat($(this).val());
     });
-    return q;
-  }
-  else
-  {
-    $(".font_discount").each(function(){
-    q = parseFloat(q)+parseFloat($(this).text());
-  });
-    return q;
-  }
+    $(".overall_disc").each(function(){
+    r = parseFloat(r)+parseFloat($(this).val());
+    });
+    var total = parseFloat(q)+parseFloat(r);
+    return total;
   
   
 
@@ -895,9 +901,46 @@ $(document).on("keyup",".expense_amount",function()
     
     total_expense_cal();
     roundoff_cal();
+    individual_expense();
+
+
   }
   
 });
+
+function individual_expense()
+{
+$('.expenses').each(function(){
+
+  var count = $(this).attr('class').split(' ')[1];
+  var total_amount =calculate_total_amount();
+    var total_expense = total_expense_cal();
+    var amount = $('#amnt'+count).val();
+    var gst_rs = $('#tax'+count).val();
+    var discount = $('.discount_val'+count).val();
+    var overall_disc = $('#overall_disc'+count).val();
+    var sum_of_total_discount = parseFloat(discount)+parseFloat(overall_disc);
+    var exp_distribution = parseFloat(total_expense)/parseFloat(total_amount)*parseFloat(amount);
+    var total_exp = parseFloat(0)+parseFloat(exp_distribution);
+
+
+    var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(sum_of_total_discount)+parseFloat(total_exp);
+  $('#net_price'+count).val(net_value.toFixed(2));
+    $('.font_net_price'+count).text(net_value.toFixed(2));
+    $('.font_expenses'+count).text(total_exp.toFixed(2));
+
+    $(this).val(total_exp);
+
+});
+
+var total_net_price=calculate_total_net_price();
+
+$(".total_net_price").html(parseFloat(total_net_price));
+$('.total_net_value').text(total_net_price.toFixed(2));
+$('#total_price').val(total_net_price.toFixed(2));
+  
+}
+
 function total_expense_cal(){
 
   var total_amount=calculate_total_net_price();
@@ -909,8 +952,9 @@ total_expense_amount=parseFloat(total_expense_amount)+parseFloat($(this).val());
   });
 
   var total_net_amount=parseFloat(total_amount)+parseFloat(total_expense_amount);
-   $('.total_net_value').text(total_net_amount.toFixed(2));
-   $('#total_price').val(total_net_amount.toFixed(2));
+   // $('.total_net_value').text(total_net_amount.toFixed(2));
+   // $('#total_price').val(total_net_amount.toFixed(2));
+   return total_expense_amount;
 }
 function roundoff_cal()
 {
@@ -976,32 +1020,10 @@ function add_items()
  var discount_rs=$('.discount_rs').val();
  var net_price=$('.net_price').val();
 
- if(discount_rs == '')
- {
-  var discount = 0;
- }
- else if(discount_percentage == '' && discount == '')
-   {
-    var discount=0;
-   }
- else
- {
-  var discount = discount_rs;
- }
-
- if(discounts == '')
- {
-  discounts =0;
- }
-  // if(discount == '' && discount_percentage != '')
-  //  {
-  //   var discount=discount_percentage+'%';
-  //  }
-
-   // else if(discount_percentage == '' && discount != '')
-   // {
-   //  var discount=discount;
-   // }
+ if($('.discount_percentage').val() == '' && $('.discount_rs').val() == '')
+  {
+    discounts = 0;
+  }
    
  if(amount == '')
  {
@@ -1012,7 +1034,7 @@ function add_items()
   var net_price=0;
  }
 
- if(item_code == '' || invoice_no == '' || quantity == '' || exclusive == '' && inclusive == '')
+ if(item_code == '' || quantity == '' || exclusive == '' && inclusive == '')
  {
   alert('Please Fill All The Input Fields');
  }
@@ -1040,7 +1062,7 @@ function add_items()
 
   var last_purchase_rate = $('#last_purchase_rate').val();
  
-  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'+i+'" type="hidden" id="invoice'+i+'" value="'+invoice_no+'" name="invoice_sno[]"><font class="item_no'+i+'">'+invoice_no+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>'
+  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'+i+'" type="hidden" id="invoice'+i+'" value="'+invoice_no+'" name="invoice_sno[]"><font class="item_no'+i+'">'+invoice_no+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><input type="hidden" class="table_qty" id="table_qty'+i+'" value="'+quantity+'"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'+i+'" value="0" name="overall_disc[]"><font class="font_overall_disc'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '+i+'" id="expenses'+i+'" value="0" name="expenses[]"><font class="font_expenses'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>'
 
   $('.append_proof_details').append(items);
 var length=$('#mytable tr:last').attr('class').split(' ')[0];
@@ -1074,40 +1096,42 @@ for(var m=0;m<length+1;m++)
   }
 }
 
-for(var m=0;m<length+1;m++)
-{
+// for(var m=0;m<length+1;m++)
+// {
 
-  var item_code_id_first = $('.item_code'+m).val();
+//   var item_code_id_first = $('.item_code'+m).val();
   
-  for(var n=m+1;n<=length+1;n++)
-  {
+//   for(var n=m+1;n<=length+1;n++)
+//   {
     
-    if(typeof $('.item_code'+n).val() == 'undefined')
-    {
+//     if(typeof $('.item_code'+n).val() == 'undefined')
+//     {
 
-    }
-    else
-    {
-      var item_code_id_second = $('.item_code'+n).val();
+//     }
+//     else
+//     {
+//       var item_code_id_second = $('.item_code'+n).val();
 
-      if(item_code_id_first == item_code_id_second)
-      {
-        alert('Item is Alredy Taken!');
-        $('#row'+i).remove();
-      }
-      else
-      {
+//       if(item_code_id_first == item_code_id_second)
+//       {
+//         alert('Item is Alredy Taken!');
+//         $('#row'+i).remove();
+//       }
+//       else
+//       {
         
-      }
-    }
-  }
-}
+//       }
+//     }
+//   }
+// }
 
 var total_net_price=calculate_total_net_price();
 var total_amount=calculate_total_amount();
 var total_gst=calculate_total_gst();
+var total_qty=calculate_total_qty();
 
 $("#total_price").val(total_net_price.toFixed(2));
+$("#total_quantity").val(total_qty);
 $(".total_net_value").text(total_net_price.toFixed(2));
 $("#total_amount").val(total_amount.toFixed(2));
 $("#total_gst").val(total_gst.toFixed(2));
@@ -1128,7 +1152,7 @@ $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
 roundoff_cal();
-
+individual_expense();
 var len=$('.tables').length;
 $('#counts').val(len);
 i++;
@@ -1211,7 +1235,8 @@ $(document).on("click",".remove_items",function(){
        
         
         
-
+    var total_qty=calculate_total_qty();
+    $("#total_quantity").val(total_qty);
     var total_net_price=calculate_total_net_price();
     var to_html_total_net = total_net_price.toFixed(2);
 
@@ -1233,6 +1258,7 @@ $(document).on("click",".remove_items",function(){
     total_expense_cal();
     overall_discounts();
     roundoff_cal();
+    individual_expense();
 
     $.ajax({
            type: "GET",
@@ -1420,6 +1446,7 @@ $(document).on("click",".update_items",function(){
   $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
   $('.inclusive'+td_id).val($('.inclusive_rate').val());
   $('.quantity'+td_id).val($('.quantity').val());
+  $('#table_qty'+td_id).val($('.quantity').val());
   $('.font_quantity'+td_id).text($('.quantity').val());
   $('.uom'+td_id).val($('.uom').val());
   $('.font_uom'+td_id).text($('.uom_name').val());
@@ -1458,6 +1485,8 @@ $(document).on("click",".update_items",function(){
   var total_net_price=calculate_total_net_price();
   var total_amount=calculate_total_amount();
   var total_gst=calculate_total_gst();
+  var total_qty=calculate_total_qty();
+  $("#total_quantity").val(total_qty);
   $("#total_price").val(total_net_price.toFixed(2));
   $(".total_net_value").text(total_net_price.toFixed(2));
   $("#total_amount").val(total_amount.toFixed(2));
@@ -1473,6 +1502,7 @@ $(document).on("click",".update_items",function(){
   total_expense_cal();
   overall_discounts();
   roundoff_cal();
+  individual_expense();
 
   
 
@@ -1538,6 +1568,7 @@ function expense_add()
   $("select").select2();
   total_expense_cal();
   roundoff_cal();
+  individual_expense();
   var length=$('.expense').length;
   $('#expense_count').val(length);
 
@@ -1560,6 +1591,7 @@ $(document).on("click",".remove_expense",function(){
   }
   total_expense_cal();
   roundoff_cal();
+  individual_expense();
 
   });
 
@@ -1571,7 +1603,8 @@ function item_details_sno(){
 
 
   $("form").submit(function(e){
-  if($('#total_price').val() == 0 || $('#total_price').val() == '')
+    var count = $('.tables').length;
+  if(count == 0)
   {
     alert('There Is No Row To Submit');
     e.preventDefault();
@@ -1847,11 +1880,6 @@ function discount_calc()
   else
   {
 
-  // var rate_exclusive_disc_val = parseFloat(exclusive) - parseFloat(discount);
-  // var rate_inclusive_disc_val = parseFloat(inclusive) - parseFloat(discount);
-
-  // $('#rate_exclusive_disc_val').val(rate_exclusive_disc_val.toFixed(2));
-  // $('#rate_inclusive_disc_val').val(rate_inclusive_disc_val.toFixed(2));
   var disc_amount_exclusive = parseFloat(discount)*100/parseFloat(exclusive);
 
    $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
@@ -1998,7 +2026,7 @@ if(append_value == 1)
               
              }
                        
-             //$('#item_code').val(code);
+             // $('#item_code').val(code);
              $('#items_codes').val(id);
             $('#item_name').val(name);
              $('#mrp').val(mrp);
@@ -2006,13 +2034,12 @@ if(append_value == 1)
              $('#uom').val(uom_id);
               $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
+             $('#quantity').val(1);
 
              
              $('.item_display').dialog('close');
-             $('#quantity').focus();
+             $('#exclusive').focus();
 
-             if($('#quantity').val() != '')
-             {
               
               var rate_exclusive = $('#exclusive').val();
               var rate_inclusive = $('#inclusive').val();
@@ -2035,11 +2062,7 @@ if(append_value == 1)
 
               var total_net_val = parseFloat(total)+parseFloat(net_val);
               $('#net_price').val(total_net_val.toFixed(2));
-             }
-            else
-            {
-
-            }
+             
         }
 
     });
@@ -2129,13 +2152,12 @@ else
              $('#uom').val(uom_id);
               $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
+             $('#quantity').val(1);
 
              
              $('#cat').dialog('close');
-             $('#quantity').focus();
+             $('#exclusive').focus();
 
-             if($('#quantity').val() != '')
-             {
               
               var rate_exclusive = $('#exclusive').val();
               var rate_inclusive = $('#inclusive').val();
@@ -2157,11 +2179,7 @@ else
 
               var total_net_val = parseFloat(total)+parseFloat(net_val);
               $('#net_price').val(total_net_val.toFixed(2));
-             }
-            else
-            {
-
-            }
+             
         }
 
     });
@@ -2207,85 +2225,11 @@ var row_id=$('#last').val();
          console.log(data);
              if(data[3]==1)
              {
-              // $('.uom_exclusive').children('option').remove();
-              // $('.uom_inclusive').children('option').remove();
-             //$('.uom_inclusive').children('option:not(:first)').remove();
+
              id = data[0].item_id;
 
              item_codes(id);
-            //  name =data[0].item_name;
-            //  code =data[0].code;
-            //  mrp =data[0].mrp;
-            //  hsn =data[0].hsn;
-            //  uom_id =data[0].uom_id;
-            //  uom_name =data[0].uom_name;
-            //  igst =data[1].igst;
-
-            //  var first_data='<option value="'+code+'">'+uom_name+'</option>';
-            //   $('.uom_exclusive').append(first_data);
-            //   $('.uom_inclusive').append(first_data);
-
-            //  for(var i=0;i<data[2].length;i++)
-            //  {
-            //   var item_uom_id=data[2][i].id;
-            //   var item_uom_name=data[2][i].name;
-            //   var item_uom_code=data[2][i].item_code;
-            //   if(item_uom_name == uom_name)
-            //   {
-
-            //   }
-            //   else
-            //   {
-            //     var div_data='<option value="'+item_uom_code+'">'+item_uom_name+'</option>';
-            //   $('.uom_exclusive').append(div_data);
-            //   $('.uom_inclusive').append(div_data);
-            //   }
-
-            //  }
-
-
-            //  $('#item_code').val(item_code);
-            //  $('#items_codes').val(id);
-            //  $('#item_name').val(name);
-            //  $('#mrp').val(mrp);
-            //  $('#hsn').val(hsn);
-            //  $('#uom').val(uom_id);
-            //  $('#uom_name').val(uom_name);
-            //  $('#tax_rate').val(igst);
-            //  $('#quantity').focus();
-            //  $('#cat').hide();
-
-
-            //  if($('#quantity').val() != '')
-            //  {
-              
-              
-            //   var rate_exclusive = $('#exclusive').val();
-            //   var rate_inclusive = $('#inclusive').val();
-            //   var quantity = $('#quantity').val();
-            //   var tax_rate = $('.tax_rate').val();
-            //   var total = parseInt(quantity)*parseFloat(rate_exclusive);
-            //   $('#amount').val(total.toFixed(2));
-            //   if(tax_rate == '')
-            //   {
-            //     $('#net_price').val(total.toFixed(2));
-            //   }
-              
-            //   var rate = parseFloat(tax_rate)/100;
-            //   var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-            //   var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-            //   $('#inclusive').val(gst_rate_inclusive.toFixed(2));
-            //   var net_val = parseFloat(total)*parseFloat(rate);
-      
-            //   $('.gst').val(net_val.toFixed(2));
-
-            //   var total_net_val = parseFloat(total)+parseFloat(net_val);
-            //   $('#net_price').val(total_net_val.toFixed(2));
-            //  }
-            // else
-            // {
-
-            // }
+            
 
              }
                     
@@ -2540,6 +2484,7 @@ function supplier_details()
         });
 }
 
+
 function estimation_details()
 {
 
@@ -2560,6 +2505,17 @@ function estimation_details()
             $('.expense').remove();
             $('.purchase_type').text('');
             $('.purchase_date').text('');
+
+            $(".total_net_price").text(0);
+            $(".total_amount").text(0);
+            $('.total_discount').val(0);
+            $('.overall_discount').val(0);
+            $('#round_off').val(0);
+            $('.total_net_value').text('00.00');
+            $("#total_gst").val(0);
+            $("#igst").val(0);
+            $("#cgst").val(0);
+            $("#sgst").val(0);
             // $('.purchase_order').hide();
             var result=JSON.parse(data);
             if(result.status>0){
@@ -2588,11 +2544,9 @@ $('.estimation_date').text(result.date_estimation);
 $('.p_estimation_date').val(result.date_estimation);
 $('.estimation_no').text(result.estimation_no);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2647,68 +2601,79 @@ function po_details()
             // $('.purchase_date').show();
             $('.tables').remove();
             $('.expense').remove();
+
+            $(".total_net_price").text(0);
+            $(".total_amount").text(0);
+            $('.total_discount').val(0);
+            $('.overall_discount').val(0);
+            $('#round_off').val(0);
+            $('.total_net_value').text('00.00');
+            $("#total_gst").val(0);
+            $("#igst").val(0);
+            $("#cgst").val(0);
+            $("#sgst").val(0);
+
             var result=JSON.parse(data);
             if(result.status>0){
-$('.append_proof_details').append(result.data);
-var expense_length=$(".expense_type").length;
-if(expense_length >1)
-{
-$('.append_expense').append(result.expense_typess);
-$('#expense_count').val(result.expense_cnt);
-}
-else if(result.expense_cnt == 0)
-{
-  $('.append_expense').html(result.expense_typess);
-  $('#expense_count').val(result.expense_cnt+1);
-}
-else
-{
-  $('.append_expense').html(result.expense_typess);
-  $('#expense_count').val(result.expense_cnt);
-}
-$('.taxes').html(result.tax_append);
-$('#counts').val(result.status);
-$('.no_items').text(result.status);
-$('.invoice_val').text(result.item_net_value_sum);
-if(result.purchase_type == 1)
-$('.purchase_type').text('Cash Purchase');
-else
-$('.purchase_type').text('Credit Purchase');
-$('.purchase_date').text(result.date_purchaseorder);
-$('.estimation_date').text(result.date_estimation);
-$('.estimation_no').text(result.estimation_no);
+            $('.append_proof_details').append(result.data);
+            var expense_length=$(".expense_type").length;
+            if(expense_length >1)
+            {
+            $('.append_expense').append(result.expense_typess);
+            $('#expense_count').val(result.expense_cnt);
+            }
+            else if(result.expense_cnt == 0)
+            {
+              $('.append_expense').html(result.expense_typess);
+              $('#expense_count').val(result.expense_cnt+1);
+            }
+            else
+            {
+              $('.append_expense').html(result.expense_typess);
+              $('#expense_count').val(result.expense_cnt);
+            }
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
-$('#total_discount').val(result.item_discount_sum);
-$('#round_off').val(result.round_off);
-$('.total_net_value').text(result.total_net_value);
- $('#total_price').val(result.total_net_value);
- $('#po_date').val(result.date_purchaseorder);
- 
+            $('.taxes').html(result.tax_append);
+            $('#counts').val(result.status);
+            $('.no_items').text(result.status);
+            $('.invoice_val').text(result.item_net_value_sum);
+            if(result.purchase_type == 1)
+            $('.purchase_type').text('Cash Purchase');
+            else
+            $('.purchase_type').text('Credit Purchase');
+            $('.purchase_date').text(result.date_purchaseorder);
+            $('.estimation_date').text(result.date_estimation);
+            $('.estimation_no').text(result.estimation_no);
 
-var total_net_price=calculate_total_net_price();
-var total_amount=calculate_total_amount();
-var total_gst=calculate_total_gst();
-$("#total_gst").val(total_gst.toFixed(2));
-    $("#igst").val(total_gst.toFixed(2));
-    var half_gst = parseFloat(total_gst)/2;
-    $("#cgst").val(half_gst.toFixed(2));
-    $("#sgst").val(half_gst.toFixed(2));
-var q=calculate_total_discount();
-$('#total_discount').val(q.toFixed(2));
-$('#disc_total').val(q.toFixed(2));
-total_expense_cal();
-overall_discounts();
-roundoff_cal();
+            $('#total_discount').val(result.item_discount_sum);
+            $('#overall_discount').val(result.overall_discount);
+            $('#overall_discount').attr('readonly','readonly');
+            $('#round_off').val(result.round_off);
+            $('.total_net_value').text(result.total_net_value);
+             $('#total_price').val(result.total_net_value);
+             $('#po_date').val(result.date_purchaseorder);
+             
+
+            var total_net_price=calculate_total_net_price();
+            var total_amount=calculate_total_amount();
+            var total_gst=calculate_total_gst();
+            $("#total_gst").val(total_gst.toFixed(2));
+                $("#igst").val(total_gst.toFixed(2));
+                var half_gst = parseFloat(total_gst)/2;
+                $("#cgst").val(half_gst.toFixed(2));
+                $("#sgst").val(half_gst.toFixed(2));
+            var q=calculate_total_discount();
+            $('#total_discount').val(q.toFixed(2));
+            $('#disc_total').val(q.toFixed(2));
+            total_expense_cal();
+            overall_discounts();
+            roundoff_cal();
 
 
-var to_html_total_net = total_net_price.toFixed(2);
-var to_html_total_amount = total_amount.toFixed(2);
-$(".total_net_price").html(parseFloat(to_html_total_net));
-$(".total_amount").html(parseFloat(to_html_total_amount));
+            var to_html_total_net = total_net_price.toFixed(2);
+            var to_html_total_amount = total_amount.toFixed(2);
+            $(".total_net_price").html(parseFloat(to_html_total_net));
+            $(".total_amount").html(parseFloat(to_html_total_amount));
 
 
 
@@ -2737,76 +2702,89 @@ function receipt_details()
             $('.expense').remove();
             $('.purchase_type').text('');
             $('.purchase_date').text('');
+
+
+            $(".total_net_price").text(0);
+            $(".total_amount").text(0);
+            $('.total_discount').val(0);
+            $('.overall_discount').val(0);
+            $('#round_off').val(0);
+            $('.total_net_value').text('00.00');
+            $("#total_gst").val(0);
+            $("#igst").val(0);
+            $("#cgst").val(0);
+            $("#sgst").val(0);
+
             var result=JSON.parse(data);
-            if(result.status>0){
-$('.append_proof_details').append(result.data);
-var expense_length=$(".expense_type").length;
-if(expense_length >1)
-{
-$('.append_expense').append(result.expense_typess);
-$('#expense_count').val(result.expense_cnt);
-}
-else if(result.expense_cnt == 0)
-{
-  $('.append_expense').html(result.expense_typess);
-  $('#expense_count').val(result.expense_cnt+1);
-}
-else
-{
-  $('.append_expense').html(result.expense_typess);
-  $('#expense_count').val(result.expense_cnt);
-}
-$('#counts').val(result.status);
-$('.no_items').text(result.status);
-$('.invoice_val').text(result.item_net_value_sum);
-if(result.purchase_type == '')
-{
+            if(result.status>0 && result.item_net_value_sum >0){
+            $('.append_proof_details').append(result.data);
+            var expense_length=$(".expense_type").length;
+            if(expense_length >1)
+            {
+            $('.append_expense').append(result.expense_typess);
+            $('#expense_count').val(result.expense_cnt);
+            }
+            else if(result.expense_cnt == 0)
+            {
+              $('.append_expense').html(result.expense_typess);
+              $('#expense_count').val(result.expense_cnt+1);
+            }
+            else
+            {
+              $('.append_expense').html(result.expense_typess);
+              $('#expense_count').val(result.expense_cnt);
+            }
+            $('#counts').val(result.status);
+            $('.no_items').text(result.status);
+            $('.invoice_val').text(result.item_net_value_sum);
+            if(result.purchase_type == '')
+            {
 
-}
-else
-{
- if(result.purchase_type == 1)
-$('.purchase_type').text('Cash Purchase');
-else if(result.purchase_type == 0)
-$('.purchase_type').text('Credit Purchase'); 
-}
+            }
+            else
+            {
+             if(result.purchase_type == 1)
+            $('.purchase_type').text('Cash Purchase');
+            else if(result.purchase_type == 0)
+            $('.purchase_type').text('Credit Purchase'); 
+            }
 
-$('.purchase_date').text(result.po_date);
-$('.estimation_date').text(result.date_estimation);
-$('.estimation_no').text(result.estimation_no);
-$('.receipt_date').val(result.receipt_note_date);
-$('.taxes').html(result.tax_append);
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
-$('#total_discount').val(result.item_discount_sum);
-$('#round_off').val(result.round_off);
-$('.total_net_value').text(result.total_net_value);
- $('#total_price').val(result.total_net_value);
- $('#po_date').val(result.date_purchaseorder);
- 
+            $('.taxes').html(result.tax_append);
 
-var total_net_price=calculate_total_net_price();
-var total_amount=calculate_total_amount();
-var total_gst=calculate_total_gst();
-$("#total_gst").val(total_gst.toFixed(2));
-    $("#igst").val(total_gst.toFixed(2));
-    var half_gst = parseFloat(total_gst)/2;
-    $("#cgst").val(half_gst.toFixed(2));
-    $("#sgst").val(half_gst.toFixed(2));
-var q=calculate_total_discount();
-$('#total_discount').val(q.toFixed(2));
-$('#disc_total').val(q.toFixed(2));
-total_expense_cal();
-overall_discounts();
-roundoff_cal();
+            $('.purchase_date').text(result.po_date);
+            $('.estimation_date').text(result.date_estimation);
+            $('.estimation_no').text(result.estimation_no);
+            $('.receipt_date').val(result.receipt_note_date);
+
+            $('#total_discount').val(result.item_discount_sum);
+            $('#overall_discount').val(result.overall_discount);
+            $('#overall_discount').attr('readonly','readonly');
+            $('#round_off').val(result.round_off);
+            $('.total_net_value').text(result.item_net_value_sum);
+             $('#total_price').val(result.item_net_value_sum);
+             $('#po_date').val(result.date_purchaseorder);
+             
+
+            var total_net_price=calculate_total_net_price();
+            var total_amount=calculate_total_amount();
+            var total_gst=calculate_total_gst();
+            $("#total_gst").val(total_gst.toFixed(2));
+            $("#igst").val(total_gst.toFixed(2));
+            var half_gst = parseFloat(total_gst)/2;
+            $("#cgst").val(half_gst.toFixed(2));
+            $("#sgst").val(half_gst.toFixed(2));
+            var q=calculate_total_discount();
+            $('#total_discount').val(q.toFixed(2));
+            $('#disc_total').val(q.toFixed(2));
+            total_expense_cal();
+            overall_discounts();
+            roundoff_cal();
 
 
-var to_html_total_net = total_net_price.toFixed(2);
-var to_html_total_amount = total_amount.toFixed(2);
-$(".total_net_price").html(parseFloat(to_html_total_net));
-$(".total_amount").html(parseFloat(to_html_total_amount));
+            var to_html_total_net = total_net_price.toFixed(2);
+            var to_html_total_amount = total_amount.toFixed(2);
+            $(".total_net_price").html(parseFloat(to_html_total_net));
+            $(".total_amount").html(parseFloat(to_html_total_amount));
 
 
 
@@ -2815,7 +2793,6 @@ $(".total_amount").html(parseFloat(to_html_total_amount));
            }
         });
 }
-
 
 function uom_details_inclusive()
 {
@@ -2833,70 +2810,78 @@ item_codes(uom_exclusive);
 
  function overall_discounts()
 {
-    var sum=0;
-    var num=0;
+    // var sum=0;
+    // var num=0;
 
     $(".overall_discount").blur(function() {
     if ($(this).val() == "" || $(this).val() == 0) 
     {
         $(this).val('0');
-        //$(".overall_discount").val(0);
+        $('#overall_discount').val(0);
+    }
+});
+  //       $('#overall_discount').val(0);
+  //       //$(".overall_discount").val(0);
 
 
-  $('.input_discounts').each(function(){
-      var overall_discount = 0;
-      var count = $(this).attr('class').split(' ')[1];
-      var overall_discount = $('#overall_discount').val();
+  // $('.input_discounts').each(function(){
+  //     var overall_discount = 0;
+  //     var count = $(this).attr('class').split(' ')[1];
+  //     var overall_discount = $('#overall_discount').val();
 
-      //console.log(overall_discount);
-      var amount = $('#amnt'+count).val();
-      var gst_rs = $('#tax'+count).val();
-      var total_amount =calculate_total_amount();
-      var disc_distribution = parseFloat(overall_discount)/parseFloat(total_amount)*parseFloat(amount);
-      var total_discount = parseFloat($(this).val())+parseFloat(disc_distribution);
-      var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(total_discount);
-      //$('#input_discount'+count).val(total_discount);
-      $('#font_discount'+count).text(total_discount.toFixed(2));
-      $('.discount_val'+count).val(total_discount.toFixed(2));
-      $('#net_price'+count).val(net_value.toFixed(2));
-      $('.font_net_price'+count).text(net_value.toFixed(2));
-      num++;
-  });
-  // if(num == 0)
-  //   {
-  //     alert('you Cannot Add Overall Discount!');
-  //     $('.overall_discount').val(0);
+  //     //console.log(overall_discount);
+  //     var amount = $('#amnt'+count).val();
+  //     var gst_rs = $('#tax'+count).val();
+  //     var total_amount =calculate_total_amount();
+  //     var disc_distribution = parseFloat(overall_discount)/parseFloat(total_amount)*parseFloat(amount);
+  //     var total_discount = parseFloat($(this).val())+parseFloat(disc_distribution);
+  //     var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(total_discount);
+  //     //$('#input_discount'+count).val(total_discount);
+  //     $('.font_overall_disc'+count).text(disc_distribution.toFixed(2));
+  //     $('#overall_disc'+count).val(disc_distribution.toFixed(2));
+  //     // $('#font_discount'+count).text(total_discount.toFixed(2));
+  //     // $('.discount_val'+count).val(total_discount.toFixed(2));
+  //     $('#net_price'+count).val(net_value.toFixed(2));
+  //     $('.font_net_price'+count).text(net_value.toFixed(2));
+  //     num++;
+  // });
+  // // if(num == 0)
+  // //   {
+  // //     alert('you Cannot Add Overall Discount!');
+  // //     $('.overall_discount').val(0);
+  // //   }
+  // var total_net_price = calculate_total_net_price();
+  // $("#total_price").val(total_net_price.toFixed(2));
+  // $(".total_net_value").text(total_net_price.toFixed(2));
+  // var to_html_total_net = total_net_price.toFixed(2);
+  // $(".total_net_price").html(parseFloat(to_html_total_net));
+  // roundoff_cal();
+  // var q=calculate_total_discount();
+  // $('#total_discount').val(q.toFixed(2));
+  // $('#disc_total').val(q.toFixed(2));
+
+
   //   }
-  var total_net_price = calculate_total_net_price();
-  $("#total_price").val(total_net_price.toFixed(2));
-  $(".total_net_value").text(total_net_price.toFixed(2));
-  var to_html_total_net = total_net_price.toFixed(2);
-  $(".total_net_price").html(parseFloat(to_html_total_net));
-  roundoff_cal();
-  var q=calculate_total_discount();
-  $('#total_discount').val(q.toFixed(2));
-  $('#disc_total').val(q.toFixed(2));
+// else
+// {
 
-
+      var total = $('#total_price').val();
+    if(total == 0)
+    {
+      alert('You Cannot Add Overall Discount Without Adding Item Details!!');
+      $('.overall_discount').val(0);
     }
     else
     {
 
-    var total = $('#total_price').val();
-  if(total == 0)
-  {
-    alert('You Cannot Add Overall Discount Without Adding Item Details!!');
-    $('.overall_discount').val(0);
-  }
-  else
-  {
-
   $('.input_discounts').each(function(){
-      var overall_discount = 0;
       var count = $(this).attr('class').split(' ')[1];
       var overall_discount = $('#overall_discount').val();
-
-      // console.log(overall_discount);
+      if(overall_discount == '')
+      {
+        overall_discount = 0;
+      }
+      console.log(overall_discount);
       var amount = $('#amnt'+count).val();
       var gst_rs = $('#tax'+count).val();
       var total_amount =calculate_total_amount();
@@ -2904,30 +2889,35 @@ item_codes(uom_exclusive);
       var total_discount = parseFloat($(this).val())+parseFloat(disc_distribution);
       var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(total_discount);
       //$('#input_discount'+count).val(total_discount);
-      $('#font_discount'+count).text(total_discount.toFixed(2));
-      $('.discount_val'+count).val(total_discount.toFixed(2));
+      $('.font_overall_disc'+count).text(disc_distribution.toFixed(2));
+      $('#overall_disc'+count).val(disc_distribution.toFixed(2));
+      // $('#font_discount'+count).text(total_discount.toFixed(2));
+      // $('.discount_val'+count).val(total_discount.toFixed(2));
       $('#net_price'+count).val(net_value.toFixed(2));
       $('.font_net_price'+count).text(net_value.toFixed(2));
-      num++;
+      // num++;
   });
   // if(num == 0)
   //   {
   //     alert('you Cannot Add Overall Discount!');
   //     $('.overall_discount').val(0);
   //   }
+  
+
+}
   var total_net_price = calculate_total_net_price();
   $("#total_price").val(total_net_price.toFixed(2));
   $(".total_net_value").text(total_net_price.toFixed(2));
   var to_html_total_net = total_net_price.toFixed(2);
   $(".total_net_price").html(parseFloat(to_html_total_net));
   roundoff_cal();
+  individual_expense();
+  total_expense_cal();
   var q=calculate_total_discount();
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));
-
-}
-}
- }); 
+// }
+ // }); 
 }
 
 

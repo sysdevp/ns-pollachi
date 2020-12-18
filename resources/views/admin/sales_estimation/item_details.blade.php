@@ -25,14 +25,16 @@
            <th>Item Name</th>
            <th>MRP</th>
            <th>HSN</th>
-           <th>Tax</th>
+           <th>Tax %</th>
            <th>Rate Exclusive Tax</th>
            <th>Rate Inclusive Tax</th>
            <th>Quantity</th>
            <th>UOM</th>
            <th>Amount</th>
            <th>Tax Rs</th>
-           <th>Discount</th>
+           <!-- <th>Discount</th> -->
+           <th>Overall Discount</th>
+           <th>Expense</th>
            <th>Net Price</th>
            <!-- <th>Action</th> -->
           </tr>
@@ -65,7 +67,9 @@
               @endif
               <td>{{ $amount[$key] }}</td>
               <td>{{ $gst_rs[$key] }}</td>
-              <td>{{ $value->discount }}</td>
+              <!-- <td>{{ $value->discount }}</td> -->
+              <td>{{ $value->overall_disc }}</td>
+              <td>{{ $value->expenses }}</td>
               <td>{{ $net_value[$key] }}</td>
               <!-- <td> 
                 <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>

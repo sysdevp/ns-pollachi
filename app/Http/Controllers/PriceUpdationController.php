@@ -239,7 +239,7 @@ class PriceUpdationController extends Controller
 
         $last_selling_price = PriceUpdation::where('item_id',$updations->item_id)
                                     ->where('updated_at',0)
-                                    ->orderBy('date','DESC')
+                                    ->orderBy('updated_at','DESC')
                                     ->latest()
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                     ->first();                             

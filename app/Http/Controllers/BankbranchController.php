@@ -13,6 +13,7 @@ class BankbranchController extends Controller
     public function index()
     {
         $bank_branch=Bankbranch::all();
+        // echo "<pre>";print_r($bank_branch);exit();
         return view('admin.master.bank_branch.view',compact('bank_branch'));
     }
 

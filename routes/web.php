@@ -1039,7 +1039,9 @@ Route::get('account_head/delete/{id}', 'AccountHeadController@destroy');
 
 /*Stock Report strat*/
 
+Route::resource('stock-report','StockReportController',['middleware' => ['auth']]);
 Route::resource('stock_summary','StockSummaryController',['middleware' => ['auth']]);
+Route::get('stock-summary/change_items/{id}', 'StockSummaryController@change_items');
 Route::resource('stock_ageing','StockAgeingController',['middleware' => ['auth']]);
 
 /*Stock Report end*/
