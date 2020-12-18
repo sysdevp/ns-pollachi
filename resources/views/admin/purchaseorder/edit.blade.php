@@ -120,7 +120,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                       <div class="col-md-2">
                     <label style="font-family: Times new roman;">Company Location</label><br>
-                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location">
+                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location" required="">
                            <option value="{{ @$purchaseorder->location }}">{{ @$purchaseorder->locations->name }}</option>
                            @foreach($location as $locations)
                            <option value="{{ $locations->id }}">{{ $locations->name }}</option>

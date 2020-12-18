@@ -16,6 +16,7 @@ use App\Models\ItemBracodeDetails;
 use App\Models\ItemTaxDetails;
 use App\Models\Language;
 use App\Models\Uom;
+use App\Models\Location;
 use App\Models\UomFactorConvertionForItem;
 use Carbon\Carbon;
 use App\Models\OpeningStock;
@@ -83,8 +84,9 @@ class ItemController extends Controller
         $tax = Tax::all();
         $language = Language::all();
         $date = date('Y-m-d');
+        $location = Location::all();
         $bulk_item = Item::where('item_type', 'Bulk')->get();
-        return view('admin.master.item.add', compact('supplier', 'brand', 'category', 'bulk_item', 'uom', 'language', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3','tax','date'));
+        return view('admin.master.item.add', compact('supplier', 'brand', 'category', 'bulk_item', 'uom', 'language', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3','tax','date','location'));
     }
 
     /**
@@ -205,6 +207,7 @@ class ItemController extends Controller
                     $openings = new OpeningStock();
 
                     $openings->item_id = $item_id;
+                    $openings->location = $request->location[$j];
                     $openings->batch_no = $request->batch_no[$j];
                     $openings->opening_qty = $request->quantity[$j];
                     $openings->rate = $request->rate[$j];
@@ -313,29 +316,32 @@ class ItemController extends Controller
         $tax_count = count($tax);
         $tax_detail_count = count($tax_details);
 
-        $opening = OpeningStock::where('item_id',$id)->get();
+        @$opening = OpeningStock::where('item_id',$id)->get();
         // 
         // $opening_data = [];
 
         foreach ($opening as $key => $value) 
         {
 
-            $opening_data[] = OpeningStock::where('item_id',$id)
-                                            ->where('batch_no',$value->batch_no)
+            @$opening_data[] = OpeningStock::join('locations','opening_stocks.location','=','locations.id')
+                                            ->where('opening_stocks.item_id',$id)
+                                            ->where('opening_stocks.batch_no',$value->batch_no)
+                                            ->select('opening_stocks.*','locations.name')
                                             ->get();
             
             
         }
-        // ; print_r($opening_data);exit();
-        
-        $opening_count = count($opening_data);
+
+        @$opening_count = count($opening_data);
+        // echo "<pre>"; print_r($opening_data);exit();
 
         $brand = Brand::orderBy('name', 'asc')->get();
         $category = Category::orderBy('name', 'asc')->get();
         $bulk_item = Item::where('item_type', 'Bulk')->get();
         $child_item = Item::all();
+        $location = Location::all();
         $supplier = Supplier::orderBy('name', 'asc')->get();
-        return view('admin.master.item.edit', compact('supplier', 'brand', 'bulk_item', 'category', 'item', 'child_item', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3', 'category_one', 'category_two', 'category_three','tax','tax_details', 'tax_value','uom','tax_count','tax_detail_count','opening','opening_stock','opening_data','opening_count'));
+        return view('admin.master.item.edit', compact('supplier', 'brand', 'bulk_item', 'category', 'item', 'child_item', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3', 'category_one', 'category_two', 'category_three','tax','tax_details', 'tax_value','uom','tax_count','tax_detail_count','opening','opening_stock','opening_data','opening_count','location'));
     }
 
     /**
@@ -359,6 +365,7 @@ class ItemController extends Controller
             $openings = new OpeningStock();
             
             $openings->item_id = $id;
+            $openings->location = $request->location[$j];
             $openings->batch_no = $request->batch_no[$j];
             $openings->opening_qty = $request->quantity[$j];
             $openings->rate = $request->rate[$j];

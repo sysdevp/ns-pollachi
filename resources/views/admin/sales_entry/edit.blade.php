@@ -272,7 +272,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Company Location</label><br>
                                 <select class="js-example-basic-multiple form-control location" 
-                                data-placeholder="Choose Location" id="location" name="location" >
+                                data-placeholder="Choose Location" id="location" name="location" required="">
                                 <option value="{{ @$sale_entry->location }}">{{ @$sale_entry->locations->name }}</option>
                                   @foreach($location as $key => $value)
                                   <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -432,6 +432,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">Item Name</label>
                       <input type="text" class="form-control item_name  required_for_proof_valid" id="item_name" placeholder="Item Name" name="item_name" readonly="" id="item_name" value="">
+
+                      <input type="hidden" class="form-control item_name1  required_for_proof_valid" id="item_name1" placeholder="Item Name" name="item_name1" readonly="" value="">
                     </div>
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">MRP</label>
@@ -2098,6 +2100,138 @@ if(append_value == 1)
              $('#item_code').val(code);
              $('#items_codes').val(id);
              $('#item_name').val(name);
+             $('#item_name1').val(name);
+             $('#mrp').val(mrp);
+             $('#hsn').val(hsn);
+             $('#uom').val(uom_id);
+             $('#uom_name').val(uom_name);
+             $('#tax_rate').val(igst);
+             $('#exclusive').val(inclusive_rate.toFixed(2));
+             $('#inclusive').val(selling_price);
+             $('#selling_price_type').val(selling_price_type);
+             $('#quantity').val(1);
+
+             
+             $('.item_display').dialog('close');
+             $('#exclusive').focus();
+
+              
+            //   var rate_exclusive = $('#exclusive').val();
+            //   var rate_inclusive = $('#inclusive').val();
+            //   var quantity = $('#quantity').val();
+            //   var tax_rate = $('.tax_rate').val();
+            //   var total = parseInt(quantity)*parseFloat(rate_exclusive);
+            //   $('#amount').val(total.toFixed(2));
+            //   if(tax_rate == '')
+            //   {
+            //     $('#net_price').val(total.toFixed(2));
+            //   }
+              
+            //   var rate = parseFloat(tax_rate)/100;
+            //   var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+            //   var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+            //   $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+            //   var net_val = parseFloat(total)*parseFloat(rate);
+      
+            //   $('.gst').val(net_val.toFixed(2));
+
+            //   var total_net_val = parseFloat(total)+parseFloat(net_val);
+            //   $('#net_price').val(total_net_val.toFixed(2));
+            
+        }
+
+    });
+
+      $.ajax({
+           type: "POST",
+            url: "{{ url('sale_order/last_purchase_rate/') }}",
+            data: { id: item_code },
+           success: function(data) {
+             $('#last_purchase_rate').val(data);
+             
+           }
+        });
+}
+
+else if(append_value == 2)
+{
+  var row_id=$('#last').val();
+
+      $.ajax({  
+        
+        type: "GET",
+        url: "{{ url('sale_order/getdata/{id}') }}",
+        data: { id: item_code },             
+                        
+        success: function(data){ 
+
+             // $('.uom_exclusive').children('option:(:first)').remove();
+             // $('.uom_inclusive').children('option:(:first)').remove();
+             $('.uom_exclusive').children('option').remove();
+             $('.uom_inclusive').children('option').remove();
+
+             id = data[0].item_id;
+             name =data[0].item_name;
+             code =data[0].code;
+             mrp =data[0].mrp;
+             hsn =data[0].hsn;
+             uom_id =data[0].uom_id;
+             ptc_code =data[0].ptc;
+             uom_name =data[0].uom_name;
+             igst =data[1].igst;
+             barcode = data[2].barcode;
+             selling_price = data.selling_price;
+             selling_price_type = data.selling_price_type;
+
+             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(sum);
+              }
+              else
+              {
+
+              }
+
+             }
+
+              var first_data='<option value="'+id+'">'+uom_name+'</option>';
+              $('.uom_exclusive').append(first_data);
+              $('.uom_inclusive').append(first_data);
+              for(var i=0;i<data[3].length;i++)
+             {
+              var item_uom_id=data[3][i].id;
+              var item_uom_name=data[3][i].name;
+              var item_id=data[3][i].item_id;
+              if(item_uom_name == uom_name)
+              {
+
+              }
+              else
+              {
+                var div_data='<option value="'+item_id+'">'+item_uom_name+'</option>';
+                $('.uom_exclusive').append(div_data);
+                $('.uom_inclusive').append(div_data);
+              }
+              
+             }
+
+             var rate=parseFloat(igst)/100+1;
+             var actual_tax = parseFloat(igst)/100;
+             var inclusive_rate = parseFloat(selling_price)/parseFloat(rate);
+                       
+             //$('#item_code').val(code);
+             $('#item_code').val(code);
+             $('#items_codes').val(id);
+             $('#item_name').val(name);
+             // $('#item_name1').val(name);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
@@ -2226,6 +2360,7 @@ else
              $('#item_code').val(code);
              $('#items_codes').val(id);
              $('#item_name').val(name);
+             $('#item_name1').val(id);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
@@ -2810,15 +2945,17 @@ $(".total_amount").html(parseFloat(to_html_total_amount));
 function uom_details_inclusive()
 {
 var uom_inclusive=$('.uom_inclusive').val();
-
-item_codes(uom_inclusive);
+var values = 2;
+item_codes(uom_inclusive,values);
 }
 
 function uom_details_exclusive()
-{
+{ 
 
 var uom_exclusive=$('.uom_exclusive').val();
-item_codes(uom_exclusive);
+var values = 2; 
+item_codes(uom_exclusive,values);
+
 }
 
  function overall_discounts()
