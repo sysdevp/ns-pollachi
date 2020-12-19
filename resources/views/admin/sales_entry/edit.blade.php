@@ -1231,7 +1231,6 @@ $('#cat').hide();
 $('.item_sno').val('');
 $('.items_codes').val('');
 $('.item_name').val('');
-$('#item_name1').val('');
 $('.mrp').val('');
 $('.hsn').val('');
 $('.quantity').val('');
@@ -2031,7 +2030,7 @@ if(append_value == 1)
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/getdata/{id}') }}",
+        url: "{{ url('sales_entry/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
@@ -2146,7 +2145,7 @@ if(append_value == 1)
 
       $.ajax({
            type: "POST",
-            url: "{{ url('sale_order/last_purchase_rate/') }}",
+            url: "{{ url('sales_entry/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              $('#last_purchase_rate').val(data);
@@ -2162,7 +2161,7 @@ else if(append_value == 2)
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/getdata/{id}') }}",
+        url: "{{ url('sales_entry/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
@@ -2277,7 +2276,7 @@ else if(append_value == 2)
 
       $.ajax({
            type: "POST",
-            url: "{{ url('sale_order/last_purchase_rate/') }}",
+            url: "{{ url('sales_entry/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              $('#last_purchase_rate').val(data);
@@ -2292,7 +2291,7 @@ else
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/getdata/{id}') }}",
+        url: "{{ url('sales_entry/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
@@ -2404,7 +2403,7 @@ else
 
       $.ajax({
            type: "POST",
-            url: "{{ url('sale_order/last_purchase_rate/') }}",
+            url: "{{ url('sales_entry/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              // console.log(data);
