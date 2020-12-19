@@ -86,8 +86,8 @@ class StockReportController extends Controller
 
                             
 
-        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items + $rejection_out_items;
-        $sale_total_qty =  $sale_entry_items + $delivery_note_items + $rejection_in_items; 
+        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items;
+        $sale_total_qty =  $sale_entry_items + $delivery_note_items; 
 
         $total_qty = $purchase_total_qty - $sale_total_qty + $stock_changes;
                             

@@ -29,6 +29,7 @@ use App\Models\PurchaseEntryExpense;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\RejectionOut;
 use App\Models\RejectionOutItem;
+use App\Models\StockChange;
 use App\Models\RejectionOutTax;
 use App\Models\RejectionOutExpense;
 use App\Models\ReceiptNote;
@@ -309,6 +310,32 @@ class RejectionOutController extends Controller
             $rejection_out_items->discount = $request->discount[$i];
 
             $rejection_out_items->save();
+
+
+
+             $item_name1 = $request->item_name1[$i];
+             if($item_name1 != $request->item_code[$i]){
+             $stock_change = new StockChange();
+             $stock_change->location_id = $request->location;
+             $serial_id = StockChange::max('serial_id');
+             $stock_change->serial_id = $serial_id+1;
+             $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+             $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+             $stock_change->quantity = -1;
+             $stock_change->status = 1;
+             $stock_change->item_id = $item_name1;
+             $stock_change->save();
+
+             $stock_change_new = new StockChange();
+             $stock_change_new->location_id = $request->location;
+             $stock_change_new->serial_id = $serial_id+1;
+             $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+             $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+             $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+             $stock_change_new->status = 1;
+             $stock_change_new->item_id = $request->item_code[$i];
+             $stock_change_new->save();
+             }
         }
          
 
