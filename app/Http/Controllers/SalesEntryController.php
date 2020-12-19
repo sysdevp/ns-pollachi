@@ -36,6 +36,7 @@ use App\Models\SaleEstimation;
 use App\Models\SaleEstimationTax;
 use App\Models\SaleEstimationExpense;
 use App\Models\SaleEstimationItem;
+use App\Models\StockChange;
 use App\Models\DeliveryNote;
 use App\Models\DeliveryNoteTax;
 use App\Models\DeliveryNoteItem;
@@ -294,6 +295,31 @@ class SalesEntryController extends Controller
             $sale_entry_items->expenses = $request->expenses[$i];
 
             $sale_entry_items->save();
+
+
+             $item_name1 = $request->item_name1[$i];
+             if($item_name1 != $request->item_code[$i]){
+             $stock_change = new StockChange();
+             $stock_change->location_id = $request->location;
+             $serial_id = StockChange::max('serial_id');
+             $stock_change->serial_id = $serial_id+1;
+             $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+             $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+             $stock_change->quantity = -1;
+             $stock_change->status = 1;
+             $stock_change->item_id = $item_name1;
+             $stock_change->save();
+
+             $stock_change_new = new StockChange();
+             $stock_change_new->location_id = $request->location;
+             $stock_change_new->serial_id = $serial_id+1;
+             $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+             $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+             $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+             $stock_change_new->status = 1;
+             $stock_change_new->item_id = $request->item_code[$i];
+             $stock_change_new->save();
+             }
         }
          
 
