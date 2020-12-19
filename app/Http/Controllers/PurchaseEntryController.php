@@ -223,11 +223,16 @@ class PurchaseEntryController extends Controller
         if($request->receipt_no)
         {
             $receipt_tag = 1;
+            $receipt_note = ReceiptNote::where('rn_no',$request->receipt_no)->where('status',0)->update(['receipt_tag' => $receipt_tag]);
         }
         else
         {
             $receipt_tag = 0;
         }
+
+        
+
+
 
 
          $purchase_entry = new PurchaseEntry();
@@ -756,6 +761,7 @@ class PurchaseEntryController extends Controller
         if($request->receipt_no)
         {
             $receipt_tag = 1;
+            $receipt_note = ReceiptNote::where('rn_no',$request->receipt_no)->where('status',0)->update(['receipt_tag' => $receipt_tag]);
         }
         else
         {

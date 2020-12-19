@@ -233,6 +233,7 @@ class SalesEntryController extends Controller
          if($request->d_no)
          {
             $delivery_tag = 1;
+            $receipt_note = DeliveryNote::where('d_no',$request->d_no)->where('cancel_status',0)->update(['delivery_tag' => $delivery_tag]);
          }
          else
          {
