@@ -1029,31 +1029,31 @@ $count=0;
 
         //return $items->item_type;
 
-        if($items->item_type != 'Parent')
-        {
-        $item_id=$this->get_parent_item_id($id);
-          //dd($item_id);
-        $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
+        // if($items->item_type != 'Parent')
+        // {
+        // $item_id=$this->get_parent_item_id($id);
+        //   //dd($item_id);
+        // $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
           
-        $uom=array();
-        $count=0;
-        foreach($item_uom as $value){
-        if(isset($value->uom->name) && !empty($value->uom->name))
-        {
-            $count++;
-            $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
-                //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
-        }
+        // $uom=array();
+        // $count=0;
+        // foreach($item_uom as $value){
+        // if(isset($value->uom->name) && !empty($value->uom->name))
+        // {
+        //     $count++;
+        //     $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
+        //         //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
+        // }
 
-        }
+        // }
 
-        $result = array_unique($uom, SORT_REGULAR);
+        // $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
-        return $data;
-        }
-        else
-        {
+        // $data[]=$result;                              
+        // return $data;
+        // }
+        // else
+        // {
         $item_id=$this->get_item_id($id);
 
         $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
@@ -1074,7 +1074,7 @@ $count=0;
 
         $data[]=$result;                              
         return $data;
-    }
+    // }
     }
 
     public function remove_data(Request $request,$id)
@@ -1518,8 +1518,8 @@ $result=[];
         if(count($value->childItem)>0)
         {
             $result=$this->childItem($value->childItem);
-            $result_val=$this->parentItem($value->childItem);
-            array_push($output_array,$result,$result_val);
+            // $result_val=$this->parentItem($value->childItem);
+            array_push($output_array,$result);
         } 
 
     }
