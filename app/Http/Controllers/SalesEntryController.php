@@ -1133,31 +1133,31 @@ $count=0;
                                     ->first();
  
 
-        if($items->item_type != 'Parent')
-        {
-        $item_id=$this->get_parent_item_id($id);
-          //dd($item_id);
-        $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
+        // if($items->item_type != 'Parent')
+        // {
+        // $item_id=$this->get_parent_item_id($id);
+        //   //dd($item_id);
+        // $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
           
-        $uom=array();
-        $count=0;
-        foreach($item_uom as $value){
-        if(isset($value->uom->name) && !empty($value->uom->name))
-        {
-            $count++;
-            $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
-                //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
-        }
+        // $uom=array();
+        // $count=0;
+        // foreach($item_uom as $value){
+        // if(isset($value->uom->name) && !empty($value->uom->name))
+        // {
+        //     $count++;
+        //     $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
+        //         //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
+        // }
 
-        }
+        // }
 
-        $result = array_unique($uom, SORT_REGULAR);
+        // $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;   
+        // $data[]=$result;   
 
-        }
-        else
-        {
+        // }
+        // else
+        // {
         $item_id=$this->get_item_id($id);
 
         $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
@@ -1178,7 +1178,7 @@ $count=0;
 
         $data[]=$result;   
         
-    }
+    // }
 
         $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
 
@@ -1477,69 +1477,6 @@ $count=0;
         
 
 
-
-
-
-        
-        // if($brand != 'no_val')
-        // {
-        //     $items = Item::join('brands','brands.id','=','items.brand_id')
-        //              ->join('categories','categories.id','=','items.category_id')
-        //              ->where('items.category_id','=',$categories)
-        //              ->where('items.brand_id','=',$brand)
-        //              ->select('items.id as item_id','items.code as item_code','items.name as item_name','brands.id as brand_id','brands.name as brand_name','items.ptc','categories.id as categories_id','categories.name as category_name')
-        //              ->get();
-
-        // foreach ($items as $key => $value) {
-        //      $item_id=$value->item_id;
-
-        //      $data[] =ItemBracodeDetails::where('item_bracode_details.item_id','=',$item_id)
-        //                                 ->select('barcode')
-        //                                 ->get();
-        //          }  
-
-        //      $data[] = $items;
-        // }
-        // else
-        // {
-        //     $items = Item::join('categories','categories.id','=','items.category_id')
-        //              ->where('items.category_id','=',$categories)
-        //              ->select('items.id as item_id','items.code as item_code','items.name as item_name','items.brand_id','items.ptc','categories.id as categories_id','categories.name as category_name')
-        //              ->get();
-
-        //              $items_1 = Item::all();
-        //             // ->select('items.id as item_id','items.code as item_code','items.name as item_name','items.brand_id','items.ptc','categories.id as categories_id','categories.name as category_name')
-                    
-
-        //              print_r($items_1); exit;
-
-
-        // // foreach ($items as $key => $values) {
-        // //                   if(isset($value->brand->name)  && !empty($value->brand->name)){
-        // //      $data[]=$value->brand->name;
-        // //     }
-        // //              }             
-
-        // foreach ($items as $key => $value) {
-        //      $item_id=$value->item_id;
-
-        //     //  if(isset($value->brand->name)  && !empty($value->brand->name)){
-        //     //  $brand_name=$value->brand->name;
-        //     // }
-        //      $data[] =ItemBracodeDetails::where('item_bracode_details.item_id','=',$item_id)
-        //                                 ->select('barcode')
-        //                                 ->get();
-        //         // $data[$key]=$brand_name;
-        //          }  
-
-        //      $data[] = $items;
-        // }
-        
-          
-                   
-
-        //   return $data;
-
     }
 
     public function brand_filter(Request $request)
@@ -1577,97 +1514,63 @@ $count=0;
              // <td><input type="hidden" value="'.$value->ptc.'" class="append_item_brand_name'.$key.'"><font style="font-family: Times new roman;">'.$value->ptc.'</font></td>
             }
          return $result;
-        
-        // $items = Item::join('brands','brands.id','=','items.brand_id')
-        //              ->join('categories','categories.id','=','items.category_id')
-        //              ->where('items.brand_id','=',$brand)
-        //              ->select('items.id as item_id','items.code as item_code','items.name as item_name','brands.id as brand_id','brands.name as brand_name','items.ptc','items.mrp','categories.id as categories_id','categories.name as category_name')
-        //              ->get();
-
-        // foreach ($items as $key => $value) 
-        // {
-        //      $item_id=$value->item_id;
-
-        //      $data[] =ItemBracodeDetails::where('item_bracode_details.item_id','=',$item_id)
-        //                                 ->select('barcode')
-        //                                 ->get();
-        // }  
-
-        // $data[] = $items;      
-        
-
-        // return $data;
+    
           
 
     }
 
-    // function uom_selection($item_id)
-    // {
-    //     $uoms = Item::where('id',$item_id)->select('uom_for_repack_item','uom_id')->first();
-    //     if($uoms->uom_for_repack_item == '')
-    //                {
-    //                 return $uoms;
-    //                }
-    //                else
-    //                {
-    //                 $parent_id=$uoms->id;
-    //                 $uoms = Item::where('id',$parent_id)->select('uom_for_repack_item','uom_id')->first();
-    //                 uom_selection($parent_id);
-    //                }
-    // }
+//     function parentItem($array)
+//    {
+//        $output_array=[];
+//        foreach($array  as $value)
+//        {
+//            $result_array=[];
+//            $result_array['id']=$value->id;
+//            $output_array[]=$result_array;
+//              if(count($value->parentItem)>0)
+//              {
+//                 $test=$this->parentItem($value->parentItem);
+//                 array_push($output_array,$test);
+//              }  
+//         }
+//            return $output_array;
+//    }
 
-    function parentItem($array)
-   {
-       $output_array=[];
-       foreach($array  as $value)
-       {
-           $result_array=[];
-           $result_array['id']=$value->id;
-           $output_array[]=$result_array;
-             if(count($value->parentItem)>0)
-             {
-                $test=$this->parentItem($value->parentItem);
-                array_push($output_array,$test);
-             }  
-        }
-           return $output_array;
-   }
+//    function get_parent_item_id($item_id)
+//    {
+//     //return $item_id;
 
-   function get_parent_item_id($item_id)
-   {
-    //return $item_id;
-
-     $item=item::with('parentItem')->where('id',$item_id)->get();
+//      $item=item::with('parentItem')->where('id',$item_id)->get();
    
-    $output_array=[];
-    foreach($item as $value)
-    {
-        $result_array=[];
-        $result_array['id']=$value->id;
-        $output_array[]=$result_array;
-        if(count($value->parentItem)>0)
-        {
-            $result=$this->parentItem($value->parentItem);
-            array_push($output_array,$result);
-        } 
+//     $output_array=[];
+//     foreach($item as $value)
+//     {
+//         $result_array=[];
+//         $result_array['id']=$value->id;
+//         $output_array[]=$result_array;
+//         if(count($value->parentItem)>0)
+//         {
+//             $result=$this->parentItem($value->parentItem);
+//             array_push($output_array,$result);
+//         } 
 
-    }
-$result=[];
-    foreach ($output_array as $key => $value)
-    {
-        if (is_array($value))
-        {
-            $result = array_merge($result, array_flatten($value));
-        } else
-        {
-            $result = array_merge($result, array($key => $value));
-        }
-    }
+//     }
+// $result=[];
+//     foreach ($output_array as $key => $value)
+//     {
+//         if (is_array($value))
+//         {
+//             $result = array_merge($result, array_flatten($value));
+//         } else
+//         {
+//             $result = array_merge($result, array($key => $value));
+//         }
+//     }
 
-    //$result=implode("','", $result);
-    //$result="'".$result."'";
-    return $result;
-}
+//     //$result=implode("','", $result);
+//     //$result="'".$result."'";
+//     return $result;
+// }
 
     function childItem($array)
    {
@@ -1700,8 +1603,8 @@ $result=[];
         if(count($value->childItem)>0)
         {
             $result=$this->childItem($value->childItem);
-            $result_val=$this->parentItem($value->childItem);
-            array_push($output_array,$result,$result_val);
+            // $result_val=$this->parentItem($value->childItem);
+            array_push($output_array,$result);
         } 
 
     }
