@@ -30,6 +30,7 @@
             <th>Estimation No </th>
             <th>Estimation Date </th>
             <th>Supplier Name</th>
+            <th>Location </th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
             <th>Total Expense</th>
@@ -54,6 +55,7 @@
               <?php else: ?>
               <td></td>
               <?php endif; ?>
+              <td><?php echo e(@$value->locations->name); ?></td>
               <td><?php echo e($total_discount[$key]); ?></td>
               <!-- <td><?php echo e($value->round_off); ?></td> -->
               <td><?php echo e($expense_total[$key]); ?></td>

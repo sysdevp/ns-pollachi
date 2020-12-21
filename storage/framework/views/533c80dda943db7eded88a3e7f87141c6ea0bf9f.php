@@ -28,7 +28,8 @@
         </thead>
         <tbody>
           
-          <?php $__currentLoopData = $bank_branch; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          
+          <?php $__currentLoopData = $bank_branch; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
               <td><?php echo e($key+1); ?></td>
              <td><?php echo e(isset($value->bank->name) && !empty($value->bank->name) ? $value->bank->name : ""); ?></td>

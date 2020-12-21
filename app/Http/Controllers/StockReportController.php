@@ -66,7 +66,7 @@ class StockReportController extends Controller
         $sale_entry_items = SaleEntryItem::join('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
                             ->where('sale_entry_items.item_id','=',$value->item_id)
                             ->where('sale_entries.cancel_status','=',0)
-                            ->where('sale_entries.delivery_tag','=',1)
+                          //  ->where('sale_entries.delivery_tag','=',1)
                             ->where('sale_entries.location','=',$l_value->id)
                             ->sum('sale_entry_items.remaining_qty');
         
