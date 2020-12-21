@@ -272,6 +272,7 @@ class PurchaseEntryController extends Controller
             $purchase_entry_items->rn_date = $request->receipt_date;
             $purchase_entry_items->item_sno = $request->invoice_sno[$i];
             $purchase_entry_items->item_id = $request->item_code[$i];
+            $purchase_entry_items->actual_item_id = $request->item_code[$i];
             $purchase_entry_items->mrp = $request->mrp[$i];
             $purchase_entry_items->gst = $request->tax_rate[$i];
             $purchase_entry_items->rate_exclusive_tax = $request->exclusive[$i];
@@ -551,7 +552,7 @@ class PurchaseEntryController extends Controller
         $location = Location::all();
 
         $purchase_entry = PurchaseEntry::where('p_no',$id)->first();
-        $purchase_entry_items = PurchaseEntryItem::where('p_no',$id)->get();
+        $purchase_entry_items = PurchaseEntryItem::where('p_no',$id)->where('active',1)->get();
         $purchase_entry_expense = PurchaseEntryExpense::where('p_no',$id)->get();
         $tax = PurchaseEntryTax::where('p_no',$id)->get();
 
@@ -684,7 +685,7 @@ class PurchaseEntryController extends Controller
         $item_discount_sum = 0;
         foreach($purchase_entry_items as $key => $value)  
         {
-            $item_amount[] = $value->qty * $value->rate_exclusive_tax;
+            $item_amount[] = $value->remaining_qty * $value->rate_exclusive_tax;
             $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
             $item_discount = $value->discount + $value->overall_disc;
             $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
@@ -697,15 +698,16 @@ class PurchaseEntryController extends Controller
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
             $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
+                                    ->where('active',1)
                                     ->orderBy('updated_at','DESC')
                                     ->first();
 
-            $amount = $item_data->qty * $item_data->rate_exclusive_tax;
+            $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
             $gst_rs = $amount * $item_data->gst / 100;
             $total_discount = $item_data->discount + $item_data->overall_disc;
             $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
 
-            $net_value[] = $sum / $item_data->qty;
+            $net_value[] = $sum / $item_data->remaining_qty;
 
         }  
 
@@ -835,6 +837,7 @@ class PurchaseEntryController extends Controller
             $purchase_entry_items->rn_date = $request->receipt_date;
             $purchase_entry_items->item_sno = $request->invoice_sno[$i];
             $purchase_entry_items->item_id = $request->item_code[$i];
+            $purchase_entry_items->actual_item_id = $request->item_code[$i];
             $purchase_entry_items->mrp = $request->mrp[$i];
             $purchase_entry_items->gst = $request->tax_rate[$i];
             $purchase_entry_items->rate_exclusive_tax = $request->exclusive[$i];
