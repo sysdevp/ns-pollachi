@@ -2093,6 +2093,33 @@ echo "<pre>"; print_r($data); exit;
 
     public function cancel($id)
     {
+
+      $rejection_out_items = RejectionOut::where('r_out_no',$id)->where('active',1)->first();
+
+      
+          $p_no = $rejection_out_items->p_no;
+          $rn_no = $rejection_out_items->rn_no;
+    
+
+        $purchase_entry_item = PurchaseEntryItem::where('p_no',$p_no)->get();
+
+        // echo "<pre>"; print_r($purchase_entry_item); exit();
+
+        foreach ($purchase_entry_item as $key => $value) {
+            $qty = $value->rejected_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            PurchaseEntryItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0]);
+
+        }
+
+        $receipt_note_item = ReceiptNoteItem::where('rn_no',$id)->get();
+        foreach ($receipt_note_item as $key => $value) {
+            $qty = $value->rejected_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            ReceiptNoteItem::where('rn_no',$id)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0]);
+
+        }
+
         $r_out = RejectionOut::where('r_out_no',$id)->first();
 
         $r_out->cancel_status = 1;

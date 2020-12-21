@@ -1332,7 +1332,7 @@ $(document).on("click",".edit_items",function(){
     $('.discount_percentage').val('');
   $('.discount_rs').val('');
   }
-   // item_codes(item_code_id);
+   item_codes(item_code_id);
 
 });
 
