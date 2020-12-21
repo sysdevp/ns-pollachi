@@ -275,6 +275,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
           <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
 
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
+
+          <input type="hidden" class="form-control child_unit  required_for_proof_valid" placeholder="Item Code" id="child_unit" name="child_unit" value="">
                
               </div>
               
@@ -1322,7 +1324,7 @@ $(document).on("click",".edit_items",function(){
 
   $('.update_items').show();
   $('.add_items').hide();
-  if($('.s_no').val() != '' || $('.d_no').val() != '')
+  if($('.p_no').val() != '' || $('.rn_no').val() != '')
   {
   $('#quantity').attr('readonly','readonly');
   $('.display_rejected').show();
@@ -1343,6 +1345,7 @@ $(document).on("click",".edit_items",function(){
   var quantity = $('.quantity'+id).val();
   var rejected_qty = $('#rejected_quantity'+id).val();
   var actual_qty = $('#actual_quantity'+id).val();
+  var child_unit = $('.child_unit'+id).val();
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
   var amnt = $('#amnt'+id).val();
@@ -1361,6 +1364,7 @@ $(document).on("click",".edit_items",function(){
   $('.mrp').val(mrp);
   $('.hsn').val(hsn);
   $('.quantity').val(quantity);
+  $('.child_unit').val(child_unit);
   $('.rejected').val(rejected_qty);
   $('.actual_qty').val(actual_qty);
   $('.tax_rate').val(tax_gst);
@@ -1428,12 +1432,12 @@ $(document).on("click",".update_items",function(){
   $("#item_code").val('');
   $("#item_code").focus();
  }
- // else if(parseFloat(inclusive)>parseFloat(mrp))
- // {
- //  alert('Rate Exceeds The MRP!!');
- //  $('#exclusive').val('');
- //  $('#inclusive').val('');
- // }
+ else if(parseFloat(inclusive)>parseFloat(mrp))
+ {
+  alert('Rate Exceeds The MRP!!');
+  $('#exclusive').val('');
+  $('#inclusive').val('');
+ }
 
  else if($('.s_no').val() != '')
  {
@@ -1452,6 +1456,7 @@ $(document).on("click",".update_items",function(){
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
+              $('.font_purchase_quantity'+td_id).text($('#actual_qty').val());
               $('.quantity'+td_id).val($('.quantity').val());
               $('.font_quantity'+td_id).text($('.quantity').val());
               $('#rejected_quantity'+td_id).val($('.rejected').val());
@@ -1508,6 +1513,7 @@ $(document).on("click",".update_items",function(){
               $(".total_net_price").html(parseFloat(to_html_total_net));
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
+              individual_expense();
               overall_discounts();
               roundoff_cal();
 
@@ -1523,6 +1529,7 @@ $(document).on("click",".update_items",function(){
               $('.tax_rate').val('');
               $('#exclusive').val('');
               $('#inclusive').val('');
+              $('.child_unit').val('');
               $('.amount').val('');
               $('#discount').val('');
               $('.discount_percentage').val('');
@@ -2281,15 +2288,17 @@ if(append_value == 1)
              //$('#item_code').val(code);
              $('#items_codes').val(id);
             $('#item_name').val(name);
+            $('#item_name1').val(id);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
               $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
+             $('#quantity').val(1);
 
              
              $('.item_display').dialog('close');
-             $('#quantity').focus();
+             $('#exclusive').focus();
 
              if($('#quantity').val() != '')
              {
@@ -2334,6 +2343,142 @@ if(append_value == 1)
            }
         });
 }
+  
+ else if(append_value == 2)
+{
+  var row_id=$('#last').val();
+
+      $.ajax({  
+        
+        type: "GET",
+        url: "<?php echo e(url('rejection_in/getdata/{id}')); ?>",
+        data: { id: item_code },             
+                        
+        success: function(data){ 
+          //alert(data);
+             // $('.uom_exclusive').children('option:(:first)').remove();
+             // $('.uom_inclusive').children('option:(:first)').remove();
+             $('.uom_exclusive').children('option').remove();
+             $('.uom_inclusive').children('option').remove();
+
+             id = data[0].item_id;
+             name =data[0].item_name;
+             code =data[0].code;
+             mrp =data[0].mrp;
+             hsn =data[0].hsn;
+             uom_id =data[0].uom_id;
+             ptc_code =data[0].ptc;
+             uom_name =data[0].uom_name;
+             igst =data[1].igst;
+             barcode = data[2].barcode;
+
+             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(sum);
+              }
+              else
+              {
+
+              }
+
+             }
+
+              var first_data='<option value="'+id+'">'+uom_name+'</option>';
+              $('.uom_exclusive').append(first_data);
+              $('.uom_inclusive').append(first_data);
+              for(var i=0;i<data[3].length;i++)
+             {
+              var item_uom_id=data[3][i].id;
+              var item_uom_name=data[3][i].name;
+              var item_id=data[3][i].item_id;
+              if(item_uom_name == uom_name)
+              {
+
+              }
+              else
+              {
+                var div_data='<option value="'+item_id+'">'+item_uom_name+'</option>';
+                $('.uom_exclusive').append(div_data);
+                $('.uom_inclusive').append(div_data);
+              }
+              
+             }
+                       
+             $('#item_code').val(code);
+             $('#items_codes').val(id);
+            $('#item_name').val(name);
+             $('#mrp').val(mrp);
+             $('#hsn').val(hsn);
+             $('#uom').val(uom_id);
+              $('#uom_name').val(uom_name);
+             $('#tax_rate').val(igst);
+             $('#quantity').removeAttr('readonly');
+             // $('#actual_qty').val('');
+             var child_unit = $('.child_unit').val();
+             var actual_quantity = $('#actual_qty').val();
+
+             var total_qty = parseInt(child_unit) * parseInt(actual_quantity);
+             $('#quantity').val(total_qty);
+             $('#child_unit').val(total_qty);
+             $('#actual_qty').val(total_qty);
+
+
+             
+             $('.item_display').dialog('close');
+             $('#exclusive').focus();
+
+             if($('#quantity').val() != '')
+             {
+              
+              var rate_exclusive = $('#exclusive').val();
+              var rate_inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+              var tax_rate = $('.tax_rate').val();
+              var total = parseInt(quantity)*parseFloat(rate_exclusive);
+              $('#amount').val(total.toFixed(2));
+              if(tax_rate == '')
+              {
+                $('#net_price').val(total.toFixed(2));
+              }
+              
+              var rate = parseFloat(tax_rate)/100;
+              var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+              var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+              $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+              var net_val = parseFloat(total)*parseFloat(rate);
+      
+              $('.gst').val(net_val.toFixed(2));
+
+              var total_net_val = parseFloat(total)+parseFloat(net_val);
+              $('#net_price').val(total_net_val.toFixed(2));
+             }
+            else
+            {
+
+            }
+        }
+
+    });
+
+      $.ajax({
+           type: "POST",
+            url: "<?php echo e(url('rejection_in/last_purchase_rate/')); ?>",
+            data: { id: item_code },
+           success: function(data) {
+             $('#last_purchase_rate').val(data);
+             
+           }
+        });
+} 
+
 else
 {
   var row_id=$('#last').val();
@@ -2404,15 +2549,17 @@ else
              $('#item_code').val(code);
              $('#items_codes').val(id);
             $('#item_name').val(name);
+            $('#item_name1').val(id);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
               $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
-
+             // $('#actual_qty').val('');
+             // $('#quantity').val(1);
              
              $('#cat').dialog('close');
-             $('#quantity').focus();
+             $('#exclusive').focus();
 
              if($('#quantity').val() != '')
              {
@@ -2985,15 +3132,17 @@ $(".total_amount").html(parseFloat(to_html_total_amount));
 function uom_details_inclusive()
 {
 var uom_inclusive=$('.uom_inclusive').val();
+var values = 2;
 
-item_codes(uom_inclusive);
+item_codes(uom_inclusive,values);
 }
 
 function uom_details_exclusive()
 {
-
 var uom_exclusive=$('.uom_exclusive').val();
-item_codes(uom_exclusive);
+var values = 2;
+
+item_codes(uom_exclusive,values);
 }
 
  function overall_discounts()

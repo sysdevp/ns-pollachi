@@ -281,6 +281,9 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
           <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
 
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
+
+          <input type="hidden" class="form-control child_unit  required_for_proof_valid" placeholder="Item Code" id="child_unit" name="child_unit" value="">
+          
                
               </div>
               
@@ -1297,6 +1300,7 @@ $(document).on("click",".edit_items",function(){
   var quantity = $('.quantity'+id).val();
   var rejected_qty = $('#rejected_quantity'+id).val();
   var actual_qty = $('#actual_quantity'+id).val();
+  var child_unit = $('#child_unit'+id).val();
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
   var amnt = $('#amnt'+id).val();
@@ -1315,6 +1319,7 @@ $(document).on("click",".edit_items",function(){
   $('.mrp').val(mrp);
   $('.hsn').val(hsn);
   $('.quantity').val(quantity);
+  $('.child_unit').val(quantity);
   $('.rejected').val(rejected_qty);
   $('.actual_qty').val(actual_qty);
   $('.tax_rate').val(tax_gst);
@@ -1364,6 +1369,7 @@ $(document).on("click",".edit_items",function(){
   var quantity = $('.quantity'+id).val();
   var rejected_qty = $('#rejected_quantity'+id).val();
   var actual_qty = $('#actual_quantity'+id).val();
+  var child_unit = $('.child_unit'+id).val();
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
   var amnt = $('#amnt'+id).val();
@@ -1382,6 +1388,7 @@ $(document).on("click",".edit_items",function(){
   $('.mrp').val(mrp);
   $('.hsn').val(hsn);
   $('.quantity').val(quantity);
+  $('.child_unit').val(child_unit);
   $('.rejected').val(rejected_qty);
   $('.actual_qty').val(actual_qty);
   $('.tax_rate').val(tax_gst);
@@ -1444,12 +1451,12 @@ $(document).on("click",".update_items",function(){
   $("#item_code").val('');
   $("#item_code").focus();
  }
- // else if(parseFloat(inclusive)>parseFloat(mrp))
- // {
- //  alert('Rate Exceeds The MRP!!');
- //  $('#exclusive').val('');
- //  $('#inclusive').val('');
- // }
+ else if(parseFloat(inclusive)>parseFloat(mrp))
+ {
+  alert('Rate Exceeds The MRP!!');
+  $('#exclusive').val('');
+  $('#inclusive').val('');
+ }
 
  else if($('.p_no').val() != '')
  {
@@ -1468,6 +1475,7 @@ $(document).on("click",".update_items",function(){
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
+              $('.font_purchase_quantity'+td_id).text($('#actual_qty').val());
               $('.quantity'+td_id).val($('.quantity').val());
               $('.font_quantity'+td_id).text($('.quantity').val());
               $('#rejected_quantity'+td_id).val($('.rejected').val());
@@ -1540,6 +1548,7 @@ $(document).on("click",".update_items",function(){
               $('.tax_rate').val('');
               $('#exclusive').val('');
               $('#inclusive').val('');
+              $('.child_unit').val('');
               $('.amount').val('');
               $('#discount').val('');
               $('.discount_percentage').val('');
@@ -1648,6 +1657,7 @@ else if($('.rn_no').val() != '')
               $('.tax_rate').val('');
               $('#exclusive').val('');
               $('#inclusive').val('');
+              $('.child_unit').val('');
               $('.amount').val('');
               $('#discount').val('');
               $('.discount_percentage').val('');
@@ -2426,7 +2436,7 @@ if(append_value == 1)
               
              }
                        
-             //$('#item_code').val(code);
+             $('#item_code').val(code);
              $('#items_codes').val(id);
             $('#item_name').val(name);
              $('#mrp').val(mrp);
@@ -2434,7 +2444,16 @@ if(append_value == 1)
              $('#uom').val(uom_id);
               $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
-             $('#quantity').val(1);
+             $('#quantity').removeAttr('readonly');
+             // $('#actual_qty').val('');
+             var child_unit = $('.child_unit').val();
+             var actual_quantity = $('#actual_qty').val();
+
+             var total_qty = parseInt(child_unit) * parseInt(actual_quantity);
+             $('#quantity').val(total_qty);
+             $('#child_unit').val(total_qty);
+             $('#actual_qty').val(total_qty);
+
 
              
              $('.item_display').dialog('close');
@@ -2560,7 +2579,8 @@ else
              $('#uom').val(uom_id);
               $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
-             $('#quantity').val(1);
+             // $('#actual_qty').val('');
+             // $('#quantity').val(1);
              
              $('#cat').dialog('close');
              $('#exclusive').focus();
