@@ -242,7 +242,13 @@ class PriceUpdationController extends Controller
                                     ->orderBy('updated_at','DESC')
                                     ->latest()
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
-                                    ->first();                             
+                                    ->first();
+
+
+        if($item_data == '')
+        {
+            
+        }                                    
 
         $unit_price = @$item_data->rate_inclusive_tax;
         $discount = @$item_data->discount / @$item_data->qty;
