@@ -1910,20 +1910,87 @@ echo "<pre>"; print_r($data); exit;
 
     public function cancel($id)
     {
-        $credit_note = CreditNote::where('cn_no',$id)->first();
 
-        $credit_note->cancel_status = 1;
-        $credit_note->save();
+        $credit_note_data = CreditNote::where('cn_no',$id)->where('active',1);
+        $credit_note_item_data = CreditNoteItem::where('cn_no',$id)->where('active',1);
+        $credit_note_expense_data = CreditNoteExpense::where('cn_no',$id)->where('active',1);
+        $credit_note_tax = CreditNoteTax::where('cn_no',$id)->where('active',1);
+
+        $credit_note = CreditNote::where('cn_no',$id)->where('active',1)->first();
+
+        $s_no = $credit_note->s_no;
+        $r_in_no = $credit_note->r_in_no;
+
+
+        $sales_entry_item = SaleEntryItem::where('s_no',$s_no)->get();
+        foreach ($sales_entry_item as $key => $value) 
+        {
+            $qty = $value->credited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            SaleEntryItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
+
+        }
+
+        $r_in_item = RejectionInItem::where('r_in_no',$r_in_no)->get();
+        foreach ($r_in_item as $key => $value) 
+        {
+            $qty = $value->r_in_credited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            RejectionInItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_in_credited_qty' => 0]);
+
+        }
+
+        $credit_notes = CreditNote::where('cn_no',$id)->first();
+
+        $credit_notes->cancel_status = 1;
+        $credit_notes->save();
 
         return Redirect::back()->with('success', 'Cancelled');
     }
 
     public function retrieve($id)
     {
-        $credit_note = CreditNote::where('cn_no',$id)->first();
 
-        $credit_note->cancel_status = 0;
-        $credit_note->save();
+        $credit_note_data = CreditNote::where('cn_no',$id)->where('active',1);
+        $credit_note_item_data = CreditNoteItem::where('cn_no',$id)->where('active',1);
+        $credit_note_expense_data = CreditNoteExpense::where('cn_no',$id)->where('active',1);
+        $credit_note_tax = CreditNoteTax::where('cn_no',$id)->where('active',1);
+
+        $credit_note_items = CreditNoteItem::where('cn_no',$id)->where('active',1)->get();
+
+        $credit_note = CreditNote::where('cn_no',$id)->where('active',1)->first();
+
+        $s_no = $credit_note->s_no;
+        $r_in_no = $credit_note->r_in_no;
+
+        foreach ($credit_note_items as $key => $value) 
+        {
+            $credited_qty[] = $value->credited_qty;
+        }
+
+
+        $sales_entry_item = SaleEntryItem::where('s_no',$s_no)->get();
+        foreach ($sales_entry_item as $key => $value) 
+        {
+            $qty = $value->remaining_qty - $credited_qty[$key];
+            $item_id = $value->item_id;
+            SaleEntryItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => $credited_qty[$key]]);
+
+        }
+
+        $r_in_item = RejectionInItem::where('r_in_no',$r_in_no)->get();
+        foreach ($r_in_item as $key => $value) 
+        {
+            $qty = $value->remaining_qty - $credited_qty[$key];
+            $item_id = $value->item_id;
+            RejectionInItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_in_credited_qty' => $credited_qty[$key]]);
+
+        }
+
+        $credit_notes = CreditNote::where('cn_no',$id)->first();
+
+        $credit_notes->cancel_status = 0;
+        $credit_notes->save();
 
         return Redirect::back()->with('success', 'Retrieved');
     }

@@ -734,58 +734,36 @@ class DebitNoteController extends Controller
 
     if($request->p_no != '')
     {
+
         foreach ($request->item_code as $key => $value) 
         {
             $purchase_entry_item = PurchaseEntryItem::where('p_no',$request->p_no)->where('item_id',$value)->first();
 
-            // $sub_val = $purchase_entry_item->debited_qty - $request->debited_qty_before_edit[$key];
-
-            // $total_debited = $sub_val + $request->debited_qty[$key];
-
-            // if($total_debited > $purchase_entry_item->actual_qty)
-            // {
-
-            // }
-
-            // else
-            // {
-
-            // $qty = $purchase_entry_item->qty - $request->debited_qty[$key];
-            
-
-            // $purchase_entry_item->qty = $qty;
+            $purchase_entry_item->remaining_qty = $request->quantity[$key];
             $purchase_entry_item->debited_qty = $request->debited_qty[$key];
             $purchase_entry_item->save();
 
-            // }     
         
         }
     }
 
     else if($request->r_out_no != '')
     {
+
         foreach ($request->item_code as $key => $value) 
         {
             $r_out_items = RejectionOutItem::where('r_out_no',$request->r_out_no)->where('item_id',$value)->first();
 
-            // $sub_val = $r_out_items->debited_qty - $request->debited_qty_before_edit[$key];
+            $purchase_entry_item = PurchaseEntryItem::where('p_no',$r_out_items->p_no)->where('item_id',$value)->first();
 
-            // $total_debited = $sub_val + $request->debited_qty[$key];
-
-            // if($total_debited > $r_out_items->actual_rejected_qty)
-            // {
-
-            // }
-
-            // else
-            // {
-                // $r_out_items->remaining_after_debit = $request->remaining_after_debit[$key];
-                $r_out_items->debited_qty = $request->debited_qty[$key];
+                $r_out_items->r_out_debited_qty = $request->debited_qty[$key];
+                $r_out_items->rejected_qty = $request->rejected_item_qty[$key];
                 $r_out_items->save();
 
-            // }
-                    
-                
+                $purchase_entry_item->r_out_debited_qty = $request->debited_qty[$key];
+                $purchase_entry_item->rejected_qty = $request->rejected_item_qty[$key];
+                $purchase_entry_item->save();
+ 
         
         }
     }
@@ -2063,20 +2041,92 @@ echo "<pre>"; print_r($data); exit;
 
     public function cancel($id)
     {
-        $debit_note = DebitNote::where('dn_no',$id)->first();
 
-        $debit_note->cancel_status = 1;
-        $debit_note->save();
+        $debit_note_data = DebitNote::where('dn_no',$id)->where('active',1);
+        $debit_note_item_data = DebitNoteItem::where('dn_no',$id)->where('active',1);
+        $debit_note_expense_data = DebitNoteExpense::where('dn_no',$id)->where('active',1);
+        $debit_note_tax = DebitNoteTax::where('dn_no',$id)->where('active',1);
+
+        $debit_note = DebitNote::where('dn_no',$id)->where('active',1)->first();
+
+        $p_no = $debit_note->p_no;
+        $r_out_no = $debit_note->r_out_no;
+
+
+        $purchase_entry_item = PurchaseEntryItem::where('p_no',$p_no)->get();
+        foreach ($purchase_entry_item as $key => $value) 
+        {
+            $qty = $value->debited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            PurchaseEntryItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
+
+        }
+
+        $r_out_item = RejectionOutItem::where('r_out_no',$r_out_no)->get();
+        foreach ($r_out_item as $key => $value) 
+        {
+            $qty = $value->r_out_debited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            RejectionOutItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_out_debited_qty' => 0]);
+
+        }
+
+
+        $debit_notes = DebitNote::where('dn_no',$id)->first();
+
+        $debit_notes->cancel_status = 1;
+        $debit_notes->save();
+
+
 
         return Redirect::back()->with('success', 'Cancelled');
     }
 
     public function retrieve($id)
     {
-        $debit_note = DebitNote::where('dn_no',$id)->first();
 
-        $debit_note->cancel_status = 0;
-        $debit_note->save();
+
+        $debit_note_data = DebitNote::where('dn_no',$id)->where('active',1);
+        $debit_note_item_data = DebitNoteItem::where('dn_no',$id)->where('active',1);
+        $debit_note_expense_data = DebitNoteExpense::where('dn_no',$id)->where('active',1);
+        $debit_note_tax = DebitNoteTax::where('dn_no',$id)->where('active',1);
+
+        $debit_note_items = DebitNoteItem::where('dn_no',$id)->where('active',1)->get();
+
+        $debit_note = DebitNote::where('dn_no',$id)->where('active',1)->first();
+
+        $p_no = $debit_note->p_no;
+        $r_out_no = $debit_note->r_out_no;
+
+        foreach ($debit_note_items as $key => $value) 
+        {
+            $debited_qty[] = $value->debited_qty;
+        }
+
+
+        $purchase_entry_item = PurchaseEntryItem::where('p_no',$p_no)->get();
+        foreach ($purchase_entry_item as $key => $value) 
+        {
+            $qty =$value->remaining_qty - $debited_qty[$key];
+            $item_id = $value->item_id;
+
+            PurchaseEntryItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => $debited_qty[$key]]);
+
+        }
+
+        $r_out_item = RejectionOutItem::where('r_out_no',$r_out_no)->get();
+        foreach ($r_out_item as $key => $value) 
+        {
+            $qty = $value->remaining_qty - $debited_qty[$key];
+            $item_id = $value->item_id;
+            RejectionOutItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_out_debited_qty' => $debited_qty[$key]]);
+
+        }
+
+        $debit_notes = DebitNote::where('dn_no',$id)->first();
+
+        $debit_notes->cancel_status = 0;
+        $debit_notes->save();
 
         return Redirect::back()->with('success', 'Retrieved');
     }
