@@ -583,7 +583,7 @@ class SalesEntryController extends Controller
         $location = Location::all();
 
         $sale_entry = SaleEntry::where('s_no',$id)->first();
-        $sale_entry_items = SaleEntryItem::where('s_no',$id)->get();
+        $sale_entry_items = SaleEntryItem::where('s_no',$id)->where('active',1)->get();
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
 
@@ -673,6 +673,7 @@ class SalesEntryController extends Controller
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
             $item_data = SaleEntryItem::where('item_id',$value->item_id)
+                                    ->where('active',1)
                                     ->orderBy('updated_at','DESC')
                                     ->first();
 

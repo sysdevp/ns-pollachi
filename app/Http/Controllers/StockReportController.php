@@ -29,7 +29,8 @@ class StockReportController extends Controller
         $array_details = [];
         foreach ($location as $key => $l_value) 
         {
-            $purchase_entry_details = PurchaseEntryItem::join('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+            $purchase_entry_details = PurchaseEntryItem::leftjoin('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+            ->where('purchase_entry_items.active',1)
         ->groupBy('purchase_entries.location','purchase_entry_items.item_id','purchase_entries.receipt_tag')
         ->select('purchase_entries.location','purchase_entry_items.item_id','purchase_entries.receipt_tag')
         ->get();
@@ -46,6 +47,7 @@ class StockReportController extends Controller
                              ->where('purchase_entry_items.item_id','=',$value->item_id)
                              ->where('purchase_entries.location','=',$l_value->id)
                              ->where('purchase_entries.cancel_status','=',0)
+                             ->where('purchase_entry_items.active','!=',0)
                              ->where('purchase_entries.receipt_tag','=',1)
                              ->sum('purchase_entry_items.remaining_qty');
         
@@ -66,7 +68,7 @@ class StockReportController extends Controller
         $sale_entry_items = SaleEntryItem::join('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
                             ->where('sale_entry_items.item_id','=',$value->item_id)
                             ->where('sale_entries.cancel_status','=',0)
-                          //  ->where('sale_entries.delivery_tag','=',1)
+                            //->where('sale_entries.delivery_tag','=',1)
                             ->where('sale_entries.location','=',$l_value->id)
                             ->sum('sale_entry_items.remaining_qty');
         
@@ -74,7 +76,7 @@ class StockReportController extends Controller
                             ->where('delivery_note_items.item_id','=',$value->item_id)
                             ->where('delivery_notes.location','=',$l_value->id)
                             ->where('delivery_notes.cancel_status','=',0)
-                            ->where('delivery_notes.delivery_tag','=',0)
+                            //->where('delivery_notes.delivery_tag','=',0)
                             ->sum('delivery_note_items.remaining_qty');
         
         $rejection_in_items = RejectionInItem::join('rejection_ins','rejection_in_items.r_in_no','=','rejection_ins.r_in_no')
