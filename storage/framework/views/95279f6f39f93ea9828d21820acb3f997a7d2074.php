@@ -27,11 +27,13 @@
            <th>Tax %</th>
            <th>Rate Exclusive Tax</th>
            <th>Rate Inclusive Tax</th>
-           <th>Rejected Quantity</th>
+           <th>Quantity</th>
            <th>UOM</th>
            <th>Amount</th>
            <th>Tax Rs</th>
-           <th>Discount</th>
+           <!-- <th>Discount</th> -->
+           <th>Overall Discount</th>
+           <th>Expense</th>
            <th>Net Price</th>
            <!-- <th>Action</th> -->
           </tr>
@@ -56,7 +58,7 @@
               <td><?php echo e($value->gst); ?></td>
               <td><?php echo e($value->rate_exclusive_tax); ?></td>
               <td><?php echo e($value->rate_inclusive_tax); ?></td>
-              <td><?php echo e($value->rejected_qty); ?></td>
+              <td><?php echo e($value->qty); ?></td>
               <?php if(isset($value->uom->name) && !empty($value->uom->name)): ?>
               <td><?php echo e($value->uom->name); ?></td>
               <?php else: ?>
@@ -64,7 +66,9 @@
               <?php endif; ?>
               <td><?php echo e($amount[$key]); ?></td>
               <td><?php echo e($gst_rs[$key]); ?></td>
-              <td><?php echo e($value->discount); ?></td>
+              <!-- <td><?php echo e($value->discount); ?></td> -->
+              <td><?php echo e($value->overall_disc); ?></td>
+              <td><?php echo e($value->expenses); ?></td>
               <td><?php echo e($net_value[$key]); ?></td>
               <!-- <td> 
                 <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
