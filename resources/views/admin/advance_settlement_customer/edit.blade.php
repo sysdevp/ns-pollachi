@@ -6,11 +6,11 @@
     <div class="card-header px-2">
       <div class="row">
         <div class="col-4">
-          <h3>Advance Settlement For Supplier</h3>
+          <h3>Edit Advance Settlement For Customers</h3>
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="{{url('advance_settlement_supplier')}}">Back</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="{{url('advance_settlement_customer')}}">Back</a></button></li>
           </ul>
         </div>
       </div>
@@ -18,23 +18,23 @@
     <!-- card header end@ -->
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('advance_settlement_supplier.store')}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('advance_settlement_customer.update',$advance->id)}}" enctype="multipart/form-data">
       {{csrf_field()}}
-
+      @method('PATCH')
         <div class="form-row">
           <div class="col-md-6">
                   <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">Party Name :</label>
                      <div class="col-sm-6">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id"  name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id"  name="customer_id" id="customer_id">
                            <option value="">Choose Supplier Name</option>
-                           @foreach($supplier as $suppliers)
-                           <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
+                           @foreach($customer as $customers)
+                           <option value="{{ $customers->id }}"  {{$advance->customer_id == $customers->id ? 'selected' : '' }}>{{ $customers->name }}</option>
                            @endforeach
                         </select>
                      </div>
                      <a href="{{ url('master/supplier/create')}}" target="_blank">
-                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Supplier"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
+                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add customer"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_supplier_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
                </div>
@@ -47,15 +47,15 @@
                             <div class="col-md-3">
                     <label style="font-family: Times new roman;">Payment Voucher No</label><br>
                   <div class="form-group row">
-                     <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="">
+                     <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="{{$advance->voucher_no}}">
                      
                   </div>
                </div>
                       <div class="col-md-3">
                         <label style="font-family: Times new roman;">Date</label>
-                      <input type="date" class="form-control date" id="date"  placeholder="" name="payment_date" step="any" value="">
+                      <input type="date" class="form-control date" id="date"  placeholder="" name="receipt_date" step="any" value="{{$advance->receipt_date}}">
 
-                      <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
+                      <input type="hidden" name="expense_total" id="expense_total" value="{{$advance->receipt_date}}" class="expense_total">
 
                       </div>
                      <!--  <div class="col-md-2">
@@ -71,7 +71,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Total Advance Amount : </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control request_no" placeholder="Total Advance Amount" name="advance_amount" value="">
+                <input type="text" class="form-control request_no" placeholder="Total Advance Amount" name="advance_amount" value="{{$advance->advance_amount}}">
               </div>
             </div>
           </div>
@@ -79,45 +79,12 @@
 
         <br>
 
-        <div class="col-md-8">
-                       <div class="form-group row">
-                       <div class="col-md-4">
-                       <label for="validationCustom01" class=" col-form-label"><h4>Pending Bills:</h4> </label><br>
-                       
-                           
-                       </div>
-                         </div>
-              </div>
-
-        <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Bill.No</th>
-            <th>Bill Date </th>
-            <th>Bill Amount </th>
-            <th>Pending Amount</th>
-          </tr>
-        </thead>
-        <tbody class="append_proof_details" id="myTable">
-        </tbody>
-        <tfoot>
-              <th></th>
-              <th>Total</th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tfoot>
-      </table>
-    </div>
-
         <div class="form-row">
         <div class="col-md-6">
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label"> Remarks : </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" placeholder="Remarks" name="remark" value="">
+                <input type="text" class="form-control remark" placeholder="Remarks" name="remark" value="{{$advance->remarks}}">
               </div>
             </div>
           </div>

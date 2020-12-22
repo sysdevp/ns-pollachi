@@ -17,7 +17,8 @@ class AdvanceSettlementSupplierController extends Controller
      */
     public function index()
     {
-        //
+    $advances=AdvanceSettlementSupplier::orderBy('id','DESC')->get();
+    return view('admin.advance_settlement_supplier.view',compact('advances'));
     }
 
     /**
@@ -28,7 +29,7 @@ class AdvanceSettlementSupplierController extends Controller
     public function create()
     {
         $date = date('Y-m-d');
-        $supplier = Supplier::all();
+        $supplier = AdvanceSettlementSupplier::all();
         return view('admin.advance_settlement_supplier.add',compact('supplier','date'));
     }
 
@@ -74,7 +75,9 @@ class AdvanceSettlementSupplierController extends Controller
      */
     public function edit($id)
     {
-        //
+        $advance=AdvanceSettlementSupplier::find($id);
+        $supplier = Supplier::all();
+        return view('admin.advance_settlement_supplier.edit',compact('advance','supplier'));
     }
 
     /**
@@ -86,7 +89,19 @@ class AdvanceSettlementSupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $supplier_advance = AdvanceSettlementSupplier::find($id);
+        $supplier_advance->supplier_id = isset($request->supplier_id) ? ($request->supplier_id) : 0;
+        $supplier_advance->voucher_no = isset($request->voucher_no) ? ($request->voucher_no) : 0;
+        $supplier_advance->payment_date = isset($request->payment_date) ? ($request->payment_date) : 0;
+        $supplier_advance->advance_amount = isset($request->advance_amount) ? ($request->advance_amount) : 0; 
+        $supplier_advance->remarks = isset($request->remark) ? ($request->remark) : 0;
+        $supplier_advance->created_by = isset($request->created_by) ? ($request->created_by) : 0;
+        $supplier_advance->updated_by = isset($request->updated_by) ? ($request->updated_by) : 0;
+         if ($supplier_advance->save()) {
+                return Redirect::back()->with('success', 'Successfully created');
+            } else {
+                return Redirect::back()->with('failure', 'Something Went Wrong..!');
+            }
     }
 
     /**
@@ -97,6 +112,12 @@ class AdvanceSettlementSupplierController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $advance = AdvanceSettlementSupplier::find($id);
+        if ($advance->delete()) {
+            return Redirect::back()->with('success', 'Deleted successfully');
+         }else{
+            return Redirect::back()->with('failure', 'Something Went Wrong..!');
+        }
     }
 }

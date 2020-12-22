@@ -9,7 +9,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="">Back</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="<?php echo e(url('advance_settlement_customer')); ?>">Back</a></button></li>
           </ul>
         </div>
       </div>
