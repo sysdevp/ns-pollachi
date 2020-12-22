@@ -13,6 +13,7 @@ use App\Models\RejectionOutItem;
 use App\Models\RejectionInItem;
 use App\Models\StockChange;
 use App\Models\Item;
+use App\Models\OpeningStock;
 use DB;
 
 class StockReportController extends Controller
@@ -39,11 +40,15 @@ class StockReportController extends Controller
         ->groupBy('receipt_notes.location','receipt_note_items.item_id')
         ->select('receipt_notes.location','receipt_note_items.item_id');
 
+        $item_opening= OpeningStock::groupBy('location','item_id')
+        ->select('location','item_id');
+
          $purchase_entry_details = SaleEntryItem::leftjoin('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
         ->where('sale_entry_items.active',1)
         ->groupBy('sale_entries.location','sale_entry_items.item_id')
         ->select('sale_entries.location','sale_entry_items.item_id')
         ->union($sale_entry_details)
+        ->union($item_opening)
         ->union($receipt_note_entry_details)
         ->get();
 
@@ -61,6 +66,10 @@ class StockReportController extends Controller
                              ->where('purchase_entry_items.active','!=',0)
                              ->where('purchase_entries.receipt_tag','!=',1)
                              ->sum('purchase_entry_items.remaining_qty');
+
+        $item_opening_quantity= OpeningStock::where('item_id','=',$value->item_id)
+                             ->where('location','=',$l_value->id)
+                             ->sum('opening_qty');
         
         $receipt_note_items = ReceiptNoteItem::join('receipt_notes','receipt_note_items.rn_no','=','receipt_notes.rn_no')
                             ->where('receipt_note_items.item_id','=',$value->item_id)
@@ -101,7 +110,7 @@ class StockReportController extends Controller
 
                             
 
-        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items;
+        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items + $item_opening_quantity;
         $sale_total_qty =  $sale_entry_items + $delivery_note_items; 
 
         $total_qty = $purchase_total_qty - $sale_total_qty + $stock_changes;
