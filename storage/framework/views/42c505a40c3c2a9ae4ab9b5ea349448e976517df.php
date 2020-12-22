@@ -17,7 +17,7 @@
     <!-- card header end@ -->
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('payment_request.store')); ?>" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('advance_settlement_supplier.store')); ?>" enctype="multipart/form-data">
       <?php echo e(csrf_field()); ?>
 
 
@@ -47,21 +47,21 @@
                             <div class="col-md-3">
                     <label style="font-family: Times new roman;">Payment Voucher No</label><br>
                   <div class="form-group row">
-                     <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no[]" step="any"  value="">
+                     <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="">
                      
                   </div>
                </div>
                       <div class="col-md-3">
                         <label style="font-family: Times new roman;">Date</label>
-                      <input type="date" class="form-control date" id="date"  placeholder="" name="date[]" step="any" value="">
+                      <input type="date" class="form-control date" id="date"  placeholder="" name="payment_date" step="any" value="">
 
                       <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
 
                       </div>
-                      <div class="col-md-2">
+                     <!--  <div class="col-md-2">
                         <label style="font-family: Times new roman; color: white;">Add Expense</label><br>
                       <input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense">
-                    </div>
+                    </div> -->
                   </div>
                     
                        </div>
@@ -71,7 +71,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Total Advance Amount : </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control request_no" placeholder="Total Advance Amount" name="request_no" value="">
+                <input type="text" class="form-control request_no" placeholder="Total Advance Amount" name="advance_amount" value="">
               </div>
             </div>
           </div>
@@ -98,7 +98,6 @@
             <th>Bill Date </th>
             <th>Bill Amount </th>
             <th>Pending Amount</th>
-            <th>Current Cleared Amount</th>
           </tr>
         </thead>
         <tbody class="append_proof_details" id="myTable">
@@ -106,7 +105,6 @@
         <tfoot>
               <th></th>
               <th>Total</th>
-              <th></th>
               <th></th>
               <th></th>
               <th></th>
@@ -127,8 +125,8 @@
         <br>
 
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" disabled="" type="submit">Submit</button>
-          <button class="btn btn-warning" name="add" disabled="" type="submit">Cancel</button>
+          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-warning" name="add" type="submit">Cancel</button>
         </div>
         <div class="col-md-7 text-right">
           
