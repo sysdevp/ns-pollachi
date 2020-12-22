@@ -996,6 +996,8 @@ Route::resource('receipt_process','ReceiptProcessController',['middleware' => ['
 
 Route::resource('advance_settlement_supplier','AdvanceSettlementSupplierController',['middleware' => ['auth']]);
 
+
+
 /*Advance Settlement For Supplier End Here*/
 
 /*Advance Settlement For Supplier Start Here*/

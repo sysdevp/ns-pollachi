@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\AdvanceSettlementCustomer;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class AdvanceSettlementCustomerController extends Controller
 {
@@ -37,7 +40,19 @@ class AdvanceSettlementCustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $customer_advance = new AdvanceSettlementCustomer(); 
+        $customer_advance->customer_id = isset($request->customer_id) ? ($request->customer_id) : 0;
+        $customer_advance->voucher_no = isset($request->voucher_no) ? ($request->voucher_no) : 0;
+        $customer_advance->receipt_date = isset($request->receipt_date) ? ($request->receipt_date) : 0;
+        $customer_advance->advance_amount = isset($request->advance_amount) ? ($request->advance_amount) : 0; 
+        $customer_advance->remarks = isset($request->remark) ? ($request->remark) : 0;
+        $customer_advance->created_by = isset($request->created_by) ? ($request->created_by) : 0;
+        $customer_advance->updated_by = isset($request->updated_by) ? ($request->updated_by) : 0;
+         if ($customer_advance->save()) {
+                return Redirect::back()->with('success', 'Successfully created');
+            } else {
+                return Redirect::back()->with('failure', 'Something Went Wrong..!');
+            }
     }
 
     /**
