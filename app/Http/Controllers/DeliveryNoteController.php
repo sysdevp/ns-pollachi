@@ -41,6 +41,7 @@ use App\Models\DeliveryNoteExpense;
 use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationExpense;
 use App\Models\RejectionIn;
+use App\Models\StockChange;
 use App\Models\RejectionInTax;
 use App\Models\RejectionInItem;
 use App\Models\RejectionInExpense;
@@ -284,6 +285,35 @@ class DeliveryNoteController extends Controller
             $delivery_note_items->expenses = $request->expenses[$i];
 
             $delivery_note_items->save();
+
+            $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
+             if($item_name1==0){ 
+            $item_name1 = $request->item_code[$i];
+             } else {
+            $item_name1 = $item_name1;
+             }
+             if($item_name1 != $request->item_code[$i]){
+             $stock_change = new StockChange();
+             $stock_change->location_id = $request->location;
+             $serial_id = StockChange::max('serial_id');
+             $stock_change->serial_id = $serial_id+1;
+             $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+             $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+             $stock_change->quantity = -1;
+             $stock_change->status = 1;
+             $stock_change->item_id = $item_name1;
+             $stock_change->save();
+
+             $stock_change_new = new StockChange();
+             $stock_change_new->location_id = $request->location;
+             $stock_change_new->serial_id = $serial_id+1;
+             $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+             $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+             $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+             $stock_change_new->status = 1;
+             $stock_change_new->item_id = $request->item_code[$i];
+             $stock_change_new->save();
+    }
         }
          
 
@@ -1083,31 +1113,31 @@ $count=0;
                                     ->first();
  
 
-        if($items->item_type != 'Parent')
-        {
-        $item_id=$this->get_parent_item_id($id);
-          //dd($item_id);
-        $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
+        // if($items->item_type != 'Parent')
+        // {
+        // $item_id=$this->get_parent_item_id($id);
+        //   //dd($item_id);
+        // $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
           
-        $uom=array();
-        $count=0;
-        foreach($item_uom as $value){
-        if(isset($value->uom->name) && !empty($value->uom->name))
-        {
-            $count++;
-            $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
-                //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
-        }
+        // $uom=array();
+        // $count=0;
+        // foreach($item_uom as $value){
+        // if(isset($value->uom->name) && !empty($value->uom->name))
+        // {
+        //     $count++;
+        //     $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
+        //         //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
+        // }
 
-        }
+        // }
 
-        $result = array_unique($uom, SORT_REGULAR);
+        // $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;   
+        // $data[]=$result;   
 
-        }
-        else
-        {
+        // }
+        // else
+        // {
         $item_id=$this->get_item_id($id);
 
         $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
@@ -1128,7 +1158,7 @@ $count=0;
 
         $data[]=$result;   
         
-    }
+    // }
 
         $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
 
