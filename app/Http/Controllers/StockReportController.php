@@ -71,6 +71,14 @@ class StockReportController extends Controller
                              ->where('purchase_entries.receipt_tag','!=',1)
                              ->sum('purchase_entry_items.remaining_qty');
 
+        $purchase_entry_items_rejected_qty= PurchaseEntryItem::join('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+                             ->where('purchase_entry_items.item_id','=',$value->item_id)
+                             ->where('purchase_entries.location','=',$l_value->id)
+                             ->where('purchase_entries.cancel_status','=',0)
+                             ->where('purchase_entry_items.active','!=',0)
+                             ->where('purchase_entries.receipt_tag','=',1)
+                             ->sum('purchase_entry_items.rejected_qty');
+
         $item_opening_quantity= OpeningStock::where('item_id','=',$value->item_id)
                              ->where('location','=',$l_value->id)
                              ->sum('opening_qty');
@@ -114,7 +122,7 @@ class StockReportController extends Controller
 
                             
 
-        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items + $item_opening_quantity;
+        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items + $item_opening_quantity - $purchase_entry_items_rejected_qty;
         $sale_total_qty =  $sale_entry_items + $delivery_note_items; 
 
         $total_qty = $purchase_total_qty - $sale_total_qty + $stock_changes;
