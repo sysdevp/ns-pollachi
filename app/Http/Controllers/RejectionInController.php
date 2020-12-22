@@ -2170,6 +2170,30 @@ echo "<pre>"; print_r($data); exit;
 
     public function cancel($id)
     {
+
+        $rejection_in_items = RejectionInItem::where('r_in_no',$id)->where('active',1)->first();
+
+        $s_no = $rejection_in_items->s_no;
+          $d_no = $rejection_in_items->d_no;
+
+        $sale_entry_item = SaleEntryItem::where('s_no',$s_no)->get();
+
+        foreach ($sale_entry_item as $key => $value) {
+            $qty = $value->rejected_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            SaleEntryItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0]);
+
+        }
+
+        $delivery_note_item = DeliveryNoteItem::where('d_no',$d_no)->get();
+
+        foreach ($delivery_note_item as $key => $value) {
+            $qty = $value->rejected_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            DeliveryNoteItem::where('d_no',$d_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0]);
+
+        }
+
         $r_in = RejectionIn::where('r_in_no',$id)->first();
 
         $r_in->cancel_status = 1;
@@ -2180,6 +2204,36 @@ echo "<pre>"; print_r($data); exit;
 
     public function retrieve($id)
     {
+
+        $rejection_in_items = RejectionInItem::where('r_in_no',$id)->where('active',1)->get();
+        $rejection_ins = RejectionInItem::where('r_in_no',$id)->where('active',1)->first();
+
+        foreach ($rejection_in_items as $key => $value) 
+        {
+          $rejected_qty[] = $value->rejected_qty;
+        }
+
+        $s_no = $rejection_outs->s_no;
+        $d_no = $rejection_outs->d_no;
+
+        $sale_entry_item = SaleEntryItem::where('s_no',$s_no)->get();
+
+        foreach ($sale_entry_item as $key => $value) {
+            $qty = $value->remaining_qty - $rejected_qty[$key];
+            $item_id = $value->item_id;
+            SaleEntryItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => $rejected_qty[$key]]);
+
+        }
+
+        $delivery_note_item = DeliveryNoteItem::where('d_no',$d_no)->get();
+
+        foreach ($delivery_note_item as $key => $value) {
+            $qty = $value->remaining_qty - $rejected_qty[$key];
+            $item_id = $value->item_id;
+            DeliveryNoteItem::where('d_no',$d_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => $rejected_qty[$key]]);
+
+        }
+
         $r_in = RejectionIn::where('r_in_no',$id)->first();
 
         $r_in->cancel_status = 0;
