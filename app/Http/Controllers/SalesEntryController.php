@@ -279,6 +279,7 @@ class SalesEntryController extends Controller
             $sale_entry_items->d_date = $request->d_date;
             $sale_entry_items->item_sno = $request->invoice_sno[$i];
             $sale_entry_items->item_id = $request->item_code[$i];
+            $sale_entry_items->actual_item_id = $request->item_code[$i];
             $sale_entry_items->mrp = $request->mrp[$i];
             $sale_entry_items->gst = $request->tax_rate[$i];
             $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];

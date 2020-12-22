@@ -1887,7 +1887,8 @@ $result=[];
 
 
             $item_data = SaleEntryItem::where('item_id',$value->item_id)
-                                    ->orderBy('s_date','DESC')
+                                    ->where('active',1)
+                                    ->orderBy('updated_at','DESC')
                                     ->first();
 
             $amount = $item_data->rejected_qty * $item_data->rate_exclusive_tax;

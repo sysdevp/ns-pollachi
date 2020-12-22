@@ -1513,7 +1513,6 @@ $(document).on("click",".update_items",function(){
               $(".total_net_price").html(parseFloat(to_html_total_net));
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
-              individual_expense();
               overall_discounts();
               roundoff_cal();
 
