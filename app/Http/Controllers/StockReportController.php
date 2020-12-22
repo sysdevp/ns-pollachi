@@ -29,16 +29,22 @@ class StockReportController extends Controller
         $array_details = [];
         foreach ($location as $key => $l_value) 
         {
-            $sale_entry_details = PurchaseEntryItem::leftjoin('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+        $sale_entry_details = PurchaseEntryItem::leftjoin('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
         ->where('purchase_entry_items.active',1)
         ->groupBy('purchase_entries.location','purchase_entry_items.item_id')
         ->select('purchase_entries.location','purchase_entry_items.item_id');
+
+        $receipt_note_entry_details = ReceiptNoteItem::leftjoin('receipt_notes','receipt_note_items.rn_no','=','receipt_notes.rn_no')
+        ->where('receipt_note_items.active',1)
+        ->groupBy('receipt_notes.location','receipt_note_items.item_id')
+        ->select('receipt_notes.location','receipt_note_items.item_id');
 
          $purchase_entry_details = SaleEntryItem::leftjoin('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
         ->where('sale_entry_items.active',1)
         ->groupBy('sale_entries.location','sale_entry_items.item_id')
         ->select('sale_entries.location','sale_entry_items.item_id')
         ->union($sale_entry_details)
+        ->union($receipt_note_entry_details)
         ->get();
 
                                               
