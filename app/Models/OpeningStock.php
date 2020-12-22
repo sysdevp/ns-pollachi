@@ -10,4 +10,9 @@ class OpeningStock extends Model
     {
         return $this->belongsTo(Item::class, 'id', 'item_id');
     }
+
+    public function locations()
+    {
+    	return $this->belongsTo(Location::class, 'location', 'id');
+    }
 }
