@@ -294,11 +294,14 @@ class SalesEntryController extends Controller
             $sale_entry_items->discount = $request->discount[$i];
             $sale_entry_items->overall_disc = $request->overall_disc[$i];
             $sale_entry_items->expenses = $request->expenses[$i];
-
             $sale_entry_items->save();
 
-
-             $item_name1 = $request->item_name1[$i];
+             $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
+             if($item_name1==0){
+            $item_name1 = $request->item_code[$i];
+             } else {
+            $item_name1 = $item_name1;
+             }
              if($item_name1 != $request->item_code[$i]){
              $stock_change = new StockChange();
              $stock_change->location_id = $request->location;
