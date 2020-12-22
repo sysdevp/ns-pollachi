@@ -431,10 +431,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           
                           <div class="col-sm-12">
                             <div class="input-group">
-                              <div class="input-group-prepend">
+                              <!-- <div class="input-group-prepend">
                                 <select class="form-control uom_exclusive" name="uom_exclusive" onchange="uom_details_exclusive()">
                                 </select>
-                              </div>
+                              </div> -->
                               <input type="number" class="form-control exclusive_rate" id="exclusive" placeholder="Exclusive Tax" oninput="calc_exclusive()" name="exclusive" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" aria-label="Text input with dropdown button" value="">
 
                             </div>
@@ -450,10 +450,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           
                           <div class="col-sm-12">
                             <div class="input-group">
-                              <div class="input-group-prepend">
+                              <!-- <div class="input-group-prepend">
                                 <select class="form-control  uom_inclusive" name="uom_inclusive" onchange="uom_details_inclusive()">
                                 </select>
-                              </div>
+                              </div> -->
                               <input type="number" class="form-control inclusive_rate" id="inclusive" placeholder="Inclusive Tax" oninput="calc_inclusive()" name="inclusive" pattern="[0-9][0-9 . 0-9]{0,100}" aria-label="Text input with dropdown button" title="Numbers Only" value="">
 
                             </div>
@@ -1513,7 +1513,6 @@ $(document).on("click",".update_items",function(){
               $(".total_net_price").html(parseFloat(to_html_total_net));
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
-              individual_expense();
               overall_discounts();
               roundoff_cal();
 
