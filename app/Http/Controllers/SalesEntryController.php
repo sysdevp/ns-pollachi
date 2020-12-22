@@ -298,7 +298,7 @@ class SalesEntryController extends Controller
             $sale_entry_items->save();
 
              $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
-             if($item_name1==0){
+             if($item_name1==0){ 
             $item_name1 = $request->item_code[$i];
              } else {
             $item_name1 = $item_name1;

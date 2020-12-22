@@ -32,19 +32,23 @@ class StockReportController extends Controller
         {
         $sale_entry_details = PurchaseEntryItem::leftjoin('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
         ->where('purchase_entry_items.active',1)
+        ->where('purchase_entries.location','=',$l_value->id)
         ->groupBy('purchase_entries.location','purchase_entry_items.item_id')
         ->select('purchase_entries.location','purchase_entry_items.item_id');
 
         $receipt_note_entry_details = ReceiptNoteItem::leftjoin('receipt_notes','receipt_note_items.rn_no','=','receipt_notes.rn_no')
         ->where('receipt_note_items.active',1)
+        ->where('receipt_notes.location','=',$l_value->id)
         ->groupBy('receipt_notes.location','receipt_note_items.item_id')
         ->select('receipt_notes.location','receipt_note_items.item_id');
 
         $item_opening= OpeningStock::groupBy('location','item_id')
+        ->where('location','=',$l_value->id)
         ->select('location','item_id');
 
          $purchase_entry_details = SaleEntryItem::leftjoin('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
         ->where('sale_entry_items.active',1)
+        ->where('sale_entries.location','=',$l_value->id)
         ->groupBy('sale_entries.location','sale_entry_items.item_id')
         ->select('sale_entries.location','sale_entry_items.item_id')
         ->union($sale_entry_details)
