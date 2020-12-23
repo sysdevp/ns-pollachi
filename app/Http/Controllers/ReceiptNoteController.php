@@ -22,6 +22,7 @@ use App\Models\AccountHead;
 use Carbon\Carbon;
 use App\Models\ReceiptNote; 
 use App\Models\ReceiptNoteItem;
+use App\Models\ReceiptNoteBlackItem;
 use App\Models\ReceiptNoteTax;
 use App\Models\ReceiptNoteExpense;
 use App\Models\Purchase_Order;
@@ -267,33 +268,71 @@ class ReceiptNoteController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $receipt_note_items = new ReceiptNoteItem();
 
-            $receipt_note_items->rn_no = $voucher_no;
-            $receipt_note_items->rn_date = $voucher_date;
-            $receipt_note_items->po_no = $request->po_no;
-            $receipt_note_items->po_date = $request->po_date;
-            $receipt_note_items->r_out_no = $request->r_out_no;
-            $receipt_note_items->r_out_date = $request->r_out_date;
-            $receipt_note_items->estimation_no = $request->p_estimation_no;
-            $receipt_note_items->estimation_date = $request->p_estimation_date;
-            $receipt_note_items->item_sno = $request->invoice_sno[$i];
-            $receipt_note_items->item_id = $request->item_code[$i];
-            $receipt_note_items->mrp = $request->mrp[$i];
-            $receipt_note_items->gst = $request->tax_rate[$i];
-            $receipt_note_items->rate_exclusive_tax = $request->exclusive[$i];
-            $receipt_note_items->rate_inclusive_tax = $request->inclusive[$i];
-            $receipt_note_items->qty = $request->quantity[$i];
-            $receipt_note_items->remaining_qty = $request->quantity[$i];
-            $receipt_note_items->rejected_qty = 0;
-            $receipt_note_items->debited_qty = 0;
-            // $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
-            $receipt_note_items->uom_id = $request->uom[$i];
-            $receipt_note_items->discount = $request->discount[$i];
-            $receipt_note_items->overall_disc = $request->overall_disc[$i];
-            $receipt_note_items->expenses = $request->expenses[$i];
+            if($request->black_or_white[$i] == 1)
+            {
+                $receipt_note_items = new ReceiptNoteItem();
 
-            $receipt_note_items->save();
+                $receipt_note_items->rn_no = $voucher_no;
+                $receipt_note_items->rn_date = $voucher_date;
+                $receipt_note_items->po_no = $request->po_no;
+                $receipt_note_items->po_date = $request->po_date;
+                $receipt_note_items->r_out_no = $request->r_out_no;
+                $receipt_note_items->r_out_date = $request->r_out_date;
+                $receipt_note_items->estimation_no = $request->p_estimation_no;
+                $receipt_note_items->estimation_date = $request->p_estimation_date;
+                $receipt_note_items->item_sno = $request->invoice_sno[$i];
+                $receipt_note_items->item_id = $request->item_code[$i];
+                $receipt_note_items->mrp = $request->mrp[$i];
+                $receipt_note_items->gst = $request->tax_rate[$i];
+                $receipt_note_items->rate_exclusive_tax = $request->exclusive[$i];
+                $receipt_note_items->rate_inclusive_tax = $request->inclusive[$i];
+                $receipt_note_items->qty = $request->quantity[$i];
+                $receipt_note_items->remaining_qty = $request->quantity[$i];
+                $receipt_note_items->rejected_qty = 0;
+                $receipt_note_items->debited_qty = 0;
+                // $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $receipt_note_items->uom_id = $request->uom[$i];
+                $receipt_note_items->discount = $request->discount[$i];
+                $receipt_note_items->overall_disc = $request->overall_disc[$i];
+                $receipt_note_items->expenses = $request->expenses[$i];
+                $receipt_note_items->b_or_w = $request->black_or_white[$i];
+
+                $receipt_note_items->save();
+
+            }
+            else
+            {
+                $receipt_note_black_items = new ReceiptNoteBlackItem();
+
+                $receipt_note_black_items->rn_no = $voucher_no;
+                $receipt_note_black_items->rn_date = $voucher_date;
+                $receipt_note_black_items->po_no = $request->po_no;
+                $receipt_note_black_items->po_date = $request->po_date;
+                $receipt_note_black_items->r_out_no = $request->r_out_no;
+                $receipt_note_black_items->r_out_date = $request->r_out_date;
+                $receipt_note_black_items->estimation_no = $request->p_estimation_no;
+                $receipt_note_black_items->estimation_date = $request->p_estimation_date;
+                $receipt_note_black_items->item_sno = $request->invoice_sno[$i];
+                $receipt_note_black_items->item_id = $request->item_code[$i];
+                $receipt_note_black_items->mrp = $request->mrp[$i];
+                $receipt_note_black_items->gst = $request->tax_rate[$i];
+                $receipt_note_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $receipt_note_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $receipt_note_black_items->qty = $request->quantity[$i];
+                $receipt_note_black_items->remaining_qty = $request->quantity[$i];
+                $receipt_note_black_items->rejected_qty = 0;
+                $receipt_note_black_items->debited_qty = 0;
+                // $receipt_note_black_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $receipt_note_black_items->uom_id = $request->uom[$i];
+                $receipt_note_black_items->discount = $request->discount[$i];
+                $receipt_note_black_items->overall_disc = $request->overall_disc[$i];
+                $receipt_note_black_items->expenses = $request->expenses[$i];
+                $receipt_note_black_items->b_or_w = $request->black_or_white[$i];
+
+                $receipt_note_black_items->save();
+            }
+            
         }
          
 
@@ -554,7 +593,10 @@ class ReceiptNoteController extends Controller
         $location = Location::all();
 
         $receipt_note = ReceiptNote::where('rn_no',$id)->first();
-        $receipt_note_items = ReceiptNoteItem::where('rn_no',$id)->get();
+        $receipt_note_black_items = ReceiptNoteBlackItem::where('rn_no',$id);
+        $receipt_note_items = ReceiptNoteItem::where('rn_no',$id)
+                                ->union($receipt_note_black_items)
+                                ->get();
         $receipt_note_expense = ReceiptNoteExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteTax::where('rn_no',$id)->get();
 
@@ -674,8 +716,12 @@ class ReceiptNoteController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
+            $item_data_black = ReceiptNoteBlackItem::where('item_id',$value->item_id)
+                                        ->orderBy('updated_at','DESC');
+
             $item_data = ReceiptNoteItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
+                                    ->union($item_data_black)
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -690,7 +736,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorder','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location'));
+        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location'));
     }
 
     /**
@@ -710,6 +756,9 @@ class ReceiptNoteController extends Controller
 
         $receipt_note_item_data = ReceiptNoteItem::where('rn_no',$id);
         $receipt_note_item_data->delete();
+
+        $receipt_note_black_item_data = ReceiptNoteBlackItem::where('rn_no',$id);
+        $receipt_note_black_item_data->delete();
 
         $receipt_note_expense_data = ReceiptNoteExpense::where('rn_no',$id);
         $receipt_note_expense_data->delete();
@@ -769,33 +818,70 @@ class ReceiptNoteController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $receipt_note_items = new ReceiptNoteItem();
+            if($request->black_or_white[$i] == 1)
+            {
+                $receipt_note_items = new ReceiptNoteItem();
 
-            $receipt_note_items->rn_no = $voucher_no;
-            $receipt_note_items->rn_date = $voucher_date;
-            $receipt_note_items->po_no = $request->po_no;
-            $receipt_note_items->po_date = $request->po_date;
-            $receipt_note_items->r_out_no = $request->r_out_no;
-            $receipt_note_items->r_out_date = $request->r_out_date;
-            $receipt_note_items->estimation_no = $request->p_estimation_no;
-            $receipt_note_items->estimation_date = $request->p_estimation_date;
-            $receipt_note_items->item_sno = $request->invoice_sno[$i];
-            $receipt_note_items->item_id = $request->item_code[$i];
-            $receipt_note_items->mrp = $request->mrp[$i];
-            $receipt_note_items->gst = $request->tax_rate[$i];
-            $receipt_note_items->rate_exclusive_tax = $request->exclusive[$i];
-            $receipt_note_items->rate_inclusive_tax = $request->inclusive[$i];
-            $receipt_note_items->qty = $request->quantity[$i];
-            $receipt_note_items->remaining_qty = $request->quantity[$i];
-            $receipt_note_items->rejected_qty = 0;
-            $receipt_note_items->debited_qty = 0;
-            // $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
-            $receipt_note_items->uom_id = $request->uom[$i];
-            $receipt_note_items->discount = $request->discount[$i];
-            $receipt_note_items->overall_disc = $request->overall_disc[$i];
-            $receipt_note_items->expenses = $request->expenses[$i];
+                $receipt_note_items->rn_no = $voucher_no;
+                $receipt_note_items->rn_date = $voucher_date;
+                $receipt_note_items->po_no = $request->po_no;
+                $receipt_note_items->po_date = $request->po_date;
+                $receipt_note_items->r_out_no = $request->r_out_no;
+                $receipt_note_items->r_out_date = $request->r_out_date;
+                $receipt_note_items->estimation_no = $request->p_estimation_no;
+                $receipt_note_items->estimation_date = $request->p_estimation_date;
+                $receipt_note_items->item_sno = $request->invoice_sno[$i];
+                $receipt_note_items->item_id = $request->item_code[$i];
+                $receipt_note_items->mrp = $request->mrp[$i];
+                $receipt_note_items->gst = $request->tax_rate[$i];
+                $receipt_note_items->rate_exclusive_tax = $request->exclusive[$i];
+                $receipt_note_items->rate_inclusive_tax = $request->inclusive[$i];
+                $receipt_note_items->qty = $request->quantity[$i];
+                $receipt_note_items->remaining_qty = $request->quantity[$i];
+                $receipt_note_items->rejected_qty = 0;
+                $receipt_note_items->debited_qty = 0;
+                // $receipt_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $receipt_note_items->uom_id = $request->uom[$i];
+                $receipt_note_items->discount = $request->discount[$i];
+                $receipt_note_items->overall_disc = $request->overall_disc[$i];
+                $receipt_note_items->expenses = $request->expenses[$i];
+                $receipt_note_items->b_or_w = $request->black_or_white[$i];
 
-            $receipt_note_items->save();
+                $receipt_note_items->save();
+
+            }
+            else
+            {
+                $receipt_note_black_items = new ReceiptNoteBlackItem();
+
+                $receipt_note_black_items->rn_no = $voucher_no;
+                $receipt_note_black_items->rn_date = $voucher_date;
+                $receipt_note_black_items->po_no = $request->po_no;
+                $receipt_note_black_items->po_date = $request->po_date;
+                $receipt_note_black_items->r_out_no = $request->r_out_no;
+                $receipt_note_black_items->r_out_date = $request->r_out_date;
+                $receipt_note_black_items->estimation_no = $request->p_estimation_no;
+                $receipt_note_black_items->estimation_date = $request->p_estimation_date;
+                $receipt_note_black_items->item_sno = $request->invoice_sno[$i];
+                $receipt_note_black_items->item_id = $request->item_code[$i];
+                $receipt_note_black_items->mrp = $request->mrp[$i];
+                $receipt_note_black_items->gst = $request->tax_rate[$i];
+                $receipt_note_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $receipt_note_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $receipt_note_black_items->qty = $request->quantity[$i];
+                $receipt_note_black_items->remaining_qty = $request->quantity[$i];
+                $receipt_note_black_items->rejected_qty = 0;
+                $receipt_note_black_items->debited_qty = 0;
+                // $receipt_note_black_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $receipt_note_black_items->uom_id = $request->uom[$i];
+                $receipt_note_black_items->discount = $request->discount[$i];
+                $receipt_note_black_items->overall_disc = $request->overall_disc[$i];
+                $receipt_note_black_items->expenses = $request->expenses[$i];
+                $receipt_note_black_items->b_or_w = $request->black_or_white[$i];
+
+                $receipt_note_black_items->save();
+            }
+
         }
          
 
@@ -924,6 +1010,7 @@ class ReceiptNoteController extends Controller
     {
         $receipt_note_data = ReceiptNote::where('rn_no',$id);
         $receipt_note_item_data = ReceiptNoteItem::where('rn_no',$id);
+        $receipt_note_black_item_data = ReceiptNoteBlackItem::where('rn_no',$id);
         $receipt_note_expense_data = ReceiptNoteExpense::where('rn_no',$id);
         $receipt_note_tax_data = ReceiptNoteTax::where('rn_no',$id);
         
@@ -934,6 +1021,11 @@ class ReceiptNoteController extends Controller
          if($receipt_note_item_data)
          {
             $receipt_note_item_data->delete();
+         }
+
+         if($receipt_note_black_item_data)
+         {
+            $receipt_note_black_item_data->delete();
          }
 
          if($receipt_note_expense_data)
