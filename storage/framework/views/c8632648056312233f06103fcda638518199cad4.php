@@ -1260,7 +1260,7 @@ $(document).on("click",".edit_items",function(){
     $('.discount_percentage').val('');
   $('.discount_rs').val('');
   }
-   // item_codes(item_code_id);
+   item_codes(item_code_id);
 
 });
 
@@ -2515,6 +2515,7 @@ var q=calculate_total_discount();
 $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
+individual_expense();
 overall_discounts();
 roundoff_cal();
 
@@ -2605,6 +2606,7 @@ var q=calculate_total_discount();
 $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
+individual_expense();
 overall_discounts();
 roundoff_cal();
 
@@ -2691,6 +2693,7 @@ var q=calculate_total_discount();
 $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
+individual_expense();
 overall_discounts();
 roundoff_cal();
 

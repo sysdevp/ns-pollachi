@@ -977,6 +977,8 @@ Route::resource('payment_request','PaymentRequestController',['middleware' => ['
 /*Payment Process Start Here*/
 
 Route::resource('payment_process','PaymentProcessController',['middleware' => ['auth']]);
+Route::post('payment_process/purchase_entry_det/', 'PaymentProcessController@purchase_entry_det');
+Route::post('payment_process/advance_entry_det/', 'PaymentProcessController@advance_entry_det');
 
 /*Payment Process End Here*/
 
@@ -989,13 +991,16 @@ Route::resource('receipt_request','ReceiptRequestController',['middleware' => ['
 /*Receipt Process Start Here*/
 
 Route::resource('receipt_process','ReceiptProcessController',['middleware' => ['auth']]);
+Route::post('receipt_process/sale_entry_det/', 'ReceiptProcessController@sale_entry_det');
+Route::post('receipt_process/advance_entry_det/', 'ReceiptProcessController@advance_entry_det');
+
 
 /*Receipt Process End Here*/
 
 /*Advance Settlement For Supplier Start Here*/
 
 Route::resource('advance_settlement_supplier','AdvanceSettlementSupplierController',['middleware' => ['auth']]);
-Route::get('advance_settlement_supplier/delete/{id}', 'EstimationController@destroy');
+Route::get('advance_settlement_supplier/delete/{id}', 'AdvanceSettlementSupplierController@destroy');
 
 
 /*Advance Settlement For Supplier End Here*/
@@ -1003,6 +1008,8 @@ Route::get('advance_settlement_supplier/delete/{id}', 'EstimationController@dest
 /*Advance Settlement For Supplier Start Here*/
 
 Route::resource('advance_settlement_customer','AdvanceSettlementCustomerController',['middleware' => ['auth']]);
+Route::get('advance_settlement_customer/delete/{id}', 'AdvanceSettlementCustomerController@destroy');
+
 
 /*Advance Settlement For Supplier End Here*/
 

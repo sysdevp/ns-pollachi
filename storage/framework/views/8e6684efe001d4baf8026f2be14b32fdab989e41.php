@@ -379,8 +379,8 @@
                         <ul>
                             <li class="dropdown-header">Advance Settlement</li>
                            
-                           <li><a href="<?php echo e(route('advance_settlement_supplier.create')); ?>">Advance Settlement For Supplier</a></li>
-                            <li><a href="<?php echo e(route('advance_settlement_customer.create')); ?>">Advance Settlement For Customer</a></li>
+                           <li><a href="<?php echo e(route('advance_settlement_supplier.create')); ?>">Advance to Suppliers</a></li>
+                            <li><a href="<?php echo e(route('advance_settlement_customer.create')); ?>">Advance from Customers</a></li>
                             
                         </ul>
                     </li>
