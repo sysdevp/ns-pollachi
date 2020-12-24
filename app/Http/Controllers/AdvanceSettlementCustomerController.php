@@ -112,6 +112,12 @@ class AdvanceSettlementCustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $advance = AdvanceSettlementCustomer::find($id);
+        if ($advance->delete()) {
+            return Redirect::back()->with('success', 'Deleted successfully');
+         }else{
+            return Redirect::back()->with('failure', 'Something Went Wrong..!');
+        }
     }
 }

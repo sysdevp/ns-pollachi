@@ -115,7 +115,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                     <div class="col-md-2">
                     <label style="font-family: Times new roman;">Company Location</label><br>
-                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location">
+                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location" required="">
                            <option value="">Choose Location</option>
                            <?php $__currentLoopData = $location; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $locations): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <option value="<?php echo e($locations->id); ?>"><?php echo e($locations->name); ?></option>
