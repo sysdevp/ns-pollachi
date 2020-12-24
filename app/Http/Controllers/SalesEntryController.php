@@ -26,11 +26,13 @@ use App\Models\PurchaseEntryItem;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderTax;
 use App\Models\SaleOrderItem;
+use App\Models\SaleOrderBlackItem;
 use App\Models\SaleOrderExpense;
 use App\Models\SaleEntry;
 use App\Models\SalesMan;
 use App\Models\SaleEntryTax;
 use App\Models\SaleEntryItem;
+use App\Models\SaleEntryBlackItem;
 use App\Models\SaleEntryExpense;
 use App\Models\SaleEstimation;
 use App\Models\SaleEstimationTax;
@@ -40,6 +42,7 @@ use App\Models\StockChange;
 use App\Models\DeliveryNote;
 use App\Models\DeliveryNoteTax;
 use App\Models\DeliveryNoteItem;
+use App\Models\DeliveryNoteBlackItem;
 use App\Models\DeliveryNoteExpense;
 use App\Models\RejectionIn;
 use App\Models\RejectionInItem;
@@ -267,64 +270,108 @@ class SalesEntryController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $sale_entry_items = new SaleEntryItem();
 
-            $sale_entry_items->s_no = $voucher_no;
-            $sale_entry_items->s_date = $voucher_date;
-            $sale_entry_items->so_no = $request->so_no;
-            $sale_entry_items->so_date = $request->so_date;
-            $sale_entry_items->sale_estimation_no = $request->sale_estimation_no;
-            $sale_entry_items->sale_estimation_date = $request->sale_estimation_date;
-            $sale_entry_items->d_no = $request->d_no;
-            $sale_entry_items->d_date = $request->d_date;
-            $sale_entry_items->item_sno = $request->invoice_sno[$i];
-            $sale_entry_items->item_id = $request->item_code[$i];
-            $sale_entry_items->actual_item_id = $request->item_code[$i];
-            $sale_entry_items->mrp = $request->mrp[$i];
-            $sale_entry_items->gst = $request->tax_rate[$i];
-            $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];
-            $sale_entry_items->rate_inclusive_tax = $request->inclusive[$i];
-            $sale_entry_items->qty = $request->quantity[$i];
-            $sale_entry_items->actual_qty = $request->quantity[$i];
-            $sale_entry_items->remaining_qty = $request->quantity[$i];
-            $sale_entry_items->remaining_after_credit = $request->quantity[$i];
-            $sale_entry_items->rejected_qty = 0;
-            $sale_entry_items->credited_qty = 0;
-            $sale_entry_items->r_in_credited_qty = 0;
-            $sale_entry_items->uom_id = $request->uom[$i];
-            $sale_entry_items->discount = $request->discount[$i];
-            $sale_entry_items->overall_disc = $request->overall_disc[$i];
-            $sale_entry_items->expenses = $request->expenses[$i];
-            $sale_entry_items->save();
+            if($request->black_or_white[$i] == 1)
+            {
 
-             $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
-             if($item_name1==0){ 
-            $item_name1 = $request->item_code[$i];
-             } else {
-            $item_name1 = $item_name1;
-             }
-             if($item_name1 != $request->item_code[$i]){
-             $stock_change = new StockChange();
-             $stock_change->location_id = $request->location;
-             $serial_id = StockChange::max('serial_id');
-             $stock_change->serial_id = $serial_id+1;
-             $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
-             $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
-             $stock_change->quantity = -1;
-             $stock_change->status = 1;
-             $stock_change->item_id = $item_name1;
-             $stock_change->save();
+                $sale_entry_items = new SaleEntryItem();
 
-             $stock_change_new = new StockChange();
-             $stock_change_new->location_id = $request->location;
-             $stock_change_new->serial_id = $serial_id+1;
-             $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
-             $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
-             $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
-             $stock_change_new->status = 1;
-             $stock_change_new->item_id = $request->item_code[$i];
-             $stock_change_new->save();
-             }
+                $sale_entry_items->s_no = $voucher_no;
+                $sale_entry_items->s_date = $voucher_date;
+                $sale_entry_items->so_no = $request->so_no;
+                $sale_entry_items->so_date = $request->so_date;
+                $sale_entry_items->sale_estimation_no = $request->sale_estimation_no;
+                $sale_entry_items->sale_estimation_date = $request->sale_estimation_date;
+                $sale_entry_items->d_no = $request->d_no;
+                $sale_entry_items->d_date = $request->d_date;
+                $sale_entry_items->item_sno = $request->invoice_sno[$i];
+                $sale_entry_items->item_id = $request->item_code[$i];
+                $sale_entry_items->actual_item_id = $request->item_code[$i];
+                $sale_entry_items->mrp = $request->mrp[$i];
+                $sale_entry_items->gst = $request->tax_rate[$i];
+                $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];
+                $sale_entry_items->rate_inclusive_tax = $request->inclusive[$i];
+                $sale_entry_items->qty = $request->quantity[$i];
+                $sale_entry_items->actual_qty = $request->quantity[$i];
+                $sale_entry_items->remaining_qty = $request->quantity[$i];
+                $sale_entry_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_items->rejected_qty = 0;
+                $sale_entry_items->credited_qty = 0;
+                $sale_entry_items->r_in_credited_qty = 0;
+                $sale_entry_items->uom_id = $request->uom[$i];
+                $sale_entry_items->discount = $request->discount[$i];
+                $sale_entry_items->overall_disc = $request->overall_disc[$i];
+                $sale_entry_items->expenses = $request->expenses[$i];
+                $sale_entry_items->b_or_w = $request->black_or_white[$i];
+                $sale_entry_items->save();
+
+                 $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
+                 if($item_name1==0){ 
+                $item_name1 = $request->item_code[$i];
+                 } else {
+                $item_name1 = $item_name1;
+                 }
+                 if($item_name1 != $request->item_code[$i]){
+                 $stock_change = new StockChange();
+                 $stock_change->location_id = $request->location;
+                 $serial_id = StockChange::max('serial_id');
+                 $stock_change->serial_id = $serial_id+1;
+                 $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+                 $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+                 $stock_change->quantity = -1;
+                 $stock_change->status = 1;
+                 $stock_change->item_id = $item_name1;
+                 $stock_change->save();
+
+                 $stock_change_new = new StockChange();
+                 $stock_change_new->location_id = $request->location;
+                 $stock_change_new->serial_id = $serial_id+1;
+                 $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+                 $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+                 $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+                 $stock_change_new->status = 1;
+                 $stock_change_new->item_id = $request->item_code[$i];
+                 $stock_change_new->save();
+                 }
+
+            }
+
+            else
+            {
+
+                $sale_entry_black_items = new SaleEntryBlackItem();
+
+                $sale_entry_black_items->s_no = $voucher_no;
+                $sale_entry_black_items->s_date = $voucher_date;
+                $sale_entry_black_items->so_no = $request->so_no;
+                $sale_entry_black_items->so_date = $request->so_date;
+                $sale_entry_black_items->sale_estimation_no = $request->sale_estimation_no;
+                $sale_entry_black_items->sale_estimation_date = $request->sale_estimation_date;
+                $sale_entry_black_items->d_no = $request->d_no;
+                $sale_entry_black_items->d_date = $request->d_date;
+                $sale_entry_black_items->item_sno = $request->invoice_sno[$i];
+                $sale_entry_black_items->item_id = $request->item_code[$i];
+                $sale_entry_black_items->actual_item_id = $request->item_code[$i];
+                $sale_entry_black_items->mrp = $request->mrp[$i];
+                $sale_entry_black_items->gst = $request->tax_rate[$i];
+                $sale_entry_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $sale_entry_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $sale_entry_black_items->qty = $request->quantity[$i];
+                $sale_entry_black_items->actual_qty = $request->quantity[$i];
+                $sale_entry_black_items->remaining_qty = $request->quantity[$i];
+                $sale_entry_black_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_black_items->rejected_qty = 0;
+                $sale_entry_black_items->credited_qty = 0;
+                $sale_entry_black_items->r_in_credited_qty = 0;
+                $sale_entry_black_items->uom_id = $request->uom[$i];
+                $sale_entry_black_items->discount = $request->discount[$i];
+                $sale_entry_black_items->overall_disc = $request->overall_disc[$i];
+                $sale_entry_black_items->expenses = $request->expenses[$i];
+                $sale_entry_black_items->b_or_w = $request->black_or_white[$i];
+                $sale_entry_black_items->save();
+
+            }
+            
         }
          
 
@@ -382,7 +429,10 @@ class SalesEntryController extends Controller
                                  ->where('address_table','=','Cus')
                                  ->first();
 
+        $sale_entry_black_item_print_data = SaleEntryBlackItem::where('s_no',$sale_entry_no);                                    
+
         $sale_entry_item_print_data = SaleEntryItem::where('s_no',$sale_entry_no)
+                                                    ->union($sale_entry_black_item_print_data)
                                                     ->get();
 
         $sale_entry_expense_print_data = SaleEntryExpense::where('s_no',$sale_entry_no)->get(); 
@@ -587,7 +637,10 @@ class SalesEntryController extends Controller
         $location = Location::all();
 
         $sale_entry = SaleEntry::where('s_no',$id)->first();
-        $sale_entry_items = SaleEntryItem::where('s_no',$id)->where('active',1)->get();
+        $sale_entry_black_items = SaleEntryBlackItem::where('s_no',$id);
+        $sale_entry_items = SaleEntryItem::where('s_no',$id)
+                                        ->union($sale_entry_black_items)
+                                        ->get();
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
 
@@ -676,9 +729,12 @@ class SalesEntryController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
+            $item_black_data = SaleEntryBlackItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC');
+
             $item_data = SaleEntryItem::where('item_id',$value->item_id)
-                                    ->where('active',1)
                                     ->orderBy('updated_at','DESC')
+                                    ->union($item_black_data)
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -713,6 +769,9 @@ class SalesEntryController extends Controller
 
         $sale_entry_item_data = SaleEntryItem::where('s_no',$id);
         $sale_entry_item_data->delete();
+
+        $sale_entry_black_item_data = SaleEntryBlackItem::where('s_no',$id);
+        $sale_entry_black_item_data->delete();
 
         $sale_entry_expense_data = SaleEntryExpense::where('s_no',$id);
         $sale_entry_expense_data->delete();
@@ -761,32 +820,107 @@ class SalesEntryController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $sale_entry_items = new SaleEntryItem();
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $sale_entry_items->s_no = $voucher_no;
-            $sale_entry_items->s_date = $voucher_date;
-            $sale_entry_items->so_no = $request->so_no;
-            $sale_entry_items->so_date = $request->so_date;
-            $sale_entry_items->sale_estimation_no = $request->sale_estimation_no;
-            $sale_entry_items->sale_estimation_date = $request->sale_estimation_date;
-            $sale_entry_items->d_no = $request->d_no;
-            $sale_entry_items->d_date = $request->d_date;
-            $sale_entry_items->item_sno = $request->invoice_sno[$i];
-            $sale_entry_items->item_id = $request->item_code[$i];
-            $sale_entry_items->mrp = $request->mrp[$i];
-            $sale_entry_items->gst = $request->tax_rate[$i];
-            $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];
-            $sale_entry_items->rate_inclusive_tax = $request->inclusive[$i];
-            $sale_entry_items->qty = $request->quantity[$i];
-            $sale_entry_items->actual_qty = $request->quantity[$i];
-            $sale_entry_items->remaining_qty = @$request->remaining_qty[$i];
-            $sale_entry_items->rejected_qty = @$request->rejected_item_qty[$i];
-            $sale_entry_items->uom_id = $request->uom[$i];
-            $sale_entry_items->discount = $request->discount[$i];
-            $sale_entry_items->overall_disc = $request->overall_disc[$i];
-            $sale_entry_items->expenses = $request->expenses[$i];
+                $sale_entry_items = new SaleEntryItem();
 
-            $sale_entry_items->save();
+                $sale_entry_items->s_no = $voucher_no;
+                $sale_entry_items->s_date = $voucher_date;
+                $sale_entry_items->so_no = $request->so_no;
+                $sale_entry_items->so_date = $request->so_date;
+                $sale_entry_items->sale_estimation_no = $request->sale_estimation_no;
+                $sale_entry_items->sale_estimation_date = $request->sale_estimation_date;
+                $sale_entry_items->d_no = $request->d_no;
+                $sale_entry_items->d_date = $request->d_date;
+                $sale_entry_items->item_sno = $request->invoice_sno[$i];
+                $sale_entry_items->item_id = $request->item_code[$i];
+                $sale_entry_items->actual_item_id = $request->item_code[$i];
+                $sale_entry_items->mrp = $request->mrp[$i];
+                $sale_entry_items->gst = $request->tax_rate[$i];
+                $sale_entry_items->rate_exclusive_tax = $request->exclusive[$i];
+                $sale_entry_items->rate_inclusive_tax = $request->inclusive[$i];
+                $sale_entry_items->qty = $request->quantity[$i];
+                $sale_entry_items->actual_qty = $request->quantity[$i];
+                $sale_entry_items->remaining_qty = $request->quantity[$i];
+                $sale_entry_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_items->rejected_qty = 0;
+                $sale_entry_items->credited_qty = 0;
+                $sale_entry_items->r_in_credited_qty = 0;
+                $sale_entry_items->uom_id = $request->uom[$i];
+                $sale_entry_items->discount = $request->discount[$i];
+                $sale_entry_items->overall_disc = $request->overall_disc[$i];
+                $sale_entry_items->expenses = $request->expenses[$i];
+                $sale_entry_items->b_or_w = $request->black_or_white[$i];
+                $sale_entry_items->save();
+
+                 $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
+                 if($item_name1==0){ 
+                $item_name1 = $request->item_code[$i];
+                 } else {
+                $item_name1 = $item_name1;
+                 }
+                 if($item_name1 != $request->item_code[$i]){
+                 $stock_change = new StockChange();
+                 $stock_change->location_id = $request->location;
+                 $serial_id = StockChange::max('serial_id');
+                 $stock_change->serial_id = $serial_id+1;
+                 $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+                 $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+                 $stock_change->quantity = -1;
+                 $stock_change->status = 1;
+                 $stock_change->item_id = $item_name1;
+                 $stock_change->save();
+
+                 $stock_change_new = new StockChange();
+                 $stock_change_new->location_id = $request->location;
+                 $stock_change_new->serial_id = $serial_id+1;
+                 $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+                 $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+                 $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+                 $stock_change_new->status = 1;
+                 $stock_change_new->item_id = $request->item_code[$i];
+                 $stock_change_new->save();
+                 }
+
+            }
+
+            else
+            {
+
+                $sale_entry_black_items = new SaleEntryBlackItem();
+
+                $sale_entry_black_items->s_no = $voucher_no;
+                $sale_entry_black_items->s_date = $voucher_date;
+                $sale_entry_black_items->so_no = $request->so_no;
+                $sale_entry_black_items->so_date = $request->so_date;
+                $sale_entry_black_items->sale_estimation_no = $request->sale_estimation_no;
+                $sale_entry_black_items->sale_estimation_date = $request->sale_estimation_date;
+                $sale_entry_black_items->d_no = $request->d_no;
+                $sale_entry_black_items->d_date = $request->d_date;
+                $sale_entry_black_items->item_sno = $request->invoice_sno[$i];
+                $sale_entry_black_items->item_id = $request->item_code[$i];
+                $sale_entry_black_items->actual_item_id = $request->item_code[$i];
+                $sale_entry_black_items->mrp = $request->mrp[$i];
+                $sale_entry_black_items->gst = $request->tax_rate[$i];
+                $sale_entry_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $sale_entry_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $sale_entry_black_items->qty = $request->quantity[$i];
+                $sale_entry_black_items->actual_qty = $request->quantity[$i];
+                $sale_entry_black_items->remaining_qty = $request->quantity[$i];
+                $sale_entry_black_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_black_items->rejected_qty = 0;
+                $sale_entry_black_items->credited_qty = 0;
+                $sale_entry_black_items->r_in_credited_qty = 0;
+                $sale_entry_black_items->uom_id = $request->uom[$i];
+                $sale_entry_black_items->discount = $request->discount[$i];
+                $sale_entry_black_items->overall_disc = $request->overall_disc[$i];
+                $sale_entry_black_items->expenses = $request->expenses[$i];
+                $sale_entry_black_items->b_or_w = $request->black_or_white[$i];
+                $sale_entry_black_items->save();
+
+            }
+
         }
          
 
@@ -844,7 +978,10 @@ class SalesEntryController extends Controller
                                  ->where('address_table','=','Cus')
                                  ->first();
 
+        $sale_entry_black_item_print_data = SaleEntryBlackItem::where('s_no',$sale_entry_no);
+
         $sale_entry_item_print_data = SaleEntryItem::where('s_no',$sale_entry_no)
+                                                    ->union($sale_entry_black_item_print_data)
                                                     ->get();
 
         $sale_entry_expense_print_data = SaleEntryExpense::where('s_no',$sale_entry_no)->get(); 
@@ -915,6 +1052,7 @@ class SalesEntryController extends Controller
     {
         $sale_entry_data = SaleEntry::where('s_no',$id);
         $sale_entry_item_data = SaleEntryItem::where('s_no',$id);
+        $sale_entry_black_item_data = SaleEntryBlackItem::where('s_no',$id);
         $sale_entry_expense_data = SaleEntryExpense::where('s_no',$id);
         $sale_entry_tax_data = SaleEntryTax::where('s_no',$id);
 
@@ -937,6 +1075,13 @@ class SalesEntryController extends Controller
             $sale_entry_item_data->delete();
             $rejection_in_item->delete();
             $credit_note_item->delete();
+         }
+
+         if($sale_entry_black_item_data)
+         {
+            $sale_entry_black_item_data->delete();
+            // $rejection_in_item->delete();
+            // $credit_note_item->delete();
          }
 
          if($sale_entry_expense_data)
