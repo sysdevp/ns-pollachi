@@ -21,6 +21,7 @@ use App\Models\AccountHead;
 use App\Models\Location;
 use Carbon\Carbon;
 use App\Models\Purchase_Order;
+use App\Models\PurchaseOrderBlackItem;
 use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseOrderExpense;
 use App\Models\PurchaseOrderTax;
@@ -188,28 +189,62 @@ class PurchaseOrderController extends Controller
          $items_count = $request->counts;
          $expense_count = $request->expense_count;
 
+
          for($i=0;$i<$items_count;$i++)
 
         {
-            $purchaseorder_items = new PurchaseOrderItem();
 
-            $purchaseorder_items->po_no = $voucher_no;
-            $purchaseorder_items->po_date = $voucher_date;
-            $purchaseorder_items->estimation_no = $request->estimation_no;
-            $purchaseorder_items->estimation_date = $request->estimation_date;
-            $purchaseorder_items->item_sno = $request->invoice_sno[$i];
-            $purchaseorder_items->item_id = $request->item_code[$i];
-            $purchaseorder_items->mrp = $request->mrp[$i];
-            $purchaseorder_items->gst = $request->tax_rate[$i];
-            $purchaseorder_items->rate_exclusive_tax = $request->exclusive[$i];
-            $purchaseorder_items->rate_inclusive_tax = $request->inclusive[$i];
-            $purchaseorder_items->qty = $request->quantity[$i];
-            $purchaseorder_items->uom_id = $request->uom[$i];
-            $purchaseorder_items->discount = $request->discount[$i];
-            $purchaseorder_items->overall_disc = $request->overall_disc[$i];
-            $purchaseorder_items->expenses = $request->expenses[$i];
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $purchaseorder_items->save();
+                $purchaseorder_items = new PurchaseOrderItem();
+
+                $purchaseorder_items->po_no = $voucher_no;
+                $purchaseorder_items->po_date = $voucher_date;
+                $purchaseorder_items->estimation_no = $request->estimation_no;
+                $purchaseorder_items->estimation_date = $request->estimation_date;
+                $purchaseorder_items->item_sno = $request->invoice_sno[$i];
+                $purchaseorder_items->item_id = $request->item_code[$i];
+                $purchaseorder_items->mrp = $request->mrp[$i];
+                $purchaseorder_items->gst = $request->tax_rate[$i];
+                $purchaseorder_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchaseorder_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchaseorder_items->qty = $request->quantity[$i];
+                $purchaseorder_items->uom_id = $request->uom[$i];
+                $purchaseorder_items->discount = $request->discount[$i];
+                $purchaseorder_items->overall_disc = $request->overall_disc[$i];
+                $purchaseorder_items->expenses = $request->expenses[$i];
+                $purchaseorder_items->b_or_w = $request->black_or_white[$i];
+
+                $purchaseorder_items->save();
+
+            }
+            else
+            {
+
+                $purchaseorder_black_items = new PurchaseOrderBlackItem();
+
+                $purchaseorder_black_items->po_no = $voucher_no;
+                $purchaseorder_black_items->po_date = $voucher_date;
+                $purchaseorder_black_items->estimation_no = $request->estimation_no;
+                $purchaseorder_black_items->estimation_date = $request->estimation_date;
+                $purchaseorder_black_items->item_sno = $request->invoice_sno[$i];
+                $purchaseorder_black_items->item_id = $request->item_code[$i];
+                $purchaseorder_black_items->mrp = $request->mrp[$i];
+                $purchaseorder_black_items->gst = $request->tax_rate[$i];
+                $purchaseorder_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchaseorder_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchaseorder_black_items->qty = $request->quantity[$i];
+                $purchaseorder_black_items->uom_id = $request->uom[$i];
+                $purchaseorder_black_items->discount = $request->discount[$i];
+                $purchaseorder_black_items->overall_disc = $request->overall_disc[$i];
+                $purchaseorder_black_items->expenses = $request->expenses[$i];
+                $purchaseorder_black_items->b_or_w = $request->black_or_white[$i];
+
+                $purchaseorder_black_items->save();
+
+            }
+            
         }
          
 
@@ -462,9 +497,15 @@ class PurchaseOrderController extends Controller
         $location = Location::all();
 
         $purchaseorder = Purchase_Order::where('po_no',$id)->first();
-        $purchaseorder_items = PurchaseOrderItem::where('po_no',$id)->get();
+        $purchaseorder_black_items = PurchaseOrderBlackItem::where('po_no',$id);
+
+        $purchaseorder_items = PurchaseOrderItem::where('po_no',$id)
+                                ->union($purchaseorder_black_items)
+                                ->get();
         $purchaseorder_expense = PurchaseOrderExpense::where('po_no',$id)->get();
         $tax = PurchaseOrderTax::where('po_no',$id)->get();
+
+        // echo "<pre>"; print_r($purchaseorder_items); exit();
 
         $item_row_count = count($purchaseorder_items);
         $expense_row_count = count($purchaseorder_expense);
@@ -551,8 +592,12 @@ class PurchaseOrderController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
+            $item_data_black = PurchaseOrderBlackItem::where('item_id',$value->item_id)
+                                        ->orderBy('updated_at','DESC');
+
             $item_data = PurchaseOrderItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
+                                    ->union($item_data_black)
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -588,6 +633,9 @@ class PurchaseOrderController extends Controller
         $purchaseorder_item_data = PurchaseOrderItem::where('po_no',$id);
         $purchaseorder_item_data->delete();
 
+        $purchaseorder_black_item_data = PurchaseOrderBlackItem::where('po_no',$id);
+        $purchaseorder_black_item_data->delete();
+
         $purchaseorder_expense_data = PurchaseOrderExpense::where('po_no',$id);
         $purchaseorder_expense_data->delete();
 
@@ -622,25 +670,57 @@ class PurchaseOrderController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $purchaseorder_items = new PurchaseOrderItem();
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $purchaseorder_items->po_no = $voucher_no;
-            $purchaseorder_items->po_date = $voucher_date;
-            $purchaseorder_items->estimation_no = $request->estimation_no;
-            $purchaseorder_items->estimation_date = $request->estimation_date;
-            $purchaseorder_items->item_sno = $request->invoice_sno[$i];
-            $purchaseorder_items->item_id = $request->item_code[$i];
-            $purchaseorder_items->mrp = $request->mrp[$i];
-            $purchaseorder_items->gst = $request->tax_rate[$i];
-            $purchaseorder_items->rate_exclusive_tax = $request->exclusive[$i];
-            $purchaseorder_items->rate_inclusive_tax = $request->inclusive[$i];
-            $purchaseorder_items->qty = $request->quantity[$i];
-            $purchaseorder_items->uom_id = $request->uom[$i];
-            $purchaseorder_items->discount = $request->discount[$i];
-            $purchaseorder_items->overall_disc = $request->overall_disc[$i];
-            $purchaseorder_items->expenses = $request->expenses[$i];
+                $purchaseorder_items = new PurchaseOrderItem();
 
-            $purchaseorder_items->save();
+                $purchaseorder_items->po_no = $voucher_no;
+                $purchaseorder_items->po_date = $voucher_date;
+                $purchaseorder_items->estimation_no = $request->estimation_no;
+                $purchaseorder_items->estimation_date = $request->estimation_date;
+                $purchaseorder_items->item_sno = $request->invoice_sno[$i];
+                $purchaseorder_items->item_id = $request->item_code[$i];
+                $purchaseorder_items->mrp = $request->mrp[$i];
+                $purchaseorder_items->gst = $request->tax_rate[$i];
+                $purchaseorder_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchaseorder_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchaseorder_items->qty = $request->quantity[$i];
+                $purchaseorder_items->uom_id = $request->uom[$i];
+                $purchaseorder_items->discount = $request->discount[$i];
+                $purchaseorder_items->overall_disc = $request->overall_disc[$i];
+                $purchaseorder_items->expenses = $request->expenses[$i];
+                $purchaseorder_items->b_or_w = $request->black_or_white[$i];
+
+                $purchaseorder_items->save();
+
+            }
+            else
+            {
+
+                $purchaseorder_black_items = new PurchaseOrderBlackItem();
+
+                $purchaseorder_black_items->po_no = $voucher_no;
+                $purchaseorder_black_items->po_date = $voucher_date;
+                $purchaseorder_black_items->estimation_no = $request->estimation_no;
+                $purchaseorder_black_items->estimation_date = $request->estimation_date;
+                $purchaseorder_black_items->item_sno = $request->invoice_sno[$i];
+                $purchaseorder_black_items->item_id = $request->item_code[$i];
+                $purchaseorder_black_items->mrp = $request->mrp[$i];
+                $purchaseorder_black_items->gst = $request->tax_rate[$i];
+                $purchaseorder_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchaseorder_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchaseorder_black_items->qty = $request->quantity[$i];
+                $purchaseorder_black_items->uom_id = $request->uom[$i];
+                $purchaseorder_black_items->discount = $request->discount[$i];
+                $purchaseorder_black_items->overall_disc = $request->overall_disc[$i];
+                $purchaseorder_black_items->expenses = $request->expenses[$i];
+                $purchaseorder_black_items->b_or_w = $request->black_or_white[$i];
+
+                $purchaseorder_black_items->save();
+
+            }
+
         }
          
 
@@ -765,6 +845,7 @@ class PurchaseOrderController extends Controller
     {
         $purchaseorder_data = Purchase_Order::where('po_no',$id);
         $purchaseorder_item_data = PurchaseOrderItem::where('po_no',$id);
+        $purchaseorder_black_item_data = PurchaseOrderBlackItem::where('po_no',$id);
         $purchaseorder_expense_data = PurchaseOrderExpense::where('po_no',$id);
         $purchaseorder_tax_data = PurchaseOrderTax::where('po_no',$id);
         
@@ -775,6 +856,11 @@ class PurchaseOrderController extends Controller
          if($purchaseorder_item_data)
          {
             $purchaseorder_item_data->delete();
+         }
+
+         if($purchaseorder_black_item_data)
+         {
+            $purchaseorder_black_item_data->delete();
          }
 
          if($purchaseorder_expense_data)

@@ -168,11 +168,10 @@ class ItemController extends Controller
                 }
             }
 
+            /* Store Barcode Details End Here  */
+
             $item_id = $item->id;
 
-
-
-            /* Store Barcode Details End Here  */
 
             /*Tax Details Start Here*/
             $count = $request->count;
@@ -440,7 +439,8 @@ class ItemController extends Controller
             if ($request->has('barcode')) {
                 foreach ($request->barcode as $barcode_key => $barcode_value) {
                     $exist_barcode_count = ItemBracodeDetails::where('barcode', $barcode_value)->get();
-                    if ($barcode_value != "" && count($exist_barcode_count) == 0) {
+                    // if ($barcode_value != "" && count($exist_barcode_count) == 0) {
+                    if ($barcode_value != "") {
                         $data = [
                             'item_id' => $item->id,
                             'barcode' => $barcode_value,
@@ -465,6 +465,8 @@ class ItemController extends Controller
                     }
                 }
             }
+
+            /* Update Existing Barcode Details end Here  */
 
             $tax_detail = ItemTaxDetails::where('item_id',$id);
             $tax_detail->delete();

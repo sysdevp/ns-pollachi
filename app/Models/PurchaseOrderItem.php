@@ -14,4 +14,8 @@ class PurchaseOrderItem extends Model
     {
         return $this->belongsTo(Uom::class, 'uom_id', 'id');
     }
+    public function black_or_white()
+    {
+    	return $this->belongsTo(PurchaseOrderBlackItem::class, 'po_no', 'po_no');
+    }
 }
