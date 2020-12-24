@@ -66,7 +66,7 @@
             <div class="form-group row">
               <label class="col-sm-4 col-form-label" for="validationCustom01">Purchase Entry No</label><br>
               <div class="col-sm-8">
-				 <select class="js-example-basic-multiple col-12 form-control custom-select purchase_entry_no" name="purchase_entry_no" onchange="purchase_det()" id="purchase_entry_no">
+				 <select class="js-example-basic-multiple col-12 form-control custom-select purchase_entry_no" name="p_no" onchange="purchase_det()" id="purchase_entry_no">
                            <option value="">Choose Purcahse Entry No</option>
                            <?php $__currentLoopData = $purchase_entry; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $purchase_entries): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <option value="<?php echo e($purchase_entries->p_no); ?>"><?php echo e($purchase_entries->p_no); ?></option>
@@ -110,7 +110,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control amount" name="amount" value="0">
+                <input type="text" class="form-control amount" name="bill_amount" value="0">
               </div>
             </div>
           </div>

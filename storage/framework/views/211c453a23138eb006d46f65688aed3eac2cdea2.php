@@ -45,27 +45,42 @@
                   <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">Party Name :</label>
                      <div class="col-sm-6">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id">
-                           <option value="">Choose Supplier Name</option>
-                           <?php $__currentLoopData = $supplier; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $suppliers): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                           <option value="<?php echo e($suppliers->id); ?>"><?php echo e($suppliers->name); ?></option>
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" name="customer_id" id="customer_id">
+                           <option value="">Choose Customer Name</option>
+                           <?php $__currentLoopData = $customer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $customers): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                           <option value="<?php echo e($customers->id); ?>"><?php echo e($customers->name); ?></option>
                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                      </div>
-                     <a href="<?php echo e(url('master/supplier/create')); ?>" target="_blank">
-                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Supplier"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
-                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_supplier_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                     <a href="<?php echo e(url('master/customer/create')); ?>" target="_blank">
+                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Customer"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
+                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_customer_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
                </div>
           
         </div>
 
-        <div class="form-row">
+        <!-- <div class="form-row">
         <div class="col-md-6">
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Receipt Request No : </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control receipt_request_no" placeholder="Receipt Request No" name="receipt_request_no" value="">
+              </div>
+            </div>
+          </div>
+        </div> -->
+         <div class="form-row">
+        <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label" for="validationCustom01">Sale Entry No</label><br>
+              <div class="col-sm-8">
+         <select class="js-example-basic-multiple col-12 form-control custom-select sale_entry_no" name="s_no" onchange="sale_det()" id="sale_entry_no">
+                           <option value="">Choose Sale Entry No</option>
+                           <?php $__currentLoopData = $sale_entry; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sale_entries): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                           <option value="<?php echo e($sale_entries->s_no); ?>"><?php echo e($sale_entries->s_no); ?></option>
+                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
               </div>
             </div>
           </div>
@@ -84,13 +99,39 @@
               </div>
             </div>
           </div>
+      
+
+        <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
+              <div class="col-sm-8">
+                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
+                           <option value="">Choose Mode</option>
+                           <option value="1">Cash</option>
+                           <option value="2">Bank</option>
+                           <option value="3">Advance Adjustment</option>
+                        </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+         <div class="form-row" id="cash_bill">
+        <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control amount" name="bill_amount" value="0">
+              </div>
+            </div>
+          </div>
         </div>
         <br>
 
         <div class="col-md-8">
                        <div class="form-group row">
                        <div class="col-md-4">
-                       <label for="validationCustom01" class=" col-form-label"><h4>Bill Details:</h4> </label><br>
+                       <label for="validationCustom01" class=" col-form-label"><h4>Purchase Entry Details:</h4> </label><br>
                        
                            
                        </div>
@@ -104,36 +145,49 @@
             <th>Bill.No</th>
             <th>Bill Date </th>
             <th>Bill Amount </th>
+            <th>Paid Amount</th>
             <th>Pending Amount</th>
-            <th>Cleared Amount</th>
           </tr>
         </thead>
         <tbody class="append_proof_details" id="myTable">
+        </tbody>
+        
+      </table>
+    </div>
+<div id="adv_det" style="display:none">
+        <div class="col-md-8">
+                       <div class="form-group row">
+                       <div class="col-md-4">
+                       <label for="validationCustom01" class=" col-form-label"><h4>Advance Bill Details:</h4> </label><br>
+                       
+                           
+                       </div>
+                         </div>
+              </div>
+
+        <div class="card-body" style="height: 100%;">
+      <table id="" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>Advance Voucher.No</th>
+            <th>Voucher Date </th>
+            <th>Advance Amount </th>
+            <th>Advance Available Amount</th>
+            <th>Current Cleared Amount</th>
+          </tr>
+        </thead>
+        <tbody class="append_proof_details" id="myTable_adv">
         </tbody>
         <tfoot>
               <th>Total</th>
               <th></th>
               <th></th>
               <th></th>
-              <th></th>
+              <th><input type="text" name="total_net_value" class="total_net_value" id="total_net_value"></th>
             </tfoot>
       </table>
     </div>
-
-    <div class="form-row">
-        <div class="col-md-6">
-            <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
-              <div class="col-sm-8">
-                <select class="js-example-basic-multiple col-12 form-control custom-select mode" name="mode" id="mode">
-                           <option value="">Choose Mode</option>
-                           <option value="1">Cash</option>
-                           <option value="2">Bank</option>
-                        </select>
-              </div>
-            </div>
-          </div>
-        </div>
+</div>
 
         <div class="form-row">
         <div class="col-md-6">
@@ -162,10 +216,96 @@
 </div>
 
 <script type="text/javascript">
-  $(document).on("click",".refresh_supplier_id",function(){
-      var supplier_dets=refresh_supplier_master_details();
-      $(".supplier_id").html(supplier_dets);
+  $(document).on("click",".refresh_customer_id",function(){
+      var customer_dets=refresh_customer_master_details();
+      $(".customer_id").html(customer_dets);
    }); 
+
+   function customer_det()
+{
+
+  var customer_id=$('#customer_id').val();
+
+   
+  $.ajax({
+
+            type: "POST",
+            url: "<?php echo e(url('receipt_process/sale_entry_det/')); ?>",
+            data: { customer_id : customer_id },
+            success: function(data) {
+            var result = JSON.parse(data);
+            $('#myTable').append(result);
+           
+           }
+        });
+}
+
+ function sale_det()
+{
+
+  var sale_entry_no=$('#sale_entry_no').val();
+  $('#single_row').remove();
+
+  $.ajax({
+            
+            type: "POST",
+            url: "<?php echo e(url('receipt_process/sale_entry_det/')); ?>",
+            data: { s_no : sale_entry_no },
+            success: function(data) {
+
+            var result = JSON.parse(data);
+            $('#myTable').append(result);
+            
+           }
+        });
+}
+
+function payment_mode(val)
+{
+
+  var payment_mode=val;
+ if(payment_mode=="3"){
+    $('#adv_det').show();
+    $('#cash_bill').hide();
+    var customer_id=$('#customer_id').val();
+     $.ajax({
+            
+            type: "POST",
+            url: "<?php echo e(url('receipt_process/advance_entry_det/')); ?>",
+            data: { customer_id : customer_id },
+            success: function(data) {
+            var result = JSON.parse(data);
+            $('#myTable_adv').append(result);
+            
+           }
+        });
+
+ } else {
+$('#adv_det').hide();
+$('#cash_bill').show();
+ }
+
+
+ 
+}
+
+function myfunction(val) {
+var sum = 0;
+  $('.amount').each(function(){
+ sum = parseInt(sum) + parseInt($(this).val());
+  });
+
+  $('.total_net_value').val(sum);
+//                 var sum = 0;
+//                 var amounts = $('.amount').val();
+
+//                 for(var i=0; i<amounts.length; i++) {
+//                     var a = +amounts[i].value;
+//                     sum += parseFloat(a) || 0;
+//                 }
+// alert(sum);
+//                 $('#total_net_value').val(sum);
+            }
 </script>
 
 <?php $__env->stopSection(); ?>

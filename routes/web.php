@@ -991,6 +991,9 @@ Route::resource('receipt_request','ReceiptRequestController',['middleware' => ['
 /*Receipt Process Start Here*/
 
 Route::resource('receipt_process','ReceiptProcessController',['middleware' => ['auth']]);
+Route::post('receipt_process/sale_entry_det/', 'ReceiptProcessController@sale_entry_det');
+Route::post('receipt_process/advance_entry_det/', 'ReceiptProcessController@advance_entry_det');
+
 
 /*Receipt Process End Here*/
 
