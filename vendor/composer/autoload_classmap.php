@@ -164,6 +164,7 @@ return array(
     'App\\Models\\City' => $baseDir . '/app/Models/City.php',
     'App\\Models\\Country' => $baseDir . '/app/Models/Country.php',
     'App\\Models\\CreditNote' => $baseDir . '/app/Models/CreditNote.php',
+    'App\\Models\\CreditNoteBlackItem' => $baseDir . '/app/Models/CreditNoteBlackItem.php',
     'App\\Models\\CreditNoteExpense' => $baseDir . '/app/Models/CreditNoteExpense.php',
     'App\\Models\\CreditNoteItem' => $baseDir . '/app/Models/CreditNoteItem.php',
     'App\\Models\\CreditNoteTax' => $baseDir . '/app/Models/CreditNoteTax.php',
