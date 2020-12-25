@@ -484,7 +484,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
 
                     </div>
-                    <div class="col-md-12 row">
+                    <!-- <div class="col-md-12 row">
 
                       <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
@@ -498,7 +498,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <option value="0">B</option>
                        </select>
                         </div>
-                      </div>
+                      </div> -->
                       <br>
                                                           
                      <div class="" align="center">

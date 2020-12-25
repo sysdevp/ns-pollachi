@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DeliveryNoteBlackItem extends Model
+class DebitNoteBlackItem extends Model
 {
     public function item()
     {
