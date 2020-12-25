@@ -23,7 +23,8 @@ class PaymentProcessController extends Controller
      */
     public function index()
     {
-        return view('admin.payment_process.view');
+        $payment_process=PaymentProcess::orderBy('id','DESC')->get();
+        return view('admin.payment_process.view',compact('payment_process'));
     }
 
     /**
