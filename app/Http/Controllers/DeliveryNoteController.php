@@ -23,6 +23,7 @@ use App\Models\SalesMan;
 use Carbon\Carbon;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderItem;
+use App\Models\SaleOrderBlackItem;
 use App\Models\SaleOrderTax;
 use App\Models\SaleOrderExpense;
 use App\Models\SaleEntry;
@@ -37,6 +38,7 @@ use App\Models\SaleEstimationTax;
 use App\Models\DeliveryNote;
 use App\Models\DeliveryNoteTax;
 use App\Models\DeliveryNoteItem;
+use App\Models\DeliveryNoteBlackItem;
 use App\Models\DeliveryNoteExpense;
 use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationExpense;
@@ -258,63 +260,102 @@ class DeliveryNoteController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $delivery_note_items = new DeliveryNoteItem();
 
-            $delivery_note_items->d_no = $voucher_no;
-            $delivery_note_items->d_date = $voucher_date;
-            $delivery_note_items->sale_estimation_no = $request->sale_estimation_no;
-            $delivery_note_items->sale_estimation_date = $request->sale_estimation_date;
-            $delivery_note_items->so_no = $request->so_no;
-            $delivery_note_items->so_date = $request->so_date;
-            $delivery_note_items->r_in_no = $request->r_in_no;
-            $delivery_note_items->r_in_date = $request->r_in_date;
-            $delivery_note_items->item_sno = $request->invoice_sno[$i];
-            $delivery_note_items->item_id = $request->item_code[$i];
-            $delivery_note_items->mrp = $request->mrp[$i];
-            $delivery_note_items->gst = $request->tax_rate[$i];
-            $delivery_note_items->rate_exclusive_tax = $request->exclusive[$i];
-            $delivery_note_items->rate_inclusive_tax = $request->inclusive[$i];
-            $delivery_note_items->qty = $request->quantity[$i];
-            $delivery_note_items->remaining_qty = $request->quantity[$i];
-            $delivery_note_items->rejected_qty = 0;
-            $delivery_note_items->credited_qty = 0;
-            // $delivery_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
-            $delivery_note_items->uom_id = $request->uom[$i];
-            $delivery_note_items->discount = $request->discount[$i];
-            $delivery_note_items->overall_disc = $request->overall_disc[$i];
-            $delivery_note_items->expenses = $request->expenses[$i];
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $delivery_note_items->save();
+                $delivery_note_items = new DeliveryNoteItem();
 
-            $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
-             if($item_name1==0){ 
-            $item_name1 = $request->item_code[$i];
-             } else {
-            $item_name1 = $item_name1;
-             }
-             if($item_name1 != $request->item_code[$i]){
-             $stock_change = new StockChange();
-             $stock_change->location_id = $request->location;
-             $serial_id = StockChange::max('serial_id');
-             $stock_change->serial_id = $serial_id+1;
-             $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
-             $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
-             $stock_change->quantity = -1;
-             $stock_change->status = 1;
-             $stock_change->item_id = $item_name1;
-             $stock_change->save();
+                $delivery_note_items->d_no = $voucher_no;
+                $delivery_note_items->d_date = $voucher_date;
+                $delivery_note_items->sale_estimation_no = $request->sale_estimation_no;
+                $delivery_note_items->sale_estimation_date = $request->sale_estimation_date;
+                $delivery_note_items->so_no = $request->so_no;
+                $delivery_note_items->so_date = $request->so_date;
+                $delivery_note_items->r_in_no = $request->r_in_no;
+                $delivery_note_items->r_in_date = $request->r_in_date;
+                $delivery_note_items->item_sno = $request->invoice_sno[$i];
+                $delivery_note_items->item_id = $request->item_code[$i];
+                $delivery_note_items->mrp = $request->mrp[$i];
+                $delivery_note_items->gst = $request->tax_rate[$i];
+                $delivery_note_items->rate_exclusive_tax = $request->exclusive[$i];
+                $delivery_note_items->rate_inclusive_tax = $request->inclusive[$i];
+                $delivery_note_items->qty = $request->quantity[$i];
+                $delivery_note_items->remaining_qty = $request->quantity[$i];
+                $delivery_note_items->rejected_qty = 0;
+                $delivery_note_items->credited_qty = 0;
+                // $delivery_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $delivery_note_items->uom_id = $request->uom[$i];
+                $delivery_note_items->discount = $request->discount[$i];
+                $delivery_note_items->overall_disc = $request->overall_disc[$i];
+                $delivery_note_items->expenses = $request->expenses[$i];
+                $delivery_note_items->b_or_w = $request->black_or_white[$i];
 
-             $stock_change_new = new StockChange();
-             $stock_change_new->location_id = $request->location;
-             $stock_change_new->serial_id = $serial_id+1;
-             $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
-             $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
-             $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
-             $stock_change_new->status = 1;
-             $stock_change_new->item_id = $request->item_code[$i];
-             $stock_change_new->save();
-    }
+                $delivery_note_items->save();
+
+                $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
+                 if($item_name1==0){ 
+                $item_name1 = $request->item_code[$i];
+                 } else {
+                $item_name1 = $item_name1;
+                 }
+                 if($item_name1 != $request->item_code[$i]){
+                 $stock_change = new StockChange();
+                 $stock_change->location_id = $request->location;
+                 $serial_id = StockChange::max('serial_id');
+                 $stock_change->serial_id = $serial_id+1;
+                 $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+                 $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+                 $stock_change->quantity = -1;
+                 $stock_change->status = 1;
+                 $stock_change->item_id = $item_name1;
+                 $stock_change->save();
+
+                 $stock_change_new = new StockChange();
+                 $stock_change_new->location_id = $request->location;
+                 $stock_change_new->serial_id = $serial_id+1;
+                 $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+                 $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+                 $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+                 $stock_change_new->status = 1;
+                 $stock_change_new->item_id = $request->item_code[$i];
+                 $stock_change_new->save();
+            }
+
         }
+        else
+        {
+                $delivery_note_black_items = new DeliveryNoteBlackItem();
+
+                $delivery_note_black_items->d_no = $voucher_no;
+                $delivery_note_black_items->d_date = $voucher_date;
+                $delivery_note_black_items->sale_estimation_no = $request->sale_estimation_no;
+                $delivery_note_black_items->sale_estimation_date = $request->sale_estimation_date;
+                $delivery_note_black_items->so_no = $request->so_no;
+                $delivery_note_black_items->so_date = $request->so_date;
+                $delivery_note_black_items->r_in_no = $request->r_in_no;
+                $delivery_note_black_items->r_in_date = $request->r_in_date;
+                $delivery_note_black_items->item_sno = $request->invoice_sno[$i];
+                $delivery_note_black_items->item_id = $request->item_code[$i];
+                $delivery_note_black_items->mrp = $request->mrp[$i];
+                $delivery_note_black_items->gst = $request->tax_rate[$i];
+                $delivery_note_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $delivery_note_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $delivery_note_black_items->qty = $request->quantity[$i];
+                $delivery_note_black_items->remaining_qty = $request->quantity[$i];
+                $delivery_note_black_items->rejected_qty = 0;
+                $delivery_note_black_items->credited_qty = 0;
+                // $delivery_note_black_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $delivery_note_black_items->uom_id = $request->uom[$i];
+                $delivery_note_black_items->discount = $request->discount[$i];
+                $delivery_note_black_items->overall_disc = $request->overall_disc[$i];
+                $delivery_note_black_items->expenses = $request->expenses[$i];
+                $delivery_note_black_items->b_or_w = $request->black_or_white[$i];
+
+                $delivery_note_black_items->save();
+        }
+            
+    }
          
 
 
@@ -370,8 +411,10 @@ class DeliveryNoteController extends Controller
         $address = AddressDetails::where('address_ref_id',$delivery_note_print_data->customer_id)
                                  ->where('address_table','=','Supplier')
                                  ->first();
+        $delivery_note_black_item_print_data = DeliveryNoteBlackItem::where('d_no',$delivery_note_no);                               
 
         $delivery_note_item_print_data = DeliveryNoteItem::where('d_no',$delivery_note_no)
+                                                    ->union($delivery_note_black_item_print_data)
                                                     ->get();
 
         $delivery_note_expense_print_data = DeliveryNoteExpense::where('d_no',$delivery_note_no)->get(); 
@@ -576,7 +619,8 @@ class DeliveryNoteController extends Controller
         $location = Location::all();
 
         $delivery_note = DeliveryNote::where('d_no',$id)->first();
-        $delivery_note_items = DeliveryNoteItem::where('d_no',$id)->get();
+        $delivery_note_black_items = DeliveryNoteBlackItem::where('d_no',$id);
+        $delivery_note_items = DeliveryNoteItem::where('d_no',$id)->union($delivery_note_black_items)->get();
         $delivery_note_expense = DeliveryNoteExpense::where('d_no',$id)->get();
         $tax = DeliveryNoteTax::where('d_no',$id)->get();
 
@@ -665,8 +709,12 @@ class DeliveryNoteController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
+            $item_black_data = DeliveryNoteBlackItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC');
+
             $item_data = DeliveryNoteItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
+                                    ->union($item_black_data)
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -701,6 +749,9 @@ class DeliveryNoteController extends Controller
 
         $delivery_note_item_data = DeliveryNoteItem::where('d_no',$id);
         $delivery_note_item_data->delete();
+
+        $delivery_note_black_item_data = DeliveryNoteBlackItem::where('d_no',$id);
+        $delivery_note_black_item_data->delete();
 
         $delivery_note_expense_data = DeliveryNoteExpense::where('d_no',$id);
         $delivery_note_expense_data->delete();
@@ -759,30 +810,99 @@ class DeliveryNoteController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $delivery_note_items = new DeliveryNoteItem();
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $delivery_note_items->d_no = $voucher_no;
-            $delivery_note_items->d_date = $voucher_date;
-            $delivery_note_items->sale_estimation_no = $request->sale_estimation_no;
-            $delivery_note_items->sale_estimation_date = $request->sale_estimation_date;
-            $delivery_note_items->so_no = $request->so_no;
-            $delivery_note_items->so_date = $request->so_date;
-            $delivery_note_items->item_sno = $request->invoice_sno[$i];
-            $delivery_note_items->item_id = $request->item_code[$i];
-            $delivery_note_items->mrp = $request->mrp[$i];
-            $delivery_note_items->gst = $request->tax_rate[$i];
-            $delivery_note_items->rate_exclusive_tax = $request->exclusive[$i];
-            $delivery_note_items->rate_inclusive_tax = $request->inclusive[$i];
-            $delivery_note_items->qty = $request->quantity[$i];
-            $delivery_note_items->remaining_qty = $request->quantity[$i];
-            $delivery_note_items->rejected_qty = 0;
-            $delivery_note_items->credited_qty = 0;
-            $delivery_note_items->uom_id = $request->uom[$i];
-            $delivery_note_items->discount = $request->discount[$i];
-            $delivery_note_items->overall_disc = $request->overall_disc[$i];
-            $delivery_note_items->expenses = $request->expenses[$i];
+                $delivery_note_items = new DeliveryNoteItem();
 
-            $delivery_note_items->save();
+                $delivery_note_items->d_no = $voucher_no;
+                $delivery_note_items->d_date = $voucher_date;
+                $delivery_note_items->sale_estimation_no = $request->sale_estimation_no;
+                $delivery_note_items->sale_estimation_date = $request->sale_estimation_date;
+                $delivery_note_items->so_no = $request->so_no;
+                $delivery_note_items->so_date = $request->so_date;
+                $delivery_note_items->r_in_no = $request->r_in_no;
+                $delivery_note_items->r_in_date = $request->r_in_date;
+                $delivery_note_items->item_sno = $request->invoice_sno[$i];
+                $delivery_note_items->item_id = $request->item_code[$i];
+                $delivery_note_items->mrp = $request->mrp[$i];
+                $delivery_note_items->gst = $request->tax_rate[$i];
+                $delivery_note_items->rate_exclusive_tax = $request->exclusive[$i];
+                $delivery_note_items->rate_inclusive_tax = $request->inclusive[$i];
+                $delivery_note_items->qty = $request->quantity[$i];
+                $delivery_note_items->remaining_qty = $request->quantity[$i];
+                $delivery_note_items->rejected_qty = 0;
+                $delivery_note_items->credited_qty = 0;
+                // $delivery_note_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $delivery_note_items->uom_id = $request->uom[$i];
+                $delivery_note_items->discount = $request->discount[$i];
+                $delivery_note_items->overall_disc = $request->overall_disc[$i];
+                $delivery_note_items->expenses = $request->expenses[$i];
+                $delivery_note_items->b_or_w = $request->black_or_white[$i];
+
+                $delivery_note_items->save();
+
+                $item_name1 =  isset($request->item_name1[$i]) ? ($request->item_name1[$i]) : 0;
+                 if($item_name1==0){ 
+                $item_name1 = $request->item_code[$i];
+                 } else {
+                $item_name1 = $item_name1;
+                 }
+                 if($item_name1 != $request->item_code[$i]){
+                 $stock_change = new StockChange();
+                 $stock_change->location_id = $request->location;
+                 $serial_id = StockChange::max('serial_id');
+                 $stock_change->serial_id = $serial_id+1;
+                 $uom_id_stock_change = Item::where('id',$item_name1)->select('uom_id', 'child_unit')->get();
+                 $stock_change->uom_id = $uom_id_stock_change[0]->uom_id;
+                 $stock_change->quantity = -1;
+                 $stock_change->status = 1;
+                 $stock_change->item_id = $item_name1;
+                 $stock_change->save();
+
+                 $stock_change_new = new StockChange();
+                 $stock_change_new->location_id = $request->location;
+                 $stock_change_new->serial_id = $serial_id+1;
+                 $uom_id_stock_change_new = Item::where('id',$request->item_code[$i])->select('uom_id')->get();
+                 $stock_change_new->uom_id = $uom_id_stock_change_new[0]->uom_id;
+                 $stock_change_new->quantity = $uom_id_stock_change[0]->child_unit;
+                 $stock_change_new->status = 1;
+                 $stock_change_new->item_id = $request->item_code[$i];
+                 $stock_change_new->save();
+            }
+
+        }
+        else
+        {
+                $delivery_note_black_items = new DeliveryNoteBlackItem();
+
+                $delivery_note_black_items->d_no = $voucher_no;
+                $delivery_note_black_items->d_date = $voucher_date;
+                $delivery_note_black_items->sale_estimation_no = $request->sale_estimation_no;
+                $delivery_note_black_items->sale_estimation_date = $request->sale_estimation_date;
+                $delivery_note_black_items->so_no = $request->so_no;
+                $delivery_note_black_items->so_date = $request->so_date;
+                $delivery_note_black_items->r_in_no = $request->r_in_no;
+                $delivery_note_black_items->r_in_date = $request->r_in_date;
+                $delivery_note_black_items->item_sno = $request->invoice_sno[$i];
+                $delivery_note_black_items->item_id = $request->item_code[$i];
+                $delivery_note_black_items->mrp = $request->mrp[$i];
+                $delivery_note_black_items->gst = $request->tax_rate[$i];
+                $delivery_note_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $delivery_note_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $delivery_note_black_items->qty = $request->quantity[$i];
+                $delivery_note_black_items->remaining_qty = $request->quantity[$i];
+                $delivery_note_black_items->rejected_qty = 0;
+                $delivery_note_black_items->credited_qty = 0;
+                // $delivery_note_black_items->actual_rejected_qty = $request->actual_rejected_qty[$i];
+                $delivery_note_black_items->uom_id = $request->uom[$i];
+                $delivery_note_black_items->discount = $request->discount[$i];
+                $delivery_note_black_items->overall_disc = $request->overall_disc[$i];
+                $delivery_note_black_items->expenses = $request->expenses[$i];
+                $delivery_note_black_items->b_or_w = $request->black_or_white[$i];
+
+                $delivery_note_black_items->save();
+        }
         }
          
 
@@ -838,7 +958,9 @@ class DeliveryNoteController extends Controller
                                  ->where('address_table','=','Supplier')
                                  ->first();
 
+        $delivery_note_black_item_print_data = DeliveryNoteBlackItem::where('d_no',$delivery_note_no);                         
         $delivery_note_item_print_data = DeliveryNoteItem::where('d_no',$delivery_note_no)
+                                                    ->union($delivery_note_black_item_print_data)
                                                     ->get();
 
         $delivery_note_expense_print_data = DeliveryNoteExpense::where('d_no',$delivery_note_no)->get(); 
@@ -909,6 +1031,7 @@ class DeliveryNoteController extends Controller
     {
         $delivery_note_data = DeliveryNote::where('d_no',$id);
         $delivery_note_item_data = DeliveryNoteItem::where('d_no',$id);
+        $delivery_note_black_item_data = DeliveryNoteBlackItem::where('d_no',$id);
         $delivery_note_expense_data = DeliveryNoteExpense::where('d_no',$id);
         $delivery_note_tax_data = DeliveryNoteTax::where('d_no',$id);
         
@@ -919,6 +1042,11 @@ class DeliveryNoteController extends Controller
          if($delivery_note_item_data)
          {
             $delivery_note_item_data->delete();
+         }
+
+         if($delivery_note_black_item_data)
+         {
+            $delivery_note_black_item_data->delete();
          }
 
          if($delivery_note_expense_data)

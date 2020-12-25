@@ -26,6 +26,7 @@ use App\Models\PurchaseOrderTax;
 use App\Models\PurchaseOrderExpense;
 use App\Models\PurchaseEntry;
 use App\Models\PurchaseEntryItem;
+use App\Models\PurchaseEntryBlackItem;
 use App\Models\PurchaseEntryTax;
 use App\Models\PurchaseEntryExpense;
 use App\Models\ReceiptNote;
@@ -260,36 +261,79 @@ class PurchaseEntryController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $purchase_entry_items = new PurchaseEntryItem();
 
-            $purchase_entry_items->p_no = $voucher_no;
-            $purchase_entry_items->p_date = $voucher_date;
-            $purchase_entry_items->po_no = $request->po_no;
-            $purchase_entry_items->po_date = $request->po_date;
-            $purchase_entry_items->estimation_no = $request->p_estimation_no;
-            $purchase_entry_items->estimation_date = $request->p_estimation_date;
-            $purchase_entry_items->rn_no = $request->receipt_no;
-            $purchase_entry_items->rn_date = $request->receipt_date;
-            $purchase_entry_items->item_sno = $request->invoice_sno[$i];
-            $purchase_entry_items->item_id = $request->item_code[$i];
-            $purchase_entry_items->actual_item_id = $request->item_code[$i];
-            $purchase_entry_items->mrp = $request->mrp[$i];
-            $purchase_entry_items->gst = $request->tax_rate[$i];
-            $purchase_entry_items->rate_exclusive_tax = $request->exclusive[$i];
-            $purchase_entry_items->rate_inclusive_tax = $request->inclusive[$i];
-            $purchase_entry_items->qty = $request->quantity[$i];
-            $purchase_entry_items->actual_qty = $request->quantity[$i];
-            $purchase_entry_items->remaining_qty = $request->quantity[$i];
-            $purchase_entry_items->remaining_after_debit = $request->quantity[$i];
-            $purchase_entry_items->rejected_qty = 0;
-            $purchase_entry_items->debited_qty = 0;
-            $purchase_entry_items->r_out_debited_qty = 0;
-            $purchase_entry_items->uom_id = $request->uom[$i];
-            $purchase_entry_items->discount = $request->discount[$i];
-            $purchase_entry_items->overall_disc = $request->overall_disc[$i];
-            $purchase_entry_items->expenses = $request->expenses[$i];
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $purchase_entry_items->save();
+                $purchase_entry_items = new PurchaseEntryItem();
+
+                $purchase_entry_items->p_no = $voucher_no;
+                $purchase_entry_items->p_date = $voucher_date;
+                $purchase_entry_items->po_no = $request->po_no;
+                $purchase_entry_items->po_date = $request->po_date;
+                $purchase_entry_items->estimation_no = $request->p_estimation_no;
+                $purchase_entry_items->estimation_date = $request->p_estimation_date;
+                $purchase_entry_items->rn_no = $request->receipt_no;
+                $purchase_entry_items->rn_date = $request->receipt_date;
+                $purchase_entry_items->item_sno = $request->invoice_sno[$i];
+                $purchase_entry_items->item_id = $request->item_code[$i];
+                $purchase_entry_items->actual_item_id = $request->item_code[$i];
+                $purchase_entry_items->mrp = $request->mrp[$i];
+                $purchase_entry_items->gst = $request->tax_rate[$i];
+                $purchase_entry_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchase_entry_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchase_entry_items->qty = $request->quantity[$i];
+                $purchase_entry_items->actual_qty = $request->quantity[$i];
+                $purchase_entry_items->remaining_qty = $request->quantity[$i];
+                $purchase_entry_items->remaining_after_debit = $request->quantity[$i];
+                $purchase_entry_items->rejected_qty = 0;
+                $purchase_entry_items->debited_qty = 0;
+                $purchase_entry_items->r_out_debited_qty = 0;
+                $purchase_entry_items->uom_id = $request->uom[$i];
+                $purchase_entry_items->discount = $request->discount[$i];
+                $purchase_entry_items->overall_disc = $request->overall_disc[$i];
+                $purchase_entry_items->expenses = $request->expenses[$i];
+                $purchase_entry_items->b_or_w = $request->black_or_white[$i];
+
+                $purchase_entry_items->save();
+
+            }
+            else
+            {
+                $purchase_entry_black_items = new PurchaseEntryBlackItem();
+
+                $purchase_entry_black_items->p_no = $voucher_no;
+                $purchase_entry_black_items->p_date = $voucher_date;
+                $purchase_entry_black_items->po_no = $request->po_no;
+                $purchase_entry_black_items->po_date = $request->po_date;
+                $purchase_entry_black_items->estimation_no = $request->p_estimation_no;
+                $purchase_entry_black_items->estimation_date = $request->p_estimation_date;
+                $purchase_entry_black_items->rn_no = $request->receipt_no;
+                $purchase_entry_black_items->rn_date = $request->receipt_date;
+                $purchase_entry_black_items->item_sno = $request->invoice_sno[$i];
+                $purchase_entry_black_items->item_id = $request->item_code[$i];
+                $purchase_entry_black_items->actual_item_id = $request->item_code[$i];
+                $purchase_entry_black_items->mrp = $request->mrp[$i];
+                $purchase_entry_black_items->gst = $request->tax_rate[$i];
+                $purchase_entry_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchase_entry_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchase_entry_black_items->qty = $request->quantity[$i];
+                $purchase_entry_black_items->actual_qty = $request->quantity[$i];
+                $purchase_entry_black_items->remaining_qty = $request->quantity[$i];
+                $purchase_entry_black_items->remaining_after_debit = $request->quantity[$i];
+                $purchase_entry_black_items->rejected_qty = 0;
+                $purchase_entry_black_items->debited_qty = 0;
+                $purchase_entry_black_items->r_out_debited_qty = 0;
+                $purchase_entry_black_items->uom_id = $request->uom[$i];
+                $purchase_entry_black_items->discount = $request->discount[$i];
+                $purchase_entry_black_items->overall_disc = $request->overall_disc[$i];
+                $purchase_entry_black_items->expenses = $request->expenses[$i];
+                $purchase_entry_black_items->b_or_w = $request->black_or_white[$i];
+
+                $purchase_entry_black_items->save();
+
+            }
+            
         }
          
 
@@ -552,7 +596,10 @@ class PurchaseEntryController extends Controller
         $location = Location::all();
 
         $purchase_entry = PurchaseEntry::where('p_no',$id)->first();
-        $purchase_entry_items = PurchaseEntryItem::where('p_no',$id)->where('active',1)->get();
+        $purchase_entry_black_items = PurchaseEntryBlackItem::where('p_no',$id);
+        $purchase_entry_items = PurchaseEntryItem::where('p_no',$id)
+                                                ->union($purchase_entry_black_items)
+                                                ->get();
         $purchase_entry_expense = PurchaseEntryExpense::where('p_no',$id)->get();
         $tax = PurchaseEntryTax::where('p_no',$id)->get();
 
@@ -697,9 +744,13 @@ class PurchaseEntryController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
-            $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
-                                    ->where('active',1)
+            $item_black_data = PurchaseEntryBlackItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
+                                    ->first();
+
+            $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->union($item_black_data)
                                     ->first();
 
             $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
@@ -753,6 +804,9 @@ class PurchaseEntryController extends Controller
 
         $purchase_entry_item_data = PurchaseEntryItem::where('p_no',$id);
         $purchase_entry_item_data->delete();
+
+        $purchase_entry_black_item_data = PurchaseEntryBlackItem::where('p_no',$id);
+        $purchase_entry_black_item_data->delete();
 
         $purchase_entry_expense_data = PurchaseEntryExpense::where('p_no',$id);
         $purchase_entry_expense_data->delete();
@@ -820,40 +874,78 @@ class PurchaseEntryController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            // if($request->remaining_qty[$i] == $remaining_qty)
-            // {
-                
-            // }
 
-            $purchase_entry_items = new PurchaseEntryItem();
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $purchase_entry_items->p_no = $voucher_no;
-            $purchase_entry_items->p_date = $voucher_date;
-            $purchase_entry_items->po_no = $request->po_no;
-            $purchase_entry_items->po_date = $request->po_date;
-            $purchase_entry_items->estimation_no = $request->p_estimation_no;
-            $purchase_entry_items->estimation_date = $request->p_estimation_date;
-            $purchase_entry_items->rn_no = $request->receipt_no;
-            $purchase_entry_items->rn_date = $request->receipt_date;
-            $purchase_entry_items->item_sno = $request->invoice_sno[$i];
-            $purchase_entry_items->item_id = $request->item_code[$i];
-            $purchase_entry_items->actual_item_id = $request->item_code[$i];
-            $purchase_entry_items->mrp = $request->mrp[$i];
-            $purchase_entry_items->gst = $request->tax_rate[$i];
-            $purchase_entry_items->rate_exclusive_tax = $request->exclusive[$i];
-            $purchase_entry_items->rate_inclusive_tax = $request->inclusive[$i];
-            $purchase_entry_items->qty = $request->quantity[$i];
-            $purchase_entry_items->actual_qty = $request->quantity[$i];
-            $purchase_entry_items->remaining_qty = $request->quantity[$i];
-            $purchase_entry_items->rejected_qty = 0;
-            $purchase_entry_items->debited_qty = 0;
-            $purchase_entry_items->r_out_debited_qty = 0;
-            $purchase_entry_items->uom_id = $request->uom[$i];
-            $purchase_entry_items->discount = $request->discount[$i];
-            $purchase_entry_items->overall_disc = $request->overall_disc[$i];
-            $purchase_entry_items->expenses = $request->expenses[$i];
+                $purchase_entry_items = new PurchaseEntryItem();
 
-            $purchase_entry_items->save();
+                $purchase_entry_items->p_no = $voucher_no;
+                $purchase_entry_items->p_date = $voucher_date;
+                $purchase_entry_items->po_no = $request->po_no;
+                $purchase_entry_items->po_date = $request->po_date;
+                $purchase_entry_items->estimation_no = $request->p_estimation_no;
+                $purchase_entry_items->estimation_date = $request->p_estimation_date;
+                $purchase_entry_items->rn_no = $request->receipt_no;
+                $purchase_entry_items->rn_date = $request->receipt_date;
+                $purchase_entry_items->item_sno = $request->invoice_sno[$i];
+                $purchase_entry_items->item_id = $request->item_code[$i];
+                $purchase_entry_items->actual_item_id = $request->item_code[$i];
+                $purchase_entry_items->mrp = $request->mrp[$i];
+                $purchase_entry_items->gst = $request->tax_rate[$i];
+                $purchase_entry_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchase_entry_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchase_entry_items->qty = $request->quantity[$i];
+                $purchase_entry_items->actual_qty = $request->quantity[$i];
+                $purchase_entry_items->remaining_qty = $request->quantity[$i];
+                $purchase_entry_items->remaining_after_debit = $request->quantity[$i];
+                $purchase_entry_items->rejected_qty = 0;
+                $purchase_entry_items->debited_qty = 0;
+                $purchase_entry_items->r_out_debited_qty = 0;
+                $purchase_entry_items->uom_id = $request->uom[$i];
+                $purchase_entry_items->discount = $request->discount[$i];
+                $purchase_entry_items->overall_disc = $request->overall_disc[$i];
+                $purchase_entry_items->expenses = $request->expenses[$i];
+                $purchase_entry_items->b_or_w = $request->black_or_white[$i];
+
+                $purchase_entry_items->save();
+
+            }
+            else
+            {
+                $purchase_entry_black_items = new PurchaseEntryBlackItem();
+
+                $purchase_entry_black_items->p_no = $voucher_no;
+                $purchase_entry_black_items->p_date = $voucher_date;
+                $purchase_entry_black_items->po_no = $request->po_no;
+                $purchase_entry_black_items->po_date = $request->po_date;
+                $purchase_entry_black_items->estimation_no = $request->p_estimation_no;
+                $purchase_entry_black_items->estimation_date = $request->p_estimation_date;
+                $purchase_entry_black_items->rn_no = $request->receipt_no;
+                $purchase_entry_black_items->rn_date = $request->receipt_date;
+                $purchase_entry_black_items->item_sno = $request->invoice_sno[$i];
+                $purchase_entry_black_items->item_id = $request->item_code[$i];
+                $purchase_entry_black_items->actual_item_id = $request->item_code[$i];
+                $purchase_entry_black_items->mrp = $request->mrp[$i];
+                $purchase_entry_black_items->gst = $request->tax_rate[$i];
+                $purchase_entry_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $purchase_entry_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $purchase_entry_black_items->qty = $request->quantity[$i];
+                $purchase_entry_black_items->actual_qty = $request->quantity[$i];
+                $purchase_entry_black_items->remaining_qty = $request->quantity[$i];
+                $purchase_entry_black_items->remaining_after_debit = $request->quantity[$i];
+                $purchase_entry_black_items->rejected_qty = 0;
+                $purchase_entry_black_items->debited_qty = 0;
+                $purchase_entry_black_items->r_out_debited_qty = 0;
+                $purchase_entry_black_items->uom_id = $request->uom[$i];
+                $purchase_entry_black_items->discount = $request->discount[$i];
+                $purchase_entry_black_items->overall_disc = $request->overall_disc[$i];
+                $purchase_entry_black_items->expenses = $request->expenses[$i];
+                $purchase_entry_black_items->b_or_w = $request->black_or_white[$i];
+
+                $purchase_entry_black_items->save();
+
+            }
         }
          
 
@@ -982,15 +1074,18 @@ class PurchaseEntryController extends Controller
     {
         $purchase_entry_data = PurchaseEntry::where('p_no',$id);
         $purchase_entry_item_data = PurchaseEntryItem::where('p_no',$id);
+        $purchase_entry_black_item_data = PurchaseEntryBlackItem::where('p_no',$id);
         $purchase_entry_expense_data = PurchaseEntryExpense::where('p_no',$id);
         $purchase_entry_tax_data = PurchaseEntryTax::where('p_no',$id);
 
         $rejection_out = RejectionOut::where('p_no',$id);
         $rejection_out_item = RejectionOutItem::where('p_no',$id);
+        // $rejection_out_black_item = RejectionOutBlackItem::where('p_no',$id);
         $rejection_out_expense = RejectionOutExpense::where('p_no',$id);
 
         $debit_note = DebitNote::where('p_no',$id);
         $debit_note_item = DebitNoteItem::where('p_no',$id);
+        // $debit_note_black_item = DebitNoteBlackItem::where('p_no',$id);
         $debit_note_expense = DebitNoteExpense::where('p_no',$id);
         
         if($purchase_entry_data)
@@ -1004,6 +1099,13 @@ class PurchaseEntryController extends Controller
             $purchase_entry_item_data->delete();
             $rejection_out_item->delete();
             $debit_note_item->delete();
+         }
+
+         if($purchase_entry_black_item_data)
+         {
+            $purchase_entry_black_item_data->delete();
+            // $rejection_out_black_item->delete();
+            // $debit_note_black_item->delete();
          }
 
          if($purchase_entry_expense_data)

@@ -29,10 +29,12 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\PriceUpdation;
 use App\Models\SellingPriceSetup;
 use App\Models\PurchaseEntryItem;
+use App\Models\PurchaseEntryBlackItem;
 use App\Models\PurchaseOrderItem;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderTax;
 use App\Models\SaleOrderItem;
+use App\Models\SaleOrderBlackItem;
 use App\Models\SaleOrderExpense;
 
 class SalesOrderController extends Controller
@@ -203,25 +205,56 @@ class SalesOrderController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $saleorder_items = new SaleOrderItem();
 
-            $saleorder_items->so_no = $voucher_no;
-            $saleorder_items->so_date = $voucher_date;
-            $saleorder_items->estimation_no = $request->estimation_no;
-            $saleorder_items->estimation_date = $request->estimation_date;
-            $saleorder_items->item_sno = $request->invoice_sno[$i];
-            $saleorder_items->item_id = $request->item_code[$i];
-            $saleorder_items->mrp = $request->mrp[$i];
-            $saleorder_items->gst = $request->tax_rate[$i];
-            $saleorder_items->rate_exclusive_tax = $request->exclusive[$i];
-            $saleorder_items->rate_inclusive_tax = $request->inclusive[$i];
-            $saleorder_items->qty = $request->quantity[$i];
-            $saleorder_items->uom_id = $request->uom[$i];
-            $saleorder_items->discount = $request->discount[$i];
-            $saleorder_items->overall_disc = $request->overall_disc[$i];
-            $saleorder_items->expenses = $request->expenses[$i];
+            if($request->black_or_white[$i] == 1)
+            {
+                $saleorder_items = new SaleOrderItem();
 
-            $saleorder_items->save();
+                $saleorder_items->so_no = $voucher_no;
+                $saleorder_items->so_date = $voucher_date;
+                $saleorder_items->estimation_no = $request->estimation_no;
+                $saleorder_items->estimation_date = $request->estimation_date;
+                $saleorder_items->item_sno = $request->invoice_sno[$i];
+                $saleorder_items->item_id = $request->item_code[$i];
+                $saleorder_items->mrp = $request->mrp[$i];
+                $saleorder_items->gst = $request->tax_rate[$i];
+                $saleorder_items->rate_exclusive_tax = $request->exclusive[$i];
+                $saleorder_items->rate_inclusive_tax = $request->inclusive[$i];
+                $saleorder_items->qty = $request->quantity[$i];
+                $saleorder_items->uom_id = $request->uom[$i];
+                $saleorder_items->discount = $request->discount[$i];
+                $saleorder_items->overall_disc = $request->overall_disc[$i];
+                $saleorder_items->expenses = $request->expenses[$i];
+                $saleorder_items->b_or_w = $request->black_or_white[$i];
+
+                $saleorder_items->save();
+
+            }
+
+            else
+            {
+                $saleorder_black_items = new SaleOrderBlackItem();
+
+                $saleorder_black_items->so_no = $voucher_no;
+                $saleorder_black_items->so_date = $voucher_date;
+                $saleorder_black_items->estimation_no = $request->estimation_no;
+                $saleorder_black_items->estimation_date = $request->estimation_date;
+                $saleorder_black_items->item_sno = $request->invoice_sno[$i];
+                $saleorder_black_items->item_id = $request->item_code[$i];
+                $saleorder_black_items->mrp = $request->mrp[$i];
+                $saleorder_black_items->gst = $request->tax_rate[$i];
+                $saleorder_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $saleorder_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $saleorder_black_items->qty = $request->quantity[$i];
+                $saleorder_black_items->uom_id = $request->uom[$i];
+                $saleorder_black_items->discount = $request->discount[$i];
+                $saleorder_black_items->overall_disc = $request->overall_disc[$i];
+                $saleorder_black_items->expenses = $request->expenses[$i];
+                $saleorder_black_items->b_or_w = $request->black_or_white[$i];
+
+                $saleorder_black_items->save();
+            }
+            
         }
          
 
@@ -275,8 +308,12 @@ class SalesOrderController extends Controller
                                  ->where('address_table','=','Cus')
                                  ->first();
 
+        $sale_order_black_item_print_data = SaleOrderBlackItem::where('so_no',$sale_order_no);                        
+
         $sale_order_item_print_data = SaleOrderItem::where('so_no',$sale_order_no)
+                                                    ->union($sale_order_black_item_print_data)
                                                     ->get();
+
 
         $sale_order_expense_print_data = SaleOrderExpense::where('so_no',$sale_order_no)->get(); 
 
@@ -474,7 +511,8 @@ class SalesOrderController extends Controller
         $location = Location::all();
 
         $saleorder = SaleOrder::where('so_no',$id)->first();
-        $saleorder_items = SaleOrderItem::where('so_no',$id)->get();
+        $saleorder_black_items = SaleOrderBlackItem::where('so_no',$id);
+        $saleorder_items = SaleOrderItem::where('so_no',$id)->union($saleorder_black_items)->get();
         $saleorder_expense = SaleOrderExpense::where('so_no',$id)->get();
         $tax = SaleOrderTax::where('so_no',$id)->get();
 
@@ -563,8 +601,12 @@ class SalesOrderController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
+            $item_black_data = SaleOrderBlackItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC');
+
             $item_data = SaleOrderItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
+                                    ->union($item_black_data)
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -600,6 +642,9 @@ class SalesOrderController extends Controller
         $saleorder_item_data = SaleOrderItem::where('so_no',$id);
         $saleorder_item_data->delete();
 
+        $saleorder_black_item_data = SaleOrderBlackItem::where('so_no',$id);
+        $saleorder_black_item_data->delete(); 
+
         $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
         $saleorder_expense_data->delete();
 
@@ -634,25 +679,56 @@ class SalesOrderController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-            $saleorder_items = new SaleOrderItem();
 
-            $saleorder_items->so_no = $voucher_no;
-            $saleorder_items->so_date = $voucher_date;
-            $saleorder_items->estimation_no = $request->estimation_no;
-            $saleorder_items->estimation_date = $request->estimation_date;
-            $saleorder_items->item_sno = $request->invoice_sno[$i];
-            $saleorder_items->item_id = $request->item_code[$i];
-            $saleorder_items->mrp = $request->mrp[$i];
-            $saleorder_items->gst = $request->tax_rate[$i];
-            $saleorder_items->rate_exclusive_tax = $request->exclusive[$i];
-            $saleorder_items->rate_inclusive_tax = $request->inclusive[$i];
-            $saleorder_items->qty = $request->quantity[$i];
-            $saleorder_items->uom_id = $request->uom[$i];
-            $saleorder_items->discount = $request->discount[$i];
-            $saleorder_items->overall_disc = $request->overall_disc[$i];
-            $saleorder_items->expenses = $request->expenses[$i];
+            if($request->black_or_white[$i] == 1)
+            {
 
-            $saleorder_items->save();
+                $saleorder_items = new SaleOrderItem();
+
+                $saleorder_items->so_no = $voucher_no;
+                $saleorder_items->so_date = $voucher_date;
+                $saleorder_items->estimation_no = $request->estimation_no;
+                $saleorder_items->estimation_date = $request->estimation_date;
+                $saleorder_items->item_sno = $request->invoice_sno[$i];
+                $saleorder_items->item_id = $request->item_code[$i];
+                $saleorder_items->mrp = $request->mrp[$i];
+                $saleorder_items->gst = $request->tax_rate[$i];
+                $saleorder_items->rate_exclusive_tax = $request->exclusive[$i];
+                $saleorder_items->rate_inclusive_tax = $request->inclusive[$i];
+                $saleorder_items->qty = $request->quantity[$i];
+                $saleorder_items->uom_id = $request->uom[$i];
+                $saleorder_items->discount = $request->discount[$i];
+                $saleorder_items->overall_disc = $request->overall_disc[$i];
+                $saleorder_items->expenses = $request->expenses[$i];
+                $saleorder_items->b_or_w = $request->black_or_white[$i];
+
+                $saleorder_items->save();
+
+            }
+            else
+            {
+                $saleorder_black_items = new SaleOrderBlackItem();
+
+                $saleorder_black_items->so_no = $voucher_no;
+                $saleorder_black_items->so_date = $voucher_date;
+                $saleorder_black_items->estimation_no = $request->estimation_no;
+                $saleorder_black_items->estimation_date = $request->estimation_date;
+                $saleorder_black_items->item_sno = $request->invoice_sno[$i];
+                $saleorder_black_items->item_id = $request->item_code[$i];
+                $saleorder_black_items->mrp = $request->mrp[$i];
+                $saleorder_black_items->gst = $request->tax_rate[$i];
+                $saleorder_black_items->rate_exclusive_tax = $request->exclusive[$i];
+                $saleorder_black_items->rate_inclusive_tax = $request->inclusive[$i];
+                $saleorder_black_items->qty = $request->quantity[$i];
+                $saleorder_black_items->uom_id = $request->uom[$i];
+                $saleorder_black_items->discount = $request->discount[$i];
+                $saleorder_black_items->overall_disc = $request->overall_disc[$i];
+                $saleorder_black_items->expenses = $request->expenses[$i];
+                $saleorder_black_items->b_or_w = $request->black_or_white[$i];
+
+                $saleorder_black_items->save();
+            }
+            
         }
          
 
@@ -777,6 +853,7 @@ class SalesOrderController extends Controller
     {
         $saleorder_data = SaleOrder::where('so_no',$id);
         $saleorder_item_data = SaleOrderItem::where('so_no',$id);
+        $saleorder_black_item_data = SaleOrderBlackItem::where('so_no',$id);
         $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
         $saleorder_tax_data = SaleOrderTax::where('so_no',$id);
         
@@ -788,7 +865,10 @@ class SalesOrderController extends Controller
          {
             $saleorder_item_data->delete();
          }
-
+         if($saleorder_black_item_data)
+         {
+            $saleorder_black_item_data->delete();
+         }
          if($saleorder_expense_data)
          {
             $saleorder_expense_data->delete();
