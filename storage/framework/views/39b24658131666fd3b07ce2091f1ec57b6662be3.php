@@ -231,7 +231,7 @@ table, th, td {
 
         <div class="form-row">
           
-          <table class="table table-striped table-bordered table-responsive" id="receivable_party">
+          <table class="table table-striped table-bordered" id="receivable_party">
                   <thead>
                     <th> S.no </th>
                     <th id="bill_no"> Bill.no </th>
@@ -254,8 +254,25 @@ table, th, td {
                     
                   </thead>
                   <tbody>
-
-                  </tbody>
+                   <?php $__currentLoopData = $purchaseentry_datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr>
+                      <td><?php echo e($key+1); ?></td>
+                      <td><?php echo e($value->s_no); ?></td>
+                      <td><?php echo e($value->s_date); ?></td>
+                      <td><?php echo e($value->customer->name); ?></td>
+                      <td><?php echo e($value->total_net_value); ?></td>
+                      <td><?php echo e($value->paid_amount); ?></td>
+                      <td><?php echo e($value->pending_amount); ?></td>
+                      <td><?php echo e($value->no_of_days); ?></td>
+                      <td><?php echo e($value->no_of_days); ?></td>
+                      <td><?php echo e($value->salesman->name); ?></td>
+                      <td><?php echo e($value->customer->name); ?></td>
+                      <td><?php echo e($value->customer->phone_no); ?></td>
+                      <td><?php echo e($value->customer->email); ?></td>
+                     
+            </tr>
+         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </tbody>
                   
                 </table>
           

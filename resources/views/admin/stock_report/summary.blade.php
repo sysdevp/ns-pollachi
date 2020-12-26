@@ -232,46 +232,94 @@ table, th, td {
                       <th id="cls_stock1">Qty</th>
                       <th id="cls_stock2">Rate</th>
                       <th id="cls_stock3">Amount</th> -->
-                      <th id="p_e1">Qty</th>
-                      <th id="p_e2">Rate</th>
-                      <th id="p_e3">Amount</th>
-                      <th id="p_o1">Qty</th>
-                      <th id="p_o2">Rate</th>
-                      <th id="p_o3">Amount</th>
-                      <th id="r_note1">Qty</th>
-                      <th id="r_note2">Rate</th>
-                      <th id="r_note3"> Amount</th>
-                      <th id="p_enrty1">Qty</th>
-                      <th id="p_enrty2">Rate</th>
-                      <th id="p_enrty3">Amount</th>
-                      <th id="r_out1">Qty</th>
-                      <th id="r_out2">Rate</th>
-                      <th id="r_out3">Amount</th>
-                      <th id="d_n1">Qty</th>
-                      <th id="d_n2">Rate</th>
-                      <th id="d_n3">Amount</th>
-                      <th id="s_e1">Qty</th>
-                      <th id="s_e2">Rate</th>
-                      <th id="s_e3">Amount</th>
-                      <th id="s_o1">Qty</th>
-                      <th id="s_o2">Rate</th>
-                      <th id="s_o3">Amount</th>
-                      <th id="d_note1">Qty</th>
-                      <th id="d_note2">Rate</th>
-                      <th id="d_note3">Amount</th>
-                      <th id="s_entry1">Qty</th>
-                      <th id="s_entry2">Rate</th>
-                      <th id="s_entry3">Amount</th>
-                      <th id="r_in1">Qty</th>
-                      <th id="r_in2">Rate</th>
-                      <th id="r_in3">Amount</th>
-                      <th id="c_note1">Qty</th>
-                      <th id="c_note2">Rate</th>
-                      <th id="c_note3">Amount</th> 
+                      <td id="p_e1">Qty</td>
+                      <td id="p_e2">Rate</td>
+                      <td id="p_e3">Amount</td>
+                      <td id="p_o1">Qty</td>
+                      <td id="p_o2">Rate</td>
+                      <td id="p_o3">Amount</td>
+                      <td id="r_note1">Qty</td>
+                      <td id="r_note2">Rate</td>
+                      <td id="r_note3"> Amount</td>
+                      <td id="p_enrty1">Qty</td>
+                      <td id="p_enrty2">Rate</td>
+                      <td id="p_enrty3">Amount</td>
+                      <td id="r_out1">Qty</td>
+                      <td id="r_out2">Rate</td>
+                      <td id="r_out3">Amount</td>
+                      <td id="d_n1">Qty</td>
+                      <td id="d_n2">Rate</td>
+                      <td id="d_n3">Amount</td>
+                      <td id="s_e1">Qty</td>
+                      <td id="s_e2">Rate</td>
+                      <td id="s_e3">Amount</td>
+                      <td id="s_o1">Qty</td>
+                      <td id="s_o2">Rate</td>
+                      <td id="s_o3">Amount</td>
+                      <td id="d_note1">Qty</td>
+                      <td id="d_note2">Rate</td>
+                      <td id="d_note3">Amount</td>
+                      <td id="s_entry1">Qty</td>
+                      <td id="s_entry2">Rate</td>
+                      <td id="s_entry3">Amount</td>
+                      <td id="r_in1">Qty</td>
+                      <td id="r_in2">Rate</td>
+                      <td id="r_in3">Amount</td>
+                      <td id="c_note1">Qty</td>
+                      <td id="c_note2">Rate</td>
+                      <td id="c_note3">Amount</td> 
                     </tr>
                   </thead>
                   <tbody>
+                      @for($i = 0; $i < $count; $i++)
+                      <tr>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['location'] }}</td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['total_qty'] }}</td>
 
+                      </tr>
+                    @endfor
                   </tbody>
                   
                 </table>
