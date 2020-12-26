@@ -686,6 +686,7 @@ class ComposerStaticInit787e9428c16392cb4d35f9f815302374
         'App\\Models\\City' => __DIR__ . '/../..' . '/app/Models/City.php',
         'App\\Models\\Country' => __DIR__ . '/../..' . '/app/Models/Country.php',
         'App\\Models\\CreditNote' => __DIR__ . '/../..' . '/app/Models/CreditNote.php',
+        'App\\Models\\CreditNoteBlackItem' => __DIR__ . '/../..' . '/app/Models/CreditNoteBlackItem.php',
         'App\\Models\\CreditNoteExpense' => __DIR__ . '/../..' . '/app/Models/CreditNoteExpense.php',
         'App\\Models\\CreditNoteItem' => __DIR__ . '/../..' . '/app/Models/CreditNoteItem.php',
         'App\\Models\\CreditNoteTax' => __DIR__ . '/../..' . '/app/Models/CreditNoteTax.php',
