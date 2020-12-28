@@ -277,6 +277,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
 
           <input type="hidden" class="form-control child_unit  required_for_proof_valid" placeholder="Item Code" id="child_unit" name="child_unit" value="">
+          
                
               </div>
               
@@ -394,6 +395,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">Item Name</label>
                       <input type="text" class="form-control item_name  required_for_proof_valid" id="item_name" placeholder="Item Name" name="item_name" readonly="" id="item_name" value="">
+
+                      <input type="hidden" class="form-control item_name1  required_for_proof_valid" id="item_name1" placeholder="Item Name" name="item_name1" readonly="" value="">
                     </div>
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">MRP</label>
@@ -496,16 +499,23 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       <!-- <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
                         <input type="number" class="form-control batch_no required_for_proof_valid" placeholder="Batch No" id="batch_no" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="batch_no" value="" >
-                        </div>
+                        </div> -->
 
-                      <div class="col-md-2">
+                        <input type="hidden" name="discounts" id="discounts" value="0">
+                        <input type="hidden" name="disc_total" id="disc_total" value="0">
+
+                        <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
+
+                    </div>
+                    <!-- <div class="col-md-12 row" id="b_w">
+                        <div class="col-md-2">
                           <label style="font-family: Times new roman;">Balck OR White</label>
-                        <select class="form-control" name="black_or_white[]">
+                        <select class="form-control" id="b_or_w">
                           <option value="1">W</option>
                           <option value="0">B</option>
                        </select>
                         </div>
-                    </div> -->
+                      </div> -->
 
                       <br>
                                                           
@@ -539,10 +549,12 @@ table, th, td {
                     <th> Total Quantity</th>
                     <th> Rejected Quantity</th>
                     <th> Remaining Quantity</th>
-                    <th> Credited Quantity</th>
+                    <th> Debited Quantity</th>
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
+                    <th> Overall Discount</th>
+                    <th> Expenses</th>
                     <th> Tax Rs</th>
                     <th> Net Value</th>
                     
@@ -631,6 +643,8 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th><label class="total_amount">0</label></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th><label class="total_net_price">0</label></th>

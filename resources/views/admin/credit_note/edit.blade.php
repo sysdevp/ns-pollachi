@@ -513,7 +513,7 @@ table, th, td {
              
               <div class="col-md-12" id="middlecol">
                 
-                <table class="table" id="team-list">
+                <table class="table table-responsive" id="team-list">
                   <thead>
                     <th> S.no </th>
                     <th> Item S.no </th>
@@ -530,6 +530,8 @@ table, th, td {
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
+                    <th> Overall Discount</th>
+                    <th> Expenses</th>
                     <th> Tax Rs</th>
                     <th> Net Value</th>
                     <th style="background-color: #FAF860;"> Last Purchase Rate(LPR)</th>
@@ -547,7 +549,7 @@ table, th, td {
                   @foreach($credit_note_items as $key => $value)
                   
 
-                  <tr id="row{{ $key }}" class="{{ $key }} tables"><td><span class="item_s_no"> {{ $key+1 }} </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no{{ $key }}" type="hidden" id="invoice{{ $key }}" value="{{ $value->item_sno }}" name="invoice_sno[]"><font class="item_no{{ $key }}">{{ $value->item_sno }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code{{ $key }}" value="{{ $value->item_id }}" name="item_code[]"><font class="items{{ $key }}">{{ $value->item->code }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name{{ $key }}" type="hidden" value="{{ $value->item->name }}" name="item_name[]"><font class="font_item_name{{ $key }}">{{ $value->item->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn{{ $key }}" type="hidden" value="{{ $value->item->hsn }}" name="hsn[]"><font class="font_hsn{{ $key }}">{{ $value->item->hsn }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp{{ $key }}" value="{{ $value->mrp }}" name="mrp[]"><font class="font_mrp{{ $key }}">{{ $value->mrp }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive{{ $key }}" value="{{ $value->rate_exclusive_tax }}" name="exclusive[]"><font class="font_exclusive{{ $key }}">{{ $value->rate_exclusive_tax }}</font><input type="hidden" class="inclusive{{ $key }}" value="{{ $value->rate_inclusive_tax }}" name="inclusive[]"></div></div></td><td><font class="font_purchase_quantity{{$key}}">{{$value->qty}}</font></td><td><font class="font_rejected_qty{{$key}}">{{$value->rejected_qty}}</font><input type="hidden" class="rejected_quantity" name="rejected_item_qty[]" id="rejected_quantity{{$key}}" value="{{$value->rejected_qty}}"></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity{{$key}}" value="{{$value->remaining_qty}}" name="quantity[]"><font class="font_quantity{{$key}}">{{$value->remaining_qty}}</font><input type="hidden" class="actual_quantity" id="actual_quantity{{$key}}" value="{{$value->qty}}" name="actual_quantity[]"><input type="hidden" class="actual_purchase_quantity" id="actual_purchase_quantity{{$key}}" value="{{$value->actual_purchase_qty}}" name="actual_purchase_quantity[]"><input type="hidden" class="remaining_qty" id="remaining_qty{{$key}}" value="{{$value->remaining_qty}}" name="remaining_qty[]"></div></div></td><td><font class="font_debited_qty{{$key}}">{{$value->credited_qty}}</font><input type="hidden" class="debited_qty" value="{{$value->credited_qty}}" name="debited_qty[]" id="debited_qty{{$key}}"><input type="hidden" name="debited_qty_before_edit[]" value="{{$value->credited_qty}}" id="debited_qty_before_edit{{$key}}"></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom{{ $key }}" value="{{ $value->uom->id }}" name="uom[]"><font class="font_uom{{ $key }}">{{ $value->uom->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt{{ $key }}" value="{{ $item_amount[$key] }}" name="amount[]"><font class="font_amount{{ $key }}"> {{$item_amount[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts {{ $key }}" value="{{ $value->discount }}" id="input_discount{{ $key }}" ><input class="discount_val{{ $key }}" type="hidden" value="{{ $value->discount }}" name="discount[]"><font class="font_discount" id="font_discount{{ $key }}">{{ $value->discount }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax{{ $key }}" value="{{$item_gst_rs[$key]}}" name="gst[]"><input type="hidden" class="tax_gst{{ $key }}"  value="{{ $value->gst }}" name="tax_rate[]"><font class="font_gst{{ $key }}"> {{$item_gst_rs[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price{{ $key }}" value="{{ $item_net_value[$key] }}" name="net_price[]"><input type="hidden" class="black_or_white{{$key}}"  value="{{ $value->b_or_w }}" name="black_or_white[]"><font class="font_net_price{{ $key }}">{{ $item_net_value[$key] }}</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase{{ $key }}">{{ $net_value[$key] }}</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="{{ $key }}" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="{{ $key }}" aria-hidden="true"></i></td></tr>
+                  <tr id="row{{ $key }}" class="{{ $key }} tables"><td><span class="item_s_no"> {{ $key+1 }} </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no{{ $key }}" type="hidden" id="invoice{{ $key }}" value="{{ $value->item_sno }}" name="invoice_sno[]"><font class="item_no{{ $key }}">{{ $value->item_sno }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code{{ $key }}" value="{{ $value->item_id }}" name="item_code[]"><font class="items{{ $key }}">{{ $value->item->code }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name{{ $key }}" type="hidden" value="{{ $value->item->name }}" name="item_name[]"><font class="font_item_name{{ $key }}">{{ $value->item->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn{{ $key }}" type="hidden" value="{{ $value->item->hsn }}" name="hsn[]"><font class="font_hsn{{ $key }}">{{ $value->item->hsn }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp{{ $key }}" value="{{ $value->mrp }}" name="mrp[]"><font class="font_mrp{{ $key }}">{{ $value->mrp }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive{{ $key }}" value="{{ $value->rate_exclusive_tax }}" name="exclusive[]"><font class="font_exclusive{{ $key }}">{{ $value->rate_exclusive_tax }}</font><input type="hidden" class="inclusive{{ $key }}" value="{{ $value->rate_inclusive_tax }}" name="inclusive[]"></div></div></td><td><font class="font_purchase_quantity{{$key}}">{{$value->qty}}</font></td><td><font class="font_rejected_qty{{$key}}">{{$value->rejected_qty}}</font><input type="hidden" class="rejected_quantity" name="rejected_item_qty[]" id="rejected_quantity{{$key}}" value="{{$value->rejected_qty}}"></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity{{$key}}" value="{{$value->remaining_qty}}" name="quantity[]"><font class="font_quantity{{$key}}">{{$value->remaining_qty}}</font><input type="hidden" class="actual_quantity" id="actual_quantity{{$key}}" value="{{$value->qty}}" name="actual_quantity[]"><input type="hidden" class="actual_purchase_quantity" id="actual_purchase_quantity{{$key}}" value="{{$value->actual_purchase_qty}}" name="actual_purchase_quantity[]"><input type="hidden" class="remaining_qty" id="remaining_qty{{$key}}" value="{{$value->remaining_qty}}" name="remaining_qty[]"></div></div></td><td><font class="font_debited_qty{{$key}}">{{$value->credited_qty}}</font><input type="hidden" class="debited_qty" value="{{$value->credited_qty}}" name="debited_qty[]" id="debited_qty{{$key}}"><input type="hidden" name="debited_qty_before_edit[]" value="{{$value->credited_qty}}" id="debited_qty_before_edit{{$key}}"></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom{{ $key }}" value="{{ $value->uom->id }}" name="uom[]"><font class="font_uom{{ $key }}">{{ $value->uom->name }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt{{ $key }}" value="{{ $item_amount[$key] }}" name="amount[]"><font class="font_amount{{ $key }}"> {{$item_amount[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts {{ $key }}" value="{{ $value->discount }}" id="input_discount{{ $key }}" ><input class="discount_val{{ $key }}" type="hidden" value="{{ $value->discount }}" name="discount[]"><font class="font_discount" id="font_discount{{ $key }}">{{ $value->discount }}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc{{$key}}" value="{{$value->overall_disc}}" name="overall_disc[]"><font class="font_overall_disc{{$key}}">{{$value->overall_disc}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses {{$key}}" id="expenses{{$key}}" value="{{$value->expenses}}" name="expenses[]"><font class="font_expenses{{$key}}">{{$value->expenses}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax{{ $key }}" value="{{$item_gst_rs[$key]}}" name="gst[]"><input type="hidden" class="tax_gst{{ $key }}"  value="{{ $value->gst }}" name="tax_rate[]"><font class="font_gst{{ $key }}"> {{$item_gst_rs[$key]}} </font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price{{ $key }}" value="{{ $item_net_value[$key] }}" name="net_price[]"><input type="hidden" class="black_or_white{{$key}}"  value="{{ $value->b_or_w }}" name="black_or_white[]"><font class="font_net_price{{ $key }}">{{ $item_net_value[$key] }}</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase{{ $key }}">{{ $net_value[$key] }}</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="{{ $key }}" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="{{ $key }}" aria-hidden="true"></i></td></tr>
 
                   @endforeach
 
@@ -615,6 +617,8 @@ table, th, td {
                       <!-- <th></th> -->
                       <th></th>
                       <th><label class="total_amount">{{$item_amount_sum}}</label></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th><label class="total_net_price">{{$item_net_value_sum}}</label></th>
@@ -889,10 +893,45 @@ $(document).on("keyup",".expense_amount",function()
     }
     
     total_expense_cal();
+    individual_expense();
+    overall_discounts();
     roundoff_cal();
   }
   
 });
+function individual_expense()
+{
+$('.expenses').each(function(){
+
+  var count = $(this).attr('class').split(' ')[1];
+  var total_amount =calculate_total_amount();
+    var total_expense = total_expense_cal();
+    var amount = $('#amnt'+count).val();
+    var gst_rs = $('#tax'+count).val();
+    var discount = $('.discount_val'+count).val();
+    var overall_disc = $('#overall_disc'+count).val();
+    var sum_of_total_discount = parseFloat(discount)+parseFloat(overall_disc);
+    var exp_distribution = parseFloat(total_expense)/parseFloat(total_amount)*parseFloat(amount);
+    var total_exp = parseFloat(0)+parseFloat(exp_distribution);
+
+
+    var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(sum_of_total_discount)+parseFloat(total_exp);
+  $('#net_price'+count).val(net_value.toFixed(2));
+    $('.font_net_price'+count).text(net_value.toFixed(2));
+    $('.font_expenses'+count).text(total_exp.toFixed(2));
+
+    $(this).val(total_exp);
+
+});
+
+var total_net_price=calculate_total_net_price();
+
+$(".total_net_price").html(parseFloat(total_net_price));
+$('.total_net_value').text(total_net_price.toFixed(2));
+$('#total_price').val(total_net_price.toFixed(2));
+  
+}
+
 function total_expense_cal(){
 
   var total_amount=calculate_total_net_price();
@@ -904,8 +943,9 @@ total_expense_amount=parseFloat(total_expense_amount)+parseFloat($(this).val());
   });
 
   var total_net_amount=parseFloat(total_amount)+parseFloat(total_expense_amount);
-   $('.total_net_value').text(total_net_amount.toFixed(2));
-   $('#total_price').val(total_net_amount.toFixed(2));
+   // $('.total_net_value').text(total_net_amount.toFixed(2));
+   // $('#total_price').val(total_net_amount.toFixed(2));
+   return total_expense_amount;
 }
 function roundoff_cal()
 {
@@ -1122,6 +1162,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+individual_expense();
 roundoff_cal();
 
 var len=$('.tables').length;
@@ -1226,6 +1267,7 @@ $(document).on("click",".remove_items",function(){
     $("#sgst").val(half_gst.toFixed(2));
     total_expense_cal();
     overall_discounts();
+    individual_expense();
     roundoff_cal();
     
     $('#cat').hide();
@@ -1517,6 +1559,7 @@ $(document).on("click",".update_items",function(){
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
               overall_discounts();
+              individual_expense();
               roundoff_cal();
 
               
@@ -1626,6 +1669,7 @@ else if($('.r_in_no').val() != '')
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
               overall_discounts();
+              individual_expense();
               roundoff_cal();
 
 
@@ -1711,6 +1755,8 @@ function expense_add()
   $('.append_expense').append(expense_details);
   $("select").select2();
   total_expense_cal();
+  individual_expense();
+  overall_discounts();
   roundoff_cal();
   var length=$('.expense').length;
   $('#expense_count').val(length);
@@ -1733,6 +1779,8 @@ $(document).on("click",".remove_expense",function(){
 
   }
   total_expense_cal();
+  individual_expense();
+  overall_discounts();
   roundoff_cal();
 
   });
@@ -2726,11 +2774,9 @@ $('.s_date').val(result.date_sale_entry);
 $('.sale_date').text(result.date_sale_entry);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2750,6 +2796,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+individual_expense();
 roundoff_cal();
 
 
@@ -2806,11 +2853,10 @@ $('.invoice_val').text(result.item_net_value_sum);
 $('.r_in_date').val(result.date_rejection_in);
 $('.sale_date').text(result.date_sale_entry);
 $('.taxes').html(result.tax_append);
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
+
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2830,6 +2876,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+individual_expense();
 roundoff_cal();
 
 

@@ -559,6 +559,8 @@ table, th, td {
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
+                    <th> Overall Discount</th>
+                    <th> Expenses</th>
                     <th> Tax Rs</th>
                     <th> Net Value</th>
                     
@@ -647,6 +649,8 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th><label class="total_amount">0</label></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th><label class="total_net_price">0</label></th>
@@ -1485,7 +1489,7 @@ $(document).on("click",".update_items",function(){
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
-              $('.font_purchase_quantity'+td_id).text($('#actual_qty').val());
+              // $('.font_purchase_quantity'+td_id).text($('#actual_qty').val());
               $('.quantity'+td_id).val($('.quantity').val());
               $('.font_quantity'+td_id).text($('.quantity').val());
               $('#rejected_quantity'+td_id).val($('.rejected').val());
@@ -3259,8 +3263,8 @@ item_codes(uom_exclusive,values);
   var to_html_total_net = total_net_price.toFixed(2);
   $(".total_net_price").html(parseFloat(to_html_total_net));
   roundoff_cal();
-  individual_expense();
-  total_expense_cal();
+  // individual_expense();
+  // total_expense_cal();
   var q=calculate_total_discount();
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));
