@@ -549,7 +549,7 @@ table, th, td {
                     <th> Total Quantity</th>
                     <th> Rejected Quantity</th>
                     <th> Remaining Quantity</th>
-                    <th> Debited Quantity</th>
+                    <th> Credited Quantity</th>
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
@@ -1446,12 +1446,12 @@ $(document).on("click",".update_items",function(){
   $("#item_code").val('');
   $("#item_code").focus();
  }
- else if(parseFloat(inclusive)>parseFloat(mrp))
- {
-  alert('Rate Exceeds The MRP!!');
-  $('#exclusive').val('');
-  $('#inclusive').val('');
- }
+ // else if(parseFloat(inclusive)>parseFloat(mrp))
+ // {
+ //  alert('Rate Exceeds The MRP!!');
+ //  $('#exclusive').val('');
+ //  $('#inclusive').val('');
+ // }
 
  else if($('.s_no').val() != '')
  {
@@ -1470,7 +1470,7 @@ $(document).on("click",".update_items",function(){
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
-              $('.font_purchase_quantity'+td_id).text($('#actual_qty').val());
+              // $('.font_purchase_quantity'+td_id).text($('#actual_qty').val());
               $('.quantity'+td_id).val($('.quantity').val());
               $('.font_quantity'+td_id).text($('.quantity').val());
               $('#rejected_quantity'+td_id).val($('.rejected').val());

@@ -1508,10 +1508,10 @@ else if($('.r_in_no').val() != '')
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
-              // $('.quantity'+td_id).val($('.quantity').val());
-              // $('.font_quantity'+td_id).text($('.quantity').val());
-              $('#rejected_quantity'+td_id).val($('.quantity').val());
-              $('.font_rejected_qty'+td_id).text($('.quantity').val());
+              $('.quantity'+td_id).val($('.quantity').val());
+              $('.font_quantity'+td_id).text($('.quantity').val());
+              // $('#rejected_quantity'+td_id).val($('.quantity').val());
+              // $('.font_rejected_qty'+td_id).text($('.quantity').val());
               $('#remaining_after_debit'+td_id).val($('.quantity').val());
               $('.font_remaining_after_debit'+td_id).text($('.quantity').val());
               $('#debited_qty'+td_id).val($('.rejected').val());
