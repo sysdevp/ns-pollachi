@@ -8,7 +8,7 @@
   *
   * @return string List of times
   */
-  function get_times ($default = '19:00', $interval = '+30 minutes') {
+  function get_times ($default = '00:00', $interval = '+30 minutes') {
     $output = '';
 
     $current = strtotime('00:00');
