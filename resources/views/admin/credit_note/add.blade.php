@@ -506,6 +506,8 @@ table, th, td {
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
+                    <th> Overall Discount</th>
+                    <th> Expenses</th>
                     <th> Tax Rs</th>
                     <th> Net Value</th>
                     <th style="background-color: #FAF860;"> Last Purchase Rate(LPR)</th>
@@ -584,6 +586,8 @@ table, th, td {
                       <!-- <th></th> -->
                       <th></th>
                       <th><label class="total_amount">0</label></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th><label class="total_net_price">0</label></th>
@@ -789,10 +793,45 @@ $(document).on("keyup",".expense_amount",function()
     }
     
     total_expense_cal();
+    individual_expense();
+    overall_discounts();
     roundoff_cal();
   }
   
 });
+function individual_expense()
+{
+$('.expenses').each(function(){
+
+  var count = $(this).attr('class').split(' ')[1];
+  var total_amount =calculate_total_amount();
+    var total_expense = total_expense_cal();
+    var amount = $('#amnt'+count).val();
+    var gst_rs = $('#tax'+count).val();
+    var discount = $('.discount_val'+count).val();
+    var overall_disc = $('#overall_disc'+count).val();
+    var sum_of_total_discount = parseFloat(discount)+parseFloat(overall_disc);
+    var exp_distribution = parseFloat(total_expense)/parseFloat(total_amount)*parseFloat(amount);
+    var total_exp = parseFloat(0)+parseFloat(exp_distribution);
+
+
+    var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(sum_of_total_discount)+parseFloat(total_exp);
+  $('#net_price'+count).val(net_value.toFixed(2));
+    $('.font_net_price'+count).text(net_value.toFixed(2));
+    $('.font_expenses'+count).text(total_exp.toFixed(2));
+
+    $(this).val(total_exp);
+
+});
+
+var total_net_price=calculate_total_net_price();
+
+$(".total_net_price").html(parseFloat(total_net_price));
+$('.total_net_value').text(total_net_price.toFixed(2));
+$('#total_price').val(total_net_price.toFixed(2));
+  
+}
+
 function total_expense_cal(){
 
   var total_amount=calculate_total_net_price();
@@ -804,8 +843,9 @@ total_expense_amount=parseFloat(total_expense_amount)+parseFloat($(this).val());
   });
 
   var total_net_amount=parseFloat(total_amount)+parseFloat(total_expense_amount);
-   $('.total_net_value').text(total_net_amount.toFixed(2));
-   $('#total_price').val(total_net_amount.toFixed(2));
+   // $('.total_net_value').text(total_net_amount.toFixed(2));
+   // $('#total_price').val(total_net_amount.toFixed(2));
+   return total_expense_amount;
 }
 function roundoff_cal()
 {
@@ -1022,6 +1062,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+individual_expense();
 roundoff_cal();
 
 var len=$('.tables').length;
@@ -1126,6 +1167,7 @@ $(document).on("click",".remove_items",function(){
     $("#sgst").val(half_gst.toFixed(2));
     total_expense_cal();
     overall_discounts();
+    individual_expense();
     roundoff_cal();
     
     $('#cat').hide();
@@ -1417,6 +1459,7 @@ $(document).on("click",".update_items",function(){
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
               overall_discounts();
+              individual_expense();
               roundoff_cal();
 
               
@@ -1526,6 +1569,7 @@ else if($('.r_in_no').val() != '')
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
               overall_discounts();
+              individual_expense();
               roundoff_cal();
 
 
@@ -1611,6 +1655,8 @@ function expense_add()
   $('.append_expense').append(expense_details);
   $("select").select2();
   total_expense_cal();
+  individual_expense();
+  overall_discounts();
   roundoff_cal();
   var length=$('.expense').length;
   $('#expense_count').val(length);
@@ -1633,6 +1679,8 @@ $(document).on("click",".remove_expense",function(){
 
   }
   total_expense_cal();
+  individual_expense();
+  overall_discounts();
   roundoff_cal();
 
   });
@@ -2648,6 +2696,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+// individual_expense();
 roundoff_cal();
 
 
@@ -2727,6 +2776,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+// individual_expense();
 roundoff_cal();
 
 

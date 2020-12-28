@@ -622,7 +622,9 @@ class DeliveryNoteController extends Controller
 
         $delivery_note = DeliveryNote::where('d_no',$id)->first();
         $delivery_note_black_items = DeliveryNoteBlackItem::where('d_no',$id);
-        $delivery_note_items = DeliveryNoteItem::where('d_no',$id)->union($delivery_note_black_items)->get();
+        $delivery_note_items = DeliveryNoteItem::where('d_no',$id)
+                                                ->union($delivery_note_black_items)
+                                                ->get();
         $delivery_note_expense = DeliveryNoteExpense::where('d_no',$id)->get();
         $tax = DeliveryNoteTax::where('d_no',$id)->get();
 
@@ -699,7 +701,7 @@ class DeliveryNoteController extends Controller
         $item_discount_sum = 0;
         foreach($delivery_note_items as $key => $value)  
         {
-            $item_amount[] = $value->qty * $value->rate_exclusive_tax;
+            $item_amount[] = ($value->remaining_qty + $value->rejected_qty) * $value->rate_exclusive_tax;
             $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
             $item_discount = $value->discount + $value->overall_disc;
             $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
@@ -719,7 +721,7 @@ class DeliveryNoteController extends Controller
                                     ->union($item_black_data)
                                     ->first();
 
-            $amount = $item_data->remaining_qty * $item_data->rate_exclusive_tax;
+            $amount = ($item_data->remaining_qty + $item_data->rejected_qty) * $item_data->rate_exclusive_tax;
             $gst_rs = $amount * $item_data->gst / 100;
             $total_discount = $item_data->discount + $item_data->overall_disc;
             $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
