@@ -277,6 +277,19 @@ Route::group(['prefix' => 'master/income-type', 'middleware' => ['auth']], funct
 });
 /* Income Type Master End Here  */
 
+/* Offers Master  Start Here  */
+Route::group(['prefix' => 'master/offers', 'middleware' => ['auth']], function () {
+    Route::any('/', 'OffersController@index')->middleware('permission:gift_voucher_matser_list');
+    Route::any('create', 'OffersController@create')->middleware('permission:gift_voucher_matser_create');
+    Route::any('store', 'OffersController@store')->middleware('permission:gift_voucher_matser_create');
+    Route::any('show/{id}', 'OffersController@show')->middleware('permission:gift_voucher_matser_list');
+    Route::any('edit/{id}', 'OffersController@edit')->middleware('permission:gift_voucher_matser_edit');
+    Route::any('update/{id}', 'OffersController@update')->middleware('permission:gift_voucher_matser_edit');
+    Route::any('delete/{id}', 'OffersController@destroy')->middleware('permission:gift_voucher_matser_update');
+    Route::get('print', 'OffersController@print');
+});
+/* Offers Master End Here  */
+
 /* Gift Voucher Master  Start Here  */
 Route::group(['prefix' => 'master/gift-voucher', 'middleware' => ['auth']], function () {
     Route::any('/', 'GiftvoucherController@index')->middleware('permission:gift_voucher_matser_list');

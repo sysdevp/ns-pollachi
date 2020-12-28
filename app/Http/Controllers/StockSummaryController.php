@@ -8,6 +8,14 @@ use App\Models\Item;
 use App\Models\Supplier;
 use App\Models\Brand;
 use App\Models\OpeningStock;
+use App\Models\Location;
+use App\Models\PurchaseEntryItem;
+use App\Models\SaleEntryItem;
+use App\Models\ReceiptNoteItem;
+use App\Models\DeliveryNoteItem;
+use App\Models\RejectionOutItem;
+use App\Models\RejectionInItem;
+use App\Models\StockChange;
 
 class StockSummaryController extends Controller
 {
@@ -22,7 +30,141 @@ class StockSummaryController extends Controller
         $item = Item::all();
         $supplier = Supplier::all();
         $brand = Brand::all();
-        return view('admin.stock_report.summary',compact('category','item','supplier','brand'));
+        // return view('admin.stock_report.summary',compact('category','item','supplier','brand'));
+        $location = Location::all();
+        $array_details = [];
+        foreach ($location as $key => $l_value) 
+        {
+        $sale_entry_details = PurchaseEntryItem::leftjoin('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+        ->where('purchase_entry_items.active',1)
+        ->where('purchase_entries.location','=',$l_value->id)
+        ->groupBy('purchase_entries.location','purchase_entry_items.item_id')
+        ->select('purchase_entries.location','purchase_entry_items.item_id');
+
+        $receipt_note_entry_details = ReceiptNoteItem::leftjoin('receipt_notes','receipt_note_items.rn_no','=','receipt_notes.rn_no')
+        ->where('receipt_note_items.active',1)
+        ->where('receipt_notes.location','=',$l_value->id)
+        ->groupBy('receipt_notes.location','receipt_note_items.item_id')
+        ->select('receipt_notes.location','receipt_note_items.item_id');
+
+        $item_opening= OpeningStock::groupBy('location','item_id')
+        ->where('location','=',$l_value->id)
+        ->select('location','item_id');
+
+         $purchase_entry_details = SaleEntryItem::leftjoin('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
+        ->where('sale_entry_items.active',1)
+        ->where('sale_entries.location','=',$l_value->id)
+        ->groupBy('sale_entries.location','sale_entry_items.item_id')
+        ->select('sale_entries.location','sale_entry_items.item_id')
+        ->union($sale_entry_details)
+        ->union($item_opening)
+        ->union($receipt_note_entry_details)
+        ->get();
+
+                                              
+        
+        foreach ($purchase_entry_details as $key => $value) 
+        {
+
+
+            
+        $purchase_entry_items= PurchaseEntryItem::join('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+                             ->where('purchase_entry_items.item_id','=',$value->item_id)
+                             ->where('purchase_entries.location','=',$l_value->id)
+                             ->where('purchase_entries.cancel_status','=',0)
+                             ->where('purchase_entry_items.active','!=',0)
+                             ->where('purchase_entries.receipt_tag','!=',1)
+                             ->sum('purchase_entry_items.remaining_qty');
+
+        $purchase_entry_items_rejected_qty= PurchaseEntryItem::join('purchase_entries','purchase_entry_items.p_no','=','purchase_entries.p_no')
+                             ->where('purchase_entry_items.item_id','=',$value->item_id)
+                             ->where('purchase_entries.location','=',$l_value->id)
+                             ->where('purchase_entries.cancel_status','=',0)
+                             ->where('purchase_entry_items.active','!=',0)
+                             ->where('purchase_entries.receipt_tag','=',1)
+                             ->sum('purchase_entry_items.rejected_qty');
+
+        $item_opening_quantity= OpeningStock::where('item_id','=',$value->item_id)
+                             ->where('location','=',$l_value->id)
+                             ->sum('opening_qty');
+        
+        $receipt_note_items = ReceiptNoteItem::join('receipt_notes','receipt_note_items.rn_no','=','receipt_notes.rn_no')
+                            ->where('receipt_note_items.item_id','=',$value->item_id)
+                            ->where('receipt_notes.location','=',$l_value->id)
+                            ->where('receipt_notes.status','=',0)
+                            //->where('receipt_notes.receipt_tag','=',1)
+                             ->sum('receipt_note_items.remaining_qty');
+
+        $rejection_out_items = RejectionOutItem::join('rejection_outs','rejection_out_items.r_out_no','=','rejection_outs.r_out_no')
+                            ->where('rejection_out_items.item_id','=',$value->item_id)
+                            ->where('rejection_outs.cancel_status','=',0)
+                            ->where('rejection_outs.status','=',0)
+                            ->where('rejection_outs.location','=',$l_value->id)
+                            ->sum('rejection_out_items.remaining_qty');
+        
+        $sale_entry_items = SaleEntryItem::join('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
+                            ->where('sale_entry_items.item_id','=',$value->item_id)
+                            ->where('sale_entries.cancel_status','=',0)
+                            ->where('sale_entries.delivery_tag','!=',1)
+                            ->where('sale_entries.location','=',$l_value->id)
+                            ->sum('sale_entry_items.remaining_qty');
+
+        $sale_entry_items_rejected_quantity = SaleEntryItem::join('sale_entries','sale_entry_items.s_no','=','sale_entries.s_no')
+                            ->where('sale_entry_items.item_id','=',$value->item_id)
+                            ->where('sale_entries.cancel_status','=',0)
+                            ->where('sale_entries.delivery_tag','=',1)
+                            ->where('sale_entries.location','=',$l_value->id)
+                            ->sum('sale_entry_items.rejected_qty');
+        
+        $delivery_note_items = DeliveryNoteItem::join('delivery_notes','delivery_note_items.d_no','=','delivery_notes.d_no')
+                            ->where('delivery_note_items.item_id','=',$value->item_id)
+                            ->where('delivery_notes.location','=',$l_value->id)
+                            ->where('delivery_notes.cancel_status','=',0)
+                           // ->where('delivery_notes.delivery_tag','=',0)
+                            ->sum('delivery_note_items.remaining_qty');
+        
+        $rejection_in_items = RejectionInItem::join('rejection_ins','rejection_in_items.r_in_no','=','rejection_ins.r_in_no')
+                            ->where('rejection_in_items.item_id','=',$value->item_id)
+                            ->where('rejection_ins.cancel_status','=',0)
+                            ->where('rejection_ins.status','=',0)
+                            ->where('rejection_ins.location','=',$l_value->id)
+                            ->sum('rejection_in_items.remaining_qty');
+                            
+        $stock_changes = StockChange::where('item_id','=',$value->item_id)->where('location_id','=',$l_value->id)->sum('quantity');
+
+                            
+
+        $purchase_total_qty =  $purchase_entry_items + $receipt_note_items + $item_opening_quantity - $purchase_entry_items_rejected_qty;
+        $sale_total_qty =  $sale_entry_items + $delivery_note_items - 
+        $sale_entry_items_rejected_quantity; 
+
+        $total_qty = $purchase_total_qty - $sale_total_qty + $stock_changes;
+                            
+                            // echo "<pre>"; print_r($total_qty);
+                                               
+        $new_array = array();
+        $item_name = Item::where('id','=',$value->item_id)->pluck('name');
+        $new_array['item'] = $item_name[0];
+        $location = Location::where('id','=',$l_value->id)->pluck('name');
+        $new_array['location'] = $location[0];
+        $new_array['total_qty'] = $total_qty;     
+
+        // echo "<pre>"; print_r($new_array);            
+ 
+        
+        array_push($array_details, $new_array);
+
+        } 
+ 
+        }          
+        // die();
+        
+             $count = count($array_details); 
+             // echo $count; exit();                        
+
+            
+    return view('admin.stock_report.summary',compact('array_details','count','category','item','supplier','brand'));
+                            
     }
 
     /**

@@ -168,6 +168,7 @@
                             @endcan -->
                             @can('gift_voucher_matser_list')
                             <li><a href="{{url('master/gift-voucher')}}">Gift Voucher</a></li>
+                            <li><a href="{{url('master/offers')}}">Offers</a></li>
                             @endcan
                         </ul>
                     </li>

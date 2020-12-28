@@ -493,7 +493,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="text" class="form-control remarks" placeholder="Remarks" id="remarks" pattern="[0-9][0-9 . 0-9]{0,100}" name="remarks" value="" >
                       </div>
 
-                      <div class="col-md-2">
+                      <!-- <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
                         <input type="number" class="form-control batch_no required_for_proof_valid" placeholder="Batch No" id="batch_no" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="batch_no" value="" >
                         </div>
@@ -505,7 +505,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <option value="0">B</option>
                        </select>
                         </div>
-                    </div>
+                    </div> -->
 
                       <br>
                                                           
@@ -1905,6 +1905,7 @@ function gst_calc()
 function calc_exclusive()
 {
   var quantity = $('#quantity').val();
+  var rejected = $('#rejected').val();
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
   var tax_rate = $('.tax_rate').val();
@@ -1941,7 +1942,7 @@ function calc_exclusive()
     //   $('#quantity').val(1);
     // }
   
-      var total = parseInt(quantity)*parseFloat(rate_exclusive);
+      var total = parseInt(rejected)*parseFloat(rate_exclusive);
     
     $('#amount').val(total.toFixed(2));
 
@@ -1997,6 +1998,7 @@ function calc_inclusive()
 {
   
   var quantity = $('#quantity').val();
+  var rejected = $('#rejected').val();
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
   var mrp = $('.mrp').val();
@@ -2047,7 +2049,7 @@ function calc_inclusive()
       var rate=parseFloat(tax_rate)/100+1;
       var actual_tax = parseFloat(tax_rate)/100;
       var gst_rate = parseFloat(rate_inclusive)/parseFloat(rate);
-      var total = parseInt(quantity)*parseFloat(gst_rate.toFixed(2));
+      var total = parseInt(rejected)*parseFloat(gst_rate.toFixed(2));
       $('#amount').val(total.toFixed(2));
       $('#exclusive').val(gst_rate.toFixed(2));
       if(parseFloat(rate_inclusive)>parseFloat(mrp))

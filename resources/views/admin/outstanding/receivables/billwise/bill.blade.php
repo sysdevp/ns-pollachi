@@ -222,26 +222,25 @@ table, th, td {
                     <th id="email"> Customer Contact Email Id</th>
                   </thead>
                   <tbody>
-                    <!-- <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="display: none;"></td>
-                    <td style="display: none;"></td>
-                    <td style="display: none;"></td>
-                    <td style="display: none;"></td>
-                    <td style="display: none;"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td> -->
-
-                  </tbody>
+                   @foreach($purchaseentry_datas as $key=> $value)
+                    <tr>
+                      <td>{{ $key+1 }}</td>
+                      <td>{{ $value->s_no }}</td>
+                      <td>{{ $value->s_date }}</td>
+                      <td>{{ $value->customer->name }}</td>
+                      <td>{{ $value->total_net_value }}</td>
+                      <td>{{ $value->paid_amount }}</td>
+                      <td>{{ $value->pending_amount }}</td>
+                      <td>{{ $value->no_of_days }}</td>
+                      <td>{{ $value->no_of_days }}</td>
+                      <td>{{ $value->salesman->name }}</td>
+                      <td>{{ $value->customer->name }}</td>
+                      <td>{{ $value->customer->phone_no }}</td>
+                      <td>{{ $value->customer->email }}</td>
+                     
+            </tr>
+         @endforeach
+        </tbody>
                   
                 </table>
               </div>
