@@ -168,12 +168,20 @@ class GiftvoucherController extends Controller
     public function print() {
         $gift_voucher = Giftvoucher::all();
 
+        $imagePath = asset('assets/image/logo.png');
+        $base64BrandImage = base64_encode(file_get_contents($imagePath));
+
         // instantiate and use the dompdf class
         $pdf = \App::make('dompdf.wrapper');
 
         $html = "";
         $html .= '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">';
 
+        $html .= '<div class="row">
+                <div class="col-md-12 text-center">
+                    <img src="data:image/png;base64,' . $base64BrandImage . '" style="widht: auto; height: 100px;">
+                </div>
+                </div>';
         $html .= '<table class="table table-striped">
                     <thead class="thead-dark">
                         <tr>
