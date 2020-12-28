@@ -719,6 +719,73 @@ table, th, td {
                           
 
                        </div>
+ <div class="col-md-8">
+                       <div class="form-group row">
+                       <div class="col-md-4">
+                       <label for="validationCustom01" class=" col-form-label"><h4>Receipt Details:</h4> </label><br>
+                       
+                           
+                       </div>
+                         </div>
+              </div>
+                        <div class="row col-md-12">
+        <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control amount" name="bill_amount" value="0">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
+              <div class="col-sm-8">
+                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
+                           <option value="">Choose Mode</option>
+                           <option value="1">Cash</option>
+                           <option value="2">Bank</option>
+                           <option value="3">Advance Adjustment</option>
+                        </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="adv_det" style="display:none">
+        <div class="col-md-8">
+                       <div class="form-group row">
+                       <div class="col-md-4">
+                       <label for="validationCustom01" class=" col-form-label"><h4>Advance Bill Details:</h4> </label><br>
+                       
+                           
+                       </div>
+                         </div>
+              </div>
+
+        <div class="card-body" style="height: 100%;">
+      <table id="" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>Advance Voucher.No</th>
+            <th>Voucher Date </th>
+            <th>Advance Amount </th>
+            <th>Advance Available Amount</th>
+            <th>Current Cleared Amount</th>
+          </tr>
+        </thead>
+        <tbody class="append_proof_details" id="myTable_adv">
+        </tbody>
+        <tfoot>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th><input type="text" name="total_net_value" class="total_net_value" id="total_net_value"></th>
+            </tfoot>
+      </table>
+    </div>
+</div>
+
 
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
@@ -2918,6 +2985,53 @@ item_codes(uom_exclusive,values);
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));
 }
+function payment_mode(val)
+{
+
+  var payment_mode=val;
+ if(payment_mode=="3"){
+    $('#adv_det').show();
+    $('#cash_bill').hide();
+    var customer_id=$('#customer_id').val();
+     $.ajax({
+            
+            type: "POST",
+            url: "{{ url('receipt_process/advance_entry_det/') }}",
+            data: { customer_id : customer_id },
+            success: function(data) {
+            var result = JSON.parse(data);
+            $('#myTable_adv').append(result);
+            
+           }
+        });
+
+ } else {
+$('#adv_det').hide();
+$('#cash_bill').show();
+ }
+
+
+ 
+}
+
+function myfunction(val) {
+
+var sum = 0;
+  $('.receipt_amount').each(function(){
+ sum = parseInt(sum) + parseInt($(this).val());
+  });
+
+  $('.total_net_value').val(sum);
+//                 var sum = 0;
+//                 var amounts = $('.amount').val();
+
+//                 for(var i=0; i<amounts.length; i++) {
+//                     var a = +amounts[i].value;
+//                     sum += parseFloat(a) || 0;
+//                 }
+// alert(sum);
+//                 $('#total_net_value').val(sum);
+            }
 
 
 </script>

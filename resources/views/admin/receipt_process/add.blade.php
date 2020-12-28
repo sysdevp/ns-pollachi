@@ -291,7 +291,7 @@ $('#cash_bill').show();
 
 function myfunction(val) {
 var sum = 0;
-  $('.amount').each(function(){
+  $('.receipt_amount').each(function(){
  sum = parseInt(sum) + parseInt($(this).val());
   });
 

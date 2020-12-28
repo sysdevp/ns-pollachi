@@ -47,6 +47,8 @@ use App\Models\DeliveryNoteExpense;
 use App\Models\RejectionIn;
 use App\Models\RejectionInItem;
 use App\Models\RejectionInExpense;
+use App\Models\ReceiptProcessAdjustments;
+use App\Models\ReceiptProcess;
 use Illuminate\Support\Facades\Redirect;
 
 class SalesEntryController extends Controller
@@ -482,7 +484,45 @@ class SalesEntryController extends Controller
         $words[$point = $point % 10] : '';
 
         //amount in words ends here
-                         
+        //receipt save coding
+        $receipt_process = new ReceiptProcess();
+        $receipt_process->voucher_no       = $voucher_no;
+        $receipt_process->voucher_date      =  $voucher_date;
+        $receipt_process->customer_id      = $request->customer_id;
+        $receipt_process->payment_mode =  $request->mode;
+        $receipt_process->s_no =  $voucher_no;
+        if($request->mode==3){
+        $receipt_process->receipt_amount =  $request->total_net_value;
+        $receipt_process->net_value =  $request->total_net_value;
+        } else {
+        $receipt_process->receipt_amount =  $request->bill_amount;
+        $receipt_process->net_value =  $request->bill_amount;    
+        }
+
+        $receipt_process->remarks =  $request->remark;    
+        $receipt_process->active_status = 1;
+        $receipt_process->created_by = 0;
+        $receipt_process->updated_by = 0;
+        $receipt_process->save();
+        $adv_array = isset($request->adv_id) ? ($request->adv_id) : 0;
+        if($adv_array==0){
+         $adv_id_cnt = 0;
+        } else {
+         $adv_id_cnt = count($request->adv_id);    
+        }
+        
+       
+        for($i=0;$i<$adv_id_cnt;$i++)
+        {
+        $receipt_process_adjustments = new ReceiptProcessAdjustments();
+        $receipt_process_adjustments->receipt_process_id = $request->receipt_no;
+        $receipt_process_adjustments->advance_receipt_no = $request->adv_id[$i];
+        $receipt_process_adjustments->amount = $request->amount[$i];
+        $receipt_process_adjustments->active_status = "1";
+        $receipt_process_adjustments->created_by = 0;
+        $receipt_process_adjustments->updated_by = 0;
+        $receipt_process_adjustments->save();
+        }                 
 
         if($request->save == 1)
         {
