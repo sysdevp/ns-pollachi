@@ -158,7 +158,7 @@ class PaymentProcessController extends Controller
          $paid_amount = PaymentProcessAdjustments::where('advance_voucher_no',$purchaseentry_data->voucher_no)->sum('amount'); 
          $pending_amount = $purchaseentry_data->advance_amount - $paid_amount;
 
-            $result.='<tr><td>'.$purchaseentry_data->voucher_no.'</td><td>'.$purchaseentry_data->payment_date.'</td><td>'.$purchaseentry_data->advance_amount.'</td><td>'.$pending_amount.'</td><td><input type="hidden" name="adv_id[]" class="adv_id" id="adv_id" value='.$purchaseentry_data->voucher_no.'><input type="text" name="amount[]" value="0" class="amount" onkeyup="myfunction(this.value)"></td></tr>'; 
+            $result.='<tr><td>'.$purchaseentry_data->voucher_no.'</td><td>'.$purchaseentry_data->payment_date.'</td><td>'.$purchaseentry_data->advance_amount.'</td><td>'.$pending_amount.'</td><td><input type="hidden" name="adv_id[]" class="adv_id" id="adv_id" value='.$purchaseentry_data->voucher_no.'><input type="text" name="amount[]" value="0" class="payment_amount" onkeyup="myfunction(this.value)"></td></tr>'; 
         }
        
 
