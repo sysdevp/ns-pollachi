@@ -773,7 +773,7 @@ table, th, td {
             <th>Current Cleared Amount</th>
           </tr>
         </thead>
-        <tbody class="append_proof_details" id="myTable_adv">
+        <tbody class="append_proof_details_adv" id="myTable_adv">
         </tbody>
         <tfoot>
               <th>Total</th>
@@ -2979,8 +2979,8 @@ item_codes(uom_exclusive,values);
   var to_html_total_net = total_net_price.toFixed(2);
   $(".total_net_price").html(parseFloat(to_html_total_net));
   roundoff_cal();
-  individual_expense();
-  total_expense_cal();
+  // individual_expense();
+  // total_expense_cal();
   var q=calculate_total_discount();
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));
@@ -2999,8 +2999,8 @@ function payment_mode(val)
             url: "<?php echo e(url('receipt_process/advance_entry_det/')); ?>",
             data: { customer_id : customer_id },
             success: function(data) {
-            var result = JSON.parse(data);
-            $('#myTable_adv').append(result);
+            var result_new = JSON.parse(data);
+            $('#myTable_adv').append(result_new);
             
            }
         });

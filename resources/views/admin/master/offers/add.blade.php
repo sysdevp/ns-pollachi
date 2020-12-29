@@ -193,78 +193,49 @@
   </div>
 </div>
 <script>
-    $(document).ready(function () {
+  $(document).ready(function () {
 
-        var date1 = new Date();
+    var date1 = new Date();
 
-        $('.from_to input').each(function() {
-          $(this).datepicker({
-            format: 'dd-mm-yyyy',
-            todayHighlight: true,
-            autoclose: true, 
-            startDate: date1,
-            endDate: '',
-            setDate: date1
-          }).on('changeDate', function (selected) {
-              var startDate = new Date(selected.date.valueOf());
-              $('.to_date').datepicker('setStartDate', startDate);
-            }).on('clearDate', function (selected) {
-              $('.to_date').datepicker('setStartDate', null);
-            });
-        });
-
-        $('#offer_type').on('change', function() {
-          const selectedValue = this.value;
-          if (selectedValue == "day" || selectedValue == "date") {
-            $("#time_ranges").hide();
-          } else {
-            $("#time_ranges").show();
-          }
-        });
-
-        $('#f_and_c').on('change', function() {
-          const fixed_and_c = this.value;
-          if (fixed_and_c == "fixed") {
-            $("input").removeClass("only_allow_digit_and_dot");
-            $("input").addClass("only_allow_digit");
-            $('span#basic-addon1').html('&#8377;');
-          } else if(fixed_and_c == "percentage") {
-            $("input").removeClass("only_allow_digit");
-            $("input").addClass("only_allow_digit_and_dot");
-            $('span#basic-addon1').text('%');
-          }
-        });
-
-        /*var date1 = new Date();
-        $(".from_date").datepicker({
-          format: 'dd-mm-yyyy',
-          todayHighlight: true,
-           autoclose: true, 
-           startDate: date1,
-           endDate: '',
-          setDate: date1
-          }).on('changeDate', function (selected) {
-            var startDate = new Date(selected.date.valueOf());
-
-            $('.to_date').datepicker('setStartDate', startDate);
+    $('.from_to input').each(function() {
+      $(this).datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: true,
+        autoclose: true, 
+        startDate: date1,
+        endDate: '',
+        setDate: date1
+      }).on('changeDate', function (selected) {
+          var startDate = new Date(selected.date.valueOf());
+          $('.to_date').datepicker('setStartDate', startDate);
         }).on('clearDate', function (selected) {
-            $('.to_date').datepicker('setStartDate', null);
+          $('.to_date').datepicker('setStartDate', null);
         });
-        $(".to_date").datepicker({
-          format: 'dd-mm-yyyy', 
-          todayHighlight: true,
-          autoclose: true,
-          endDate: '',
-          startDate: date1,
-          setDate: date1, 
-          }).on('changeDate', function (selected) {
-            var endDate = new Date(selected.date.valueOf());
-            $('.from_date').datepicker('setEndDate', endDate);
-        }).on('clearDate', function (selected) {
-            $('.from_date').datepicker('setEndDate', null);
-        });*/
-
     });
+
+    $('#offer_type').on('change', function() {
+      const selectedValue = this.value;
+      if (selectedValue == "day" || selectedValue == "date") {
+        $("#time_ranges").hide();
+      } else {
+        $("#time_ranges").show();
+      }
+    });
+
+    $('#f_and_c').on('change', function() {
+      const fixed_and_c = this.value;
+      if (fixed_and_c == "fixed") {
+        $("input").removeClass("only_allow_digit_and_dot");
+        $("input").addClass("only_allow_digit");
+        $('span#basic-addon1').html('&#8377;');
+      } else if(fixed_and_c == "percentage") {
+        $("input").removeClass("only_allow_digit");
+        $("input").addClass("only_allow_digit_and_dot");
+        $('span#basic-addon1').text('%');
+      }
+    });
+
+  });
 </script>
 @endsection
 
