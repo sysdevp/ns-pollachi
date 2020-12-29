@@ -710,6 +710,41 @@ table, th, td {
             </div>
           </div>
         </div>
+        
+ <div id="adv_det" style="display:none">
+        <div class="col-md-8">
+                       <div class="form-group row">
+                       <div class="col-md-4">
+                       <label for="validationCustom01" class=" col-form-label"><h4>Advance Bill Details:</h4> </label><br>
+                       
+                           
+                       </div>
+                         </div>
+              </div>
+
+        <div class="card-body" style="height: 100%;">
+      <table id="" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>Advance Voucher.No</th>
+            <th>Voucher Date </th>
+            <th>Advance Amount </th>
+            <th>Advance Available Amount</th>
+            <th>Current Cleared Amount</th>
+          </tr>
+        </thead>
+        <tbody class="append_proof_details_adv" id="myTable_adv">
+        </tbody>
+        <tfoot>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th><input type="text" name="total_net_value" class="total_net_value" id="total_net_value"></th>
+            </tfoot>
+      </table>
+    </div>
+</div>
 
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
