@@ -173,29 +173,20 @@ table, th, td {
               <div class="col-sm-2">
                 <label>Category </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select category"  name="category" id="category">
-                  <option value="">Choose Category</option>
-                  @foreach($category as $value)
-                  <option value="{{ $value->id }}">{{ $value->name }}</option>
-                  @endforeach
+                 
                         </select>
               </div>
               <div class="col-sm-2">
                 <label>Item Name </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select item"  name="item" id="item">
-                  <option value="">Choose Item Name</option>
-                  @foreach($item as $value)
-                  <option value="{{ $value->id }}">{{ $value->name }}</option>
-                  @endforeach
+                  
                         </select>
               </div>
 
               <div class="col-sm-2">
                 <label>Party Name </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select supplier"  name="supplier" id="supplier">
-                  <option value="">Choose Party Name</option>
-                  @foreach($supplier as $value)
-                  <option value="{{ $value->id }}">{{ $value->name }}</option>
-                  @endforeach
+                  <
                         </select>
               </div>
 
@@ -206,7 +197,6 @@ table, th, td {
                   <thead>
                     <tr>
                     <th rowspan="2"> S.no </th>
-                    <th rowspan="2"> Date</th>
                     <th rowspan="2"> Name Of Item </th>
                     <th rowspan="2"> Group</th>
                     <th rowspan="2"> Category</th>
@@ -233,7 +223,7 @@ table, th, td {
                       <th id="cls_stock2">Rate</th>
                       <th id="cls_stock3">Amount</th> -->
                       <td id="p_e1">Qty</td>
-                      <td id="p_e2">Rate</td>
+                      <td id="p_e1">Rate</td>
                       <td id="p_e3">Amount</td>
                       <td id="p_o1">Qty</td>
                       <td id="p_o2">Rate</td>
@@ -274,50 +264,63 @@ table, th, td {
                       @for($i = 0; $i < $count; $i++)
                       <tr>
                       <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
                       <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
-                      <td><?php echo $i+1; ?></td>
-                      <td>{{ $array_details[$i]['location'] }}</td>
-                      <td>{{ $array_details[$i]['item'] }}</td>
-                      <td>{{ $array_details[$i]['total_qty'] }}</td>
+                      <td>{{ $array_details[$i]['group_name'] }}</td>
+                      <td>{{ $array_details[$i]['category'] }}</td>
+                      <td>{{ $array_details[$i]['opening_stock'] }}</td>
+                      <td>{{ $array_details[$i]['closing_stock'] }}</td>
 
+                      <td>{{ $array_details[$i]['purchase_estimation_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_estimation_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['purchase_order_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_order_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['receipt_note_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['receipt_note_amount'] }}</td>
+
+
+                      <td>{{ $array_details[$i]['purchase_entry_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_entry_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['rejection_out_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['rejection_out_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['debit_note_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['debit_note_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['sale_estimation_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['sale_estimation_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['sale_order_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['sale_order_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['delivery_note_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['delivery_note_amount'] }}</td>
+                      
+                      <td>{{ $array_details[$i]['sale_entry_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['sale_entry_amount'] }}</td>
+
+                      <td>{{ $array_details[$i]['rejection_in_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['rejection_in_amount'] }}</td>
+                      
+
+                      <td>{{ $array_details[$i]['credit_note_quantity'] }}</td>
+                      <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
+                      <td>{{ $array_details[$i]['credit_note_amount'] }}</td>
+                     
+                      <td> </td>
                       </tr>
                     @endfor
                   </tbody>
