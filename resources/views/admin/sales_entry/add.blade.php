@@ -773,7 +773,7 @@ table, th, td {
             <th>Current Cleared Amount</th>
           </tr>
         </thead>
-        <tbody class="append_proof_details" id="myTable_adv">
+        <tbody class="append_proof_details_adv" id="myTable_adv">
         </tbody>
         <tfoot>
               <th>Total</th>
@@ -2999,8 +2999,8 @@ function payment_mode(val)
             url: "{{ url('receipt_process/advance_entry_det/') }}",
             data: { customer_id : customer_id },
             success: function(data) {
-            var result = JSON.parse(data);
-            $('#myTable_adv').append(result);
+            var result_new = JSON.parse(data);
+            $('#myTable_adv').append(result_new);
             
            }
         });

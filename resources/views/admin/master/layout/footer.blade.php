@@ -1,9 +1,9 @@
-<footer class="foot">
+<section class="foot">
 
       <div class="col-12 px-0">
       <div class="row mx-0">
         <div class="col-6">
-          <p>Â© 2019 Copyright.</p>
+          <p>© 2019 Copyright.</p>
         </div>
         <div class="col-6 text-right">
            <p>Mazenetsolution</p> 
@@ -11,10 +11,12 @@
       </div>
     
 </div>
-</footer>
+</section>
     
-</div>
-    
+</div></div>
+
+  </main></div>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" ></script>
     <!-- select 2 -->
     <script src="{{asset('assets/js/select2.min.js')}}"></script>
    
@@ -38,11 +40,13 @@
     <!-- date picker -->
     <script src="{{asset('assets/js/moment.min.js')}}"></script>
     <script src="{{asset('assets/js/master/common_ajax_master.js')}}"></script>
-     
+    <script  src="{{asset('assets/js/scriptpo.js')}}"></script>
+    <script  src="{{asset('assets/js/dashboardjs.js')}}"></script>
+    
+ 
 
     <script src="{{asset('assets/datepicker/bootstrap-datepicker.js')}}"></script>
-    
-
+	
     <script>
 
 

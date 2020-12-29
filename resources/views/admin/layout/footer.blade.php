@@ -1,4 +1,4 @@
-<footer class="foot">
+<section class="foot">
 
       <div class="col-12 px-0">
       <div class="row mx-0">
@@ -11,10 +11,12 @@
       </div>
     
 </div>
-</footer>
+</section>
     
-</div>
-    
+</div></div>
+
+  </main></div>
+  <script  src="https://code.jquery.com/jquery-3.3.1.js" ></script>
     <!-- select 2 -->
     <script src="{{asset('assets/js/select2.min.js')}}"></script>
    
@@ -41,6 +43,8 @@
      
 
     <script src="{{asset('assets/datepicker/bootstrap-datepicker.js')}}"></script>
+	<script  src="{{asset('assets/js/scriptpo.js')}}"></script>
+    <script  src="{{asset('assets/js/dashboardjs.js')}}"></script>
     
 
     <script>
