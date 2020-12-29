@@ -16,6 +16,11 @@ use App\Models\ItemTaxDetails;
 use App\Models\ItemBracodeDetails;
 use App\Models\ExpenseType;
 use App\Models\Tax;
+use App\Models\AccountHead;
+use App\Models\Pos;
+use App\Models\PosItem;
+use App\Models\PosTax;
+use App\Models\PosExpense;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 
@@ -28,9 +33,15 @@ class PosController extends Controller
      */
     public function index()
     {
+        $date = date('Y-m-d');
         $brand = Brand::all();
+        $item = Item::all();
         $categories = Category::all();
-        return view('admin.pos.add',compact('categories','brand'));
+        $supplier = Supplier::all();
+        $agent = Agent::all();
+        $account_head = AccountHead::all();
+        $tax = Tax::all();
+        return view('admin.pos.add',compact('categories','brand','supplier','agent','item','account_head','tax','date'));
     }
 
     /**
@@ -51,7 +62,145 @@ class PosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tax = Tax::all();
+
+        $estimation = new Pos();
+
+         
+         $estimation->supplier_id = $request->supplier_id;
+         $estimation->agent_id = $request->agent_id;
+         $estimation->overall_discount = $request->overall_discount;
+         $estimation->total_net_value = $request->total_price;
+         $estimation->round_off = $request->round_off;
+
+         $estimation->save();
+
+         $items_count = $request->counts;
+         $expense_count = $request->expense_count;
+
+         for($i=0;$i<$items_count;$i++)
+
+        {
+            $estimation_items = new PosItem();
+
+            $estimation_items->item_sno = $request->invoice_sno[$i];
+            $estimation_items->item_id = $request->item_code[$i];
+            $estimation_items->mrp = $request->mrp[$i];
+            $estimation_items->gst = $request->tax_rate[$i];
+            $estimation_items->rate_exclusive_tax = $request->exclusive[$i];
+            $estimation_items->rate_inclusive_tax = $request->inclusive[$i];
+            $estimation_items->qty = $request->quantity[$i];
+            $estimation_items->uom_id = $request->uom[$i];
+            $estimation_items->discount = $request->discount[$i];
+            $estimation_items->overall_disc = $request->overall_disc[$i];
+            $estimation_items->expenses = $request->expenses[$i];
+
+            $estimation_items->save();
+        }
+         
+
+
+         for($j=0;$j<$expense_count;$j++)
+
+        {
+            if($expense_count >= 1 && $request->expense_type[$j] == '' && $request->expense_amount[$j] == '')
+            {
+
+            }
+            else
+            {
+                $estimation_expense = new PosExpense();
+
+                $estimation_expense->expense_type = $request->expense_type[$j];
+                $estimation_expense->expense_amount = $request->expense_amount[$j];
+
+                $estimation_expense->save();
+            }
+           
+            
+        }
+
+        foreach ($tax as $key => $value) 
+                {
+                    $str_json = json_encode($value->name); //array to json string conversion
+                    $tax_name = str_replace('"', '', $str_json);
+                    $value_name = $tax_name.'_id';
+
+                       $tax_details = new PosTax;
+
+                      
+                       $tax_details->taxmaster_id = $request->$value_name;
+                       $tax_details->value = $request->$tax_name;
+
+                       $tax_details->save();
+
+                    }
+                    
+        $estimation_num = $estimation->estimation_no;
+        
+        $estimation_print_data = Pos::where('estimation_no',$estimation_num)->first();
+        $address = AddressDetails::where('address_ref_id',$estimation_print_data->supplier_id)
+                                 ->where('address_table','=','Supplier')
+                                 ->first();
+
+        $estimation_item_print_data = PosItem::where('estimation_no',$estimation_num)
+                                                    ->get();
+
+        $estimation_expense_print_data = PosExpense::where('estimation_no',$estimation_num)->get(); 
+
+        $amnt = $estimation_print_data->total_net_value;
+
+        //amount in words
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.add.print',compact('estimation_print_data','address','estimation_item_print_data','estimation_expense_print_data','result','points'));
+        }
+
+        return Redirect::back()->with('success', 'Saved Successfully');
+
     }
 
     /**
@@ -99,6 +248,71 @@ class PosController extends Controller
         //
     }
 
+    public function address_details(Request $request)
+    {
+       $supplier_id = $request->supplier_id;
+
+       $getdata = AddressDetails::
+       join('suppliers','suppliers.id','=','address_details.address_ref_id')
+       ->where('address_details.address_table','=','Supplier')
+       ->where('address_details.address_ref_id','=',$supplier_id)
+       ->first();
+
+      
+$count=0;
+
+       $address="";
+      
+          if(isset($getdata->address_line_1) && !empty($getdata->address_line_1)){
+            $address.=$getdata->address_line_1.", \n";
+            
+          }
+
+          if(isset($getdata->address_line_2) && !empty($getdata->address_line_2)){
+            $address.=$getdata->address_line_2.",  \n ";
+            
+          }
+
+
+         if(isset($getdata->city->name)  || isset($getdata->district->name)){
+
+            if(!empty($getdata->city->name)){
+                $address.=$getdata->city->name." ,";
+               
+            }
+           
+
+            if(!empty($getdata->district->name)){
+                $address.=$getdata->district->name." ,";
+                $data[] = $getdata->district->id;
+            }
+            
+
+            $address.="\n";
+
+         }
+
+
+
+         if(isset($getdata->state->name)  && !empty($getdata->state->name)){
+             $address.=$getdata->state->name." -";
+             
+        if(isset($getdata->postal_code) && !empty($getdata->postal_code)){
+            // $address.=" - ";
+            $address.=$getdata->postal_code.',';
+            
+        }
+             
+             $address.="\n";
+         }
+         $address.="GST Number :".$getdata->gst_no;
+
+
+
+   return $address;   
+        
+    }
+
     public function getdata(Request $request,$id)
     {
         $id=$request->id;
@@ -120,7 +334,6 @@ class PosController extends Controller
                                         ->where('tax_master_id','!=',$tax_master_cgst->id)
                                         ->where('tax_master_id','!=',$tax_master_sgst->id)
                                         ->first('valid_from');
-                                        // return $tax_date; exit;
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
                                 ->where('valid_from',$tax_date->valid_from)
@@ -128,8 +341,23 @@ class PosController extends Controller
                                 ->where('tax_master_id','!=',$tax_master_sgst->id)
                                 ->sum('value');
 
+            /* start dynamic tax value */                    
+            $tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->get();
+
+            foreach ($tax_view as $key => $value) 
+            {
+              $tax_val[] = $value->value;
+              $tax_master[] = $value->tax_master_id;
+            }      
+
+            $cnt = count($tax_master);               
+
+            /* end dynamic tax value */                  
+
             $sum = $tax_value + $items->category->gst_no;                            
-            $data[] = array('igst' => $sum);
+            $data[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
             
             
         }  
@@ -151,7 +379,23 @@ class PosController extends Controller
                                 ->where('tax_master_id','!=',$tax_master_sgst->id)
                                 ->sum('value');
 
-            $data[] = array('igst' => $tax_value);    
+            /* start dynamic tax value */      
+                          
+            $tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->get();
+
+            foreach ($tax_view as $key => $value) 
+            {
+              $tax_val[] = $value->value;
+              $tax_master[] = $value->tax_master_id;
+            }   
+
+            $cnt = count($tax_master);                  
+
+            /* end dynamic tax value */                    
+
+            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
 
         }          
          
@@ -217,6 +461,96 @@ class PosController extends Controller
     }
     }
 
+    public function remove_data(Request $request,$id)
+    {
+
+        $id = $request->data_val;
+
+        $data[]=Item::join('uoms','uoms.id','=','items.uom_id')
+                    ->where('items.id','=',$id)
+                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc')
+                    ->first();
+
+        if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
+        {
+            $tax_master_cgst = Tax::where('name','cgst')->first();
+            $tax_master_sgst = Tax::where('name','sgst')->first();
+
+            $tax_date = ItemTaxDetails::where('item_id',$id)
+                                        ->orderBy('valid_from','DESC')
+                                        ->whereDate('valid_from', '<=', Carbon::now())
+                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->first('valid_from');
+
+            $tax_value =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->sum('value');
+
+            /* start dynamic tax value */                    
+            $tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->get();
+
+            foreach ($tax_view as $key => $value) 
+            {
+              $tax_val[] = $value->value;
+              $tax_master[] = $value->tax_master_id;
+            }      
+
+            $cnt = count($tax_master);               
+
+            /* end dynamic tax value */                  
+
+            $sum = $tax_value + $items->category->gst_no;                            
+            $data[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
+            
+            
+        }  
+        else
+        {
+            $tax_master_cgst = Tax::where('name','cgst')->first();
+            $tax_master_sgst = Tax::where('name','sgst')->first();
+
+            $tax_date = ItemTaxDetails::where('item_id',$id)
+                                        ->orderBy('valid_from','DESC')
+                                        ->whereDate('valid_from', '<=', Carbon::now())
+                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->first('valid_from');
+
+            $tax_value =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->sum('value');
+
+            /* start dynamic tax value */      
+                          
+            $tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->get();
+
+            foreach ($tax_view as $key => $value) 
+            {
+              $tax_val[] = $value->value;
+              $tax_master[] = $value->tax_master_id;
+            }   
+
+            $cnt = count($tax_master);                  
+
+            /* end dynamic tax value */                    
+
+            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+
+        }
+
+        return $data;
+        
+    }
+
 
     function child_category($array)
    {
@@ -264,6 +598,41 @@ class PosController extends Controller
     }
     //$result=implode("','", $result);
     //$result="'".$result."'";
+    return $result;
+   }
+
+   public function browse_item(Request $request,$id)
+   {
+    $browse_item = $request->browse_item;
+
+    $data = Item::where('name',$browse_item)->get();
+    $result ="";
+    foreach ($data as $key => $value) 
+    {
+        if($value->brand_id != 0)
+            {
+                $barnd_name=isset($value->brand->name) ? $value->brand->name : "";
+            }
+            else
+            {
+                $barnd_name='Not Applicable';
+            }
+            
+            $category_name=isset($value->category->name) ? $value->category->name : "";
+            $uom_id=isset($value->uom->id) ? $value->uom->id : "";
+            $uom_name=isset($value->uom->name) ? $value->uom->name : "";
+
+            $barcode="";
+            if(count($value->item_barcode_details)>0){
+                $barcode_array=[];
+                foreach($value->item_barcode_details as $row){
+                    $barcode_array[]=$row->barcode;
+                }
+                $barcode=implode(",",$barcode_array);
+            }
+        $result .='<tr class="row_category"><td><center><input type="radio" name="select" onclick="add_data('.$key.')"></center></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->code.'" class="append_item_code'.$key.'"><font style="font-family: Times new roman;">'.$value->code.'</font></td><td><input type="hidden" value="'.$value->name.'" class="append_item_name'.$key.'"><font style="font-family: Times new roman;">'.$value->name.'</font></td><td><input type="hidden" value="'.$value->mrp.'" class="append_item_name'.$key.'"><font style="font-family: Times new roman;">'.$value->mrp.'</font></td><td><input type="hidden" value="'.$uom_id.'" class="append_item_name'.$key.'"><font style="font-family: Times new roman;">'.$uom_name.'</font></td><td><input type="hidden" value="'.$value->brand_id.'" class="append_item_brand_name'.$key.'"><font style="font-family: Times new roman;">'.$barnd_name .'</font></td><td><input type="hidden" value="'.$value->category_id.'" class="append_item_brand_name'.$key.'"><font style="font-family: Times new roman;">'.$category_name .'</font></td><td><input type="hidden" value="'.$barcode.'" class="append_item_brand_name'.$key.'"><font style="font-family: Times new roman;">'.$barcode.'</font></td></tr>';
+        
+    }
     return $result;
    }
 
@@ -659,4 +1028,62 @@ $result=[];
         return $result;
 
     }
+    
+    public function item_details($id)
+    {
+
+        $item_details = Estimation_Item::where('estimation_no',$id)->get();
+        foreach ($item_details as $key => $value) 
+        {
+            $amount[] = $value->qty * $value->rate_exclusive_tax;
+            $gst_rs[] = $amount[$key] * $value->gst / 100;
+            $net_value[] = $amount[$key] + $gst_rs[$key] - $value->discount;
+        }
+    return view('admin.estimation.item_details',compact('item_details','gst_rs','amount','net_value'));
+    }
+
+    public function expense_details($id)
+    {
+        $expense_details = Estimation_Expense::where('estimation_no',$id)->get();
+        return view('admin.estimation.expense_details',compact('expense_details'));
+    }
+
+    public function last_purchase_rate(Request $request)
+    {
+        $id = $request->id;
+
+        $item_data = Estimation_Item::where('item_id',$id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+
+        $amount = $item_data->qty * $item_data->rate_exclusive_tax;
+        $gst_rs = $amount * $item_data->gst / 100;
+        $total_discount = $item_data->discount + $item_data->overall_disc;
+        $net_value = $amount + $gst_rs - $total_discount + $item_data->expenses; 
+
+        $value = $net_value / $item_data->qty; 
+
+        return $value;                          
+    }
+
+    public function cancel($id)
+    {
+        $estimation = Estimation::where('estimation_no',$id)->first();
+
+        $estimation->status = 1;
+        $estimation->save();
+
+        return Redirect::back()->with('success', 'Cancelled');
+    }
+
+    public function retrieve($id)
+    {
+        $estimation = Estimation::where('estimation_no',$id)->first();
+
+        $estimation->status = 0;
+        $estimation->save();
+
+        return Redirect::back()->with('success', 'Retrieved');
+    }
+
 }

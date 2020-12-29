@@ -773,7 +773,11 @@ table, th, td {
             <th>Current Cleared Amount</th>
           </tr>
         </thead>
+<<<<<<< HEAD
+        <tbody class="" id="myTable_adv">
+=======
         <tbody class="append_proof_details_adv" id="myTable_adv">
+>>>>>>> origin/master
         </tbody>
         <tfoot>
               <th>Total</th>
