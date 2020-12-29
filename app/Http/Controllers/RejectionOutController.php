@@ -409,7 +409,7 @@ class RejectionOutController extends Controller
                 $rejection_out_items->rate_inclusive_tax = $request->inclusive[$i];
                 $rejection_out_items->actual_qty = $request->actual_qty[$i];
                 $rejection_out_items->qty = $request->actual_quantity[$i];
-                $rejection_out_items->remaining_qty = $request->quantity[$i];
+                $rejection_out_items->remaining_qty = $request->rejected_item_qty[$i];
                 $rejection_out_items->rejected_qty = $request->rejected_item_qty[$i];
                 $rejection_out_items->actual_rejected_qty = $request->rejected_item_qty[$i];
                 $rejection_out_items->debited_qty = $request->debited_qty[$i];
@@ -445,7 +445,7 @@ class RejectionOutController extends Controller
                 $rejection_out_black_items->rate_inclusive_tax = $request->inclusive[$i];
                 $rejection_out_black_items->actual_qty = $request->actual_qty[$i];
                 $rejection_out_black_items->qty = $request->actual_quantity[$i];
-                $rejection_out_black_items->remaining_qty = $request->quantity[$i];
+                $rejection_out_black_items->remaining_qty = $request->rejected_item_qty[$i];
                 $rejection_out_black_items->rejected_qty = $request->rejected_item_qty[$i];
                 $rejection_out_black_items->actual_rejected_qty = $request->rejected_item_qty[$i];
                 $rejection_out_black_items->debited_qty = $request->debited_qty[$i];
@@ -972,16 +972,20 @@ class RejectionOutController extends Controller
         $purchase_entry_item = PurchaseEntryItem::where('p_no',$id)->get();
         foreach ($purchase_entry_item as $key => $value) {
             $qty = $value->rejected_qty + $value->remaining_qty;
+            // $debited_qty = $value->rejected_qty - $value->remaining_rejected_qty;
+            // $total_debited_qty = $debited_qty + $value->debited_qty;
             $item_id = $value->item_id;
-            PurchaseEntryItem::where('p_no',$id)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0]);
+            PurchaseEntryItem::where('p_no',$id)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0, 'debited_qty' => $total_debited_qty]);
 
         }
 
         $purchase_entry_black_item = PurchaseEntryBlackItem::where('p_no',$id)->get();
         foreach ($purchase_entry_black_item as $key => $value) {
             $qty = $value->rejected_qty + $value->remaining_qty;
+            // $debited_qty = $value->rejected_qty - $value->remaining_rejected_qty;
+            // $total_debited_qty = $debited_qty + $value->debited_qty;
             $item_id = $value->item_id;
-            PurchaseEntryBlackItem::where('p_no',$id)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0]);
+            PurchaseEntryBlackItem::where('p_no',$id)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'rejected_qty' => 0, 'debited_qty' => $total_debited_qty]);
 
         }
 

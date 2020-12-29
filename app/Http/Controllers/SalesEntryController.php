@@ -298,6 +298,7 @@ class SalesEntryController extends Controller
                 $sale_entry_items->remaining_qty = $request->quantity[$i];
                 $sale_entry_items->remaining_after_credit = $request->quantity[$i];
                 $sale_entry_items->rejected_qty = 0;
+                $sale_entry_items->remaining_rejected_qty = 0;
                 $sale_entry_items->credited_qty = 0;
                 $sale_entry_items->r_in_credited_qty = 0;
                 $sale_entry_items->uom_id = $request->uom[$i];
@@ -362,6 +363,7 @@ class SalesEntryController extends Controller
                 $sale_entry_black_items->actual_qty = $request->quantity[$i];
                 $sale_entry_black_items->remaining_qty = $request->quantity[$i];
                 $sale_entry_black_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_black_items->remaining_rejected_qty = 0;
                 $sale_entry_black_items->rejected_qty = 0;
                 $sale_entry_black_items->credited_qty = 0;
                 $sale_entry_black_items->r_in_credited_qty = 0;
@@ -884,6 +886,7 @@ class SalesEntryController extends Controller
                 $sale_entry_items->actual_qty = $request->quantity[$i];
                 $sale_entry_items->remaining_qty = $request->quantity[$i];
                 $sale_entry_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_items->remaining_rejected_qty = 0;
                 $sale_entry_items->rejected_qty = 0;
                 $sale_entry_items->credited_qty = 0;
                 $sale_entry_items->r_in_credited_qty = 0;
@@ -949,6 +952,7 @@ class SalesEntryController extends Controller
                 $sale_entry_black_items->actual_qty = $request->quantity[$i];
                 $sale_entry_black_items->remaining_qty = $request->quantity[$i];
                 $sale_entry_black_items->remaining_after_credit = $request->quantity[$i];
+                $sale_entry_black_items->remaining_rejected_qty = 0;
                 $sale_entry_black_items->rejected_qty = 0;
                 $sale_entry_black_items->credited_qty = 0;
                 $sale_entry_black_items->r_in_credited_qty = 0;
