@@ -1,5 +1,6 @@
 @extends('admin.layout.app')
 @section('content')
+<main class="page-content">
 <div class="row">
 <div class="col-8 body-sec">
     <!-- card header start@ -->

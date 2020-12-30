@@ -1,8 +1,6 @@
 @extends('admin.layout.app1')
-
-
-
 @section('content')
+<main class="page-content">
 <div class="col-12 body-sec">
 	<div class="row">
   <div class="col-sm-6">

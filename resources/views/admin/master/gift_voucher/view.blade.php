@@ -1,9 +1,7 @@
 @extends('admin.layout.app')
 @section('content')
 <main class="page-content">
-<div class="container-fuild" style="background:#28a745">
-				<div class="text-right pr-3">sdfjsdfjl</div>
-		</div>
+
 <div class="col-12 body-sec">
   <div class="card">
     <!-- card header start@ -->
@@ -14,7 +12,6 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="{{url('master/gift-voucher/print')}}">Print</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/gift-voucher/create')}}">Add Gift Voucher</a></button></li>
           </ul>
         </div>

@@ -299,7 +299,7 @@ Route::group(['prefix' => 'master/gift-voucher', 'middleware' => ['auth']], func
     Route::any('edit/{id}', 'GiftvoucherController@edit')->middleware('permission:gift_voucher_matser_edit');
     Route::any('update/{id}', 'GiftvoucherController@update')->middleware('permission:gift_voucher_matser_edit');
     Route::any('delete/{id}', 'GiftvoucherController@destroy')->middleware('permission:gift_voucher_matser_update');
-    Route::get('print', 'GiftvoucherController@print');
+    Route::get('print/{id}', 'GiftvoucherController@print');
 });
 /* Gift Voucher Master End Here  */
 

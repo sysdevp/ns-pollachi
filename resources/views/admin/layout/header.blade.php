@@ -29,7 +29,49 @@
     <script type="text/javascript">
       var APP_URL = {!! json_encode(url('/')) !!}
       </script>
-    
+	  <style>
+    .profileimage{font-size:50px !important;}
+
+.navtopadmin{padding: 8px;}
+
+.changepass {  -
+ font-family: Arial;
+ color: #fff !important;
+ font-size: 12px;
+ background: #007bff;
+ padding: 8px 10px 8px 10px;
+ text-decoration: none;
+ margin-right:10px;
+}
+.changepass:hover {  -
+ color: #fff !important;
+ font-size: 12px;
+ background: #28a745;
+}
+.logout {
+ font-family: Arial;
+ color: #fff !important;
+ font-size: 12px;
+ background: #007bff;
+ padding: 8px 10px 8px 10px;
+ text-decoration: none;
+}
+
+.logout:hover {  -
+ color: #fff !important;
+ font-size: 12px;
+ background: #28a745;
+}
+
+.admintext{color: #fff; text-decoration:none;
+   font-size: 15px;}
+
+.Adminimage{background: #28a745;
+   margin-top: -9px;
+   margin-bottom: 7px;
+   margin-left: 0px;
+   color: #fff; padding: 10px;}
+   </style>
     
 
   </head>
@@ -483,3 +525,47 @@
       </div>
     </div>    
   </nav>
+  <div class="container-fuild" style="background:#28a745">
+<div class="text-right pr-3">
+<div class="top_nav">
+     <div class="nav_menu">
+       <nav>    
+
+         <ul class="nav navbar-nav navbar-right navtopadmin">
+           
+
+           <li role="presentation" class="dropdown">
+         <a href="javascript:;" class="user-profile dropdown-toggle admintext" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-user" aria-hidden="true"></i> Admin</a>
+             <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+               <li class="text-center Adminimage">
+                 <a>
+                   <span><i class="fa fa-user" aria-hidden="true" style="font-size:40px !important; color:#fff"></i>
+<br/>
+               
+                   <span class="message">
+                       Admin <br/> 30.12.2020
+                       </span>
+                 </a>
+               </li>
+             
+               <li>
+                 <div class="text-center">
+                   <a class="changepass">
+                     <strong><i class="fa fa-lock" aria-hidden="true"></i> Change Password</strong>
+                   </a>
+
+ <a class="logout">
+                     <strong><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</strong>
+                   </a>
+                 </div>
+               </li>
+             </ul>
+           </li>
+         </ul>
+       </nav>
+     </div>
+   </div>
+</div>
+</div>
+  

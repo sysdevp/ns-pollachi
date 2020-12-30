@@ -1,9 +1,17 @@
 @extends('admin.layout.app')
 @section('content')
+
+<?php
+  
+  
+  $obj = json_decode($giftvoucher->code);/*
+  echo "<pre>";
+  print_r($obj);
+  exit();
+*/
+?>
 <main class="page-content">
-<div class="container-fuild" style="background:#28a745">
-				<div class="text-right pr-3">sdfjsdfjl</div>
-		</div>
+
 <div class="col-12 body-sec">
   <div class="card container px-0">
     <!-- card header start@ -->
@@ -42,12 +50,15 @@
 
         <div class="col-md-6">
           <div class="form-group row">
-            <label for="validationCustom01" class="col-sm-4 col-form-label">Gift Voucher Code <span class="mandatory">*</span></label>
+            <label for="validationCustom01" class="col-sm-4 col-form-label">Gift Voucher Code(s)<span class="mandatory">*</span></label>
             <div class="col-sm-8">
-              <input type="text" class="form-control  code" placeholder="Gift Voucher Code" name="code" value="{{old('code',$giftvoucher->code)}}" required>
-              <span class="mandatory"> {{ $errors->first('code')  }} </span>
-              <div class="invalid-feedback">
-                Enter valid Gift Voucher Code
+              <select id="code" class="s-example-basic-multiple form-control col-12 custom-select parent_id" name="code" required>
+                @foreach ($obj as $value)
+                  <option value="{{ $value }}" {{ old('value',$obj) == $value ? 'selected' : '' }}>{{ $value }}</option>
+                @endforeach
+              </select>
+              <div class="invalid-feedback" style="display: block;">
+                Gift voucher once generated cannot be modified.
               </div>
             </div>
           </div>
