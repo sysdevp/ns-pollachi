@@ -66,14 +66,13 @@
               </div>
             </div>
           </div>
-       
+
           <div class="col-md-6">
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Choose Category<span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple form-control col-12 custom-select parent_id" name="parent_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select parent_id" id="category_select" name="parent_id" required>
                   <option value="">Choose Category</option>
-                  <option value="0" {{ old('parent_id') == "0" ? 'selected' : '' }} >Parent</option>
                   @foreach($category as $value)
                   <option value="{{ $value->id }}" {{ old('parent_id') == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
                   @endforeach
@@ -81,6 +80,20 @@
                 <span class="mandatory"> {{ $errors->first('parent_id')  }} </span>
                 <div class="invalid-feedback">
                   Please select a valid Category
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Select Item(s)<span class="mandatory">*</span></label>
+              <div class="col-sm-8">
+                <select class="selectpicker js-example-basic-multiple form-control col-12 custom-select parent_id" id="item_category" name="items[]" required multiple data-live-search="true">
+                </select>
+                <span class="mandatory"> {{ $errors->first('parent_id')  }} </span>
+                <div class="invalid-feedback">
+                  Please select a Item
                 </div>
               </div>
             </div>
@@ -235,6 +248,22 @@
         $("input").addClass("only_allow_digit_and_dot");
         $('span#basic-addon1').text('%');
       }
+    });
+
+    $('select#category_select').on('change', function() {
+      const selectedValue = this.value;
+      $.ajax({
+        url: '{{ url('/master/offers/getItem') }}',
+        type: 'GET',
+        cache: false,
+        data: {'category_id': selectedValue},
+        dataType: 'json',
+        success: function (response) {
+          $.each(response, function(index, value) {
+            $('select#item_category').append(new Option(value.name, value.id));
+          });
+        }
+      });
     });
 
   });
