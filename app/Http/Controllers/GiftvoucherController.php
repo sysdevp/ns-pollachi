@@ -48,24 +48,30 @@ class GiftvoucherController extends Controller
             
          ])->validate();
 
-        for ($i = 1; $i <= $request->quantity; $i++) {
-            $fromDate = date('d',strtotime($request->valid_from));
-            $toDate = date('d',strtotime($request->valid_to));
+        $count = $request->quantity;;
+        $generatedGiftVoucherCode = array();
+        $prefix = $request->code;
+        $fromDate = date('d',strtotime($request->valid_from));
+        $toDate = date('d',strtotime($request->valid_to));
 
-            $generatedGiftVoucherCode = "NSP" . trim($request->code) . $fromDate . $this->generateGiftVouchers(6) . $toDate;
-
-            $giftvoucher = new Giftvoucher();
-            $giftvoucher->name = $request->name;
-            $giftvoucher->code = $generatedGiftVoucherCode;
-            $giftvoucher->value = $request->value;
-            $giftvoucher->qty = $request->quantity;
-            $giftvoucher->valid_from = date('Y-m-d',strtotime($request->valid_from));
-            $giftvoucher->valid_to = date('Y-m-d',strtotime($request->valid_to));
-            $giftvoucher->remark =  $request->remark;
-            $giftvoucher->created_by = 0;
-            $giftvoucher->updated_by = 0;
-            $result = $giftvoucher->save();
+        for ($i=1; $i <= $count; $i++) {
+          $generatedGiftVoucherCode[] = "NSP" . trim($prefix) . $fromDate . $this->generateGiftVouchers(6) . $toDate;
         }
+
+        $out = array_values($generatedGiftVoucherCode);
+        $myJSON = json_encode($out);
+
+        $giftvoucher = new Giftvoucher();
+        $giftvoucher->name = $request->name;
+        $giftvoucher->code = $myJSON;
+        $giftvoucher->value = $request->value;
+        $giftvoucher->qty = $request->quantity;
+        $giftvoucher->valid_from = date('Y-m-d',strtotime($request->valid_from));
+        $giftvoucher->valid_to = date('Y-m-d',strtotime($request->valid_to));
+        $giftvoucher->remark =  $request->remark;
+        $giftvoucher->created_by = 0;
+        $giftvoucher->updated_by = 0;
+        $result = $giftvoucher->save();
 
         if ($result == true) {
             return Redirect::back()->with('success', 'Successfully created');
@@ -165,49 +171,56 @@ class GiftvoucherController extends Controller
     }*/
 
     /* Print all Gift Vouchers PDF */
-    public function print() {
-        $gift_voucher = Giftvoucher::all();
+    public function print($id) {
+        $gift_voucher = Giftvoucher::find($id);
 
-        $imagePath = asset('assets/image/logo.png');
-        $base64BrandImage = base64_encode(file_get_contents($imagePath));
+        /* Uncomment below to get brand logo - ns pollachi */
+        /*$imagePath = asset('assets/image/logo.png');
+        $base64BrandImage = base64_encode(file_get_contents($imagePath));*/
 
         // instantiate and use the dompdf class
         $pdf = \App::make('dompdf.wrapper');
 
         $html = "";
+        $html .= '<html><head>';
+        $html .= '<title>Gift Voucher | NS Pollachi - ' . $gift_voucher["name"] . '</title>';
         $html .= '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">';
+        $html .= '<style type="text/css">
+                  .wrapper-page {
+                      page-break-after: auto;
+                  }
+                </style></head><body>';
 
-        $html .= '<div class="row">
+        /* Uncomment below to get brand logo rendered in pdf - ns pollachi */
+        /*$html .= '<div class="row">
                 <div class="col-md-12 text-center">
                     <img src="data:image/png;base64,' . $base64BrandImage . '" style="widht: auto; height: 100px;">
                 </div>
-                </div>';
-        $html .= '<table class="table table-striped">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col" class="text-center">#</th>
-                            <th scope="col" class="text-center">Gift Voucher Name</th>
-                            <th scope="col" class="text-center">Valid From</th>
-                            <th scope="col" class="text-center">Valid To</th>
-                            <th scope="col" class="text-center">QrCode</th>
-                        </tr>
-                    </thead>';
-        $html .= '<tbody>';
-        
-        foreach ($gift_voucher as $key => $value) {
-            $qrcode_base64 = base64_encode(\QrCode::format('png')->size(110)->errorCorrection('H')->margin(1)->generate($value->code));
-            $qrCode = '<img src="data:image/png;base64,' . $qrcode_base64 . '">';
-            $html .= '<tr>
-                            <th scope="row" class="mt-5 text-center">1</th>
-                            <td class="mt-5 text-center">'.$value->name.'</td>
-                            <td class="mt-5 text-center">'.$value->valid_from.'</td>
-                            <td class="mt-5 text-center">'.$value->valid_to.'</td>
-                            <td class="text-center">'.$qrCode.'</td>
-                        </tr>';
-        }
+                </div>';*/
 
-        $html .= '</tbody>
-                </table>';
+        /* Uncomment foreach to get get all gift vouchers */
+        /*foreach ($gift_voucher as $key => $value) {*/
+            $obj = json_decode($gift_voucher->code);
+            for($i = 0, $l = count($obj); $i < $l; ++$i) {
+              $qrcode_base64 = base64_encode(\QrCode::backgroundColor(163, 208, 114)->format('png')->size(140)->errorCorrection('H')->margin(1)->generate($obj[$i]));
+              $qrCode = '<img src="data:image/png;base64,' . $qrcode_base64 . '">';
+              $html .= '<div class="wrapper-page" style="page-break-inside:avoid; clear:both; position:relative; background: #a3d072; height: 290px;">
+                            <div style="position:absolute; left: 10rem; width: 192pt;">
+                              <h3 class="pt-5" style="font-size: 35px; margin-left: -15px;">NS Pollachi</h3>
+                              <p>'.$qrCode.'</p>
+                            </div>
+                            <div style="margin-left: 30rem;">
+                              <h3 class="pt-5" style="margin-left: 14rem;">'.$gift_voucher->value.'</h3>
+                              <p style="margin-left: 5.5rem;">Voucher valid from '.$gift_voucher->valid_from.' to '.$gift_voucher->valid_to.'</p>
+                              <p class="pr-5" style="text-align: justify;">'.$gift_voucher->remark.'</p>
+                              <p style="margin-left: 11.5rem;">www.nspollachi.com</p>
+                            </div>
+                      </div>';
+              $html .= '<br /><br />';
+            }
+        /*}*/
+
+        $html .= '</body></html>';
 
         $pdf->loadHTML($html);
         
@@ -215,6 +228,7 @@ class GiftvoucherController extends Controller
         $pdf->setPaper('A4', 'landscape');
 
         // Output the generated PDF to Browser
-        return $pdf->stream();
+        //return $pdf->stream();
+        return $pdf->stream("NS-Pollachi-".$gift_voucher["name"]."-"."GiftVoucher-"."-.pdf");
     }
 }
