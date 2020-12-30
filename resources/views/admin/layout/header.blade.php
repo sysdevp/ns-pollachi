@@ -278,10 +278,10 @@
 													<div class="acnav__label acnav__label--level2">Payment</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Payment Request</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Payment Process</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Payment Of Expenses</a></li>
-                           						</ul>
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('payment_request.index') }}">Payment Request</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('payment_process.index') }}">Payment Process</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('payment_expense.index') }}">Payment Of Expenses</a></li>
+								</ul>
 										</li>
 										</ul>
 			
@@ -292,10 +292,9 @@
 													<div class="acnav__label acnav__label--level2">Receipt</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Receipt Request</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Receipt Process</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Receipt Of Income</a></li>
-                           						</ul>
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('receipt_request.index') }}">Receipt Request</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('receipt_process.index') }}">Receipt Process</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('receipt_income.index') }}">Receipt Of Income</a></li>	</ul>
 										</li>
 										</ul>	
 										
@@ -305,9 +304,9 @@
 													<div class="acnav__label acnav__label--level2">Advance Settlement</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Advance to Suppliers</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Advance from Customers</a></li>
-                                						</ul>
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('advance_settlement_supplier.create') }}">Advance to Suppliers</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('advance_settlement_customer.create') }}">Advance from Customers</a></li>
+                            		</ul>
 										</li>
 										</ul>	
 			
@@ -321,6 +320,8 @@
 											<!--1st Add sub menu-->	
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Mark Up and Mark Down</div>
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('price_updation.index') }}">Mark Up and Mark Down</a></li>
+                            
 										</li>
 										</ul>
 			
@@ -336,14 +337,12 @@
 													<div class="acnav__label acnav__label--level2">Purchase</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Purchase Estimation</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Purchase order</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Receipt Note</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Purchase Entry</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Rejection Out</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Purchase Gate Pass Entry</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Debit Note</a></li>
-                           						</ul>
+													<li><a href="{{ url('estimation/index/1') }}">Purchase Estimation</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/1') }}">Purchase order</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/1') }}">Receipt Note</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_entry/index/1') }}">Purchase Entry</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('rejection_out/index/1') }}">Rejection Out</a></li>
+                            <li><a class="acnav__link acnav__link--level3"  href="{{ url('debit_note/index/1') }}">Debit Note</a></li>		</ul>
 										</li>
 										</ul>
 										
@@ -353,14 +352,14 @@
 													<div class="acnav__label acnav__label--level2">Sales</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Sales Estimation</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Sales Order</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Delivery Note</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Sales Entry</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Rejection In</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Sales Gate Pass Entry</a></li>
-							<li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/0') }}">Credit Note</a></li>
-                           						</ul>
+													<li><a href="{{ url('sales_estimation/index/1') }}">Sales Estimation</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sale_order/index/1') }}">Sales Order</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('delivery_note/index/1') }}">Delivery Note</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_entry/index/1') }}">Sales Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('rejection_in/index/1') }}">Rejection In</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_gatepass_entry/index/1') }}">Sales Gate Pass Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('credit_note/index/1') }}">Credit Note</a></li>
+                     			</ul>
 										</li>
 										</ul>
 			
@@ -374,10 +373,8 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Receivables</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Bill Wise</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Party Wise</a></li>
-                                 						</ul>
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('receivable_billwise.index') }}">Bill Wise</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('receivable_partywise.index') }}">Party Wise</a></li>   						</ul>
 										</li>
 										</ul>
 				
@@ -386,10 +383,8 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Payables</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Bill Wise</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/0') }}">Party Wise</a></li>
-                                 						</ul>
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('payable_billwise.index') }}">Bill Wise</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ route('payable_partywise.index') }}">Party Wise</a></li>		</ul>
 										</li>
 										</ul>
 				
@@ -403,9 +398,8 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Day Book</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Day Book</a></li>
-                           
+													<li><a  class="acnav__link acnav__link--level3"  href="{{ route('daybook.index') }}">Day Book</a></li>
+                            
                                  						</ul>
 										</li>
 										</ul>
@@ -415,11 +409,10 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Stock Reports</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Stock Report</a></li>
-						   <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Stock Summary</a></li>
-						   <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Stock Ageing</a></li>
-                           
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('stock-report.index') }}">Stock Report</a></li>
+                           <li><a  class="acnav__link acnav__link--level3" href="{{ route('stock_summary.index') }}">Stock Summary</a></li>
+                           <li><a  class="acnav__link acnav__link--level3" href="{{ route('stock_ageing.index') }}">Stock Ageing</a></li>
+                            
                                  						</ul>
 										</li>
 										</ul>						
@@ -429,9 +422,8 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Individual Ledger</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Individual Ledger</a></li>
-						  					</ul>
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('individual_ledger.index') }}">Individual Ledger</a></li>
+                            	</ul>
 										</li>
 										</ul>	
 										
@@ -440,9 +432,8 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">GST Report</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">GST Report</a></li>
-						  					</ul>
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('gst_report.index') }}">GST Report</a></li>
+                           	</ul>
 										</li>
 										</ul>	
 				
@@ -456,9 +447,8 @@
 									<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Selling Price</div>
 													<ul class="acnav__list acnav__list--level3">
-														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">Selling Price Setup</a></li>
-                           
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('selling-price-setup.index') }}">Selling Price Setup</a></li>
+                       
                                  						</ul>
 										</li>
 										</ul>	
@@ -475,8 +465,8 @@
 													<div class="acnav__label acnav__label--level2">POS</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/0') }}">POS</a></li>
-                           
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('pos.index') }}">POS</a></li>
+                      
                                  						</ul>
 										</li>
 										</ul>	
