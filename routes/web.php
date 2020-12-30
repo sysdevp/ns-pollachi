@@ -36,7 +36,7 @@ Route::get('send-mail', function () {
 });
 Route::any('import-item', 'ItemImportExportController@importExportView');
 Route::any('import', 'ItemImportExportController@import');
-
+Route::get('/charts', 'ChartController@index')->name('charts');
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('change-password', 'Auth\RegisterController@indexshow')->name('change.password')->middleware(['auth']);
@@ -286,7 +286,7 @@ Route::group(['prefix' => 'master/offers', 'middleware' => ['auth']], function (
     Route::any('edit/{id}', 'OffersController@edit')->middleware('permission:gift_voucher_matser_edit');
     Route::any('update/{id}', 'OffersController@update')->middleware('permission:gift_voucher_matser_edit');
     Route::any('delete/{id}', 'OffersController@destroy')->middleware('permission:gift_voucher_matser_update');
-    Route::get('print', 'OffersController@print');
+    Route::get('getItem', 'OffersController@getItem');
 });
 /* Offers Master End Here  */
 
@@ -299,7 +299,7 @@ Route::group(['prefix' => 'master/gift-voucher', 'middleware' => ['auth']], func
     Route::any('edit/{id}', 'GiftvoucherController@edit')->middleware('permission:gift_voucher_matser_edit');
     Route::any('update/{id}', 'GiftvoucherController@update')->middleware('permission:gift_voucher_matser_edit');
     Route::any('delete/{id}', 'GiftvoucherController@destroy')->middleware('permission:gift_voucher_matser_update');
-    Route::get('print', 'GiftvoucherController@print');
+    Route::get('print/{id}', 'GiftvoucherController@print');
 });
 /* Gift Voucher Master End Here  */
 

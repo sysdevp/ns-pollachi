@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <style type="text/css">
   tbody#team-list {
     counter-reset: rowNumber;
@@ -2505,8 +2507,8 @@ item_codes(uom_exclusive);
   var to_html_total_net = total_net_price.toFixed(2);
   $(".total_net_price").html(parseFloat(to_html_total_net));
   roundoff_cal();
-  individual_expense();
-  total_expense_cal();
+  // individual_expense();
+  // total_expense_cal();
   var q=calculate_total_discount();
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));

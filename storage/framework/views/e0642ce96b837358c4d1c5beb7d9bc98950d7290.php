@@ -117,7 +117,7 @@ table, th, td {
                 <label>Item Name </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select item"  name="item" id="item">
                   <option value="">Choose Item Name</option>
-                  <?php $__currentLoopData = $item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <option value="<?php echo e($value->id); ?>"><?php echo e($value->name); ?></option>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
@@ -174,7 +174,15 @@ table, th, td {
                     <th id="120" style="display: none;">(>120 Days)</th>
                   </thead>
                   <tbody>
-
+                      <?php for($i = 0; $i < $count; $i++): ?>
+                      <tr>
+                      <td><?php echo $i+1; ?></td>
+                      <td><?php echo e($array_details[$i]['item']); ?></td>
+                      <td><?php echo e($array_details[$i]['quantity']); ?></td>
+                      <td><?php echo e($array_details[$i]['rate']); ?></td>
+                      <td><?php echo e($array_details[$i]['amount']); ?></td>
+                      </tr>
+                      <?php endfor; ?>
                   </tbody>
                   
                 </table>

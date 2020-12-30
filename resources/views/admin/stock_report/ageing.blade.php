@@ -1,5 +1,7 @@
 @extends('admin.layout.app')
 @section('content')
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card px-0">
     <!-- card header start@ -->
@@ -117,7 +119,7 @@ table, th, td {
                 <label>Item Name </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select item"  name="item" id="item">
                   <option value="">Choose Item Name</option>
-                  @foreach($item as $value)
+                  @foreach($items as $value)
                   <option value="{{ $value->id }}">{{ $value->name }}</option>
                   @endforeach
                         </select>
@@ -174,7 +176,15 @@ table, th, td {
                     <th id="120" style="display: none;">(>120 Days)</th>
                   </thead>
                   <tbody>
-
+                      @for($i = 0; $i < $count; $i++)
+                      <tr>
+                      <td><?php echo $i+1; ?></td>
+                      <td>{{ $array_details[$i]['item'] }}</td>
+                      <td>{{ $array_details[$i]['quantity'] }}</td>
+                      <td>{{ $array_details[$i]['rate'] }}</td>
+                      <td>{{ $array_details[$i]['amount'] }}</td>
+                      </tr>
+                      @endfor
                   </tbody>
                   
                 </table>

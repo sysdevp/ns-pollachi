@@ -3,10 +3,10 @@
       <div class="col-12 px-0">
       <div class="row mx-0">
         <div class="col-6">
-          <p>© 2019 Copyright.</p>
+          <p>© 2020 Copyright.</p>
         </div>
         <div class="col-6 text-right">
-           <p>Mazenetsolution</p> 
+           <p>Powered by Mazenet</p> 
         </div>
       </div>
     
@@ -16,7 +16,7 @@
 </div></div>
 
   </main></div>
-  <script  src="https://code.jquery.com/jquery-3.3.1.js" ></script>
+ 
     <!-- select 2 -->
     <script src="{{asset('assets/js/select2.min.js')}}"></script>
    

@@ -1,5 +1,7 @@
 @extends('admin.layout.app')
 @section('content')
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card">
     <!-- card header start@ -->
@@ -10,7 +12,6 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="{{url('master/gift-voucher/print')}}">Print</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/gift-voucher/create')}}">Add Gift Voucher</a></button></li>
           </ul>
         </div>
@@ -48,6 +49,7 @@
                 <a href="{{url('master/gift-voucher/show/'.$value->id )}}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{url('master/gift-voucher/edit/'.$value->id )}}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a onclick="return confirm('Are you sure ?')" href="{{url('master/gift-voucher/delete/'.$value->id )}}" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a onclick="return confirm('Are you sure ?')" href="{{url('master/gift-voucher/print/'.$value->id )}}" class="px-2 py-1 bg-secondary text-white rounded"><i class="fa fa-print" aria-hidden="true"></i></a>
               </td>
             </tr>
           @endforeach

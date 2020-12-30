@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card px-0">
     <!-- card header start@ -->
@@ -107,13 +109,13 @@ table, th, td {
           </div>
 
           <div class="col-md-12 mb-3">
-          <table class="table table-striped table-bordered" id="master">
+          <table class="table table-striped table-bordered" id="day_book">
                   <thead>
                     <th> S.no </th>
-                    <th id="items">Opening Balance</th>
-                    <th id="rate"> Debit</th>
-                    <th id="0-30">Credit</th>
-                    <th id="amnt"> Closing Balance</th>
+                    <th id="balnce">Opening Balance</th>
+                    <th id="debit"> Debit</th>
+                    <th id="crediit">Credit</th>
+                    <th id="closing"> Closing Balance</th>
                     
                   </thead>
                   <tbody>

@@ -1,5 +1,7 @@
 @extends('admin.layout.app')
 @section('content')
+<main class="page-content">
+
 <style type="text/css">
   tbody#team-list {
     counter-reset: rowNumber;

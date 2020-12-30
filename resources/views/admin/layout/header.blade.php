@@ -24,12 +24,54 @@
 	<link rel="stylesheet" href="{{asset('assets/css/dashboardcss.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/css/gijgo.min.css')}}">
     <!-- main js -->
-    <script src="{{asset('assets/js/jquery-3.3.1.js')}}"></script>
+<script src="{{asset('assets/js/jquery-3.3.1.js')}}"></script>
 
     <script type="text/javascript">
       var APP_URL = {!! json_encode(url('/')) !!}
       </script>
-    
+	  <style>
+    .profileimage{font-size:50px !important;}
+
+.navtopadmin{padding: 8px;}
+
+.changepass {  -
+ font-family: Arial;
+ color: #fff !important;
+ font-size: 12px;
+ background: #007bff;
+ padding: 8px 10px 8px 10px;
+ text-decoration: none;
+ margin-right:10px;
+}
+.changepass:hover {  -
+ color: #fff !important;
+ font-size: 12px;
+ background: #28a745;
+}
+.logout {
+ font-family: Arial;
+ color: #fff !important;
+ font-size: 12px;
+ background: #007bff;
+ padding: 8px 10px 8px 10px;
+ text-decoration: none;
+}
+
+.logout:hover {  -
+ color: #fff !important;
+ font-size: 12px;
+ background: #28a745;
+}
+
+.admintext{color: #fff; text-decoration:none;
+   font-size: 15px;}
+
+.Adminimage{background: #28a745;
+   margin-top: -9px;
+   margin-bottom: 7px;
+   margin-left: 0px;
+   color: #fff; padding: 10px;}
+   </style>
     
 
   </head>
@@ -61,7 +103,7 @@
 		<!--1st li menu-->
 			<li class="has-children">
 				<div class="acnav__label">
-					<i class="fa fa-leaf" aria-hidden="true"></i>  Masters
+					<i class="fa fa-database" aria-hidden="true"></i>  Masters
 				</div>
 								<!--sub menu-->
 								<ul class="acnav__list acnav__list--level2">	
@@ -201,8 +243,33 @@
                             <li><a class="acnav__link acnav__link--level3" href="{{url('master/supplier')}}">Supplier</a></li>
                             @endcan
                             <li><a class="acnav__link acnav__link--level3" href="{{route('sales_man.index')}}">Sales Man</a></li>
+							
 													</ul>
 										</li>
+										
+										<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Area</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+                           @can('area_list')
+                          <li><a class="acnav__link acnav__link--level3" href="{{url('master/area')}}">Area</a></li>
+                          @endcan
+							
+													</ul>
+										</li>
+										
+										<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Account Group</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('account_group.index')}}">Account Group</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('account_head.index')}}">Account Head</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('account_group_tax.index')}}">Tax For Account Group</a></li>
+							
+													</ul>
+										</li>
+										
+										
 										
 									</li>
 								</ul>
@@ -212,7 +279,7 @@
 			
 			<!--2nd li menu-->
 
-			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Transactions</div>
+			<li class="has-children"><div class="acnav__label"> <i class="fa fa-shopping-cart" aria-hidden="true"></i>   Transactions</div>
 			<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
 									<li class="has-children">
@@ -229,24 +296,224 @@
 													</ul>
 										</li>
 										</ul>
+										
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Sales</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_estimation/index/0') }}">Sales Estimation</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sale_order/index/0') }}">Sales Order</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('delivery_note/index/0') }}">Delivery Note</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_entry/index/0') }}">Sales Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('rejection_in/index/0') }}">Rejection In</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_gatepass_entry/index/0') }}">Sales Gate Pass Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('credit_note/index/0') }}">Credit Note</a></li>
+													</ul>
+										</li>
+										</ul>
+										
+											<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Payment</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('payment_request.index') }}">Payment Request</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('payment_process.index') }}">Payment Process</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('payment_expense.index') }}">Payment Of Expenses</a></li>
+								</ul>
+										</li>
+										</ul>
 			
+			
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Receipt</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('receipt_request.index') }}">Receipt Request</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('receipt_process.index') }}">Receipt Process</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('receipt_income.index') }}">Receipt Of Income</a></li>	</ul>
+										</li>
+										</ul>	
+										
+											<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Advance Settlement</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('advance_settlement_supplier.create') }}">Advance to Suppliers</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('advance_settlement_customer.create') }}">Advance from Customers</a></li>
+                            		</ul>
+										</li>
+										</ul>	
 			
 			
 			</li>
 			
 			<!--3rdt li menu-->
-			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Price Updation </div>
-			
-			
+			<li class="has-children"><div class="acnav__label"> <i class="fa fa-tag" aria-hidden="true"></i>   Price Updation </div>
+					
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('price_updation.index') }}">Mark Up and Mark Down</a></li>
+                            
+										</li>
+										</ul>
 			
 			</li>
 			
 			
-			<!--3rdt li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>   Updation </div>
+			<!--4th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-file" aria-hidden="true"></i>  Registers </div>
+			
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Purchase</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/1') }}">Purchase Estimation</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/1') }}">Purchase order</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/1') }}">Receipt Note</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_entry/index/1') }}">Purchase Entry</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ url('rejection_out/index/1') }}">Rejection Out</a></li>
+                            <li><a class="acnav__link acnav__link--level3"  href="{{ url('debit_note/index/1') }}">Debit Note</a></li>		</ul>
+										</li>
+										</ul>
+										
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Sales</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a class="acnav__link acnav__link--level3" href="{{ url('sales_estimation/index/1') }}">Sales Estimation</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sale_order/index/1') }}">Sales Order</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('delivery_note/index/1') }}">Delivery Note</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_entry/index/1') }}">Sales Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('rejection_in/index/1') }}">Rejection In</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_gatepass_entry/index/1') }}">Sales Gate Pass Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ url('credit_note/index/1') }}">Credit Note</a></li>
+                     			</ul>
+										</li>
+										</ul>
+			
+			</li>
+			
+			<!--5th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-list-alt" aria-hidden="true"></i>  Outstanding </div> 
+			
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Receivables</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('receivable_billwise.index') }}">Bill Wise</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{ route('receivable_partywise.index') }}">Party Wise</a></li>   						</ul>
+										</li>
+										</ul>
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Payables</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('payable_billwise.index') }}">Bill Wise</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="{{ route('payable_partywise.index') }}">Party Wise</a></li>		</ul>
+										</li>
+										</ul>
+				
+			</li>
+			
+			<!--5th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-envelope" aria-hidden="true"></i> Reports </div> 
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Day Book</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a  class="acnav__link acnav__link--level3"  href="{{ route('daybook.index') }}">Day Book</a></li>
+                            
+                                 						</ul>
+										</li>
+										</ul>
+										
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Stock Reports</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('stock-report.index') }}">Stock Report</a></li>
+                           <li><a  class="acnav__link acnav__link--level3" href="{{ route('stock_summary.index') }}">Stock Summary</a></li>
+                           <li><a  class="acnav__link acnav__link--level3" href="{{ route('stock_ageing.index') }}">Stock Ageing</a></li>
+                            
+                                 						</ul>
+										</li>
+										</ul>						
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Individual Ledger</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a  class="acnav__link acnav__link--level3" href="{{ route('individual_ledger.index') }}">Individual Ledger</a></li>
+                            	</ul>
+										</li>
+										</ul>	
+										
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">GST Report</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('gst_report.index') }}">GST Report</a></li>
+                           	</ul>
+										</li>
+										</ul>	
+				
+			</li>
+			
+			<!--6th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-cog"" aria-hidden="true"></i> Settings </div> 
+			
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Selling Price</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('selling-price-setup.index') }}">Selling Price Setup</a></li>
+                       
+                                 						</ul>
+										</li>
+										</ul>	
+				
+			</li>
 			
 			
-			
+			<!--7th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-stack-exchange" aria-hidden="true"></i> POS </div> 
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">POS</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('pos.index') }}">POS</a></li>
+                      
+                                 						</ul>
+										</li>
+										</ul>	
+				
+				
 			</li>
 			
 			
@@ -258,3 +525,46 @@
       </div>
     </div>    
   </nav>
+  <div class="container-fuild" style="background:#28a745">
+<div class="text-right pr-3">
+<div class="top_nav">
+     <div class="nav_menu">
+       <nav>    
+
+         <ul class="nav navbar-nav navbar-right navtopadmin">
+           
+           <li role="presentation" class="dropdown">
+         <a href="javascript:;" class="user-profile dropdown-toggle admintext" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-user" aria-hidden="true"></i> Admin</a>
+             <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+               <li class="text-center Adminimage">
+                 <a>
+                   <span><i class="fa fa-user" aria-hidden="true" style="font-size:40px !important; color:#fff"></i>
+<br/>
+               
+                   <span class="message">
+                       Admin <br/>
+                       </span>
+                 </a>
+               </li>
+             
+               <li>
+                 <div class="text-center">
+                   <a class="changepass" href="{{ url('master/password_change/index') }}">
+                     <strong><i class="fa fa-lock" aria-hidden="true"></i> Change Password</strong>
+                   </a>
+
+ <a class="logout" href="{{url('logout')}}">
+                     <strong><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</strong>
+                   </a>
+                 </div>
+               </li>
+             </ul>
+           </li>
+         </ul>
+       </nav>
+     </div>
+   </div>
+</div>
+</div>
+  

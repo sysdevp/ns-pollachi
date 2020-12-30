@@ -1,6 +1,7 @@
 @extends('admin.layout.app')
 @section('content')
-<div class="col-12 body-sec">
+<main class="page-content">
+
   <div class="card container px-0">
     <!-- card header start@ -->
     <div class="card-header px-2">

@@ -1,4 +1,8 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+<div class="container-fuild" style="background:#28a745">
+				<div class="text-right pr-3">sdfjsdfjl</div>
+		</div>
 <style type="text/css">
   tbody#team-list {
     counter-reset: rowNumber;
@@ -773,7 +777,11 @@ table, th, td {
             <th>Current Cleared Amount</th>
           </tr>
         </thead>
+<<<<<<< HEAD
+        <tbody class="" id="myTable_adv">
+=======
         <tbody class="append_proof_details_adv" id="myTable_adv">
+>>>>>>> origin/master
         </tbody>
         <tfoot>
               <th>Total</th>

@@ -1,5 +1,6 @@
 @extends('admin.layout.app')
 @section('content')
+<main class="page-content">
 
 <?php
   
