@@ -113,28 +113,30 @@ class GiftvoucherController extends Controller
      */
     public function update(Request $request, Giftvoucher $giftvoucher,$id)
     {
-        $giftvoucher = Giftvoucher::find($id);
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:giftvouchers,name,'.$id.',id,deleted_at,NULL',
-            'code' => 'required|unique:giftvouchers,code,'.$id.',id,deleted_at,NULL',
-            'value' => 'required',
-            'valid_from' => 'required',
-            'valid_to' => 'required',
-            
-         ])->validate();
-        $giftvoucher->name       = $request->name;
-        $giftvoucher->code       = $request->code;
-        $giftvoucher->value       = $request->value;
-        $giftvoucher->valid_from       = date('Y-m-d',strtotime($request->valid_from));
-        $giftvoucher->valid_to       = date('Y-m-d',strtotime($request->valid_to));
-        $giftvoucher->remark      =  $request->remark;
-        $giftvoucher->created_by = 0;
-        $giftvoucher->updated_by = 0;
+      $giftvoucher = Giftvoucher::find($id);
+      $validator = Validator::make($request->all(), [
+      'name' => 'required|unique:giftvouchers,name,'.$id.',id,deleted_at,NULL',
+      /*'code' => 'required|unique:giftvouchers,code,'.$id.',id,deleted_at,NULL',*/
+      'value' => 'required',
+      'valid_from' => 'required',
+      'valid_to' => 'required',
+
+      ])->validate();
+
+      $giftvoucher->name       = $request->name;
+      /*$giftvoucher->code       = $request->code;*/
+      $giftvoucher->value       = $request->value;
+      $giftvoucher->valid_from       = date('Y-m-d',strtotime($request->valid_from));
+      $giftvoucher->valid_to       = date('Y-m-d',strtotime($request->valid_to));
+      $giftvoucher->remark      =  $request->remark;
+      $giftvoucher->created_by = 0;
+      $giftvoucher->updated_by = 0;
+
       if ($giftvoucher->save()) {
-            return Redirect::back()->with('success', 'Updated Successfully');
-        } else {
-            return Redirect::back()->with('failure', 'Something Went Wrong..!');
-        }
+        return Redirect::back()->with('success', 'Updated Successfully');
+      } else {
+        return Redirect::back()->with('failure', 'Something Went Wrong..!');
+      }
     }
 
     /**
