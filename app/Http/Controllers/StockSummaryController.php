@@ -130,17 +130,27 @@ class StockSummaryController extends Controller
         $new_array['credit_note_amount'] = $credit_note_items;
         $new_array['credit_note_quantity'] = $credit_note_quantity;
 
+        $item_opening_quantity= OpeningStock::where('item_id','=',$item->id)
+                             ->sum('opening_qty');
+
+        $stock_changes = StockChange::where('item_id','=',$item->id)->sum('quantity');
+
+
+        $purchase_total_qty =  $purchase_entry_items_quantity + $receipt_note_quantity + $item_opening_quantity - $rejected_out_quantity;
+        $sale_total_qty =  $sale_entry_items_quantity + $delivery_note_quantity - 
+        $rejected_in_quantity; 
+
+        $total_qty = $purchase_total_qty - $sale_total_qty + $stock_changes;
+
 
         
         $new_array['item'] = $item->name;
         $new_array['group_name'] = '-';
         $new_array['category'] = '-';
         $new_array['item'] = $item->name;
-        $new_array['total_qty'] = 0; 
-        $new_array['location'] = 0; 
 
-        $new_array['opening_stock'] = 0; 
-        $new_array['closing_stock'] = 0; 
+        $new_array['opening_stock'] = $purchase_total_qty; 
+        $new_array['closing_stock'] = $total_qty; 
        
                         
         array_push($array_details, $new_array);
