@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card container px-0">
     <!-- card header start@ -->
@@ -291,7 +293,7 @@ $('#cash_bill').show();
 
 function myfunction(val) {
 var sum = 0;
-  $('.amount').each(function(){
+  $('.receipt_amount').each(function(){
  sum = parseInt(sum) + parseInt($(this).val());
   });
 

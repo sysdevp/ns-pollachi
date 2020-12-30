@@ -103,7 +103,7 @@
 		<!--1st li menu-->
 			<li class="has-children">
 				<div class="acnav__label">
-					<i class="fa fa-leaf" aria-hidden="true"></i>  Masters
+					<i class="fa fa-database" aria-hidden="true"></i>  Masters
 				</div>
 								<!--sub menu-->
 								<ul class="acnav__list acnav__list--level2">	
@@ -279,7 +279,7 @@
 			
 			<!--2nd li menu-->
 
-			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Transactions</div>
+			<li class="has-children"><div class="acnav__label"> <i class="fa fa-shopping-cart" aria-hidden="true"></i>   Transactions</div>
 			<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
 									<li class="has-children">
@@ -356,12 +356,12 @@
 			</li>
 			
 			<!--3rdt li menu-->
-			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Price Updation </div>
+			<li class="has-children"><div class="acnav__label"> <i class="fa fa-tag" aria-hidden="true"></i>   Price Updation </div>
 					
 					<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
 									<li class="has-children">
-													<div class="acnav__label acnav__label--level2">Mark Up and Mark Down</div>
+													
 													<li><a class="acnav__link acnav__link--level3" href="{{ route('price_updation.index') }}">Mark Up and Mark Down</a></li>
                             
 										</li>
@@ -371,7 +371,7 @@
 			
 			
 			<!--4th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>  Registers </div>
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-file" aria-hidden="true"></i>  Registers </div>
 			
 					<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -379,7 +379,7 @@
 													<div class="acnav__label acnav__label--level2">Purchase</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-													<li><a href="{{ url('estimation/index/1') }}">Purchase Estimation</a></li>
+													<li><a class="acnav__link acnav__link--level3" href="{{ url('estimation/index/1') }}">Purchase Estimation</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_order/index/1') }}">Purchase order</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="{{ url('receipt_note/index/1') }}">Receipt Note</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="{{ url('purchase_entry/index/1') }}">Purchase Entry</a></li>
@@ -394,7 +394,7 @@
 													<div class="acnav__label acnav__label--level2">Sales</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-													<li><a href="{{ url('sales_estimation/index/1') }}">Sales Estimation</a></li>
+													<li><a class="acnav__link acnav__link--level3" href="{{ url('sales_estimation/index/1') }}">Sales Estimation</a></li>
                         <li><a class="acnav__link acnav__link--level3" href="{{ url('sale_order/index/1') }}">Sales Order</a></li>
                         <li><a class="acnav__link acnav__link--level3" href="{{ url('delivery_note/index/1') }}">Delivery Note</a></li>
                         <li><a class="acnav__link acnav__link--level3" href="{{ url('sales_entry/index/1') }}">Sales Entry</a></li>
@@ -408,7 +408,7 @@
 			</li>
 			
 			<!--5th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>  Outstanding </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-list-alt" aria-hidden="true"></i>  Outstanding </div> 
 			
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -433,7 +433,7 @@
 			</li>
 			
 			<!--5th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> Reports </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-envelope" aria-hidden="true"></i> Reports </div> 
 				
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -482,7 +482,7 @@
 			</li>
 			
 			<!--6th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> Settings </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-cog"" aria-hidden="true"></i> Settings </div> 
 			
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -499,7 +499,7 @@
 			
 			
 			<!--7th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> POS </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-stack-exchange" aria-hidden="true"></i> POS </div> 
 				
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -533,7 +533,6 @@
 
          <ul class="nav navbar-nav navbar-right navtopadmin">
            
-
            <li role="presentation" class="dropdown">
          <a href="javascript:;" class="user-profile dropdown-toggle admintext" data-toggle="dropdown" aria-expanded="false">
               <i class="fa fa-user" aria-hidden="true"></i> Admin</a>
@@ -544,18 +543,18 @@
 <br/>
                
                    <span class="message">
-                       Admin <br/> 30.12.2020
+                       Admin <br/>
                        </span>
                  </a>
                </li>
              
                <li>
                  <div class="text-center">
-                   <a class="changepass">
+                   <a class="changepass" href="{{ url('master/password_change/index') }}">
                      <strong><i class="fa fa-lock" aria-hidden="true"></i> Change Password</strong>
                    </a>
 
- <a class="logout">
+ <a class="logout" href="{{url('logout')}}">
                      <strong><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</strong>
                    </a>
                  </div>

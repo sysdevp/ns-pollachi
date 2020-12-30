@@ -30,7 +30,49 @@
       var APP_URL = <?php echo json_encode(url('/')); ?>
 
       </script>
-    
+	  <style>
+    .profileimage{font-size:50px !important;}
+
+.navtopadmin{padding: 8px;}
+
+.changepass {  -
+ font-family: Arial;
+ color: #fff !important;
+ font-size: 12px;
+ background: #007bff;
+ padding: 8px 10px 8px 10px;
+ text-decoration: none;
+ margin-right:10px;
+}
+.changepass:hover {  -
+ color: #fff !important;
+ font-size: 12px;
+ background: #28a745;
+}
+.logout {
+ font-family: Arial;
+ color: #fff !important;
+ font-size: 12px;
+ background: #007bff;
+ padding: 8px 10px 8px 10px;
+ text-decoration: none;
+}
+
+.logout:hover {  -
+ color: #fff !important;
+ font-size: 12px;
+ background: #28a745;
+}
+
+.admintext{color: #fff; text-decoration:none;
+   font-size: 15px;}
+
+.Adminimage{background: #28a745;
+   margin-top: -9px;
+   margin-bottom: 7px;
+   margin-left: 0px;
+   color: #fff; padding: 10px;}
+   </style>
     
 
   </head>
@@ -62,7 +104,7 @@
 		<!--1st li menu-->
 			<li class="has-children">
 				<div class="acnav__label">
-					<i class="fa fa-leaf" aria-hidden="true"></i>  Masters
+					<i class="fa fa-database" aria-hidden="true"></i>  Masters
 				</div>
 								<!--sub menu-->
 								<ul class="acnav__list acnav__list--level2">	
@@ -238,7 +280,7 @@
 			
 			<!--2nd li menu-->
 
-			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Transactions</div>
+			<li class="has-children"><div class="acnav__label"> <i class="fa fa-shopping-cart" aria-hidden="true"></i>   Transactions</div>
 			<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
 									<li class="has-children">
@@ -315,12 +357,12 @@
 			</li>
 			
 			<!--3rdt li menu-->
-			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Price Updation </div>
+			<li class="has-children"><div class="acnav__label"> <i class="fa fa-tag" aria-hidden="true"></i>   Price Updation </div>
 					
 					<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
 									<li class="has-children">
-													<div class="acnav__label acnav__label--level2">Mark Up and Mark Down</div>
+													
 													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('price_updation.index')); ?>">Mark Up and Mark Down</a></li>
                             
 										</li>
@@ -330,7 +372,7 @@
 			
 			
 			<!--4th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>  Registers </div>
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-file" aria-hidden="true"></i>  Registers </div>
 			
 					<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -338,7 +380,7 @@
 													<div class="acnav__label acnav__label--level2">Purchase</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-													<li><a href="<?php echo e(url('estimation/index/1')); ?>">Purchase Estimation</a></li>
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('estimation/index/1')); ?>">Purchase Estimation</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_order/index/1')); ?>">Purchase order</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('receipt_note/index/1')); ?>">Receipt Note</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_entry/index/1')); ?>">Purchase Entry</a></li>
@@ -353,7 +395,7 @@
 													<div class="acnav__label acnav__label--level2">Sales</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-													<li><a href="<?php echo e(url('sales_estimation/index/1')); ?>">Sales Estimation</a></li>
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_estimation/index/1')); ?>">Sales Estimation</a></li>
                         <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sale_order/index/1')); ?>">Sales Order</a></li>
                         <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('delivery_note/index/1')); ?>">Delivery Note</a></li>
                         <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_entry/index/1')); ?>">Sales Entry</a></li>
@@ -367,7 +409,7 @@
 			</li>
 			
 			<!--5th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>  Outstanding </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-list-alt" aria-hidden="true"></i>  Outstanding </div> 
 			
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -392,7 +434,7 @@
 			</li>
 			
 			<!--5th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> Reports </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-envelope" aria-hidden="true"></i> Reports </div> 
 				
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -441,7 +483,7 @@
 			</li>
 			
 			<!--6th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> Settings </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-cog"" aria-hidden="true"></i> Settings </div> 
 			
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -458,7 +500,7 @@
 			
 			
 			<!--7th li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> POS </div> 
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-stack-exchange" aria-hidden="true"></i> POS </div> 
 				
 				<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
@@ -483,4 +525,47 @@
 </section>
       </div>
     </div>    
-  </nav><?php /**PATH C:\xampp\htdocs\ns_pollachi\resources\views/admin/layout/header.blade.php ENDPATH**/ ?>
+  </nav>
+  <div class="container-fuild" style="background:#28a745">
+<div class="text-right pr-3">
+<div class="top_nav">
+     <div class="nav_menu">
+       <nav>    
+
+         <ul class="nav navbar-nav navbar-right navtopadmin">
+           
+           <li role="presentation" class="dropdown">
+         <a href="javascript:;" class="user-profile dropdown-toggle admintext" data-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-user" aria-hidden="true"></i> Admin</a>
+             <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+               <li class="text-center Adminimage">
+                 <a>
+                   <span><i class="fa fa-user" aria-hidden="true" style="font-size:40px !important; color:#fff"></i>
+<br/>
+               
+                   <span class="message">
+                       Admin <br/>
+                       </span>
+                 </a>
+               </li>
+             
+               <li>
+                 <div class="text-center">
+                   <a class="changepass" href="<?php echo e(url('master/password_change/index')); ?>">
+                     <strong><i class="fa fa-lock" aria-hidden="true"></i> Change Password</strong>
+                   </a>
+
+ <a class="logout" href="<?php echo e(url('logout')); ?>">
+                     <strong><i class="fa fa-sign-out" aria-hidden="true"></i> Sign Out</strong>
+                   </a>
+                 </div>
+               </li>
+             </ul>
+           </li>
+         </ul>
+       </nav>
+     </div>
+   </div>
+</div>
+</div>
+  <?php /**PATH C:\xampp\htdocs\ns_pollachi\resources\views/admin/layout/header.blade.php ENDPATH**/ ?>

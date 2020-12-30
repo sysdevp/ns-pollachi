@@ -36,7 +36,7 @@ Route::get('send-mail', function () {
 });
 Route::any('import-item', 'ItemImportExportController@importExportView');
 Route::any('import', 'ItemImportExportController@import');
-
+Route::get('/charts', 'ChartController@index')->name('charts');
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('change-password', 'Auth\RegisterController@indexshow')->name('change.password')->middleware(['auth']);
