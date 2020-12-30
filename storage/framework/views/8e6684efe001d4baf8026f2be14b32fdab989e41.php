@@ -24,7 +24,7 @@
 	<link rel="stylesheet" href="<?php echo e(asset('assets/css/dashboardcss.css')); ?>">
 	<link rel="stylesheet" href="<?php echo e(asset('assets/css/gijgo.min.css')); ?>">
     <!-- main js -->
-    <script src="<?php echo e(asset('assets/js/jquery-3.3.1.js')); ?>"></script>
+<script src="<?php echo e(asset('assets/js/jquery-3.3.1.js')); ?>"></script>
 
     <script type="text/javascript">
       var APP_URL = <?php echo json_encode(url('/')); ?>
@@ -262,13 +262,13 @@
 													<div class="acnav__label acnav__label--level2">Sales</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                           <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('estimation/index/0')); ?>">Sales Estimation</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_order/index/0')); ?>">Sales Order</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('receipt_note/index/0')); ?>">Delivery Note</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_entry/index/0')); ?>">Sales Entry</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('rejection_out/index/0')); ?>">Rejection In</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_gatepass_entry/index/0')); ?>">Sales Gate Pass Entry</a></li>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('debit_note/index/0')); ?>">Credit Note</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_estimation/index/0')); ?>">Sales Estimation</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sale_order/index/0')); ?>">Sales Order</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('delivery_note/index/0')); ?>">Delivery Note</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_entry/index/0')); ?>">Sales Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('rejection_in/index/0')); ?>">Rejection In</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_gatepass_entry/index/0')); ?>">Sales Gate Pass Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('credit_note/index/0')); ?>">Credit Note</a></li>
 													</ul>
 										</li>
 										</ul>

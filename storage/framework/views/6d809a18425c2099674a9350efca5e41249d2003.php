@@ -1,4 +1,8 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+<div class="container-fuild" style="background:#28a745">
+				<div class="text-right pr-3">sdfjsdfjl</div>
+		</div>
 <div class="col-12 body-sec">
   <div class="card">
     <!-- card header start@ -->
@@ -31,6 +35,7 @@
             <th>Sale Order Date </th>
             <th>Customer Name</th>
             <th>Sales Man Name</th>
+            <th>Location</th>
             <th>overall Discount</th>
             <!-- <th>Round Off</th> -->
             <th>Total Expense</th>
@@ -60,6 +65,7 @@
               <?php else: ?>
               <td></td>
               <?php endif; ?>
+              <td><?php echo e(@$value->locations->name); ?></td>
               <td><?php echo e($total_discount[$key]); ?></td>
               <!-- <td><?php echo e($value->round_off); ?></td> -->
               <td><?php echo e($expense_total[$key]); ?></td>

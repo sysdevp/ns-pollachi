@@ -16,7 +16,7 @@
 </div></div>
 
   </main></div>
-  <script  src="https://code.jquery.com/jquery-3.3.1.js" ></script>
+ 
     <!-- select 2 -->
     <script src="<?php echo e(asset('assets/js/select2.min.js')); ?>"></script>
    

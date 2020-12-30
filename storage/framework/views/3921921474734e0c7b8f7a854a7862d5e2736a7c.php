@@ -1,4 +1,8 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+<div class="container-fuild" style="background:#28a745">
+				<div class="text-right pr-3">sdfjsdfjl</div>
+		</div>
 <style type="text/css">
   tbody#team-list {
     counter-reset: rowNumber;
@@ -118,7 +122,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
                                 </div>
                                 <br>
-                                <div class="row col-md-12">
+                                <div class="row col-md-12 mb-3">
 
                                   <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Rejection Out No</label><br>
@@ -176,7 +180,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
 
                                 
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                   <label style="font-family: Times new roman;">Party Address</label><br>
                                   <input type="hidden" name="address_line_1" id="address_line_1">
                                   
@@ -208,7 +212,23 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
 
                               </div>
-                              <br>
+
+                              <div class="row col-md-12 mb-3">
+
+                                <div class="col-md-2">
+                                  <label style="font-family: Times new roman;">Company Location</label><br>
+                                <select class="js-example-basic-multiple form-control location" 
+                                data-placeholder="Choose Location" id="location" name="location" required="">
+                                <option></option>
+                                  <?php $__currentLoopData = $location; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                  <option value="<?php echo e($value->id); ?>"><?php echo e($value->name); ?></option>
+                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                 </select>
+                                 
+                                </div>
+                                
+                              </div>
+
                               <!-- <div class="row col-md-12">
                                 <div class="col-md-4">
                   <label style="font-family: Times new roman;">Party Name</label><br>
@@ -236,7 +256,6 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div>
 
                               </div> -->
-                              <br>
     
       <div class="col-md-8">
                        <div class="form-group row">
@@ -469,7 +488,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
 
                     </div>
-                    <div class="col-md-12 row">
+                    <!-- <div class="col-md-12 row">
 
                       <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
@@ -483,7 +502,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <option value="0">B</option>
                        </select>
                         </div>
-                      </div>
+                      </div> -->
                       <br>
                                                           
                      <div class="" align="center">
@@ -504,7 +523,7 @@ table, th, td {
              
               <div class="col-md-12" id="middlecol">
                 
-                <table class="table" id="team-list">
+                <table class="table table-responsive" id="team-list">
                   <thead>
                     <th> S.no </th>
                     <th> Item S.no </th>
@@ -517,10 +536,12 @@ table, th, td {
                     <th> Rejected Quantity</th>
                     <th> Remaining Quantity</th>
                     <th> Debited Quantity</th>
-                    <th> Remaining Quantity After Debit</th>
+                    <!-- <th> Remaining Quantity After Debit</th> -->
                     <th> UOM</th>
                     <th> Amount</th>
                     <th> Discount</th>
+                    <th> Overall Discount</th>
+                    <th> Expenses</th>
                     <th> Tax Rs</th>
                     <th> Net Value</th>
                     <th style="background-color: #FAF860;"> Last Purchase Rate(LPR)</th>
@@ -596,9 +617,11 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th></th>
-                      <th></th>
+                      <!-- <th></th> -->
                       <th></th>
                       <th><label class="total_amount">0</label></th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                       <th></th>
                       <th><label class="total_net_price">0</label></th>
@@ -632,12 +655,12 @@ table, th, td {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]" id="expense_type" >
                          <option value="">Choose Expense Type</option>
-                         <?php $__currentLoopData = $expense_type; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $expense_types): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($expense_types->id); ?>"><?php echo e($expense_types->type); ?></option>
+                         <?php $__currentLoopData = $account_head; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $expense_types): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($expense_types->id); ?>"><?php echo e($expense_types->name); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                      </div>
-                     <a href="<?php echo e(url('master/expense-type/create')); ?>" target="_blank">
+                     <a href="<?php echo e(route('account_head.create')); ?>" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
@@ -656,6 +679,11 @@ table, th, td {
                     </div>
                   </div>
                     
+                       </div>
+
+                       <div class="col-md-12" style="float: right;">
+
+                        <font color="black" style="font-size: 150%; margin-left: 700px; font-weight: 900;">NET Value :</font>&nbsp;<font class="total_net_value" style="font-size: 150%; font-weight: 900;">00.00</font> 
                        </div>
 
 
@@ -702,9 +730,18 @@ table, th, td {
 
                        
 
-                       <div class="col-md-7 text-right">
-          <input type="submit" class="btn btn-success save" style="margin-bottom: 150px;" name="save" value="Save">
-        </div>
+                       <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
+
+                          </p>
+                          
+                        </div>
+
+                      </div>
       </form>
                        
         <script type="text/javascript">
@@ -799,9 +836,43 @@ $(document).on("keyup",".expense_amount",function()
     
     total_expense_cal();
     roundoff_cal();
+    individual_expense();
   }
   
 });
+function individual_expense()
+{
+$('.expenses').each(function(){
+
+  var count = $(this).attr('class').split(' ')[1];
+  var total_amount =calculate_total_amount();
+    var total_expense = total_expense_cal();
+    var amount = $('#amnt'+count).val();
+    var gst_rs = $('#tax'+count).val();
+    var discount = $('.discount_val'+count).val();
+    var overall_disc = $('#overall_disc'+count).val();
+    var sum_of_total_discount = parseFloat(discount)+parseFloat(overall_disc);
+    var exp_distribution = parseFloat(total_expense)/parseFloat(total_amount)*parseFloat(amount);
+    var total_exp = parseFloat(0)+parseFloat(exp_distribution);
+
+
+    var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(sum_of_total_discount)+parseFloat(total_exp);
+  $('#net_price'+count).val(net_value.toFixed(2));
+    $('.font_net_price'+count).text(net_value.toFixed(2));
+    $('.font_expenses'+count).text(total_exp.toFixed(2));
+
+    $(this).val(total_exp);
+
+});
+
+var total_net_price=calculate_total_net_price();
+
+$(".total_net_price").html(parseFloat(total_net_price));
+$('.total_net_value').text(total_net_price.toFixed(2));
+$('#total_price').val(total_net_price.toFixed(2));
+  
+}
+
 function total_expense_cal(){
 
   var total_amount=calculate_total_net_price();
@@ -813,8 +884,9 @@ total_expense_amount=parseFloat(total_expense_amount)+parseFloat($(this).val());
   });
 
   var total_net_amount=parseFloat(total_amount)+parseFloat(total_expense_amount);
-   $('.total_net_value').text(total_net_amount.toFixed(2));
-   $('#total_price').val(total_net_amount.toFixed(2));
+   // $('.total_net_value').text(total_net_amount.toFixed(2));
+   // $('#total_price').val(total_net_amount.toFixed(2));
+   return total_expense_amount;
 }
 function roundoff_cal()
 {
@@ -1027,7 +1099,9 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+individual_expense();
 roundoff_cal();
+    
 
 var len=$('.tables').length;
 $('#counts').val(len);
@@ -1131,6 +1205,7 @@ $(document).on("click",".remove_items",function(){
     $("#sgst").val(half_gst.toFixed(2));
     total_expense_cal();
     overall_discounts();
+    individual_expense();
     roundoff_cal();
     
     $('#cat').hide();
@@ -1192,11 +1267,11 @@ $(document).on("click",".edit_items",function(){
   var discount_val = $('.discount_val'+id).val(); 
   var exclusive = $('.exclusive'+id).val();
   var inclusive = $('.inclusive'+id).val(); 
-  // var quantity = $('.quantity'+id).val();
-  var quantity = $('.font_remaining_after_debit'+id).text();
+  var quantity = $('.quantity'+id).val();
+  // var quantity = $('.font_remaining_after_debit'+id).text();
   var actual_qty = $('#actual_quantity'+id).val();
   // var rejected_qty = $('#rejected_quantity'+id).val();
-  var rejected_qty = $('.font_debited_qty'+id).text();
+  var rejected_qty = 0;
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
   var amnt = $('#amnt'+id).val();
@@ -1232,6 +1307,7 @@ $(document).on("click",".edit_items",function(){
     $('.discount_percentage').val('');
   $('.discount_rs').val('');
   }
+  item_codes(item_code_id);
 
   }
 
@@ -1242,7 +1318,7 @@ $(document).on("click",".edit_items",function(){
   $('.display_rejected').show();
   $('.display_remarks').show();
 
-    var id = $(this).attr("id");
+  var id = $(this).attr("id");
   $('#dummy_table_id').val(id);
   var invoice_no = $('.invoice_no'+id).val(); 
   var item_code_id = $('.item_code'+id).val();
@@ -1253,11 +1329,11 @@ $(document).on("click",".edit_items",function(){
   var discount_val = $('.discount_val'+id).val(); 
   var exclusive = $('.exclusive'+id).val();
   var inclusive = $('.inclusive'+id).val(); 
-  var quantity = $('#remaining_after_debit'+id).val();
+  // var quantity = $('#remaining_qty'+id).val();
   // var quantity = $('.font_remaining_after_debit'+id).text();
   var actual_qty = $('#actual_quantity'+id).val();
-  // var rejected_qty = $('#rejected_quantity'+id).val();
-  var rejected_qty = $('.font_debited_qty'+id).text();
+  var quantity = $('#rejected_quantity'+id).val();
+  var rejected_qty = 0;
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
   var amnt = $('#amnt'+id).val();
@@ -1295,7 +1371,7 @@ $(document).on("click",".edit_items",function(){
   }
 
   }
-   // item_codes(item_code_id);
+   item_codes(item_code_id);
 
 });
 
@@ -1356,10 +1432,10 @@ $(document).on("click",".update_items",function(){
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
-              // $('.quantity'+td_id).val($('.quantity').val());
-              // $('.font_quantity'+td_id).text($('.quantity').val());
-              $('#remaining_after_debit'+td_id).val($('.quantity').val());
-              $('.font_remaining_after_debit'+td_id).text($('.quantity').val());
+              $('.quantity'+td_id).val($('.quantity').val());
+              $('.font_quantity'+td_id).text($('.quantity').val());
+              // $('#remaining_after_debit'+td_id).val($('.quantity').val());
+              // $('.font_remaining_after_debit'+td_id).text($('.quantity').val());
               // $('#rejected_quantity'+td_id).val($('.rejected').val());
               // $('.font_rejected_qty'+td_id).text($('.rejected').val());
               $('#debited_qty'+td_id).val($('.rejected').val());
@@ -1417,9 +1493,8 @@ $(document).on("click",".update_items",function(){
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
               overall_discounts();
+              individual_expense();
               roundoff_cal();
-
-              
 
               
               $('.item_sno').val('');
@@ -1467,10 +1542,10 @@ else if($('.r_out_no').val() != '')
               $('.exclusive'+td_id).val($('.exclusive_rate').val());
               $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
               $('.inclusive'+td_id).val($('.inclusive_rate').val());
-              // $('.quantity'+td_id).val($('.quantity').val());
-              // $('.font_quantity'+td_id).text($('.quantity').val());
-              // $('#rejected_quantity'+td_id).val($('.rejected').val());
-              // $('.font_rejected_qty'+td_id).text($('.rejected').val());
+              $('.quantity'+td_id).val($('.quantity').val());
+              $('.font_quantity'+td_id).text($('.quantity').val());
+              // $('#rejected_quantity'+td_id).val($('.quantity').val());
+              // $('.font_rejected_qty'+td_id).text($('.quantity').val());
               $('#remaining_after_debit'+td_id).val($('.quantity').val());
               $('.font_remaining_after_debit'+td_id).text($('.quantity').val());
               $('#debited_qty'+td_id).val($('.rejected').val());
@@ -1528,9 +1603,9 @@ else if($('.r_out_no').val() != '')
               $(".total_amount").html(parseFloat(to_html_total_amount));
               total_expense_cal();
               overall_discounts();
+              individual_expense();
               roundoff_cal();
 
-              
 
               
               $('.item_sno').val('');
@@ -1614,6 +1689,8 @@ function expense_add()
   $('.append_expense').append(expense_details);
   $("select").select2();
   total_expense_cal();
+  individual_expense();
+  overall_discounts();
   roundoff_cal();
   var length=$('.expense').length;
   $('#expense_count').val(length);
@@ -1636,6 +1713,8 @@ $(document).on("click",".remove_expense",function(){
 
   }
   total_expense_cal();
+  individual_expense();
+  overall_discounts();
   roundoff_cal();
 
   });
@@ -1710,6 +1789,7 @@ function gst_calc()
 function calc_exclusive()
 {
   var quantity = $('#quantity').val();
+  var rejected = $('#rejected').val();
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
   var tax_rate = $('.tax_rate').val();
@@ -1746,7 +1826,7 @@ function calc_exclusive()
     //   $('#quantity').val(1);
     // }
   
-      var total = parseInt(quantity)*parseFloat(rate_exclusive);
+      var total = parseInt(rejected)*parseFloat(rate_exclusive);
     
     $('#amount').val(total.toFixed(2));
 
@@ -1802,6 +1882,7 @@ function calc_inclusive()
 {
   
   var quantity = $('#quantity').val();
+  var rejected = $('#rejected').val();
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
   var mrp = $('.mrp').val();
@@ -1843,16 +1924,16 @@ function calc_inclusive()
     }
     else
     {
-      if(quantity == 0)
-      {
-        quantity =1;
-        $('#quantity').val(1);
-      }
+      // if(quantity == 0)
+      // {
+      //   quantity =1;
+      //   $('#quantity').val(1);
+      // }
 
       var rate=parseFloat(tax_rate)/100+1;
       var actual_tax = parseFloat(tax_rate)/100;
       var gst_rate = parseFloat(rate_inclusive)/parseFloat(rate);
-      var total = parseInt(quantity)*parseFloat(gst_rate.toFixed(2));
+      var total = parseInt(rejected)*parseFloat(gst_rate.toFixed(2));
       $('#amount').val(total.toFixed(2));
       $('#exclusive').val(gst_rate.toFixed(2));
       if(parseFloat(rate_inclusive)>parseFloat(mrp))
@@ -2631,11 +2712,9 @@ $('.purchase_date').text(result.date_purchaseorder);
 $('.p_date').val(result.date_purchase_entry);
 $('.taxes').html(result.tax_append);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2655,6 +2734,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+// individual_expense();
 roundoff_cal();
 
 
@@ -2714,11 +2794,9 @@ $('.no_items').text(result.status);
 $('.invoice_val').text(result.item_net_value_sum);
 $('.r_out_date').val(result.date_rejection_out);
 
-// $('.total_net_price').append(result.item_net_value_sum);
-// $('#igst').val(result.item_gst_rs_sum);
-// $('#cgst').val($('#igst').val()/2);
-// $('#sgst').val($('#igst').val()/2);
 $('#total_discount').val(result.item_discount_sum);
+$('#overall_discount').val(result.overall_discount);
+$('#overall_discount').attr('readonly','readonly');
 $('#round_off').val(result.round_off);
 $('.total_net_value').text(result.total_net_value);
  $('#total_price').val(result.total_net_value);
@@ -2739,6 +2817,7 @@ $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
 overall_discounts();
+// individual_expense();
 roundoff_cal();
 
 
