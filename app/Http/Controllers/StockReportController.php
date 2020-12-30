@@ -139,7 +139,21 @@ class StockReportController extends Controller
                                                
         $new_array = array();
         $item_name = Item::where('id','=',$value->item_id)->pluck('name');
+        $items = Item::where('id','=',$value->item_id)->first();
+        $brand = @$items->brand->name;
+        $uom = @$items->uom->name;
+        if($brand == '')
+        {
+            $brand = 'Not Applicable';
+        }
+        else
+        {
+            $brand = @$items->brand->name;
+        }
+
         $new_array['item'] = $item_name[0];
+        $new_array['brand'] = $brand;
+        $new_array['uom'] = $uom;
         $location = Location::where('id','=',$l_value->id)->pluck('name');
         $new_array['location'] = $location[0];
         $new_array['total_qty'] = $total_qty;     

@@ -34,16 +34,22 @@ table, th, td {
                   <thead>
                     <th> S.no </th>
                     <th id="rate"> Location</th>
+					<th id="rate"> Group Name</th>
+					<th id="rate"> Brand Name</th>
                     <th id="items"> Name Of Item </th>
                     <th id="qty">Quantity</th>
+					<th id="qty">UOM</th>
                   </thead>
                   <tbody>
                     @for($i = 0; $i < $count; $i++)
                       <tr>
                       <td><?php echo $i+1; ?></td>
                       <td>{{ $array_details[$i]['location'] }}</td>
+					  <td>{{ $array_details[$i]['item'] }}</td>
+					  <td>{{ $array_details[$i]['brand'] }}</td>
                       <td>{{ $array_details[$i]['item'] }}</td>
                       <td>{{ $array_details[$i]['total_qty'] }}</td>
+					  <td>{{ $array_details[$i]['uom'] }}</td>
                       </tr>
                     @endfor
                   </tbody>
