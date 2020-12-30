@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Offers;
 use App\Models\Category;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Response; // don't forget or use response()
 
 class OffersController extends Controller
 {
@@ -29,8 +31,9 @@ class OffersController extends Controller
     public function create()
     {
         $category = Category::all();
+        $items = Item::all();
         $offer_types = ['date','day','time'];
-        return view('admin.master.offers.add',compact('category','offer_types'));
+        return view('admin.master.offers.add',compact('category','offer_types','items'));
     }
 
     /**
@@ -41,9 +44,13 @@ class OffersController extends Controller
      */
     public function store(Request $request)
     {
+        $out = array_values($request->items);
+        $myJSON = json_encode($out);
+
         $offers = new Offers();
         $offers->offers_category_id = $request->parent_id;
         $offers->offer_name = $request->name;
+        $offers->item_id = $myJSON;
         $offers->offer_type = $request->offer_type;
         $offers->valid_from = date('Y-m-d',strtotime($request->valid_from));
         $offers->valid_to = date('Y-m-d',strtotime($request->valid_to));
@@ -140,5 +147,11 @@ class OffersController extends Controller
         } else {
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
+    }
+
+    public function getItem(Category $category_id)
+    {
+        $items = Item::select('id','name')->where('category_id','16')->get();
+        return Response::json($items);
     }
 }

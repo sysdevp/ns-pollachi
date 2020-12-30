@@ -286,7 +286,7 @@ Route::group(['prefix' => 'master/offers', 'middleware' => ['auth']], function (
     Route::any('edit/{id}', 'OffersController@edit')->middleware('permission:gift_voucher_matser_edit');
     Route::any('update/{id}', 'OffersController@update')->middleware('permission:gift_voucher_matser_edit');
     Route::any('delete/{id}', 'OffersController@destroy')->middleware('permission:gift_voucher_matser_update');
-    Route::get('print', 'OffersController@print');
+    Route::get('getItem', 'OffersController@getItem');
 });
 /* Offers Master End Here  */
 
