@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\PurchaseEntryItem;
 
 class StockAgeingController extends Controller
 {
@@ -14,8 +15,30 @@ class StockAgeingController extends Controller
      */
     public function index()
     {
-        $item = Item::all();
-        return view('admin.stock_report.ageing',compact('item'));
+        $items = Item::all();
+        $array_details = [];
+        foreach ($items as $item) 
+        {
+        $new_array = array();
+        $purchase_entry_items_quantity= PurchaseEntryItem::where('item_id','=',$item->id)
+                             ->where('active','!=',0)
+                             ->sum('remaining_qty');
+        $purchase_entry_items = $purchase_entry_items_quantity * $item->mrp;
+        $new_array['amount'] = $purchase_entry_items;
+        $new_array['rate'] = $item->mrp;
+        $new_array['quantity'] = $purchase_entry_items_quantity;
+
+        $new_array['item'] = $item->name;
+       
+                        
+        array_push($array_details, $new_array);
+
+        } 
+ 
+       
+             $count = count($array_details); 
+             
+        return view('admin.stock_report.ageing',compact('array_details','items','count'));
     }
 
     /**
