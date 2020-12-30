@@ -202,8 +202,33 @@
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/supplier')); ?>">Supplier</a></li>
                             <?php endif; ?>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('sales_man.index')); ?>">Sales Man</a></li>
+							
 													</ul>
 										</li>
+										
+										<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Area</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+                           <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('area_list')): ?>
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/area')); ?>">Area</a></li>
+                          <?php endif; ?>
+							
+													</ul>
+										</li>
+										
+										<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Account Group</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('account_group.index')); ?>">Account Group</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('account_head.index')); ?>">Account Head</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('account_group_tax.index')); ?>">Tax For Account Group</a></li>
+							
+													</ul>
+										</li>
+										
+										
 										
 									</li>
 								</ul>
@@ -230,24 +255,224 @@
 													</ul>
 										</li>
 										</ul>
+										
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Sales</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+                           <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('estimation/index/0')); ?>">Sales Estimation</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_order/index/0')); ?>">Sales Order</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('receipt_note/index/0')); ?>">Delivery Note</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_entry/index/0')); ?>">Sales Entry</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('rejection_out/index/0')); ?>">Rejection In</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_gatepass_entry/index/0')); ?>">Sales Gate Pass Entry</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('debit_note/index/0')); ?>">Credit Note</a></li>
+													</ul>
+										</li>
+										</ul>
+										
+											<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Payment</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a  class="acnav__link acnav__link--level3" href="<?php echo e(route('payment_request.index')); ?>">Payment Request</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('payment_process.index')); ?>">Payment Process</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('payment_expense.index')); ?>">Payment Of Expenses</a></li>
+								</ul>
+										</li>
+										</ul>
 			
+			
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Receipt</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a  class="acnav__link acnav__link--level3" href="<?php echo e(route('receipt_request.index')); ?>">Receipt Request</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('receipt_process.index')); ?>">Receipt Process</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('receipt_income.index')); ?>">Receipt Of Income</a></li>	</ul>
+										</li>
+										</ul>	
+										
+											<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Advance Settlement</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('advance_settlement_supplier.create')); ?>">Advance to Suppliers</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('advance_settlement_customer.create')); ?>">Advance from Customers</a></li>
+                            		</ul>
+										</li>
+										</ul>	
 			
 			
 			</li>
 			
 			<!--3rdt li menu-->
 			<li class="has-children"><div class="acnav__label"> <i class="fa fa-leaf" aria-hidden="true"></i>   Price Updation </div>
-			
-			
+					
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Mark Up and Mark Down</div>
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('price_updation.index')); ?>">Mark Up and Mark Down</a></li>
+                            
+										</li>
+										</ul>
 			
 			</li>
 			
 			
-			<!--3rdt li menu-->
-			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>   Updation </div>
+			<!--4th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>  Registers </div>
+			
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Purchase</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a href="<?php echo e(url('estimation/index/1')); ?>">Purchase Estimation</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_order/index/1')); ?>">Purchase order</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('receipt_note/index/1')); ?>">Receipt Note</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('purchase_entry/index/1')); ?>">Purchase Entry</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('rejection_out/index/1')); ?>">Rejection Out</a></li>
+                            <li><a class="acnav__link acnav__link--level3"  href="<?php echo e(url('debit_note/index/1')); ?>">Debit Note</a></li>		</ul>
+										</li>
+										</ul>
+										
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Sales</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a href="<?php echo e(url('sales_estimation/index/1')); ?>">Sales Estimation</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sale_order/index/1')); ?>">Sales Order</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('delivery_note/index/1')); ?>">Delivery Note</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_entry/index/1')); ?>">Sales Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('rejection_in/index/1')); ?>">Rejection In</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('sales_gatepass_entry/index/1')); ?>">Sales Gate Pass Entry</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('credit_note/index/1')); ?>">Credit Note</a></li>
+                     			</ul>
+										</li>
+										</ul>
+			
+			</li>
+			
+			<!--5th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i>  Outstanding </div> 
+			
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Receivables</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('receivable_billwise.index')); ?>">Bill Wise</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('receivable_partywise.index')); ?>">Party Wise</a></li>   						</ul>
+										</li>
+										</ul>
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Payables</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('payable_billwise.index')); ?>">Bill Wise</a></li>
+                        <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('payable_partywise.index')); ?>">Party Wise</a></li>		</ul>
+										</li>
+										</ul>
+				
+			</li>
+			
+			<!--5th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> Reports </div> 
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Day Book</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a  class="acnav__link acnav__link--level3"  href="<?php echo e(route('daybook.index')); ?>">Day Book</a></li>
+                            
+                                 						</ul>
+										</li>
+										</ul>
+										
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Stock Reports</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a  class="acnav__link acnav__link--level3" href="<?php echo e(route('stock-report.index')); ?>">Stock Report</a></li>
+                           <li><a  class="acnav__link acnav__link--level3" href="<?php echo e(route('stock_summary.index')); ?>">Stock Summary</a></li>
+                           <li><a  class="acnav__link acnav__link--level3" href="<?php echo e(route('stock_ageing.index')); ?>">Stock Ageing</a></li>
+                            
+                                 						</ul>
+										</li>
+										</ul>						
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Individual Ledger</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a  class="acnav__link acnav__link--level3" href="<?php echo e(route('individual_ledger.index')); ?>">Individual Ledger</a></li>
+                            	</ul>
+										</li>
+										</ul>	
+										
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">GST Report</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('gst_report.index')); ?>">GST Report</a></li>
+                           	</ul>
+										</li>
+										</ul>	
+				
+			</li>
+			
+			<!--6th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> Settings </div> 
+			
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Selling Price</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('selling-price-setup.index')); ?>">Selling Price Setup</a></li>
+                       
+                                 						</ul>
+										</li>
+										</ul>	
+				
+			</li>
 			
 			
-			
+			<!--7th li menu-->
+			<li class="has-children"><div class="acnav__label">   <i class="fa fa-leaf" aria-hidden="true"></i> POS </div> 
+				
+				<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">POS</div>
+													<ul class="acnav__list acnav__list--level3">
+														
+													<li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('pos.index')); ?>">POS</a></li>
+                      
+                                 						</ul>
+										</li>
+										</ul>	
+				
+				
 			</li>
 			
 			
