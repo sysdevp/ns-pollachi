@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card">
     <!-- card header start@ -->
@@ -46,6 +48,7 @@
                 <a href="<?php echo e(url('master/gift-voucher/show/'.$value->id )); ?>" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="<?php echo e(url('master/gift-voucher/edit/'.$value->id )); ?>" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a onclick="return confirm('Are you sure ?')" href="<?php echo e(url('master/gift-voucher/delete/'.$value->id )); ?>" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a onclick="return confirm('Are you sure ?')" href="<?php echo e(url('master/gift-voucher/print/'.$value->id )); ?>" class="px-2 py-1 bg-secondary text-white rounded"><i class="fa fa-print" aria-hidden="true"></i></a>
               </td>
             </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

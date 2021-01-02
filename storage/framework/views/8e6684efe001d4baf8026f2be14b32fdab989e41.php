@@ -352,6 +352,18 @@
                             		</ul>
 										</li>
 										</ul>	
+
+                      <ul class="acnav__list acnav__list--level2">  
+                      <!--1st Add sub menu--> 
+                  <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Account Expenses</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3"  href="<?php echo e(route('expense.create')); ?>">Account Transaction</a></li>
+                        
+                                </ul>
+                    </li>
+                    </ul> 
 			
 			
 			</li>
