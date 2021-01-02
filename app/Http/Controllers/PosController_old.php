@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
+
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Estimation;
@@ -16,35 +16,14 @@ use App\Models\ItemTaxDetails;
 use App\Models\ItemBracodeDetails;
 use App\Models\ExpenseType;
 use App\Models\Tax;
-use App\Models\Location;
 use App\Models\AccountHead;
-use App\Models\SaleEstimation;
-use App\Models\SaleEstimationTax;
-use App\Models\SaleEstimationItem;
-use App\Models\SaleEstimationExpense;
-use App\Models\Customer;
-use App\Models\SalesMan;
+use App\Models\Pos;
+use App\Models\PosItem;
+use App\Models\PosTax;
+use App\Models\PosExpense;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
-use App\Models\PriceUpdation;
-use App\Models\SellingPriceSetup;
-use App\Models\PurchaseEntryItem;
-use App\Models\PurchaseEntryBlackItem;
-use App\Models\PurchaseOrderItem;
-use App\Models\PurchaseOrderBlackItem;
-use App\Models\Pos;
-use App\Models\PosPayment;
-use App\Models\PosTax;
-use App\Models\PosItem;
 
-use App\Models\HoldPos;
-use App\Models\HoldPosPayment;
-use App\Models\HoldPosTax;
-use App\Models\HoldPosItem;
-
-use App\Models\PosBlackItem;
-use App\Models\PosExpense;
-// use APP\Models\Giftvoucher;
 class PosController extends Controller
 {
     /**
@@ -55,40 +34,14 @@ class PosController extends Controller
     public function index()
     {
         $date = date('Y-m-d');
+        $brand = Brand::all();
+        $item = Item::all();
         $categories = Category::all();
         $supplier = Supplier::all();
-        $item = Item::all();
         $agent = Agent::all();
-        $brand = Brand::all();
-        $expense_type = ExpenseType::all();
-        $estimation = SaleEstimation::where('cancel_status',0)->get();
-        $customer = Customer::all();
-        $tax = Tax::all();
-        $sales_man = SalesMan::all();
         $account_head = AccountHead::all();
-        $location = Location::all();
-        
-
-        $voucher_num=Pos::orderBy('id','DESC')
-                           ->select('id')
-                           ->first();
-
-         if ($voucher_num == null) 
-         {
-             $voucher_no=1;
-
-                             
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $voucher_no=$current_voucher_num+1;
-        
-         
-         }
-
-
-        return view('admin.pos.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','customer','tax','sales_man','account_head','location'));
+        $tax = Tax::all();
+        return view('admin.pos.add',compact('categories','brand','supplier','agent','item','account_head','tax','date'));
     }
 
     /**
@@ -109,112 +62,18 @@ class PosController extends Controller
      */
     public function store(Request $request)
     {
-
-        //echo $request->hold_trans_id; exit();
         $tax = Tax::all();
 
+        $estimation = new Pos();
 
-
-        if($request->hold_trans_id=="1")
-         {
-            $so_no=HoldPos::orderBy('id','DESC')
-            ->select('id')
-            ->first();
-         }
-         else
-         {
-            $so_no=Pos::orderBy('id','DESC')
-            ->select('id')
-            ->first();
-         }
-
-         if ($so_no == null) 
-         {
-             $voucher_no=1;
-
-                             
-         }                  
-         else
-         {
-             $current_voucher_num=$so_no->id;
-             $voucher_no=$current_voucher_num+1;
-        
-         }
-         $voucher_date = $request->voucher_date;
-         $estimation_date = $request->estimation_date;
-
-         if($request->customer_id == '' && $request->customer_name != '')
-         {
-            $customer = new Customer();
-            $customer->name = $request->customer_name;
-            $customer->phone_no = $request->phone_no;
-
-            $customer->save();
-            $customer_id = $customer->id;
-         }
-         else if($request->customer_name == '' && $request->customer_id != '')
-         {
-            $customer_id = $request->customer_id;
-         }
-         else 
-         {
-            $customer_id = null;
-         }
          
+         $estimation->supplier_id = $request->supplier_id;
+         $estimation->agent_id = $request->agent_id;
+         $estimation->overall_discount = $request->overall_discount;
+         $estimation->total_net_value = $request->total_price;
+         $estimation->round_off = $request->round_off;
 
-
-         if($request->hold_trans_id=="1")
-         {
-            $pos_payment = new HoldPosPayment();
-
-         }
-         else
-         {
-
-            $pos_payment = new PosPayment();
-        }
-    
-         $pos_payment->cash = $request->cash_amount;
-         $pos_payment->cash_remark = $request->cash_remark;
-         $pos_payment->card = $request->card_amount;
-         $pos_payment->card_remark = $request->card_remark;
-         $pos_payment->cheque = $request->cheque_amount;
-         $pos_payment->cheque_remark = $request->cheque_remark;
-         $pos_payment->cheque_date = $request->cheque_date;
-         $pos_payment->voucher = $voucher_no;
-         $pos_payment->voucher_remark = $request->voucher_remark;
-
-         $pos_payment->save();
-         
-
-         if($request->hold_trans_id=="1")
-         {
-            $saleorder = new HoldPos();
-
-         }
-        else
-        {
-            $saleorder = new Pos();
-
-        }
-
-
-
-         $saleorder->so_no = $voucher_no;
-         $saleorder->so_date = $voucher_date;
-        //  $saleorder->estimation_no = $request->estimation_no;
-        //  $saleorder->estimation_date = $request->estimation_date;
-         $saleorder->customer_id = $customer_id;
-         $saleorder->no_item = $request->no_item;
-         $saleorder->no_qty = $request->no_qty;
-        //  $saleorder->salesman_id = $request->salesmen_id;
-        //  $saleorder->sale_type = $request->sale_type;
-         $saleorder->overall_discount = $request->overall_discount;
-         $saleorder->total_net_value = $request->total_price;
-         $saleorder->round_off = $request->round_off;
-        //  $saleorder->location = $request->location;
-
-         $saleorder->save();
+         $estimation->save();
 
          $items_count = $request->counts;
          $expense_count = $request->expense_count;
@@ -222,75 +81,126 @@ class PosController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
+            $estimation_items = new PosItem();
 
-            if($request->hold_trans_id=="1")
-            {
-                $saleorder_items = new HoldPosItem();
+            $estimation_items->item_sno = $request->invoice_sno[$i];
+            $estimation_items->item_id = $request->item_code[$i];
+            $estimation_items->mrp = $request->mrp[$i];
+            $estimation_items->gst = $request->tax_rate[$i];
+            $estimation_items->rate_exclusive_tax = $request->exclusive[$i];
+            $estimation_items->rate_inclusive_tax = $request->inclusive[$i];
+            $estimation_items->qty = $request->quantity[$i];
+            $estimation_items->uom_id = $request->uom[$i];
+            $estimation_items->discount = $request->discount[$i];
+            $estimation_items->overall_disc = $request->overall_disc[$i];
+            $estimation_items->expenses = $request->expenses[$i];
 
-            }
-            else
-            {
-                $saleorder_items = new PosItem();
-
-            }
-
-                $saleorder_items->so_no = $voucher_no;
-                $saleorder_items->so_date = $voucher_date;
-                // $saleorder_items->estimation_no = $request->estimation_no;
-                // $saleorder_items->estimation_date = $request->estimation_date;
-              //  $saleorder_items->item_sno = $request->invoice_sno[$i];
-                $saleorder_items->item_id = $request->item_code[$i];
-                $saleorder_items->mrp = $request->mrp[$i];
-                $saleorder_items->gst = $request->tax_rate[$i];
-                $saleorder_items->rate_exclusive_tax = $request->exclusive[$i];
-                $saleorder_items->rate_inclusive_tax = $request->inclusive[$i];
-                $saleorder_items->qty = $request->quantity[$i];
-                $saleorder_items->uom_id = $request->uom[$i];
-                $saleorder_items->discount = $request->discount[$i];
-                $saleorder_items->overall_disc = $request->overall_disc[$i];
-                $saleorder_items->expenses = $request->expenses[$i];
-
-                $saleorder_items->amount = $request->amount[$i];
-                $saleorder_items->tax = $request->gst[$i];
-                $saleorder_items->tot_amt = $request->net_price[$i];
-                // $saleorder_items->b_or_w = $request->black_or_white[$i];
-
-                $saleorder_items->save();
-
-            
-        
+            $estimation_items->save();
         }
          
 
 
-        foreach ($tax as $key => $value) 
+         for($j=0;$j<$expense_count;$j++)
+
+        {
+            if($expense_count >= 1 && $request->expense_type[$j] == '' && $request->expense_amount[$j] == '')
             {
-            $str_json = json_encode($value->name); //array to json string conversion
-            $tax_name = str_replace('"', '', $str_json);
-            $value_name = $tax_name.'_id';
-                
-            if($request->hold_trans_id=="1")
-               {
-                $tax_details = new HoldPosTax;
-
-               } 
-               else
-               {
-                $tax_details = new PosTax;
-
-               }
-
-               $tax_details->so_no = $voucher_no;
-               $tax_details->so_date = $voucher_date;
-               $tax_details->taxmaster_id = $request->$value_name;
-               $tax_details->value = $request->$tax_name;
-
-               $tax_details->save();
 
             }
+            else
+            {
+                $estimation_expense = new PosExpense();
 
+                $estimation_expense->expense_type = $request->expense_type[$j];
+                $estimation_expense->expense_amount = $request->expense_amount[$j];
+
+                $estimation_expense->save();
+            }
+           
+            
+        }
+
+        foreach ($tax as $key => $value) 
+                {
+                    $str_json = json_encode($value->name); //array to json string conversion
+                    $tax_name = str_replace('"', '', $str_json);
+                    $value_name = $tax_name.'_id';
+
+                       $tax_details = new PosTax;
+
+                      
+                       $tax_details->taxmaster_id = $request->$value_name;
+                       $tax_details->value = $request->$tax_name;
+
+                       $tax_details->save();
+
+                    }
+                    
+        $estimation_num = $estimation->estimation_no;
+        
+        $estimation_print_data = Pos::where('estimation_no',$estimation_num)->first();
+        $address = AddressDetails::where('address_ref_id',$estimation_print_data->supplier_id)
+                                 ->where('address_table','=','Supplier')
+                                 ->first();
+
+        $estimation_item_print_data = PosItem::where('estimation_no',$estimation_num)
+                                                    ->get();
+
+        $estimation_expense_print_data = PosExpense::where('estimation_no',$estimation_num)->get(); 
+
+        $amnt = $estimation_print_data->total_net_value;
+
+        //amount in words
+          $number = $amnt;
+          $no = floor($number);
+          $point = round($number - $no, 2) * 100;
+          $hundred = null;
+          $digits_1 = strlen($no);
+          $i = 0;
+          $str = array();
+          $words = array('0' => '', '1' => 'One', '2' => 'Two',
+        '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+        '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+        '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+        '13' => 'Thirteen', '14' => 'Fourteen',
+        '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+        '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+        '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+        '60' => 'Sixty', '70' => 'Seventy',
+        '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+        $divider = ($i == 2) ? 10 : 100;
+        $number = floor($no % $divider);
+        $no = floor($no / $divider);
+        $i += ($divider == 10) ? 1 : 2;
+        if ($number) {
+        $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+        $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+        $str [] = ($number < 21) ? $words[$number] .
+        " " . $digits[$counter] . $plural . " " . $hundred
+        :
+        $words[floor($number / 10) * 10]
+        . " " . $words[$number % 10] . " "
+        . $digits[$counter] . $plural . " " . $hundred;
+        } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+        "." . $words[$point / 10] . " " .
+        $words[$point = $point % 10] : '';
+
+        //amount in words ends here
+                         
+
+        if($request->save == 1)
+        {
+            return view('admin.add.print',compact('estimation_print_data','address','estimation_item_print_data','estimation_expense_print_data','result','points'));
+        }
 
         return Redirect::back()->with('success', 'Saved Successfully');
+
     }
 
     /**
@@ -338,43 +248,6 @@ class PosController extends Controller
         //
     }
 
-    public function get_pos_hold_data(Request $request)
-    {
-
-     $result = "";   
-
-      $hold_data = HoldPos::all();  
-     foreach($hold_data as $key => $value)
-     {
-        $result.='<tr class="row_category"><td><center><input type="radio" name="select" onclick="append_pos_holded_data('.$value->so_no.')"></center></td><td><input type="hidden" value="'.$value->id.'" class="append_item_id'.$key.'"><input type="hidden" value="'.$value->so_no.'" class="append_so_no'.$key.'"><font style="font-family: Times new roman;">'.$value->so_no.'</font></td><td><input type="hidden" value="'.$value->so_date.'" class="append_so_date'.$key.'"><font style="font-family: Times new roman;">'.$value->so_date.'</font></td><td><input type="hidden" value="'.$value->customer_id.'" class="append_customer'.$key.'"><font style="font-family: Times new roman;">'.$value->customer_id.'</font></td><td><input type="hidden" value="'.$value->total_net_value.'" class="append_total_net_value'.$key.'"><font style="font-family: Times new roman;">'.$value->total_net_value.'</font></td></tr>';
-
-     }
-
-       return $result;
-    }
-    
-
-    public function get_pos_load_data(Request $request)
-    {
-        // return $request->so_no;
-     $result = ""; 
-     $table_tbody="";  
-
-      $hold_data = HoldPosItem::where('so_no',$request->so_no)
-                            ->get(); 
-                            // return $hold_data;
-
-                            
-    foreach($hold_data as $i => $value)
-    {
-    
-        $table_tbody.='<tr id="row'.$i.'" class="'.$i.' tables"><td><span class="item_s_no"> '.$i.' </span></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'.$i.'" value="'.$value->item_id.'" name="item_code[]"><input type="hidden" value="'.$value->item_id.'" name="item_name1[]"><font class="items'.$i.'">'.$value->item->code.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'.$i.'" type="hidden" value="'.$value->item->name.'" name="item_name[]"><font class="font_item_name'.$i.'">'.$value->item->name.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'.$i.'" type="hidden" value="'.$value->item->hsn.'" name="hsn[]"><font class="font_hsn'.$i.'">'.$value->item->hsn.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'.$i.'" value="'.$value->mrp.'" name="mrp[]"><font class="font_mrp'.$i.'">'.$value->mrp.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'.$i.'" value="'.$value->rate_exclusive_tax.'" name="exclusive[]"><font class="font_exclusive'.$i.'">'.$value->rate_exclusive_tax.'</font><input type="hidden" class="inclusive'.$i.'" value="'.$value->rate_inclusive_tax.'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'.$i.'" value="'.$value->qty.'" name="quantity[]"><font class="font_quantity'.$i.'">'.$value->qty.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'.$i.'" value="'.$value->uom_id.'" name="uom[]"><font class="font_uom'.$i.'">'.$value->uom->name.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'.$i.'" value="'.$value->amount.'" name="amount[]"><font class="font_amount'.$i.'">'.$value->amount.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts" value="'.$value->discount.'" id="input_discount'.$i.'" ><input class="discount_val'.$i.'" type="hidden" value="'.$value->discount.'" name="discount[]"><font class="font_discount" id="font_discount'.$i.'">'.$value->discount.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'.$i.'" value="'.$value->overall_disc.'" name="overall_disc[]"><font class="font_overall_disc'.$i.'">'.$value->overall_disc.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '.$i.'" id="expenses'.$i.'" value="'.$value->expenses.'" name="expenses[]"><font class="font_expenses'.$i.'">'.$value->expenses.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'.$i.'" value="'.$value->tax.'" name="gst[]"><input type="hidden" class="tax_gst'.$i.'"  value="'.$value->gst.'" name="tax_rate[]"><font class="font_gst'.$i.'">'.$value->tax.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'.$i.'" value="'.$value->tot_amt.'" name="net_price[]"><input type="hidden" class="black_or_white'.$i.'"  value="'.$value->b_or_w.'" name="black_or_white[]"><font class="font_net_price'.$i.'">'.$value->tot_amt.'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'.$i.'"></font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'.$i.'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'.$i.'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'.$i.'" aria-hidden="true"></i></td></tr>';
-
-    }   
-
-       return $table_tbody;
-    }
-    
     public function address_details(Request $request)
     {
        $supplier_id = $request->supplier_id;
@@ -1211,24 +1084,6 @@ $result=[];
         $estimation->save();
 
         return Redirect::back()->with('success', 'Retrieved');
-    }
-    public function check_voucher_code(Request $request)
-    {
-        // return $request->id;
-        //expiry date active status validfrom valid to
-        $gift_voucher = DB::table('giftvouchers')->where('code',$request->id)
-        ->where('active_status',1)
-        ->whereDate('valid_from', '<=', Carbon::now())
-        ->whereDate('valid_to', '>=', Carbon::now())
-        ->first();
-        if($gift_voucher!="")
-        {
-        return $gift_voucher->value;
-        }
-        else
-        {
-            return "";            
-        }
     }
 
 }

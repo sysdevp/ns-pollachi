@@ -15,15 +15,11 @@ use App\Spatie\Permission\Models\Permission;
 use App\Spatie\Permission\Models\Role;
 
 Route::any('/', function () {
-    return view('admin.master.dash');
+    return view('admin.master.empty');
 })->middleware('auth');
 
 Route::get('/view', function () {
     return view('Masters.Sample.View');
-});
-
-Route::get('/emptydash', function () {
-    return view('admin.master.empty');
 });
 
 
@@ -982,9 +978,6 @@ Route::get('sales_man/delete/{id}', 'SalesManController@destroy');
 /*POS Start Here*/
 
 Route::resource('pos','PosController',['middleware' => ['auth']]);
-Route::post('pos/get_pos_hold_data/', 'PosController@get_pos_hold_data');
-Route::post('pos/get_pos_load_data/', 'PosController@get_pos_load_data');
-Route::post('pos/check_voucher_code/', 'PosController@check_voucher_code');
 
 /*POS End Here*/
 

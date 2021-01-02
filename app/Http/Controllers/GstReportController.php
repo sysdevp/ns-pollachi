@@ -47,7 +47,7 @@ class GstReportController extends Controller
         $igst_b2b = $supp_b2b[0]['igst'];
         $c_s_gst_b2b = $supp_b2b[0]['c_s_gst'];
         $tot_b2b = $sum_taxable_b2b + $igst_b2b;
-        $sum_tax_b2b = $supp_b2b[0]['sum_tax_b2b']
+        $sum_tax_b2b = $supp_b2b[0]['sum_tax_b2b'];
 
 
         $supp_b2c = GstReport::gst_report("2");//get model
@@ -55,20 +55,43 @@ class GstReportController extends Controller
         $igst_b2c = $supp_b2c[0]['igst'];
         $c_s_gst_b2c = $supp_b2c[0]['c_s_gst'];
         $tot_b2c = $sum_taxable_b2c + $igst_b2c;
-        $sum_tax_b2c = $supp_b2c[0]['sum_tax_b2b']
+        $sum_tax_b2c = $supp_b2c[0]['sum_tax_b2b'];
 
         $supp_unreg = GstReport::gst_report("3");//get model
         $sum_taxable_unreg = $supp_unreg[0]['tot_b2b'];
         $igst_unreg = $supp_unreg[0]['igst'];
         $c_s_gst_unreg = $supp_unreg[0]['c_s_gst'];
         $tot_unreg = $sum_taxable_unreg + $igst_unreg;
-        $sum_tax_unreg = $supp_unreg[0]['sum_tax_b2b']
+        $sum_tax_unreg = $supp_unreg[0]['sum_tax_b2b'];
 
         // $supp_b2c = GstReport::gst_report("2");
         // $supp_unreg = GstReport::gst_report("3");
         // print_r($supp_b2b[0]['tot_b2b']);exit;
 
-        return view('admin.gst_report.consolidated',compact('sum_taxable_b2b','igst_b2b','c_s_gst_b2b','tot_b2b','sum_tax_b2b'));
+
+        $cust_b2b = GstReport::gst_report_customer("1");//get model
+        $cust_sum_taxable_b2b = $cust_b2b[0]['cust_tot_b2b'];
+        $cust_igst_b2b = $cust_b2b[0]['cust_igst'];
+        $cust_c_s_gst_b2b = $cust_b2b[0]['cust_c_s_gst'];
+        $cust_tot_b2b = $cust_sum_taxable_b2b + $cust_igst_b2b;
+        $cust_sum_tax_b2b = $cust_b2b[0]['cust_sum_tax_b2b'];
+
+
+        $cust_b2c = GstReport::gst_report_customer("2");//get model
+        $cust_sum_taxable_b2c = $cust_b2c[0]['cust_tot_b2b'];
+        $cust_igst_b2c = $cust_b2c[0]['cust_igst'];
+        $cust_c_s_gst_b2c = $cust_b2c[0]['cust_c_s_gst'];
+        $cust_tot_b2c = $cust_sum_taxable_b2c + $cust_igst_b2c;
+        $cust_sum_tax_b2c = $cust_b2c[0]['cust_sum_tax_b2b'];
+
+        $cust_unreg = GstReport::gst_report_customer("3");//get model
+        $cust_sum_taxable_unreg = $cust_unreg[0]['cust_tot_b2b'];
+        $cust_igst_unreg = $cust_unreg[0]['cust_igst'];
+        $cust_c_s_gst_unreg = $cust_unreg[0]['cust_c_s_gst'];
+        $cust_tot_unreg = $cust_sum_taxable_unreg + $cust_igst_unreg;
+        $cust_sum_tax_unreg = $cust_unreg[0]['cust_sum_tax_b2b'];
+
+        return view('admin.gst_report.consolidated',compact('sum_taxable_b2b','igst_b2b','c_s_gst_b2b','tot_b2b','sum_tax_b2b','sum_taxable_b2c','igst_b2c','c_s_gst_b2c','tot_b2c','sum_tax_b2c','sum_taxable_unreg','igst_unreg','c_s_gst_unreg','tot_unreg','sum_tax_unreg','cust_sum_taxable_b2b','cust_igst_b2b','cust_c_s_gst_b2b','cust_tot_b2b','cust_sum_tax_b2b','cust_sum_taxable_b2c','cust_igst_b2c','cust_c_s_gst_b2c','cust_tot_b2c','cust_sum_tax_b2c','cust_sum_taxable_unreg','cust_igst_unreg','cust_c_s_gst_unreg','cust_tot_unreg','cust_sum_tax_unreg'));
         
     }
 
