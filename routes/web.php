@@ -1087,7 +1087,6 @@ Route::group(['prefix' => 'master/ho_details', 'middleware' => ['auth']], functi
 
 
 
-
 /*tax dummy strat*/
 
 Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
@@ -1096,7 +1095,7 @@ Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 
 
-
+Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
 
 
 

@@ -3,7 +3,7 @@
       <div class="col-12 px-0">
       <div class="row mx-0">
         <div class="col-6">
-          <p>© 2020 Copyright.</p>
+          <p>© 2021 Copyright.</p>
         </div>
         <div class="col-6 text-right">
            <p>Powered by Mazenet</p> 
