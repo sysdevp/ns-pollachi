@@ -198,6 +198,22 @@
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Customer Type <span class="mandatory">*</span></label>
+              <div class="col-sm-8">
+              <select class="js-example-basic-multiple col-12 form-control price_level select custom-select required_for_valid" 
+              error-data="Enter valid Price Level" data-placeholder="Choose Price Level " name="customer_mode" >
+              <option value=""></option>
+                 <option value="1"  {{ old('customer_mode') == '1' ? 'selected' : '' }}>Register</option>
+                  <option value="2" {{ old('customer_mode') == '2' ? 'selected' : '' }}>Un-Register</option>
+                  <option value="3" {{ old('customer_mode') == '3' ? 'selected' : '' }}>Customer</option> 
+               </select>
+               
+                  
+              </div>
+            </div>
+          </div>
 </div>
  
  <div class="form-row">

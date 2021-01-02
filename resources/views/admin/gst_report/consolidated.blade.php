@@ -209,12 +209,12 @@ table, th, td {
                     <tr>
                       <td>1</td>
                       <td>B2B</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{{$sum_taxable_b2b}}</td>
+                      <td>{{$igst_b2b}}</td>
+                      <td>{{$c_s_gst_b2b}}</td>
+                      <td>{{$c_s_gst_b2b}}</td>
+                      <td>{{$sum_tax_b2b}}</td>
+                      <td>{{$tot_b2b}}</td>
                     </tr>
                     
                     <tr>

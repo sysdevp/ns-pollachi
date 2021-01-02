@@ -209,12 +209,12 @@ table, th, td {
                     <tr>
                       <td>1</td>
                       <td>B2B</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td><?php echo e($sum_taxable_b2b); ?></td>
+                      <td><?php echo e($igst); ?></td>
+                      <td><?php echo e($c_s_gst); ?></td>
+                      <td><?php echo e($c_s_gst); ?></td>
+                      <td><?php echo e($sum_tax_b2b); ?></td>
+                      <td><?php echo e($tot_b2b); ?></td>
                     </tr>
                     
                     <tr>

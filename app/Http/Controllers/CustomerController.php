@@ -66,6 +66,7 @@ class CustomerController extends Controller
         $customer->opening_balance = $request->opening_balance;
         $customer->remark = $request->remark;
         $customer->price_level = $request->price_level;
+        $customer->customer_mode = $request->customer_mode;
         $customer->created_by = 0;
         $customer->updated_by = 0;
         $now = Carbon::now()->toDateTimeString();
