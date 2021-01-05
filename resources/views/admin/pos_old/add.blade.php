@@ -32,7 +32,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="{{ url('sale_order/index/0') }}">Back</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="{{ url('/') }}">Back</a></button></li>
           </ul>
         </div>
       </div>
@@ -468,7 +468,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       </div>
                       <br>
                                                           
-                     <div class="" align="center">
+					<div class="col-lg-12" align="center">
                                    
                     <input type="button" class="btn btn-success add_items" value="Add More" name="" id="add_items0">  
 
@@ -477,7 +477,9 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <input type="button" style="display: none" class="btn btn-success update_items_one_key" value="Update" name="" id="update_items_one_key">
                     
                     <input type="hidden" name="" id="dummy_table_id"> 
-                     </div> <br>              
+                     </div> 
+					 
+					 <br>  <br>              
                    
 <style>
 table, th, td {

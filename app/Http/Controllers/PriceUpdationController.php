@@ -38,12 +38,25 @@ class PriceUpdationController extends Controller
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                     ->first();
 
-            $unit_price = @$item_data->rate_inclusive_tax;
-            $discount = @$item_data->discount / @$item_data->qty;
-            $item_rate = $unit_price - $discount;
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
+                $last_purchase_cost[] =0;
+                $tax = 0;
+            } 
+            else
+            {
+                $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
 
-            $last_purchase_cost[] = $unit_price;
-            $tax = @$item_data->gst;
+                $last_purchase_cost[] = $unit_price;
+                $tax = @$item_data->gst;
+            }                                 
+
+            
 
             if(@$updated_selling_price->mark_up_type == 1)
             {
@@ -163,11 +176,24 @@ class PriceUpdationController extends Controller
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                     ->first();
 
-            $unit_price = @$item_data->rate_inclusive_tax;
-            $discount = @$item_data->discount / @$item_data->qty;
-            $item_rate = $unit_price - $discount;
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
 
-            $tax = @$item_data->gst;
+                $tax =0;
+            }   
+            else
+            {
+                $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
+
+                $tax = @$item_data->gst;
+            }                                 
+
+            
 
             if(@$updated_selling_price->mark_up_type == 1)
             {
@@ -247,14 +273,20 @@ class PriceUpdationController extends Controller
 
         if($item_data == '')
         {
-            
-        }                                    
+            $unit_price = 0;
+            $discount = 0;
+            $item_rate = 0;
 
-        $unit_price = @$item_data->rate_inclusive_tax;
-        $discount = @$item_data->discount / @$item_data->qty;
-        $item_rate = $unit_price - $discount;
-        
-        $tax = @$item_data->gst;
+            $tax =0;
+        }     
+        else
+        {
+            $unit_price = @$item_data->rate_inclusive_tax;
+            $discount = @$item_data->discount / @$item_data->qty;
+            $item_rate = $unit_price - $discount;
+            
+            $tax = @$item_data->gst;
+        }                               
 
         if(@$updated_selling_price->mark_up_type == '')
         {

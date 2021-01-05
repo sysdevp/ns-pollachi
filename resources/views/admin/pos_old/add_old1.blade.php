@@ -15,12 +15,6 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
     min-width: 1em;
     margin-right: 0.5em;
 }
-
-.netvalue{background: #a3d072;
-    font-size: 17px;
-    padding: -20px;
-    margin: 0px;}
-    .spantextwidth{width:200px;}
 </style>
 <div class="col-12 body-sec">
   <div class="card container-fluid px-0">
@@ -32,7 +26,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="{{ url('sale_order/index/0') }}">Back</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="{{ url('estimation/index/0') }}">Back</a></button></li>
           </ul>
         </div>
       </div>
@@ -62,140 +56,75 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
 <form  method="post" class="form-horizontal" action="{{ route('pos.store') }}" id="dataInput" enctype="multipart/form-data">
       {{csrf_field()}}
-<input type="hidden" id="hold_trans_id" name="hold_trans_id" value=""/>
+
       
-         <div class="row col-md-12">
+                       <div class="row col-md-10">
 
-                  <div class="col-md-2">
-                    <label style="font-family: Times new roman;">Voucher No</label><br>
-                    <div class="">
-                      <font size="2">{{ $voucher_no }}</font>
-                    </div>
-                  
-                   
-                  </div>
+                                <div class="col-md-2">
+                                  <label style="font-family: Times new roman;">Voucher No</label><br>
+                                  <div class="">
+                                    <font size="2"></font>
+                                    <input type="hidden" name="voucher_no" class="voucher_no" value="">
+                                  </div>
+                                
+                                 
+                                </div>
 
-                  <div class="col-md-2">
-                    <label style="font-family: Times new roman;">Voucher Date</label><br>
-                  <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
-                   
-                  </div>
+                                <div class="col-md-2">
+                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                                 
+                                </div>
 
-                  <div class="col-md-3">
-                  <label style="font-family: Times new roman;">Customer Name</label><br>
+                <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Party Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_data()" name="customer_id" id="customer_id">
-                           <option value="">Choose Customer Name</option>
-                           @foreach($customer as $customers)
-                           <option value="{{ $customers->id }}">{{ $customers->name }}({{$customers->phone_no}})</option>
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
+                           <option value="">Choose Supplier Name</option>
+                           @foreach($supplier as $suppliers)
+                           <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
                            @endforeach
                         </select>
                      </div>
-                     
-                     <!-- <a href="{{ url('master/customer/create')}}" target="_blank">
+                     <a href="{{ url('master/supplier/create')}}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Supplier"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
-                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_customer_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-  -->
+                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_supplier_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
-                  
-                  
                </div>
-               
-               <div class="col-md-3" id="cust_data1" style="margin-left: -106px;">
-                  <label style="font-family: Times new roman;">Customer Name</label><br>
+                                <div class="col-md-4">
+                                  <label style="font-family: Times new roman;">Party Address</label><br>
+                                  <input type="hidden" name="address_line_1" id="address_line_1">
+                                 
+                                  <div class="address">
+                                    
+                                  </div>
+                                
+                                 
+                                </div>
+                                </div>
+
+                                <div class="row col-md-12">
+
+                    <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Agent Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                     <input type="text" class="form-control required_for_proof_valid" placeholder="Customer Name" id="customer_name" name="customer_name" value="">
-
-                     </div>
-                 </div>
-                  
-                  
-               </div>
-               <div class="col-md-3" id="cust_data2" style="margin-left: -107px;">
-                  <label style="font-family: Times new roman;">Mobile No</label><br>
-                  <div class="form-group row">
-                     <div class="col-sm-8">
-                     <input type="text" class="form-control required_for_proof_valid" placeholder="Customer Mobile No" id="phone_no" name="phone_no" value="">
-
-                     </div>
-                 </div>
-                  
-                  
-               </div>
-                  <!-- <div class="col-md-2">
-                    <label style="font-family: Times new roman;">Sale Estimation No</label><br>
-                  <select class="js-example-basic-multiple col-12 form-control custom-select estimation_no" onchange="estimation_details()" name="estimation_no" id="estimation_no">
-                           <option value="">Choose Sale Estimation No</option>
-                           @foreach($estimation as $estimations)
-                           <option value="{{ $estimations->sale_estimation_no }}">{{ $estimations->sale_estimation_no }}</option>
-                           @endforeach
-                        </select>
-                   
-                  </div>
-
-                  <div class="col-md-2">
-                    <label style="font-family: Times new roman;">Estimation Date</label><br>
-                  <input type="date" class="form-control estimation_date  required_for_proof_valid" readonly="" id="estimation_date" placeholder="Estimation Date" name="estimation_date" value="">
-                   
-                  </div> 
-
-
-                
-                  
-                  </div>
-
-                  <div class="row col-md-12">
-
-                    <div class="col-md-4">
-                    <label style="font-family: Times new roman;">Customer Address</label><br>
-                    <input type="hidden" name="address_line_1" id="address_line_1">
-                    <div class="address">
-                      
-                    </div>
-                  
-                   
-                  </div>
-
-                  <div class="col-md-3">
-                  <label style="font-family: Times new roman;">Sales Men Name</label><br>
-                  <div class="form-group row">
-                     <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id">
-                           <option value="">Choose Sales Men Name</option>
-                           @foreach($sales_man as $value)
-                           <option value="{{ $value->id }}">{{ $value->name }}</option>
+                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" >
+                           <option value="">Choose Agent Name</option>
+                           @foreach($agent as $agents)
+                           <option value="{{ $agents->id }}">{{ $agents->name }}</option>
                            @endforeach
                         </select>
                      </div>
-                     <a href="{{ route('sales_man.create')}}" target="_blank">
-                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Sales Men"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
-                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_salesmen_id" title="Add Sales Men"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                     <a href="{{ url('master/agent/create')}}" target="_blank">
+                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Agent"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
+                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_agent_id" title="Add Agent"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
                </div>
 
-                  <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Sale type</label><br>
-                    <input type="radio" name="sale_type" value="1" checked="">
-                    <label style="font-family: Times new roman;">Cash Sale</label>
-                    <input type="radio" name="sale_type" value="0">
-                    <label style="font-family: Times new roman;">Credit Sale</label>
-                  </div>
-
-                  <div class="col-md-2">
-                    <label style="font-family: Times new roman;">Company Location</label><br>
-                  <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location" required="">
-                           <option value="">Choose Location</option>
-                           @foreach($location as $value)
-                           <option value="{{ $value->id }}">{{ $value->name }}</option>
-                           @endforeach
-                        </select>
-                   
-                  </div>
-
-                </div>-->
-                <br>
+                              </div>
+                              <br>
     
       <div class="col-md-8">
                        <div class="form-group row">
@@ -208,11 +137,11 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
               </div>
 
       <div class="row col-md-12">
-        <!-- <div class="col-md-2">
+        <div class="col-md-2">
           <label style="font-family: Times new roman;">Item Bill S.No</label>
         <input type="text" class="form-control item_sno " placeholder="Item S.no" id="item_sno" name="item_sno" value="">
          
-        </div> -->
+        </div>
 
         <div class="col-md-2">
           <label style="font-family: Times new roman;">Item Code</label>
@@ -286,7 +215,6 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                               </table>
                             </div>
                           </div>
-    
                             
                       </div>
 
@@ -324,38 +252,6 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                               </table>
                             </div>
                           </div>
-                        
-                            
-                      </div>
-
-                      <div class="hold_data" id="hold_data" style="display: none;" title="Search Here">
-                        
-                        <div class="form-row">
-                            <div class="col-md-12">
-                              <table class="hold_table" style="width: 100%;">
-                                  <thead>
-                                  <th style="font-family: Times New Roman;">Select One</th>
-                                  <th style="font-family: Times New Roman;">Voucher No</th>
-                                  <th style="font-family: Times New Roman;">Date</th>
-                                  <th style="font-family: Times New Roman;">Customer</th>
-                                  <th style="font-family: Times New Roman;">Total Net Amt</th>
-                                 
-                                  
-                                </thead>
-                                <tbody class="append_hold_data">
-                                </tbody>
-                                <tfoot>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  <th></th>
-                                  
-                                </tfoot>
-                              </table>
-                            </div>
-                          </div>
-    
                             
                       </div>
 
@@ -382,7 +278,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                     <div class="col-md-2">
                         <label style="font-family: Times new roman;">Quantity</label>
-                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" oninput="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
+                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
                       </div>
                       </div>
                       
@@ -457,16 +353,15 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
 
                     </div>
-                    <div class="col-md-12 row" id="b_w">
+                      <div class="col-md-12 row">
                         <div class="col-md-2">
-                          <label style="font-family: Times new roman;">Quantity OR Rating</label>
-                        <select class="form-control" id="b_or_w">
+                          <label style="font-family: Times new roman;">Balck OR White</label>
+                        <select class="form-control" name="black_or_white[]">
                           <option value="1">W</option>
                           <option value="0">B</option>
                        </select>
                         </div>
                       </div>
-                      <br>
                                                           
                      <div class="" align="center">
                                    
@@ -474,8 +369,6 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                     <input type="button" style="display: none" class="btn btn-success update_items" value="Update" name="" id="update_items"> 
 
-                    <input type="button" style="display: none" class="btn btn-success update_items_one_key" value="Update" name="" id="update_items_one_key">
-                    
                     <input type="hidden" name="" id="dummy_table_id"> 
                      </div> <br>              
                    
@@ -491,6 +384,7 @@ table, th, td {
                 <table class="table" id="team-list">
                   <thead>
                     <th> S.no </th>
+                    <th> Item S.no </th>
                     <th> Item Code</th>
                     <th> Item Name</th>
                     <th> HSN</th>
@@ -574,6 +468,7 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th></th>
+                      <th></th>
                       <th><label class="total_amount">0</label></th>
                       <th></th>
                       <th></th>
@@ -588,7 +483,7 @@ table, th, td {
                 </table>
                 
                        </div>
-                       <!-- <div class="row col-md-12">
+                       <div class="row col-md-12">
 
                         <div class="col-md-2">
                         <label style="font-family: Times new roman;">Discount(-)</label>
@@ -598,8 +493,7 @@ table, th, td {
                         <label style="font-family: Times new roman;">Overall Discount</label>
                       <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
                       </div>
-                    </div> 
-
+                    </div>
 
                         <div class="row col-md-12 append_expense">
 
@@ -615,12 +509,12 @@ table, th, td {
                         @endforeach
                         </select>
                      </div>
-                     <a href="{{ route('account_head.create')}}" target="_blank">
+                     <a href="{{ route('account_head.create') }}" target="_blank">
                      <button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
                </div>
-                        
+                      
                       <div class="col-md-2">
                         <label style="font-family: Times new roman;">Expense Amount</label>
                       <input type="number" class="form-control expense_amount" id="expense_amount"  placeholder="Expense Amount" name="expense_amount[]" step="any" title="Numbers Only" value="">
@@ -632,105 +526,14 @@ table, th, td {
                         <label style="font-family: Times new roman; color: white;">Add Expense</label><br>
                       <input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense">
                     </div>
+                       </div>
                   </div>
-                    
-                       </div>-->
 
+                  <div class="col-md-12" style="float: right;">
 
+                        <font color="black" style="font-size: 150%; margin-left: 700px; font-weight: 900;">NET Value :</font>&nbsp;<font class="total_net_value" style="font-size: 150%; font-weight: 900;">00.00</font> 
+                       </div>
                     <!-- net value -->
-                  
-
-                      <div class="row col-md-12" id="middlecol">
-
-<div class="col-md-8">
-<table >
-                      <tr>
-                      <th>Payment Type</th>
-                      <th>Amount</th>
-                      <th>Remarks</th>
-                      <th>Date</th>
-                      </tr>
-                      <tbody>
-                      <tr>
-                      <td>Cash</td>
-                      <td><input type="number" name="cash_amount"/></td>
-                      <td><input type="text" name="cash_remark"/></td>
-                      <td></td>
-                      </tr>
-                      <tr>
-                      <td>Card</td>
-                      <td><input type="number" name="card_amount"/></td>
-                      <td><input type="text" name="card_remark"/></td>
-                      <td></td>
-                      </tr>
-                      <tr>
-                      <td>Cheque</td>
-                      <td><input type="number" name="cheque_amount"/></td>
-                      <td><input type="text" name="cheque_remark"/></td>
-                      <td><input type="date" name="cheque_date"/></td>
-                      </tr>
-                      <tr>
-                      <td>Voucher</td>
-                      <td><input type="number" name="voucher_no" id="voucher_no"/></td>
-                      <td><input type="text" name="voucher_code" placeholder="VOUCHER CODE" oninput="get_voucher_amt($(this).val())"/></td>
-                      <td></td>
-                      </tr>
-                      </tbody>
-                      </table>
-</div>
-
-
-<div class="col-md-4">
-<div class="row mx-auto d-flex">
-   <div class="netvalue" style="margin:20px; padding:15px;">
-   <div class="row mx-auto d-flex">
-    <!--Table-->
-    <table id="tablePreview" class="" style="width:100%; border: 1px solid #a3d072 !important;">
-
-  <!--Table body-->
-  <tbody>
-    <tr>
-      <td> No of Item</td>
-      <td align="right"> <input type="text" class="form-control" readonly="" id="no_item" name="no_item" value="0"  style="text-align: right;
-    background: none;
-    border: #a3d072 solid 1px !important;"> </td>
-     
-    </tr>
-    <tr>
-    <td> No of Qty</td>
-      <td align="right"><input type="text" class="form-control" readonly="" id="no_qty" name="no_qty" value="0" style="text-align: right;
-    background: none;
-    border: #a3d072 solid 1px !important;"></td>
-     
-    </tr>
-    <tr>
-    <td> NET Value</td>
-      <td align="right"><font class="total_net_value" style="font-size: 150%; font-weight: 900;">00.00</font> </td>
-     
-    </tr>
-
-    <tr>
-    <td>Amt Tendered</td>
-      <td align="right"></td>
-     
-    </tr>
-
-    <tr>
-    <td>Change</td>
-      <td align="right"></td>
-     
-    </tr>
-  </tbody>
-  <!--Table body-->
-</table><!--Table-->
-  </div>
-  
-    </div>
-</div>
-</div>
-
-                      
-
 
 
 
@@ -740,15 +543,8 @@ table, th, td {
                         <label style="font-family: Times new roman;">Round Off(+/-)</label>
                       <input type="text" class="form-control round_off" readonly="" value="0" id="round_off" name="round_off" >
                       </div>
-                        
 
-
-
-                      
-
-
-                       
-                       <div class="row col-md-12 taxes mb-3">
+                       <div class="row col-md-12 mb-3">
                         @foreach($tax as $value)
                          <div class="col-md-2">
                            <label style="font-family: Times new roman;">{{ $value->name }}</label>
@@ -762,431 +558,38 @@ table, th, td {
 
                        </div>
 
-                       <div class="row col-md-12 taxes mb-3">
-                         <div class="col-md-2">
-                           <!-- <label style="font-family: Times new roman;">No of Item</label> -->
-                     
-                         </div>
-                         <div class="col-md-2">
-                           <!-- <label style="font-family: Times new roman;">No of Qty</label> -->
-                     
-                         </div>
-                          
-                         <div class="col-md-2">
-                           <!-- <label style="font-family: Times new roman;">Grand Total</label> -->
-                      <!-- <input type="text" class="form-control" readonly="" id="grand_total" name="" value="0">
-                         </div>
-                          
-                         <div class="col-md-2">
-                           <label style="font-family: Times new roman;">Amt Tendered</label>
-                      <input type="text" class="form-control"  id="amt_tend" name="" value="0">
-                         </div>                         <div class="col-md-2">
-                           <label style="font-family: Times new roman;">Change</label>
-                      <input type="text" class="form-control" readonly="" id="change" name="" value="0"> -->
-                         </div>
-                          
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
-                            <br>
+                            
                           <p>
                              <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
-                             <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
-                             <button class="btn btn-primary"  type="button" onclick="find_cat()">Find Item F2</button>
-                             <button class="btn btn-dark"  type="button" id="scan_item">Scan ItemsF4</button>
-                             <button class="btn btn-info"  type="submit" name="hold_trans" id="hold_trans">Hold Trans F8</button>
-                             <button class="btn btn-dark"  type="button" id="load_trans">Load Trans F9</button>
-                             <button class="btn btn-primary"  type="button" id="change_qty">Change Qty Cntrl+F1 </button>
+                              <button class="btn btn-warning print" name="save" value="1" type="submit">Save & Print</button>
 
                           </p>
                           
                         </div>
 
                       </div>
-      
-      
+
+                        <!-- <div class="row col-md-12 text-center">
+                          <div class="col-md-12">
+                            
+                          <p>
+                             <button class="btn btn-success save" name="save" value="0" type="submit">Save</button>
+                              <input class="btn btn-warning print" name="save" onclick="new_page()" value="Save & Print" type="button">
+
+                          </p>
+                          
+                        </div>
+
+                      </div> -->
+
+                       
+
+                     
       </form>
                        
         <script type="text/javascript">
-    $('#customer_id').removeAttr('required');
-
-function customer_data()
-{
-  var customer_id= $('#customer_id').val();
-  if(customer_id!="")
-  {
-    $('#customer_name').removeAttr('required');
-    $('#phone_no').removeAttr('required');
-    $('#customer_id').attr('required','required');
-    
-    $('#cust_data1').hide();
-    $('#cust_data2').hide();
-
-    
-  }
-  else
-  {
-    $('#cust_data1').show();
-    $('#cust_data2').show();
-
-    $('#customer_name').attr('required','required');
-    $('#phone_no').attr('required','required');
-    $('#customer_id').removeAttr('required');
-  }
-
-}
-
-$("#load_trans").click(function() {
-  $(".row_category").remove();
-
-  $.ajax({
-           type: "POST",
-            url: "{{ url('pos/get_pos_hold_data/') }}",
-            data: {},
-           success: function(data) {
-             $('.hold_data').show();
-             $('.hold_data').dialog({width:900},{height:250}).prev(".ui-dialog-titlebar").css("background","#28a745").prev(".ui-dialog.ui-widget-content");
-
-            $('.append_hold_data').append(data);
-             
-           }
-           
-        });
-
-  });
-
-function append_pos_holded_data(val)
-{
-  // alert(val);
-  // return false;
-
-  $.ajax({
-           type: "POST",
-            url: "{{ url('pos/get_pos_load_data/') }}",
-            data: {so_no : val},
-           success: function(data) {
-            //  console.log(data);
-            $('.append_proof_details').append(data);
-           }
-           
-        });
-}
-
-  $("#hold_trans").click(function() {
-
-$('#hold_trans_id').val("1");
-form.submit();
-});
-
-  $("#scan_item").click(function() {
-
-      $('#item_code').focus();
-   
-   });
-
-   $("#change_qty").click(function() {
-
-    $('.add_items').hide();
-      $('.update_items').hide();
-      $('.update_items_one_key').show();
-
-      var id=$('#mytable tr:last').attr('class').split(' ')[0];
-        //alert(length);
-        var invoice_no = $('.invoice_no'+id).val(); 
-  var item_code_id = $('.item_code'+id).val();
-  var item_code_name = $('.items'+id).text(); 
-  var item_name = $('.item_name'+id).val();
-  var hsn = $('.hsn'+id).val(); 
-  var mrp = $('.mrp'+id).val();
-  var discount_val = $('.discount_val'+id).val(); 
-  var exclusive = $('.exclusive'+id).val();
-  var inclusive = $('.inclusive'+id).val(); 
-  var quantity = $('.quantity'+id).val();
-  var uom = $('.uom'+id).val(); 
-  var uom_name = $('.font_uom'+id).text();
-  var amnt = $('#amnt'+id).val();
-  var tax = $('#tax'+id).val(); 
-  var tax_gst = $('.tax_gst'+id).val();
-  var net_price = $('#net_price'+id).val(); 
-  var last_purchase_rate = $('.last_purchase'+id).text();
-
-  $('.quantity').focus();
-
-  $('.exclusive_rate').val(exclusive);
-  $('.inclusive_rate').val(inclusive);
-  $('.item_sno').val(invoice_no);
-  $('.items_codes').val(item_code_id);
-  $('.item_name').val(item_name);
-  $('.item_code').val(item_code_name);
-  $('.mrp').val(mrp);
-  $('.hsn').val(hsn);
-  $('.quantity').val(quantity);
-  $('.tax_rate').val(tax_gst);
-  $('.amount').val(amnt);
-  $('.net_price').val(net_price);
-  $('.gst').val(tax);
-  $('.uom').val(uom);
-  $('.uom_name').val(uom_name);
-  $('#last_purchase_rate').val(last_purchase_rate);
-  var disc_value = parseFloat(discount_val)/parseFloat(quantity);
-  $('.discount_rs').val(disc_value.toFixed(2));
-  discount_calc();
-   
-  if(discount_val == 0)
-  {
-    $('.discount_percentage').val('');
-  $('.discount_rs').val('');
-  }
-
-
-});
-function get_voucher_amt(val)
-{
-  
-$.ajax({
-           type: "POST",
-            url: "{{ url('pos/check_voucher_code/') }}",
-            data: { id: val },
-           success: function(data) {
-            //  console.log(data.value);
-              //alert(data);
-              if(data!="")
-              {
-              $('#voucher_no').val(data);
-            }
-            else
-            {
-              $('#voucher_no').val("");
-              alert("Pls Check Voucher Code");
-
-            }
-
-           }
-
-           
-        });
-
-}
-
-$(document).ready(function(){
-
-	$('body').keyup(function(e) {
-    var key=e.keyCode;
-    var code =e.which;
-// alert(key);
-var quantity =$("#quantity").val();
-// alert(quantity);
-if(key==13 || code==13 )
-{
-  add_items();
-  item_details_sno();
-}
-
-
-    // alert(code);
-    if(key==119 || code==119)
-    {
-      var length = $('.tables').length;
-      // alert(length);
-      // return false;
-      if(length!=0)
-      {
-      $('#hold_trans_id').val("1");
-      $('#dataInput').submit();
-      }
-      else
-      {
-        alert("Pls Add Items Details");
-      }
-
-
-    }
-    if(key==113 || code==113)
-    {
-      find_cat();
-    }
-    if(key==115 || code==115)
-    {
-      // alert('ddd');
-       $('#item_code').focus();
-    }
-    if(key==120 || code==120)
-    { 
-      $(".row_category").remove();
-      
-      $("#load_trans").click();
-    }
-    if(key==17 || code==17 && key==112 || code==112 )
-    {
-      
-      
-      $('.add_items').hide();
-      $('.update_items').hide();
-      $('.update_items_one_key').show();
-
-      var id=$('#mytable tr:last').attr('class').split(' ')[0];
-        //alert(length);
-        var invoice_no = $('.invoice_no'+id).val(); 
-  var item_code_id = $('.item_code'+id).val();
-  var item_code_name = $('.items'+id).text(); 
-  var item_name = $('.item_name'+id).val();
-  var hsn = $('.hsn'+id).val(); 
-  var mrp = $('.mrp'+id).val();
-  var discount_val = $('.discount_val'+id).val(); 
-  var exclusive = $('.exclusive'+id).val();
-  var inclusive = $('.inclusive'+id).val(); 
-  var quantity = $('.quantity'+id).val();
-  var uom = $('.uom'+id).val(); 
-  var uom_name = $('.font_uom'+id).text();
-  var amnt = $('#amnt'+id).val();
-  var tax = $('#tax'+id).val(); 
-  var tax_gst = $('.tax_gst'+id).val();
-  var net_price = $('#net_price'+id).val(); 
-  var last_purchase_rate = $('.last_purchase'+id).text();
-
-  $('.exclusive_rate').val(exclusive);
-  $('.inclusive_rate').val(inclusive);
-  $('.item_sno').val(invoice_no);
-  $('.items_codes').val(item_code_id);
-  $('.item_name').val(item_name);
-  $('.item_code').val(item_code_name);
-  $('.mrp').val(mrp);
-  $('.hsn').val(hsn);
-  $('.quantity').val(quantity);
-  $('.tax_rate').val(tax_gst);
-  $('.amount').val(amnt);
-  $('.net_price').val(net_price);
-  $('.gst').val(tax);
-  $('.uom').val(uom);
-  $('.uom_name').val(uom_name);
-  $('#last_purchase_rate').val(last_purchase_rate);
-  var disc_value = parseFloat(discount_val)/parseFloat(quantity);
-  $('.discount_rs').val(disc_value.toFixed(2));
-  discount_calc();
-   
-  if(discount_val == 0)
-  {
-    $('.discount_percentage').val('');
-  $('.discount_rs').val('');
-  }
-   // item_codes(item_code_id);
-    }
-
-  });
-});
-
-$(document).on('click','.update_items_one_key',function(){
-
-  var td_id=$('#mytable tr:last').attr('class').split(' ')[0];
-
-  $('.invoice_no'+td_id).val($('.item_sno').val());
-  $('.item_no'+td_id).text($('.item_sno').val());
-  $('.item_code'+td_id).val($('.items_codes').val());
-  $('.items'+td_id).text($('.item_code').val());
-  $('.item_name'+td_id).val($('.item_name').val());
-  $('.font_item_name'+td_id).text($('.item_name').val());
-  $('.hsn'+td_id).val($('.hsn').val());
-  $('.font_hsn'+td_id).text($('.hsn').val());
-  $('.mrp'+td_id).val($('.mrp').val());
-  $('.font_mrp'+td_id).text($('.mrp').val());
-  $('.exclusive'+td_id).val($('.exclusive_rate').val());
-  $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
-  $('.inclusive'+td_id).val($('.inclusive_rate').val());
-  $('.quantity'+td_id).val($('.quantity').val());
-  $('#qty'+td_id).val($('.quantity').val());
-  $('.font_quantity'+td_id).text($('.quantity').val());
-  $('.uom'+td_id).val($('.uom').val());
-  $('.font_uom'+td_id).text($('.uom_name').val());
-  $('#amnt'+td_id).val($('.amount').val());
-  $('.font_amount'+td_id).text($('.amount').val());
-  $('.black_or_white'+td_id).val($('#b_or_w').val());
-  $('#tax'+td_id).val($('.gst').val());
-  $('.tax_gst'+td_id).val($('.tax_rate').val());
-  $('.font_gst'+td_id).text($('.gst').val());
-  $('.last_purchase'+td_id).text($('#last_purchase_rate').val());
-
-
-   if($('.discount_percentage').val() == '' && $('.discount_rs').val() == '')
-   {
-    var discount=0;
-    $('.discount_val'+td_id).val(discount);
-    $('#font_discount'+td_id).text(discount);
-    $('#input_discount'+td_id).val(discount);
-    var q=calculate_total_discount();
-    $('#total_discount').val(q.toFixed(2));
-    $('#disc_total').val(q.toFixed(2));
-
-   }
-   else
-   {
-    $('.discount_val'+td_id).val($('#discounts').val());
-    $('#font_discount'+td_id).text($('#discounts').val());
-    $('#input_discount'+td_id).val($('#discounts').val());
-    var q=calculate_total_discount();
-    $('#total_discount').val(q.toFixed(2));
-    $('#disc_total').val(q.toFixed(2));
-   }
-
-  $('#net_price'+td_id).val($('.net_price').val());
-  $('.font_net_price'+td_id).text($('.net_price').val());
-
-  var total_net_price=calculate_total_net_price();
-  var total_amount=calculate_total_amount();
-  var total_gst=calculate_total_gst();
-  $("#total_price").val(total_net_price.toFixed(2));
-  $(".total_net_value").text(total_net_price.toFixed(2));
-  $("#grand_total").val(total_net_price.toFixed(2));
-  $("#total_amount").val(total_amount.toFixed(2));
-  $("#total_gst").val(total_gst.toFixed(2));
-  $("#igst").val(total_gst.toFixed(2));
-  var half_gst = parseFloat(total_gst)/2;
-  $("#cgst").val(half_gst.toFixed(2));
-  $("#sgst").val(half_gst.toFixed(2));
-  var to_html_total_net = total_net_price.toFixed(2);
-  var to_html_total_amount = total_amount.toFixed(2);
-  $(".total_net_price").html(parseFloat(to_html_total_net));
-  $(".total_amount").html(parseFloat(to_html_total_amount));
-  total_expense_cal();
-  individual_expense();
-  //overall_discounts();
-  roundoff_cal();
-
-var total_qty = 0;
-$('.qty').each(function(){
-
-total_qty = parseInt(total_qty) + parseInt($(this).val());
-$('#no_qty').val(parseInt(total_qty));
-});
-
-  
-
-  
-  $('.item_sno').val('');
-  $('.items_codes').val('');
-  $('.item_name').val('');
-  $('.mrp').val('');
-  $('.hsn').val('');
-  $('.quantity').val('');
-  $('.tax_rate').val('');
-  $('#exclusive').val('');
-  $('#inclusive').val('');
-  $('.amount').val('');
-  $('#discount').val('');
-  $('.discount_percentage').val('');
-  $('.net_price').val('');
-  $('.gst').val('');
-  $('.item_code').val('');
-  $('#discounts').val('');
-  $('#last_purchase_rate').val(0);
-  $('.uom_inclusive').children('option').remove();
-  $('.uom_exclusive').children('option').remove();
-  $("select").select2();
-  $("#b_w").load(" #b_w > *");
-
-  $('.add_items').show();
-      $('.update_items').hide();
-      $('.update_items_one_key').hide();
-
-});
 
           var i=1;
           var discount_total = 0;
@@ -1229,17 +632,6 @@ function calculate_total_discount()
   
 
 }
-$(document).on("keyup","#amt_tend",function(){
-
-  var amt_tend = $(this).val();
-  var tot = $('#grand_total').val();
-  var change = parseInt(amt_tend)-parseInt(tot);
-  if(parseInt(tot) <= parseInt(amt_tend))
-  {
-  $('#change').val(change);
-  }
-  else{$('#change').val("");}
-});
 
 $(document).on("keyup",".expense_amount",function()
 {
@@ -1281,7 +673,7 @@ $(document).on("keyup",".expense_amount",function()
   }
   
 });
-
+  
 function individual_expense()
 {
 $('.expenses').each(function(){
@@ -1297,9 +689,8 @@ $('.expenses').each(function(){
     var exp_distribution = parseFloat(total_expense)/parseFloat(total_amount)*parseFloat(amount);
     var total_exp = parseFloat(0)+parseFloat(exp_distribution);
 
-
     var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(sum_of_total_discount)+parseFloat(total_exp);
-  $('#net_price'+count).val(net_value.toFixed(2));
+    $('#net_price'+count).val(net_value.toFixed(2));
     $('.font_net_price'+count).text(net_value.toFixed(2));
     $('.font_expenses'+count).text(total_exp.toFixed(2));
 
@@ -1311,10 +702,9 @@ var total_net_price=calculate_total_net_price();
 
 $(".total_net_price").html(parseFloat(total_net_price));
 $('.total_net_value').text(total_net_price.toFixed(2));
-$("#grand_total").val(total_net_price.toFixed(2));
 $('#total_price').val(total_net_price.toFixed(2));
   
-}
+}  
 
 function total_expense_cal(){
 
@@ -1331,7 +721,6 @@ total_expense_amount=parseFloat(total_expense_amount)+parseFloat($(this).val());
    // $('#total_price').val(total_net_amount.toFixed(2));
    return total_expense_amount;
 }
-
 function roundoff_cal()
 {
   var substr = $("#total_price").val().split('.');
@@ -1369,40 +758,81 @@ else if(substr[1] < 50)
   $("#round_off").val(symbol);
 }
 }
+
+
+function new_page()
+          {
+            var estimation_info = [];
+            var invoice_no = [];
+            var item_code = [];
+            var mrp = [];
+            var exclusive = [];
+            var inclusive = [];
+            var quantity = [];
+            var amnt = [];
+            var input_discount = [];
+            var tax_gst = [];
+            var uom = [];
+            var expense_type = [];
+            var expense_amount = [];
+
+            var length = $('#mytable').length;
+
+            estimation_info[0] = $('.voucher_no').val();
+            estimation_info[1] = $('.voucher_date').val();
+            estimation_info[2] = $('.supplier_id').val(); 
+            estimation_info[3] = $('.agent_id').val();
+            estimation_info[4] = $('.overall_discount').val();
+            estimation_info[5] = $('.total_price').val();
+            estimation_info[6] = $('.round_off').val(); 
+
+            for(var i=0;i<length;i++)
+            {
+
+              invoice_no[i] = $('#invoice'+i).val();
+              item_code[i] = $('.item_code'+i).val();
+              mrp[i] = $('.mrp'+i).val();
+              exclusive[i] = $('.exclusive'+i).val();
+              inclusive[i] = $('.inclusive'+i).val();
+              quantity[i] = $('.quantity'+i).val();
+              amnt[i] = $('#amnt'+i).val();
+              input_discount[i] = $('#input_discount'+i).val();
+              tax_gst[i] = $('.tax_gst'+i).val();
+              uom[i] = $('.uom'+i).val();
+
+            }
+
+            var expense_length = $('.expense').length;
+
+            $('.expense_type').each(function(key){
+              expense_type[key] = $(this).val();
+            });
+
+            $('.expense_amount').each(function(key){
+              expense_amount[key] = $(this).val();
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('estimation/print/') }}",
+                data: { estimation_info : estimation_info, invoice_no : invoice_no, item_code : item_code, mrp : mrp, exclusive : exclusive, inclusive, quantity : quantity, amnt : amnt, input_discount : input_discount, tax_gst : tax_gst, uom : uom, expense_type : expense_type, expense_amount : expense_amount, length : length, expense_length : expense_length},
+                success: function(data) 
+                {
+                console.log(data);
+                }
+            });
+
+          }
+
+
 function add_items()
 {
-
-  /*for table Net Value Calculation*/
-
-  var rate_exclusive = $('#exclusive').val();
-  var rate_inclusive = $('#inclusive').val();
-  var quantity = $('#quantity').val();
-  var tax_rate = $('.tax_rate').val();
-  var total = parseInt(quantity)*parseFloat(rate_exclusive);
-  $('#amount').val(total.toFixed(2));
-  if(tax_rate == '')
-  {
-    $('#net_price').val(total.toFixed(2));
-  }
-  var rate = parseFloat(tax_rate)/100;
-  var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-  var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-  var net_val = parseFloat(total)*parseFloat(rate);
-
-  $('.gst').val(net_val.toFixed(2));
-
-  var total_net_val = parseFloat(total)+parseFloat(net_val);
-  $('#net_price').val(total_net_val.toFixed(2)); 
-
-  /*for table Net Value Calculation*/
-
   var j=$('#mytable tr:last').attr('class');
  var l=parseInt(i)+1;
  var voucher_date=$('.voucher_date').val();
  var invoice_no=$('.item_sno').val();
  var uom_name = $('.uom_name').val();
  var uom_id = $('.uom').val();
- var black_or_white = $('#b_or_w').val();
  // var item_code=$("#items_codes option:selected");
  // var item_code=item_code.text();
  var item_code=$("#item_code").val();
@@ -1464,41 +894,39 @@ function add_items()
 
   var last_purchase_rate = $('#last_purchase_rate').val();
  
-  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" id="qty'+i+'" class="qty" value="'+quantity+'" name=""><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'+i+'" value="0" name="overall_disc[]"><font class="font_overall_disc'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '+i+'" id="expenses'+i+'" value="0" name="expenses[]"><font class="font_expenses'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><input type="hidden" class="black_or_white'+i+'"  value="'+black_or_white+'" name="black_or_white[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>';
-
-  $("#b_w").load(" #b_w > *");
+  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'+i+'" type="hidden" id="invoice'+i+'" value="'+invoice_no+'" name="invoice_sno[]"><font class="item_no'+i+'">'+invoice_no+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'+i+'" value="0" name="overall_disc[]"><font class="font_overall_disc'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '+i+'" id="expenses'+i+'" value="0" name="expenses[]"><font class="font_expenses'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>'
 
   $('.append_proof_details').append(items);
 var length=$('#mytable tr:last').attr('class').split(' ')[0];
 
-// for(var m=0;m<length+1;m++)
-// {
+for(var m=0;m<length+1;m++)
+{
 
-//   var invoice_num = $('#invoice'+m).val();
+  var invoice_num = $('#invoice'+m).val();
   
-//   for(var n=m+1;n<=length+1;n++)
-//   {
+  for(var n=m+1;n<=length+1;n++)
+  {
     
-//     if(typeof $('#invoice'+n).val() == 'undefined')
-//     {
+    if(typeof $('#invoice'+n).val() == 'undefined')
+    {
 
-//     }
-//     else
-//     {
-//       var invoice_num1 = $('#invoice'+n).val();
+    }
+    else
+    {
+      var invoice_num1 = $('#invoice'+n).val();
 
-//       if(invoice_num == invoice_num1)
-//       {
-//         alert('Item S.No is Alredy Taken!');
-//         $('#row'+i).remove();
-//       }
-//       else
-//       {
+      if(invoice_num == invoice_num1)
+      {
+        alert('Item S.No is Alredy Taken!');
+        $('#row'+i).remove();
+      }
+      else
+      {
         
-//       }
-//     }
-//   }
-// }
+      }
+    }
+  }
+}
 
 // for(var m=0;m<length+1;m++)
 // {
@@ -1528,12 +956,6 @@ var length=$('#mytable tr:last').attr('class').split(' ')[0];
 //     }
 //   }
 // }
-var total_qty = 0;
-$('.qty').each(function(){
-
-total_qty = parseInt(total_qty) + parseInt($(this).val());
-$('#no_qty').val(parseInt(total_qty));
-});
 
 var total_net_price=calculate_total_net_price();
 var total_amount=calculate_total_amount();
@@ -1541,7 +963,6 @@ var total_gst=calculate_total_gst();
 
 $("#total_price").val(total_net_price.toFixed(2));
 $(".total_net_value").text(total_net_price.toFixed(2));
-$("#grand_total").val(total_net_price.toFixed(2));
 $("#total_amount").val(total_amount.toFixed(2));
 $("#total_gst").val(total_gst.toFixed(2));
 $("#igst").val(total_gst.toFixed(2));
@@ -1558,10 +979,10 @@ $(".total_amount").html(parseFloat(to_html_total_amount));
 var q=calculate_total_discount();
 $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
-// //overall_discounts();
-individual_expense();
-roundoff_cal();
 total_expense_cal();
+overall_discounts();
+roundoff_cal();
+individual_expense();
 
 var len=$('.tables').length;
 $('#counts').val(len);
@@ -1655,7 +1076,6 @@ $(document).on("click",".remove_items",function(){
     var to_html_total_amount = total_amount.toFixed(2);
     $(".total_amount").html(parseFloat(to_html_total_amount));
     $(".total_net_value").text(to_html_total_net);
-    $("#grand_total").val(total_net_price.toFixed(2));
     var total_gst=calculate_total_gst();
 
     $("#total_price").val(total_net_price.toFixed(2));
@@ -1667,12 +1087,14 @@ $(document).on("click",".remove_items",function(){
     $("#sgst").val(half_gst.toFixed(2));
     total_expense_cal();
     individual_expense();
-    // //overall_discounts();
+    overall_discounts();
     roundoff_cal();
+
+    
 
     $.ajax({
            type: "GET",
-            url: "{{ url('sale_order/remove_data/{id}') }}",
+            url: "{{ url('estimation/remove_data/{id}') }}",
             data: { data_val: data_val },
            success: function(data) {
              console.log(data);
@@ -1726,22 +1148,21 @@ $(document).on("click",".remove_items",function(){
     $('.update_items').hide();
     
 
-    $.ajax({
-           type: "POST",
-            url: "{{ url('purchase/remove_data/') }}",
-            data: { invoice_no: invoice_no, gatepass_no: gatepass_no },
-           success: function(data) {
-             // console.log(data);
+    // $.ajax({
+    //        type: "POST",
+    //         url: "{{ url('purchase/remove_data/') }}",
+    //         data: { invoice_no: invoice_no, gatepass_no: gatepass_no },
+    //        success: function(data) {
+    //          // console.log(data);
              
-           }
-        });
+    //        }
+    //     });
 
 
   
 });
 
 $(document).on("click",".edit_items",function(){
-  // alert($('#mytable tr:last').attr('class').);return false;
   $('.update_items').show();
   $('.add_items').hide();
 
@@ -1782,8 +1203,8 @@ $(document).on("click",".edit_items",function(){
   $('.uom_name').val(uom_name);
   $('#last_purchase_rate').val(last_purchase_rate);
   var disc_value = parseFloat(discount_val)/parseFloat(quantity);
-  $('.discount_rs').val(disc_value.toFixed(2));
-  discount_calc();
+   $('.discount_rs').val(disc_value.toFixed(2));
+   discount_calc();
    
   if(discount_val == 0)
   {
@@ -1797,11 +1218,6 @@ $(document).on("click",".edit_items",function(){
 $(document).on("click",".refresh_supplier_id",function(){
       var supplier_dets=refresh_supplier_master_details();
       $(".supplier_id").html(supplier_dets);
-   });
-
-$(document).on("click",".refresh_customer_id",function(){
-      var customer_dets=refresh_customer_master_details();
-      $(".customer_id").html(customer_dets);
    });
 
 $(document).on("click",".refresh_agent_id",function(){
@@ -1828,7 +1244,7 @@ $(document).on("click",".update_items",function(){
  var inclusive=$('#inclusive').val();
  var net_price=$('.net_price').val();
   
-  if(item_code == '' || quantity == '' || exclusive == '' && inclusive == '')
+  if(item_code == '' || invoice_no == '' || quantity == '' || exclusive == '' && inclusive == '')
  {
   alert('Please Fill All The Input Fields');
  }
@@ -1862,13 +1278,11 @@ $(document).on("click",".update_items",function(){
   $('.font_exclusive'+td_id).text($('.exclusive_rate').val());
   $('.inclusive'+td_id).val($('.inclusive_rate').val());
   $('.quantity'+td_id).val($('.quantity').val());
-  $('#qty'+td_id).val($('.quantity').val());
   $('.font_quantity'+td_id).text($('.quantity').val());
   $('.uom'+td_id).val($('.uom').val());
   $('.font_uom'+td_id).text($('.uom_name').val());
   $('#amnt'+td_id).val($('.amount').val());
   $('.font_amount'+td_id).text($('.amount').val());
-  $('.black_or_white'+td_id).val($('#b_or_w').val());
   $('#tax'+td_id).val($('.gst').val());
   $('.tax_gst'+td_id).val($('.tax_rate').val());
   $('.font_gst'+td_id).text($('.gst').val());
@@ -1904,7 +1318,6 @@ $(document).on("click",".update_items",function(){
   var total_gst=calculate_total_gst();
   $("#total_price").val(total_net_price.toFixed(2));
   $(".total_net_value").text(total_net_price.toFixed(2));
-  $("#grand_total").val(total_net_price.toFixed(2));
   $("#total_amount").val(total_amount.toFixed(2));
   $("#total_gst").val(total_gst.toFixed(2));
   $("#igst").val(total_gst.toFixed(2));
@@ -1917,15 +1330,8 @@ $(document).on("click",".update_items",function(){
   $(".total_amount").html(parseFloat(to_html_total_amount));
   total_expense_cal();
   individual_expense();
-  //overall_discounts();
+  overall_discounts();
   roundoff_cal();
-
-var total_qty = 0;
-$('.qty').each(function(){
-
-total_qty = parseInt(total_qty) + parseInt($(this).val());
-$('#no_qty').val(parseInt(total_qty));
-});
 
   
 
@@ -1952,14 +1358,13 @@ $('#no_qty').val(parseInt(total_qty));
   $("select").select2();
   $('.update_items').hide();
   $('.add_items').show();
-  $("#b_w").load(" #b_w > *");
   
   }
   
   });
 
 $(document).on("click",".show_items",function(){
-    var id = $(this).attr("id");
+  var id = $(this).attr("id");
   $('.item_show').dialog({width : 1000}).prev(".ui-dialog-titlebar").css("background","#28a745");
   $('.show_item_code').text($('.items'+id).text());
   $('.show_item_name').text($('.item_name'+id).val());
@@ -1986,7 +1391,7 @@ function expense_add()
   else
   {
 
-  var expense_details='<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>@foreach($expense_type as $expense_types)<option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>@endforeach</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>'
+  var expense_details='<div class="row col-md-12 expense"><div class="col-md-3"><label style="font-family: Times new roman;">Expense Type</label><br><div class="form-group row"><div class="col-sm-8"><select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type[]"><option value="">Choose Expense Type</option>@foreach($account_head as $expense_types)<option value="{{ $expense_types->id}}">{{ $expense_types->type}}</option>@endforeach</select></div><a href="{{ url("master/expense-type/create")}}" target="_blank"><button type="button"  class="px-2 btn btn-success ml-2" title="Add Expense type"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a><button type="button"  class="px-2 btn btn-success mx-2 refresh_expense_type_id" title="Add Expense Type"><i class="fa fa-refresh" aria-hidden="true"></i></button></div></div><div class="col-md-2"><label style="font-family: Times new roman;">Expense Amount</label><input type="number" class="form-control expense_amount"  placeholder="Expense Amount" name="expense_amount[]" pattern="[0-9]{0,100}" title="Numbers Only" value=""></div><div class="col-md-2"><label><font color="white" style="font-family: Times new roman;">Add Expense</font></label><br><input type="button" class="btn btn-success" value="+" onclick="expense_add()" name="" id="add_expense">&nbsp;<input type="button" class="btn btn-danger remove_expense" value="-" name="" id="remove_expense"></div></div>'
 
   $('.append_expense').append(expense_details);
   $("select").select2();
@@ -2013,8 +1418,6 @@ $(document).on("click",".remove_expense",function(){
 
   }
   total_expense_cal();
-  //overall_discounts();
-  individual_expense();
   roundoff_cal();
 
   });
@@ -2022,7 +1425,6 @@ $(document).on("click",".remove_expense",function(){
 function item_details_sno(){
   $(".item_s_no").each(function(key,index){
       $(this).html((key+1));
-      $('#no_item').val(++key);
     });
 }
 
@@ -2044,23 +1446,14 @@ function qty()
 {
   var rate_exclusive = $('#exclusive').val();
   var rate_inclusive = $('#inclusive').val();
-  var quantity = $('#quantity').val();
-  var tax_rate = $('.tax_rate').val();
-  var total = parseInt(quantity)*parseFloat(rate_exclusive);
-  $('#amount').val(total.toFixed(2));
-  if(tax_rate == '')
+  if(rate_exclusive == '' && rate_inclusive == '')
   {
-    $('#net_price').val(total.toFixed(2));
+
   }
-  var rate = parseFloat(tax_rate)/100;
-  var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-  var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-  var net_val = parseFloat(total)*parseFloat(rate);
-
-  $('.gst').val(net_val.toFixed(2));
-
-  var total_net_val = parseFloat(total)+parseFloat(net_val);
-  $('#net_price').val(total_net_val.toFixed(2));
+  else
+  {
+    calc_exclusive();
+  }
 }
 
 function gst_calc()
@@ -2312,16 +1705,11 @@ function discount_calc()
   else
   {
 
-  // var rate_exclusive_disc_val = parseFloat(exclusive) - parseFloat(discount);
-  // var rate_inclusive_disc_val = parseFloat(inclusive) - parseFloat(discount);
-
-  // $('#rate_exclusive_disc_val').val(rate_exclusive_disc_val.toFixed(2));
-  // $('#rate_inclusive_disc_val').val(rate_inclusive_disc_val.toFixed(2));
   var disc_amount_exclusive = parseFloat(discount)*100/parseFloat(exclusive);
 
    $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
 
-  qty();
+  calc_exclusive();
   var amount = $(".amount").val();
   var discounts = parseInt(quantity)*parseFloat(discount);
   $('#discounts').val(discounts.toFixed(2));
@@ -2374,7 +1762,7 @@ function discount_calc1()
   var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
 
   $(".discount_rs").val(disc_val_exclusive.toFixed(2));
-  qty();
+  calc_exclusive();
   var amount = $(".amount").val();
   var discounts = parseInt(quantity)*parseFloat(disc_val_exclusive.toFixed(2));
   $('#discounts').val(discounts.toFixed(2));
@@ -2402,11 +1790,11 @@ if(append_value == 1)
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/getdata/{id}') }}",
+        url: "{{ url('estimation/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
-
+          console.log(data);
              // $('.uom_exclusive').children('option:(:first)').remove();
              // $('.uom_inclusive').children('option:(:first)').remove();
              $('.uom_exclusive').children('option').remove();
@@ -2422,8 +1810,6 @@ if(append_value == 1)
              uom_name =data[0].uom_name;
              igst =data[1].igst;
              barcode = data[2].barcode;
-             selling_price = data.selling_price;
-             selling_price_type = data.selling_price_type;
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
@@ -2464,65 +1850,57 @@ if(append_value == 1)
               }
               
              }
-
-             var rate=parseFloat(igst)/100+1;
-             var actual_tax = parseFloat(igst)/100;
-             var inclusive_rate = parseFloat(selling_price)/parseFloat(rate);
                        
              //$('#item_code').val(code);
-             $('#item_code').val(code);
              $('#items_codes').val(id);
-             $('#item_name').val(name);
+            $('#item_name').val(name);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
-             $('#uom_name').val(uom_name);
+              $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
-             $('#exclusive').val(inclusive_rate.toFixed(2));
-             $('#inclusive').val(selling_price);
-             $('#selling_price_type').val(selling_price_type);
              $('#quantity').val(1);
 
              
              $('.item_display').dialog('close');
              $('#exclusive').focus();
 
-            //  if($('#quantity').val() != '')
-            //  {
+             if($('#quantity').val() != '')
+             {
               
-            //   var rate_exclusive = $('#exclusive').val();
-            //   var rate_inclusive = $('#inclusive').val();
-            //   var quantity = $('#quantity').val();
-            //   var tax_rate = $('.tax_rate').val();
-            //   var total = parseInt(quantity)*parseFloat(rate_exclusive);
-            //   $('#amount').val(total.toFixed(2));
-            //   if(tax_rate == '')
-            //   {
-            //     $('#net_price').val(total.toFixed(2));
-            //   }
+              var rate_exclusive = $('#exclusive').val();
+              var rate_inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+              var tax_rate = $('.tax_rate').val();
+              var total = parseInt(quantity)*parseFloat(rate_exclusive);
+              $('#amount').val(total.toFixed(2));
+              if(tax_rate == '')
+              {
+                $('#net_price').val(total.toFixed(2));
+              }
               
-            //   var rate = parseFloat(tax_rate)/100;
-            //   var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-            //   var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-            //   $('#inclusive').val(gst_rate_inclusive.toFixed(2));
-            //   var net_val = parseFloat(total)*parseFloat(rate);
+              var rate = parseFloat(tax_rate)/100;
+              var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+              var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+              $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+              var net_val = parseFloat(total)*parseFloat(rate);
       
-            //   $('.gst').val(net_val.toFixed(2));
+              $('.gst').val(net_val.toFixed(2));
 
-            //   var total_net_val = parseFloat(total)+parseFloat(net_val);
-            //   $('#net_price').val(total_net_val.toFixed(2));
-            //  }
-            // else
-            // {
+              var total_net_val = parseFloat(total)+parseFloat(net_val);
+              $('#net_price').val(total_net_val.toFixed(2));
+             }
+            else
+            {
 
-            // }
+            }
         }
 
     });
 
       $.ajax({
            type: "POST",
-            url: "{{ url('sale_order/last_purchase_rate/') }}",
+            url: "{{ url('estimation/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              $('#last_purchase_rate').val(data);
@@ -2537,11 +1915,12 @@ else
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/getdata/{id}') }}",
+        url: "{{ url('estimation/getdata/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){ 
-          //console.log(data);
+
+          // console.log(data[1].tax_master);
               $('.uom_exclusive').children('option').remove();
               $('.uom_inclusive').children('option').remove();
              // $('.uom_inclusive').children('option:not(:first)').remove();
@@ -2555,9 +1934,6 @@ else
              uom_name =data[0].uom_name;
              igst =data[1].igst;
              barcode = data[2].barcode;
-             selling_price = data.selling_price;
-             selling_price_type = data.selling_price_type;
-             
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
@@ -2599,58 +1975,56 @@ else
               }
               
              }
-
-             var rate=parseFloat(igst)/100+1;
-             var actual_tax = parseFloat(igst)/100;
-             var inclusive_rate = parseFloat(selling_price)/parseFloat(rate);
                        
              $('#item_code').val(code);
              $('#items_codes').val(id);
-             $('#item_name').val(name);
+            $('#item_name').val(name);
              $('#mrp').val(mrp);
              $('#hsn').val(hsn);
              $('#uom').val(uom_id);
-             $('#uom_name').val(uom_name);
+              $('#uom_name').val(uom_name);
              $('#tax_rate').val(igst);
-             $('#exclusive').val(inclusive_rate.toFixed(2));
-             $('#inclusive').val(selling_price);
-             $('#selling_price_type').val(selling_price_type);
              $('#quantity').val(1);
-             $('#quantity').focus();
-             
 
              
              $('#cat').dialog('close');
              $('#exclusive').focus();
-              
-              // var rate_exclusive = $('#exclusive').val();
-              // var rate_inclusive = $('#inclusive').val();
-              // var quantity = $('#quantity').val();
-              // var tax_rate = $('.tax_rate').val();
-              // var total = parseInt(quantity)*parseFloat(rate_exclusive);
-              // $('#amount').val(total.toFixed(2));
-              // if(tax_rate == '')
-              // {
-              //   $('#net_price').val(total.toFixed(2));
-              // }
-              // var rate = parseFloat(tax_rate)/100;
-              // var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
-              // var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
-              // $('#inclusive').val(gst_rate_inclusive.toFixed(2));
-              // var net_val = parseFloat(total)*parseFloat(rate);
-      
-              // $('.gst').val(net_val.toFixed(2));
 
-              // var total_net_val = parseFloat(total)+parseFloat(net_val);
-              // $('#net_price').val(total_net_val.toFixed(2));
-             
+             if($('#quantity').val() != '')
+             {
+              
+              var rate_exclusive = $('#exclusive').val();
+              var rate_inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+              var tax_rate = $('.tax_rate').val();
+              var total = parseInt(quantity)*parseFloat(rate_exclusive);
+              $('#amount').val(total.toFixed(2));
+              if(tax_rate == '')
+              {
+                $('#net_price').val(total.toFixed(2));
+              }
+              var rate = parseFloat(tax_rate)/100;
+              var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+              var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+              $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+              var net_val = parseFloat(total)*parseFloat(rate);
+      
+              $('.gst').val(net_val.toFixed(2));
+
+              var total_net_val = parseFloat(total)+parseFloat(net_val);
+              $('#net_price').val(total_net_val.toFixed(2));
+             }
+            else
+            {
+
+            }
         }
 
     });
 
       $.ajax({
            type: "POST",
-            url: "{{ url('sale_order/last_purchase_rate/') }}",
+            url: "{{ url('estimation/last_purchase_rate/') }}",
             data: { id: item_code },
            success: function(data) {
              // console.log(data);
@@ -2799,7 +2173,7 @@ function item_with_same_data(item_code)
   $.ajax({
 
         type: "GET",
-        url: "{{ url('sale_order/same_items/{id}') }}",
+        url: "{{ url('estimation/same_items/{id}') }}",
         data: { id: item_code },
 
         success:function(data){
@@ -2818,8 +2192,8 @@ function find_cat()
   
   $('#categories').val("");
   $('#brand').val("");
-  $("select").select2();
   $('#browse_item').val("");
+  $("select").select2();
   $('#cat').show();
   $('.row_brand').remove(); 
   $('.row_category').remove();
@@ -2833,7 +2207,7 @@ function browse_item()
   $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/browse_item/{id}') }}",
+        url: "{{ url('estimation/browse_item/{id}') }}",
         data: { browse_item: browse_item},             
              
         success: function(data){
@@ -2855,7 +2229,7 @@ function categories_check()
   $.ajax({  
         
         type: "GET",
-        url: "{{ url('sale_order/change_items/{id}') }}",
+        url: "{{ url('estimation/change_items/{id}') }}",
         data: { categories: categories, brand: brand },             
              
         success: function(data){ 
@@ -2927,7 +2301,7 @@ function brand_check()
   $.ajax({
 
         type: "POST",
-        url: "{{ url('sale_order/brand_filter/') }}",
+        url: "{{ url('estimation/brand_filter/') }}",
         data: {brand: brand },             
              
         success: function(data)
@@ -2998,96 +2372,19 @@ function code_check()
   
 }
 
-function customer_details()
+function supplier_details()
 {
 
-  var customer_id=$('.customer_id').val();
+  var supplier_id=$('.supplier_id').val();
+
 
   $.ajax({
            type: "POST",
-            url: "{{ url('sale_order/address_details/') }}",
-            data: { customer_id : customer_id },
+            url: "{{ url('estimation/address_details/') }}",
+            data: { supplier_id : supplier_id },
            success: function(data) {
-            var result = JSON.parse(data);
-            $('#address_line_1').val(result.address);
-           $('.address').text(result.address);
-           $('.estimation_no').children('option:not(:first)').remove()
-           .end().append(result.estimation_options);
-           }
-        });
-}
-
-function estimation_details()
-{
-
-  var estimation_no=$('.estimation_no').val();
-  
-
-  $.ajax({
-           type: "POST",
-            url: "{{ url('sales_order/estimation_details/') }}",
-            data: { estimation_no : estimation_no },
-           success: function(data) {
-            $('.tables').remove();
-            $('.expense').remove();
-            var result=JSON.parse(data);
-            if(result.status>0){
-$('.append_proof_details').append(result.data);
-var expense_length=$(".expense_type").length;
-if(expense_length >1)
-{
-$('.append_expense').append(result.expense_typess);
-$('#expense_count').val(result.expense_cnt);
-}
-else if(result.expense_cnt == 0)
-{
-  $('.append_expense').html(result.expense_typess);
-  $('#expense_count').val(result.expense_cnt+1);
-}
-else
-{
-  $('.append_expense').html(result.expense_typess);
-  $('#expense_count').val(result.expense_cnt);
-}
-$('.taxes').html(result.tax_append);
-
-$('#total_discount').val(result.item_discount_sum);
-$('#overall_discount').val(result.overall_discount);
-$('#overall_discount').attr('readonly','readonly');
-$('#round_off').val(result.round_off);
-$('.total_net_value').text(result.total_net_value);
-$("#grand_total").val(total_net_price.toFixed(2));
-$("#grand_total").val(total_net_price.toFixed(2));
- $('#total_price').val(result.total_net_value);
- $('.estimation_date').val(result.date);
- $('#counts').val(result.status);
-
-
-var total_net_price=calculate_total_net_price();
-var total_amount=calculate_total_amount();
-var total_gst=calculate_total_gst();
-$("#total_gst").val(total_gst.toFixed(2));
-$("#igst").val(total_gst.toFixed(2));
-var half_gst = parseFloat(total_gst)/2;
-$("#cgst").val(half_gst.toFixed(2));
-$("#sgst").val(half_gst.toFixed(2));
-var q=calculate_total_discount();
-$('#total_discount').val(q.toFixed(2));
-$('#disc_total').val(q.toFixed(2));
-total_expense_cal();
-//overall_discounts();
-roundoff_cal();
-
-
-var to_html_total_net = total_net_price.toFixed(2);
-var to_html_total_amount = total_amount.toFixed(2);
-$(".total_net_price").html(parseFloat(to_html_total_net));
-$(".total_amount").html(parseFloat(to_html_total_amount));
-
-
-
-
-            }
+            $('#address_line_1').val(data);
+            $('.address').text(data);
            }
         });
 }
@@ -3107,7 +2404,9 @@ item_codes(uom_exclusive);
 }
 
  function overall_discounts()
- {
+{
+    // var sum=0;
+    // var num=0;
 
     $(".overall_discount").blur(function() {
     if ($(this).val() == "" || $(this).val() == 0) 
@@ -3116,7 +2415,50 @@ item_codes(uom_exclusive);
         $('#overall_discount').val(0);
     }
 });
-  
+  //       $('#overall_discount').val(0);
+  //       //$(".overall_discount").val(0);
+
+
+  // $('.input_discounts').each(function(){
+  //     var overall_discount = 0;
+  //     var count = $(this).attr('class').split(' ')[1];
+  //     var overall_discount = $('#overall_discount').val();
+
+  //     //console.log(overall_discount);
+  //     var amount = $('#amnt'+count).val();
+  //     var gst_rs = $('#tax'+count).val();
+  //     var total_amount =calculate_total_amount();
+  //     var disc_distribution = parseFloat(overall_discount)/parseFloat(total_amount)*parseFloat(amount);
+  //     var total_discount = parseFloat($(this).val())+parseFloat(disc_distribution);
+  //     var net_value = parseFloat(amount)+parseFloat(gst_rs)-parseFloat(total_discount);
+  //     //$('#input_discount'+count).val(total_discount);
+  //     $('.font_overall_disc'+count).text(disc_distribution.toFixed(2));
+  //     $('#overall_disc'+count).val(disc_distribution.toFixed(2));
+  //     // $('#font_discount'+count).text(total_discount.toFixed(2));
+  //     // $('.discount_val'+count).val(total_discount.toFixed(2));
+  //     $('#net_price'+count).val(net_value.toFixed(2));
+  //     $('.font_net_price'+count).text(net_value.toFixed(2));
+  //     num++;
+  // });
+  // // if(num == 0)
+  // //   {
+  // //     alert('you Cannot Add Overall Discount!');
+  // //     $('.overall_discount').val(0);
+  // //   }
+  // var total_net_price = calculate_total_net_price();
+  // $("#total_price").val(total_net_price.toFixed(2));
+  // $(".total_net_value").text(total_net_price.toFixed(2));
+  // var to_html_total_net = total_net_price.toFixed(2);
+  // $(".total_net_price").html(parseFloat(to_html_total_net));
+  // roundoff_cal();
+  // var q=calculate_total_discount();
+  // $('#total_discount').val(q.toFixed(2));
+  // $('#disc_total').val(q.toFixed(2));
+
+
+  //   }
+// else
+// {
 
       var total = $('#total_price').val();
     if(total == 0)
@@ -3148,13 +2490,19 @@ item_codes(uom_exclusive);
       // $('.discount_val'+count).val(total_discount.toFixed(2));
       $('#net_price'+count).val(net_value.toFixed(2));
       $('.font_net_price'+count).text(net_value.toFixed(2));
+      // num++;
   });
+  // if(num == 0)
+  //   {
+  //     alert('you Cannot Add Overall Discount!');
+  //     $('.overall_discount').val(0);
+  //   }
+  
 
 }
   var total_net_price = calculate_total_net_price();
   $("#total_price").val(total_net_price.toFixed(2));
   $(".total_net_value").text(total_net_price.toFixed(2));
-  $("#grand_total").val(total_net_price.toFixed(2));
   var to_html_total_net = total_net_price.toFixed(2);
   $(".total_net_price").html(parseFloat(to_html_total_net));
   roundoff_cal();
@@ -3163,6 +2511,8 @@ item_codes(uom_exclusive);
   var q=calculate_total_discount();
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));
+// }
+ // }); 
 }
 
 

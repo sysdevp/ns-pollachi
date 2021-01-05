@@ -15,15 +15,11 @@ use App\Spatie\Permission\Models\Permission;
 use App\Spatie\Permission\Models\Role;
 
 Route::any('/', function () {
-    return view('admin.master.dash');
+    return view('admin.master.empty');
 })->middleware('auth');
 
 Route::get('/view', function () {
     return view('Masters.Sample.View');
-});
-
-Route::get('/emptydash', function () {
-    return view('admin.master.empty');
 });
 
 
@@ -956,7 +952,9 @@ Route::resource('daybook','DayBookController',['middleware' => ['auth']]);
 
 Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']]);
 
+/*Individual Ledger Start Here*/
 
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
 /*Individual Ledger End Here*/
 
@@ -980,9 +978,6 @@ Route::get('sales_man/delete/{id}', 'SalesManController@destroy');
 /*POS Start Here*/
 
 Route::resource('pos','PosController',['middleware' => ['auth']]);
-Route::post('pos/get_pos_hold_data/', 'PosController@get_pos_hold_data');
-Route::post('pos/get_pos_load_data/', 'PosController@get_pos_load_data');
-Route::post('pos/check_voucher_code/', 'PosController@check_voucher_code');
 
 /*POS End Here*/
 
@@ -1093,21 +1088,18 @@ Route::group(['prefix' => 'master/ho_details', 'middleware' => ['auth']], functi
 
 
 
+/*tax dummy strat*/
+
 Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 /*tax dummy end*/
 
-/*IExpense Start Here*/
 
-Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
 
-/*Individual Ledger Start Here*/
 
-Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
-Route::post('ledger_report', 'IndividualLedgerController@index');
 
-Route::post('daybook_report', 'DaybookController@index');
+
 
 Auth::routes(['register' => false]);
 
