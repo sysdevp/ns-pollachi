@@ -35,7 +35,7 @@ table, th, td {
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('daybook.store')); ?>" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(url('daybook_report')); ?>" enctype="multipart/form-data">
       <?php echo e(csrf_field()); ?>
 
 
@@ -93,10 +93,21 @@ table, th, td {
               </div>
               <div class="col-md-2">
               <label>Head</label>
-            <input type="text" class="form-control head" placeholder="Head" name="head" id="head">
+            <select class="js-example-basic-multiple col-12 form-control custom-select head_id" name="head_id" id="head_id">
+                           <option value="">Choose Head Name</option>
+                           <?php $__currentLoopData = $head; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                           <option value="<?php echo e($value->id); ?>"><?php echo e($value->name); ?></option>
+                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
             </div>
+            <div class="col-md-12 mb-3">
+            <div class="col-md-2">
+            <input type="submit" class="btn btn-success" name="add" value="Submit">
+            </div>
+          </div>
+</form>
 
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
               <label>Amount</label>
             <div class="input-group">
               <input type="text" class="form-control col-md-9" aria-label="Text input with dropdown button" placeholder="Amount" name="amount">
@@ -111,7 +122,7 @@ table, th, td {
 
               </div>
             </div>
-          </div>
+          </div> -->
 
             <!-- <div class="col-md-2">
               <label>Amount</label>
@@ -138,7 +149,17 @@ table, th, td {
                     <th id="credit"> Credit Amount</th>
                   </thead>
                   <tbody>
-
+                    <?php $__currentLoopData = $array_details; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <tr>
+                      
+                      <td><?php echo e($key+1); ?></td>
+                      <td><?php echo e($value['date']); ?></td>
+                      <td><?php echo e($value['particular_db']); ?></td>
+                      <td><?php echo e($value['nature']); ?></td>
+                      <td><?php echo e($value['debit']); ?></td>
+                      <td><?php echo e($value['credit']); ?></td>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   </tbody>
                   
                 </table>

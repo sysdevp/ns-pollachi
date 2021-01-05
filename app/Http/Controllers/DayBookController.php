@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\AccountHead;
+use App\Models\Expense;
 
 class DayBookController extends Controller
 {
@@ -11,9 +13,59 @@ class DayBookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.daybook.report');
+		 $head = AccountHead::all();
+        $array_details = [];
+       // print_r($request->supplier_id);exit;
+        if($request->head_id)
+          {
+            $from_date = $request->from;
+            $to_date = $request->to;
+
+            $credit_heads = Expense::where('credit_account_head',$request->head_id)->whereBetween('entry_date',[$from_date,$to_date])->get();
+            
+            foreach($credit_heads as $credit_head){
+            $new_array = array();
+            $new_array['sno'] = $credit_head->id;
+            $new_array['date'] = $credit_head->entry_date;
+			$new_array['nature'] = "";
+            $new_array['particular_db'] = isset($credit_head->debit_head_det) ? ($credit_head->debit_head_det->name) : '-';
+            $new_array['debit'] = $credit_head->debit_amount;
+            $new_array['credit'] = $credit_head->credit_amount;
+            array_push($array_details, $new_array);
+            
+            }
+
+            $debit_heads = Expense::where('debit_account_head',$request->head_id)->whereBetween('entry_date',[$from_date,$to_date])->get();
+            
+            foreach($debit_heads as $debit_head){
+            $new_array_debit = array();
+            $new_array_debit['sno'] = $debit_head->id;
+            $new_array_debit['date'] = $debit_head->entry_date;
+			$new_array_debit['nature'] = "";
+            $new_array_debit['particular_db'] = isset($debit_head->debit_head_det) ? ($debit_head->debit_head_det->name) : '-';
+            $new_array_debit['debit'] = $debit_head->debit_amount;
+            $new_array_debit['credit'] = $debit_head->credit_amount;
+            array_push($array_details, $new_array_debit);
+            
+            }
+          }
+          else
+          {
+            $new_array = array();
+            $new_array['sno'] = '';
+            $new_array['date'] = '';
+			$new_array['nature'] = '';
+            $new_array['particular_db'] = '';
+            $new_array['particular_cd'] = '';
+            $new_array['debit'] = '';
+            $new_array['credit'] ='';
+            array_push($array_details, $new_array);
+            
+           }  
+    
+        return view('admin.daybook.report',compact('head','array_details'));
     }
 
     /**

@@ -36,7 +36,7 @@ table, th, td {
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('daybook.store')}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('daybook_report')}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -93,10 +93,21 @@ table, th, td {
               </div>
               <div class="col-md-2">
               <label>Head</label>
-            <input type="text" class="form-control head" placeholder="Head" name="head" id="head">
+            <select class="js-example-basic-multiple col-12 form-control custom-select head_id" name="head_id" id="head_id">
+                           <option value="">Choose Head Name</option>
+                           @foreach($head as $value)
+                           <option value="{{ $value->id }}">{{ $value->name }}</option>
+                           @endforeach
+                        </select>
             </div>
+            <div class="col-md-12 mb-3">
+            <div class="col-md-2">
+            <input type="submit" class="btn btn-success" name="add" value="Submit">
+            </div>
+          </div>
+</form>
 
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
               <label>Amount</label>
             <div class="input-group">
               <input type="text" class="form-control col-md-9" aria-label="Text input with dropdown button" placeholder="Amount" name="amount">
@@ -111,7 +122,7 @@ table, th, td {
 
               </div>
             </div>
-          </div>
+          </div> -->
 
             <!-- <div class="col-md-2">
               <label>Amount</label>
@@ -138,7 +149,17 @@ table, th, td {
                     <th id="credit"> Credit Amount</th>
                   </thead>
                   <tbody>
-
+                    @foreach($array_details as $key=> $value)
+                  <tr>
+                      
+                      <td>{{ $key+1 }}</td>
+                      <td>{{ $value['date'] }}</td>
+                      <td>{{ $value['particular_db'] }}</td>
+                      <td>{{ $value['nature'] }}</td>
+                      <td>{{ $value['debit'] }}</td>
+                      <td>{{ $value['credit'] }}</td>
+                    </tr>
+                    @endforeach
                   </tbody>
                   
                 </table>

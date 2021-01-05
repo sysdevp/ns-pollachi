@@ -952,9 +952,7 @@ Route::resource('daybook','DayBookController',['middleware' => ['auth']]);
 
 Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']]);
 
-/*Individual Ledger Start Here*/
 
-Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
 /*Individual Ledger End Here*/
 
@@ -1087,18 +1085,22 @@ Route::group(['prefix' => 'master/ho_details', 'middleware' => ['auth']], functi
 
 
 
-/*tax dummy strat*/
 
 Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 /*tax dummy end*/
 
-
+/*IExpense Start Here*/
 
 Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
 
+/*Individual Ledger Start Here*/
 
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
+Route::post('ledger_report', 'IndividualLedgerController@index');
+
+Route::post('daybook_report', 'DaybookController@index');
 
 Auth::routes(['register' => false]);
 
