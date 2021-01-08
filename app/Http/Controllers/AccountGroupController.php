@@ -16,7 +16,7 @@ class AccountGroupController extends Controller
      */
     public function index()
     {
-        $account_group = AccountGroup::all();
+        $account_group = AccountGroup::where('is_editable','0')->get();
         return view('admin.master.account_group.view',compact('account_group'));
     }
 

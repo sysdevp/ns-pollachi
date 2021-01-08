@@ -100,7 +100,18 @@ table, th, td {
                     
                   </thead>
                   <tbody>
-                    
+                    @if($initial_page =='1')
+                     <tr>
+                      
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+
+                    @else
                    @foreach($array_details as $key=> $value)
                   <tr>
                       
@@ -112,6 +123,7 @@ table, th, td {
                       <td>{{ $value['credit'] }}</td>
                     </tr>
                     @endforeach
+                    @endif
                   </tbody>
                   
                 </table>

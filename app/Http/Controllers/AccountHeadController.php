@@ -17,7 +17,7 @@ class AccountHeadController extends Controller
      */
     public function index()
     {
-        $account_head = AccountHead::all();
+        $account_head = AccountHead::where('is_editable','0')->get();
         return view('admin.master.account_head.view',compact('account_head'));
     }
 

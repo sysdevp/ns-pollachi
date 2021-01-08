@@ -89,17 +89,11 @@ table, th, td {
                 <label>Nature </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
                   <option value="">Choose Nature</option>
+                  <option value="1">Purchase</option>
+                  <option value="2">Sales</option>
                         </select>
               </div>
-              <div class="col-md-2">
-              <label>Head</label>
-            <select class="js-example-basic-multiple col-12 form-control custom-select head_id" name="head_id" id="head_id">
-                           <option value="">Choose Head Name</option>
-                           <?php $__currentLoopData = $head; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                           <option value="<?php echo e($value->id); ?>"><?php echo e($value->name); ?></option>
-                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-            </div>
+             
             <div class="col-md-12 mb-3">
             <div class="col-md-2">
             <input type="submit" class="btn btn-success" name="add" value="Submit">
@@ -143,6 +137,7 @@ table, th, td {
                   <thead>
                     <th> S.no </th>
                     <th> Date </th>
+                    <th> Voucher No </th>
                     <th id="particulars"> Particulars</th>
                     <th id="natures"> Nature</th>
                     <th id="debit"> Debit Amount</th>
@@ -154,6 +149,7 @@ table, th, td {
                       
                       <td><?php echo e($key+1); ?></td>
                       <td><?php echo e($value['date']); ?></td>
+                      <td><?php echo e($value['voucher_no']); ?></td>
                       <td><?php echo e($value['particular_db']); ?></td>
                       <td><?php echo e($value['nature']); ?></td>
                       <td><?php echo e($value['debit']); ?></td>

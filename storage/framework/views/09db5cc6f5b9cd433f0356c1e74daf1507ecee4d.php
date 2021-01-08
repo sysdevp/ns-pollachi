@@ -100,7 +100,18 @@ table, th, td {
                     
                   </thead>
                   <tbody>
-                    
+                    <?php if($initial_page =='1'): ?>
+                     <tr>
+                      
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+
+                    <?php else: ?>
                    <?php $__currentLoopData = $array_details; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <tr>
                       
@@ -112,6 +123,7 @@ table, th, td {
                       <td><?php echo e($value['credit']); ?></td>
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
                   </tbody>
                   
                 </table>

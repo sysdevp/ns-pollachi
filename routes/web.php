@@ -1105,9 +1105,17 @@ Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
 
 Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
-Route::post('ledger_report', 'IndividualLedgerController@index');
+Route::post('ledger_report', 'IndividualLedgerController@report');
 
 Route::post('daybook_report', 'DaybookController@index');
+
+Route::post('payable_billwise_report','PayableBillwiseController@report');
+
+Route::post('payable_partywise_report','PayablePartywiseController@report');
+
+Route::post('receivable_billwise_report','ReceivableeBillwiseController@report');
+
+Route::post('receivable_partywise_report','ReceivablePartywiseController@report');
 
 Auth::routes(['register' => false]);
 

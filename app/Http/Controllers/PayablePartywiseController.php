@@ -16,30 +16,12 @@ class PayablePartywiseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $supplier = Supplier::all();
-        $purchaseentry_datas = PurchaseEntry::get();
-        $paid_amount = 0;
-        $remaining_value =0;
-        $result = '';
-        foreach($purchaseentry_datas as $purchaseentry_data){
-         $paid_amount = PaymentProcess::where('p_no',$purchaseentry_data->p_no)->sum('payment_amount');
-         $purchaseentry_data['paid_amount'] = $paid_amount;
-         $pending_amount = $purchaseentry_data->total_net_value - $paid_amount;
-         $purchaseentry_data['pending_amount'] = $pending_amount;
-
-         //no of days calculation
-         $fdate = $purchaseentry_data->p_date;
-         $tdate = date('Y-m-d');
-         $datetime1 = new DateTime($fdate);
-         $datetime2 = new DateTime($tdate);
-         $interval = $datetime1->diff($datetime2);
-         $days = $interval->format('%a');
-         $purchaseentry_data['no_of_days'] = $days;
-                   
-        }
-        return view('admin.outstanding.payables.partywise.bill',compact('purchaseentry_datas','supplier'));
+        $initial_page = "1";
+       
+        return view('admin.outstanding.payables.partywise.bill',compact('initial_page','supplier'));
     }
 
     /**
@@ -106,5 +88,42 @@ class PayablePartywiseController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+     public function report(Request $request){
+        $supplier = Supplier::all();
+        $cond = [];
+        if(isset($request->supplier_id)){
+                $cond['supplier_id'] = $request->supplier_id; 
+            }
+            if(isset($request->from)) { 
+                $from = date('Y-m-d',strtotime($request->from)); 
+            }           
+            if(isset($request->to)) {
+                $to = date('Y-m-d',strtotime($request->to)); 
+            }
+        $initial_page = "0";
+        $purchaseentry_datas = PurchaseEntry::where($cond)->whereBetween('p_date',[$from,$to])->get();
+        $paid_amount = 0;
+        $remaining_value =0;
+        $result = '';
+        foreach($purchaseentry_datas as $purchaseentry_data){
+         $paid_amount = PaymentProcess::where('p_no',$purchaseentry_data->p_no)->sum('payment_amount');
+         $purchaseentry_data['paid_amount'] = $paid_amount;
+         $pending_amount = $purchaseentry_data->total_net_value - $paid_amount;
+         $purchaseentry_data['pending_amount'] = $pending_amount;
+
+         //no of days calculation
+         $fdate = $purchaseentry_data->p_date;
+         $tdate = date('Y-m-d');
+         $datetime1 = new DateTime($fdate);
+         $datetime2 = new DateTime($tdate);
+         $interval = $datetime1->diff($datetime2);
+         $days = $interval->format('%a');
+         $purchaseentry_data['no_of_days'] = $days;
+                   
+        }
+        return view('admin.outstanding.payables.partywise.bill',compact('purchaseentry_datas','supplier','initial_page'));
+
     }
 }

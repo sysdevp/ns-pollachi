@@ -36,7 +36,7 @@ table, th, td {
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('payable_billwise.store')}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('payable_billwise_report')}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -159,16 +159,15 @@ table, th, td {
             </div>
 
               <div class="col-sm-2">
-                <label>Nature </label>
-                <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
-                  <option value="">Choose Nature</option>
-                        </select>
+                <label>Supplier </label>
+                 <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
+                           <option value="">Choose Supplier Name</option>
+                           @foreach($supplier as $suppliers)
+                           <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
+                           @endforeach
+                  </select>
               </div>
-              <div class="col-md-2">
-              <label>Head</label>
-            <input type="text" class="form-control head" placeholder="Head" name="head" id="head">
-            </div>
-
+             
             <div class="col-md-3">
               <label>Amount</label>
             <div class="input-group">
@@ -184,6 +183,7 @@ table, th, td {
 
               </div>
             </div>
+
           </div>
 
 
@@ -200,8 +200,14 @@ table, th, td {
                            <option value="">Equal To</option>
                         </select>
               </div> -->
+
           </div>
-          
+          <div class="col-md-2">
+            <label> </label>
+            <input type="submit" class="btn btn-success" name="add" value="Submit">
+            
+          </div>
+
           <table class="table table-striped table-bordered" id="payable_bill">
                   <thead>
                     <th> S.no </th>
@@ -224,6 +230,25 @@ table, th, td {
                     <th id="email"> Customer Contact Email Id</th>
                   </thead>
                   <tbody>
+                     @if($initial_page =='1')
+                     <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                     
+            </tr>
+
+                     @else 
                    @foreach($purchaseentry_datas as $key=> $value)
                     <tr>
                       <td>{{ $key+1 }}</td>
@@ -242,6 +267,7 @@ table, th, td {
                      
             </tr>
          @endforeach
+         @endif
         </tbody>
                   
                 </table>

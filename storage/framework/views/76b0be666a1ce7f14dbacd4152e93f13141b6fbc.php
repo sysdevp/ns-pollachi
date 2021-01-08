@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card px-0">
     <!-- card header start@ -->
@@ -33,7 +35,7 @@ table, th, td {
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('payable_billwise.store')); ?>" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(url('payable_billwise_report')); ?>" enctype="multipart/form-data">
       <?php echo e(csrf_field()); ?>
 
 
@@ -157,16 +159,15 @@ table, th, td {
             </div>
 
               <div class="col-sm-2">
-                <label>Nature </label>
-                <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
-                  <option value="">Choose Nature</option>
-                        </select>
+                <label>Supplier </label>
+                 <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
+                           <option value="">Choose Supplier Name</option>
+                           <?php $__currentLoopData = $supplier; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $suppliers): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                           <option value="<?php echo e($suppliers->id); ?>"><?php echo e($suppliers->name); ?></option>
+                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  </select>
               </div>
-              <div class="col-md-2">
-              <label>Head</label>
-            <input type="text" class="form-control head" placeholder="Head" name="head" id="head">
-            </div>
-
+             
             <div class="col-md-3">
               <label>Amount</label>
             <div class="input-group">
@@ -182,6 +183,7 @@ table, th, td {
 
               </div>
             </div>
+
           </div>
 
 
@@ -198,8 +200,14 @@ table, th, td {
                            <option value="">Equal To</option>
                         </select>
               </div> -->
+
           </div>
-          
+          <div class="col-md-2">
+            <label> </label>
+            <input type="submit" class="btn btn-success" name="add" value="Submit">
+            
+          </div>
+
           <table class="table table-striped table-bordered" id="payable_bill">
                   <thead>
                     <th> S.no </th>
@@ -222,6 +230,25 @@ table, th, td {
                     <th id="email"> Customer Contact Email Id</th>
                   </thead>
                   <tbody>
+                     <?php if($initial_page =='1'): ?>
+                     <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                     
+            </tr>
+
+                     <?php else: ?> 
                    <?php $__currentLoopData = $purchaseentry_datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                       <td><?php echo e($key+1); ?></td>
@@ -240,6 +267,7 @@ table, th, td {
                      
             </tr>
          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+         <?php endif; ?>
         </tbody>
                   
                 </table>
