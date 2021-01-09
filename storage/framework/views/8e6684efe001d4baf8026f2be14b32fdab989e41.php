@@ -162,7 +162,7 @@
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/department')); ?>">Department</a></li>
                             <?php endif; ?>
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('desigination_list')): ?>
-                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/designation')); ?>">Desigination</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/designation')); ?>">Role</a></li>
                             <?php endif; ?>
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('employee_list')): ?>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/employee')); ?>">Employee</a></li>
@@ -174,10 +174,10 @@
 													<ul class="acnav__list acnav__list--level3">
 														
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user_list')): ?>
-                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/user')); ?>">User</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/user')); ?>">User Creation</a></li>
                           <?php endif; ?>
                           <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('role_list')): ?>
-                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/role')); ?>">Role</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/role')); ?>">User Access</a></li>
                           <?php endif; ?>
 													</ul>
 										</li>

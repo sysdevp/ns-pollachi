@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Designation;
 use App\Spatie\Permission\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -21,8 +22,8 @@ class UserController extends Controller
     public function create()
     {
         $employee=Employee::all();
-        $role=Role::all();
-        return view('admin.master.user.add',compact('employee','role'));
+        
+        return view('admin.master.user.add',compact('employee'));
     }
 
     public function store(Request $request)

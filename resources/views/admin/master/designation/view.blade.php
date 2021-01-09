@@ -8,11 +8,11 @@
     <div class="card-header px-2">
       <div class="row">
         <div class="col-4">
-          <h3>List Designation</h3>
+          <h3>List Role</h3>
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="{{url('master/designation/create')}}">Add Designation</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="{{url('master/designation/create')}}">Add Role</a></button></li>
           </ul>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <thead>
           <tr>
             <th>S.No</th>
-            <th>Name</th>
+            <th>Role Name</th>
             <th>Short Name</th>
             <th>Remarks</th>
            <th>Action </th>

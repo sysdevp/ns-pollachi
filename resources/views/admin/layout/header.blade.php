@@ -161,7 +161,7 @@
                             <li><a class="acnav__link acnav__link--level3" href="{{url('master/department')}}">Department</a></li>
                             @endcan
                             @can('desigination_list')
-                            <li><a class="acnav__link acnav__link--level3" href="{{url('master/designation')}}">Desigination</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="{{url('master/designation')}}">Role</a></li>
                             @endcan
                             @can('employee_list')
                             <li><a class="acnav__link acnav__link--level3" href="{{url('master/employee')}}">Employee</a></li>
@@ -173,10 +173,10 @@
 													<ul class="acnav__list acnav__list--level3">
 														
                             @can('user_list')
-                          <li><a class="acnav__link acnav__link--level3" href="{{url('master/user')}}">User</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="{{url('master/user')}}">User Creation</a></li>
                           @endcan
                           @can('role_list')
-                          <li><a class="acnav__link acnav__link--level3" href="{{url('master/role')}}">Role</a></li>
+                          <li><a class="acnav__link acnav__link--level3" href="{{url('master/role')}}">User Access</a></li>
                           @endcan
 													</ul>
 										</li>
