@@ -46,6 +46,8 @@ class OffersController extends Controller
     {
         $out = array_values($request->items);
         $myJSON = json_encode($out);
+        $myJSONDateRange = json_encode($request->day_range_offers);
+
 
         $offers = new Offers();
         $offers->offers_category_id = $request->parent_id;
@@ -54,6 +56,7 @@ class OffersController extends Controller
         $offers->offer_type = $request->offer_type;
         $offers->valid_from = date('Y-m-d',strtotime($request->valid_from));
         $offers->valid_to = date('Y-m-d',strtotime($request->valid_to));
+        $offers->day_range_offers = $myJSONDateRange;
         $offers->variable =  $request->variable;
         if ($request->offer_type == "time") {
             $offers->from_time = $request->from_time;
