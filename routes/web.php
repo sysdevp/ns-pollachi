@@ -943,8 +943,10 @@ Route::get('rejection_out/retrieve/{id}', 'RejectionOutController@retrieve');
 
 Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']]);
 Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']]);
+Route::get('single_ledger/{id}','ReceivablePartywiseController@show');
 Route::resource('payable_billwise','PayableBillwiseController',['middleware' => ['auth']]);
 Route::resource('payable_partywise','PayablePartywiseController',['middleware' => ['auth']]);
+Route::get('payable_single_ledger/{id}','PayablePartywiseController@show');
 
 /*Outstanding Report End Here*/
 
@@ -1047,8 +1049,9 @@ Route::resource('receipt_income','ReceiptIncomeController',['middleware' => ['au
 /*Account Group Start Here*/
 
 Route::resource('account_group','AccountGroupController',['middleware' => ['auth']]);
-Route::get('account_group/delete/{id}', 'AccountGroupController@destroy');
-
+Route::group(['middleware' => ['auth']], function () {
+Route::get('account_group/delete/{id}', 'AccountGroupController@destroy')->middleware('permission:account_group_delete');
+});
 /*Account Group End Here*/
 
 /*Tax Account Group Start Here*/

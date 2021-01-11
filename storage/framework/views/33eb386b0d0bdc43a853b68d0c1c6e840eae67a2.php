@@ -32,9 +32,9 @@
               <div class="col-sm-8">
                 <select class="js-example-basic-multiple col-12 custom-select bank_id" name="role_id" required>
                   <option value="">Choose Role</option>
-                  <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                 /* <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <option value="<?php echo e($value->id); ?>" <?php echo e(old('role_id') == $value->id ? 'selected' : ''); ?> ><?php echo e($value->name); ?></option>
-                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> */
                 </select>
                 <span class="mandatory"> <?php echo e($errors->first('role_id')); ?> </span>
                 <div class="invalid-feedback">
@@ -62,7 +62,7 @@
 								<div class="row">
 									<div class="col-lg-2">
 										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+								<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="a1" class="state masters"  id="zone" name="permission[]"/></label>
@@ -82,7 +82,7 @@
 									
 									<div class="col-lg-2">
 										<div class="" id="tab2">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							    <input type="checkbox" name="checkAll2" id="checkAll2"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="b1" class="District masters" id="branch" name="permission[]"/></label>
@@ -102,19 +102,19 @@
 									
 									<div class="col-lg-2">
 											<div class="" id="tab3">
-                                <input type="checkbox" name="checkAll2" id="checkAll2"/></label>
+                                <input type="checkbox" name="checkAll3" id="checkAll3"/></label>
 								<label class="control-label">Select All</label>
 								<br>							
 								<input type="checkbox" value="c1" class="City masters" id="scheme" name="permission[]"/></label>
 								<label class="control-label">City</label>
 								<br>
-						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="c2" class="City_scheme masters" id="City_add" name="permission[]"/></label>
+						 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="c2" class="City masters" id="City_add" name="permission[]"/></label>
 								<span class="control-label">Add</span>
 								<br>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="c3" class="City_scheme masters" id="City_edit" name="permission[]"/></label>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="c3" class="City masters" id="City_edit" name="permission[]"/></label>
 								<span class="control-label">Edit</span>
 								<br>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="c4" class="City_scheme masters" id="City_delete" name="permission[]"/></label>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="c4" class="City masters" id="City_delete" name="permission[]"/></label>
 								<span class="control-label">Delete</span>
 							</div>	
 									</div>
@@ -124,8 +124,8 @@
 								
 								
 								<div class="col-lg-2">
-										<div class="" id="tab5">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab4">	
+							    <input type="checkbox" name="checkAll4" id="checkAll4"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="d1" class="address_type masters" id="branch" name="permission[]"/></label>
@@ -144,7 +144,7 @@
 									
 									<div class="col-lg-2">
 										<div class="" id="tab5">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							    <input type="checkbox" name="checkAll5" id="checkAll5"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="e1" class="location_type masters" id="branch" name="permission[]"/></label>
@@ -162,8 +162,8 @@
 									</div>
 									
 									<div class="col-lg-2">
-										<div class="" id="tab5">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab6">	
+							    <input type="checkbox" name="checkAll6" id="checkAll6"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="f1" class="company_location masters" id="branch" name="permission[]"/></label>
@@ -182,8 +182,8 @@
 									
 									
 									<div class="col-lg-2">
-										<div class="" id="tab5">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab7">	
+							    <input type="checkbox" name="checkAll7" id="checkAll7"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="g1" class="head_office_detail masters" id="branch" name="permission[]"/></label>
@@ -206,12 +206,12 @@
 							</div>	</br> </br>		
 							
 							<div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll8" id="checkAll8"/></label>
 								<label class="control-label"><b>Bank</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab8">		
+								<input type="checkbox" name="checkAll8" id="checkAll8"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="h1" class="bank masters"  id="zone" name="permission[]"/></label>
@@ -230,11 +230,11 @@
 									
 									
 									<div class="col-lg-2">
-										<div class="" id="tab2">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab9">	
+							    <input type="checkbox" name="checkAll9" id="checkAll9"/></label>
 								<label class="control-label">Select All</label>
 								<br>
-								<input type="checkbox" value="i1" class="bank masters" id="branch" name="permission[]"/></label>
+								<input type="checkbox" value="i1" class="bank_branch masters" id="branch" name="permission[]"/></label>
 								<label class="control-label">Bank Branch</label>
 								<br>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="i2" class="bank_branch masters" id="bank_branch_add" name="permission[]"/></label>
@@ -250,8 +250,8 @@
 									
 									
 									<div class="col-lg-2">
-											<div class="" id="tab3">
-                                <input type="checkbox" name="checkAll2" id="checkAll2"/></label>
+											<div class="" id="tab10">
+                                <input type="checkbox" name="checkAll10" id="checkAll10"/></label>
 								<label class="control-label">Select All</label>
 								<br>							
 								<input type="checkbox" value="j1" class="denomination masters" id="scheme" name="permission[]"/></label>
@@ -273,8 +273,8 @@
 								
 								
 								<div class="col-lg-2">
-										<div class="" id="tab5">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab11">	
+							    <input type="checkbox" name="checkAll11" id="checkAll11"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="k1" class="account_type masters" id="branch" name="permission[]"/></label>
@@ -299,12 +299,12 @@
 							 </br></br></br>
 							
 							<div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label"><b>Employee</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab12">		
+								<input type="checkbox" name="checkAll12" id="checkAll12"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="l1" class="department masters"  id="zone" name="permission[]"/></label>
@@ -323,8 +323,8 @@
 									
 									
 									<div class="col-lg-2">
-										<div class="" id="tab2">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab13">	
+							    <input type="checkbox" name="checkAll13" id="checkAll13"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="m1" class="designation masters" id="branch" name="permission[]"/></label>
@@ -343,8 +343,8 @@
 									
 									
 									<div class="col-lg-2">
-											<div class="" id="tab3">
-                                <input type="checkbox" name="checkAll2" id="checkAll2"/></label>
+											<div class="" id="tab14">
+                                <input type="checkbox" name="checkAll14" id="checkAll14"/></label>
 								<label class="control-label">Select All</label>
 								<br>							
 								<input type="checkbox" value="n1" class="employee masters" id="scheme" name="permission[]"/></label>
@@ -368,12 +368,12 @@
 							 </br></br></br>
 							 
 							 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label"><b>User</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab15">		
+								<input type="checkbox" name="checkAll15" id="checkAll15"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="o1" class="user masters"  id="zone" name="permission[]"/></label>
@@ -392,8 +392,8 @@
 									
 									
 									<div class="col-lg-2">
-										<div class="" id="tab2">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab16">	
+							    <input type="checkbox" name="checkAll16" id="checkAll16"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="p1" class="role masters" id="branch" name="permission[]"/></label>
@@ -416,12 +416,12 @@
 							 </br></br></br>
 							 
 							  <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label"><b>Accounts</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab17">		
+								<input type="checkbox" name="checkAll17" id="checkAll17"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="q1" class="gift_voucher masters"  id="zone" name="permission[]"/></label>
@@ -440,8 +440,8 @@
 									
 									
 									<div class="col-lg-2">
-										<div class="" id="tab2">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab18">	
+							    <input type="checkbox" name="checkAll18" id="checkAll18"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="r1" class="offers masters" id="branch" name="permission[]"/></label>
@@ -463,12 +463,12 @@
 							
 							 </br></br></br>
 							  <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label"><b>Category</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab19">		
+								<input type="checkbox" name="checkAll19" id="checkAll19"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="s1" class="category masters"  id="zone" name="permission[]"/></label>
@@ -487,8 +487,8 @@
 									
 									
 									<div class="col-lg-2">
-										<div class="" id="tab2">	
-							    <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+										<div class="" id="tab20">	
+							    <input type="checkbox" name="checkAll20" id="checkAll20"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="t1" class="brand masters" id="branch" name="permission[]"/></label>
@@ -514,8 +514,8 @@
 								<label class="control-label"><b>Language</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab21">		
+								<input type="checkbox" name="checkAll21" id="checkAll21"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="u1" class="language masters"  id="zone" name="permission[]"/></label>
@@ -540,8 +540,8 @@
 								<label class="control-label"><b>Item</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab22">	
+								<input type="checkbox" name="checkAll22" id="checkAll22"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="v1" class="uom masters"  id="zone" name="permission[]"/></label>
@@ -559,8 +559,8 @@
 									</div>
 									
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab23">		
+								<input type="checkbox" name="checkAll23" id="checkAll23"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="w1" class="tax masters"  id="zone" name="permission[]"/></label>
@@ -578,8 +578,8 @@
 									</div>
 									
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab24">		
+								<input type="checkbox" name="checkAll24" id="checkAll24"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="x1" class="items masters"  id="zone" name="permission[]"/></label>
@@ -597,11 +597,11 @@
 									</div>
 									
 																		<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab25">		
+								<input type="checkbox" name="checkAll25" id="checkAll25"/></label>
 								<label class="control-label">Select All</label>
 								<br>
-								<input type="checkbox" value="y1" class="items masters"  id="zone" name="permission[]"/></label>
+								<input type="checkbox" value="y1" class="item_tax_detail masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">Item Tax Details</label>
 								<br>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="y2" class="item_tax_detail masters " id="item_tax_detail_add" name="permission[]"/></label>
@@ -620,12 +620,12 @@
 							</br></br></br>
 							
 							 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label"><b>Vendor</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab26">		
+								<input type="checkbox" name="checkAll26" id="checkAll26"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="z1" class="agent masters"  id="zone" name="permission[]"/></label>
@@ -643,8 +643,8 @@
 									</div>
 									
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab27">		
+								<input type="checkbox" name="checkAll27" id="checkAll27"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="aa1" class="customer masters"  id="zone" name="permission[]"/></label>
@@ -662,8 +662,8 @@
 									</div>
 									
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab28">		
+								<input type="checkbox" name="checkAll28" id="checkAll28"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="bb1" class="supplier masters"  id="zone" name="permission[]"/></label>
@@ -680,9 +680,9 @@
 							</div>	
 									</div>
 									
-																		<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+								<div class="col-lg-2">
+								<div class="" id="tab29">		
+								<input type="checkbox" name="checkAll29" id="checkAll29"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="cc1" class="salesman masters"  id="zone" name="permission[]"/></label>
@@ -708,8 +708,8 @@
 								<label class="control-label"><b>Area</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab30">		
+								<input type="checkbox" name="checkAll30" id="checkAll30"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="dd1" class="area masters"  id="zone" name="permission[]"/></label>
@@ -733,8 +733,8 @@
 								<label class="control-label"><b>Account Group</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab31">		
+								<input type="checkbox" name="checkAll31" id="checkAll31"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ee1" class="account_group masters"  id="zone" name="permission[]"/></label>
@@ -752,8 +752,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab32">		
+								<input type="checkbox" name="checkAll32" id="checkAll32"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ff1" class="account_head masters"  id="zone" name="permission[]"/></label>
@@ -771,8 +771,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab33">		
+								<input type="checkbox" name="checkAll33" id="checkAll33"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="gg1" class="tax_for_account_grp masters"  id="zone" name="permission[]"/></label>
@@ -804,12 +804,12 @@
                              </div>
                             </div>
 							<div id="transaction_management_div" class="trans_div form-group" style="display:none; width:100%">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label"><b>Purchase</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab34">		
+								<input type="checkbox" name="checkAll34" id="checkAll34"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="hh1" class="estimation masters"  id="zone" name="permission[]"/></label>
@@ -827,8 +827,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab35">		
+								<input type="checkbox" name="checkAll35" id="checkAll35"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ii1" class="purchase masters"  id="zone" name="permission[]"/></label>
@@ -846,8 +846,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab36">		
+								<input type="checkbox" name="checkAll36" id="checkAll36"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="jj1" class="receipt_note masters"  id="zone" name="permission[]"/></label>
@@ -865,8 +865,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab37">		
+								<input type="checkbox" name="checkAll37" id="checkAll37"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="kk1" class="purchase_entry masters"  id="zone" name="permission[]"/></label>
@@ -884,8 +884,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab38">		
+								<input type="checkbox" name="checkAll38" id="checkAll38"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ll1" class="rejection_out masters"  id="zone" name="permission[]"/></label>
@@ -902,8 +902,8 @@
 							</div>	
 								</div>
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab39">		
+								<input type="checkbox" name="checkAll39" id="checkAll39"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="mm1" class="purchase_gate_entry masters"  id="zone" name="permission[]"/></label>
@@ -921,8 +921,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab40">		
+								<input type="checkbox" name="checkAll40" id="checkAll40"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="nn1" class="debit_note masters"  id="zone" name="permission[]"/></label>
@@ -946,8 +946,8 @@
 								<label class="control-label"><b>Sales</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab41">		
+								<input type="checkbox" name="checkAll41" id="checkAll41"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="oo1" class="sales_estimation masters"  id="zone" name="permission[]"/></label>
@@ -965,8 +965,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab42">		
+								<input type="checkbox" name="checkAll42" id="checkAll42"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="pp1" class="sales_order masters"  id="zone" name="permission[]"/></label>
@@ -984,8 +984,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab43">		
+								<input type="checkbox" name="checkAll43" id="checkAll43"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="qq1" class="delivery_notes masters"  id="zone" name="permission[]"/></label>
@@ -1004,8 +1004,8 @@
 							
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab44">		
+								<input type="checkbox" name="checkAll44" id="checkAll44"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="rr1" class="sales_entry masters"  id="zone" name="permission[]"/></label>
@@ -1023,8 +1023,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab45">		
+								<input type="checkbox" name="checkAll45" id="checkAll45"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ss1" class="rejection_in masters"  id="zone" name="permission[]"/></label>
@@ -1041,8 +1041,8 @@
 							</div>	
 								</div>
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab46">		
+								<input type="checkbox" name="checkAll46" id="checkAll46"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="tt1" class="sales_gate_entry masters"  id="zone" name="permission[]"/></label>
@@ -1060,8 +1060,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab47">		
+								<input type="checkbox" name="checkAll47" id="checkAll47"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="uu1" class="credit_note masters"  id="zone" name="permission[]"/></label>
@@ -1086,8 +1086,8 @@
 								<label class="control-label"><b>Payments</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab48">		
+								<input type="checkbox" name="checkAll48" id="checkAll48"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="vv1" class="payment_request masters"  id="zone" name="permission[]"/></label>
@@ -1105,8 +1105,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab49">		
+								<input type="checkbox" name="checkAll49" id="checkAll49"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ww1" class="payment_process masters"  id="zone" name="permission[]"/></label>
@@ -1124,8 +1124,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab50">		
+								<input type="checkbox" name="checkAll50" id="checkAll50"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="xx1" class="payment_expense masters"  id="zone" name="permission[]"/></label>
@@ -1150,8 +1150,8 @@
 								<label class="control-label"><b>Receipts</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab51">		
+								<input type="checkbox" name="checkAll51" id="checkAll51"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="yy1" class="receipt_request masters"  id="zone" name="permission[]"/></label>
@@ -1169,8 +1169,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab52">		
+								<input type="checkbox" name="checkAll52" id="checkAll52"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="zz1" class="receipt_process masters"  id="zone" name="permission[]"/></label>
@@ -1188,8 +1188,8 @@
 								</div>
 								
 								<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab53">		
+								<input type="checkbox" name="checkAll53" id="checkAll53"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="aaa1" class="payment_expense masters"  id="zone" name="permission[]"/></label>
@@ -1213,8 +1213,8 @@
 								<label class="control-label"><b>Advance</b></label>
 								<div class="row">
 									<div class="col-lg-3">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab54">		
+								<input type="checkbox" name="checkAll54" id="checkAll54"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="bbb1" class="payment_advance masters"  id="zone" name="permission[]"/></label>
@@ -1232,8 +1232,8 @@
 								</div>
 								
 								<div class="col-lg-3">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab55">		
+								<input type="checkbox" name="checkAll55" id="checkAll55"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ccc1" class="receipt_advance masters"  id="zone" name="permission[]"/></label>
@@ -1255,8 +1255,8 @@
 								<label class="control-label"><b>Account Expense</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab56">		
+								<input type="checkbox" name="checkAll56" id="checkAll56"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="ddd1" class="account_expense masters"  id="zone" name="permission[]"/></label>
@@ -1284,8 +1284,8 @@
                              </div>
 							 						<div id="prize_updation_div" class="prize_updation_div form-group" style="display:none; width:100%">
 							 <div class="col-lg-3">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab57">		
+								<input type="checkbox" name="checkAll57" id="checkAll57"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="bbb1" class="price_updation masters"  id="zone" name="permission[]"/></label>
@@ -1321,8 +1321,8 @@
 								<label class="control-label"><b>Receivables</b></label>
 								<div class="row">
 									<div class="col-lg-3">
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab58">		
+								<input type="checkbox" name="checkAll58" id="checkAll58"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="fff1" class="receivables masters"  id="zone" name="permission[]"/></label>
@@ -1335,8 +1335,8 @@
 									<div class="col-lg-3">
 									 <input type="checkbox" name="checkAll" id="checkAll"/></label>
 								<label class="control-label"><b>Payables</b></label>
-										<div class="" id="tab1">		
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+										<div class="" id="tab59">		
+								<input type="checkbox" name="checkAll59" id="checkAll59"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="hhh1" class="payables masters"  id="zone" name="permission[]"/></label>
@@ -1357,11 +1357,11 @@
                              </div>
                              </div>
 							 <div id="settings_div" class="outstanding_div form-group" style="display:none; width:100%">
-							 <input type="checkbox" name="checkAll" id="checkAll"/></label>
+							 <input type="checkbox" name="checkAll60" id="checkAll60"/></label>
 								<label class="control-label"><b>Selling Price</b></label>
 								<div class="row">
 									<div class="col-lg-3">
-										<div class="" id="tab1">		
+										<div class="" id="tab60">		
 								
 								<input type="checkbox" value="jjj1" class="receivables masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">Selling Price setup</label><br>
@@ -1380,11 +1380,11 @@
                              </div>
                              </div>
 							 <div id="pos_div" class="prize_updation_div form-group" style="display:none; width:100%">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll61" id="checkAll61"/></label>
 								<label class="control-label"><b>POS</b></label>
 								<div class="row">
 									<div class="col-lg-3">
-										<div class="" id="tab1">		
+										<div class="" id="tab61">		
 								
 								<input type="checkbox" value="kkk1" class="receivables masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">POS</label><br>
@@ -1404,11 +1404,11 @@
                              </div>	
 							 <div id="reports_div" class="reports_div form-group" style="display:none; width:100%">
 						<div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll62" id="checkAll62"/></label>
 								<label class="control-label"><b>Day Book</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
+										<div class="" id="tab62">		
 								
 								<input type="checkbox" value="lll1" class="bank masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">Day Book</label>
@@ -1419,11 +1419,11 @@
 							</div>	</br></br></br>
 							
 							<div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll63" id="checkAll63"/></label>
 								<label class="control-label"><b>Stock Report</b></label>
 								<div class="row">
 									<div class="col-lg-3">
-										<div class="" id="tab1">		
+										<div class="" id="tab63">		
 								
 								<input type="checkbox" value="mmm1" class="bank masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">Stock Report</label>
@@ -1442,11 +1442,11 @@
 							</div>	</br></br></br>
                          
 						 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll64" id="checkAll64"/></label>
 								<label class="control-label"><b>Individual Report</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
+										<div class="" id="tab64">		
 								
 								<input type="checkbox" value="ppp1" class="bank masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">Individual Report</label>
@@ -1457,11 +1457,11 @@
 							</div>	</br></br></br>
                          
 						 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll65" id="checkAll65"/></label>
 								<label class="control-label"><b>GST Report</b></label>
 								<div class="row">
 									<div class="col-lg-2">
-										<div class="" id="tab1">		
+										<div class="" id="tab65">		
 								
 								<input type="checkbox" value="qqq1" class="bank masters"  id="zone" name="permission[]"/></label>
 								<label class="control-label">GST Report</label>
@@ -1486,8 +1486,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
 $(function () {
-    $("#tab1 #checkAll").click(function () {
-        if ($("#tab1 #checkAll").is(':checked')) {
+    $("#tab1 #checkAll1").click(function () {
+        if ($("#tab1 #checkAll1").is(':checked')) {
             $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
@@ -1499,31 +1499,8 @@ $(function () {
         }
     });
 });
-$(".child_zone").change(function(){
-    var all = $('.child_zone');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll").prop("checked", true);
-    } else {
-        $("#checkAll").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab2 #checkAll1").click(function () {
-        if ($("#tab2 #checkAll1").is(':checked')) {
-            $("#tab2 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab2 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-$(".child_branch").change(function(){
-    var all = $('.child_branch');
+$(".state").change(function(){
+    var all = $('.state');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll1").prop("checked", true);
     } else {
@@ -1532,21 +1509,21 @@ $(".child_branch").change(function(){
 });
 
 $(function () {
-    $("#tab3 #checkAll2").click(function () {
-        if ($("#tab3 #checkAll2").is(':checked')) {
-            $("#tab3 input[type=checkbox]").each(function () {
+    $("#tab2 #checkAll2").click(function () {
+        if ($("#tab2 #checkAll2").is(':checked')) {
+            $("#tab2 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab3 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_scheme").change(function(){
-    var all = $('.child_scheme');
+$(".District").change(function(){
+    var all = $('.District');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll2").prop("checked", true);
     } else {
@@ -1554,22 +1531,23 @@ $(".child_scheme").change(function(){
     }
 });
 
+
 $(function () {
-    $("#tab4 #checkAll3").click(function () {
-        if ($("#tab4 #checkAll3").is(':checked')) {
-            $("#tab4 input[type=checkbox]").each(function () {
+    $("#tab3 #checkAll3").click(function () {
+        if ($("#tab3 #checkAll3").is(':checked')) {
+            $("#tab3 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab4 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_group").change(function(){
-    var all = $('.child_group');
+$(".City").change(function(){
+    var all = $('.City');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll3").prop("checked", true);
     } else {
@@ -1577,22 +1555,24 @@ $(".child_group").change(function(){
     }
 });
 
+
+
 $(function () {
-    $("#tab5 #checkAll4").click(function () {
-        if ($("#tab5 #checkAll4").is(':checked')) {
-            $("#tab5 input[type=checkbox]").each(function () {
+    $("#tab4 #checkAll4").click(function () {
+        if ($("#tab4 #checkAll4").is(':checked')) {
+            $("#tab4 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab5 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_employee").change(function(){
-    var all = $('.child_employee');
+$(".address_type").change(function(){
+    var all = $('.address_type');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll4").prop("checked", true);
     } else {
@@ -1602,21 +1582,21 @@ $(".child_employee").change(function(){
 
 
 $(function () {
-    $("#tab6 #checkAll5").click(function () {
-        if ($("#tab6 #checkAll5").is(':checked')) {
-            $("#tab6 input[type=checkbox]").each(function () {
+    $("#tab5 #checkAll5").click(function () {
+        if ($("#tab5 #checkAll5").is(':checked')) {
+            $("#tab5 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab6 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_login").change(function(){
-    var all = $('.child_login');
+$(".location_type").change(function(){
+    var all = $('.location_type');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll5").prop("checked", true);
     } else {
@@ -1625,21 +1605,21 @@ $(".child_login").change(function(){
 });
 
 $(function () {
-    $("#tab7 #checkAll6").click(function () {
-        if ($("#tab7 #checkAll6").is(':checked')) {
-            $("#tab7 input[type=checkbox]").each(function () {
+    $("#tab6 #checkAll6").click(function () {
+        if ($("#tab6 #checkAll6").is(':checked')) {
+            $("#tab6 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab7 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_agent").change(function(){
-    var all = $('.child_agent');
+$(".company_location").change(function(){
+    var all = $('.company_location');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll6").prop("checked", true);
     } else {
@@ -1647,22 +1627,24 @@ $(".child_agent").change(function(){
     }
 });
 
+
+
 $(function () {
-    $("#tab8 #checkAll7").click(function () {
-        if ($("#tab8 #checkAll7").is(':checked')) {
-            $("#tab8 input[type=checkbox]").each(function () {
+    $("#tab7 #checkAll7").click(function () {
+        if ($("#tab7 #checkAll7").is(':checked')) {
+            $("#tab7 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab8 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_customer").change(function(){
-    var all = $('.child_customer');
+$(".head_office_detail").change(function(){
+    var all = $('.head_office_detail');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll7").prop("checked", true);
     } else {
@@ -1672,21 +1654,21 @@ $(".child_customer").change(function(){
 
 
 $(function () {
-    $("#tab9 #checkAll8").click(function () {
-        if ($("#tab9 #checkAll8").is(':checked')) {
-            $("#tab9 input[type=checkbox]").each(function () {
+    $("#tab8 #checkAll8").click(function () {
+        if ($("#tab8 #checkAll8").is(':checked')) {
+            $("#tab8 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab9 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_enroll").change(function(){
-    var all = $('.child_enroll');
+$(".bank").change(function(){
+    var all = $('.bank');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll8").prop("checked", true);
     } else {
@@ -1694,22 +1676,23 @@ $(".child_enroll").change(function(){
     }
 });
 
+
 $(function () {
-    $("#tab10 #checkAll9").click(function () {
-        if ($("#tab10 #checkAll9").is(':checked')) {
-            $("#tab10 input[type=checkbox]").each(function () {
+    $("#tab9 #checkAll9").click(function () {
+        if ($("#tab9 #checkAll9").is(':checked')) {
+            $("#tab9 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab10 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_document").change(function(){
-    var all = $('.child_document');
+$(".bank_branch").change(function(){
+    var all = $('.bank_branch');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll9").prop("checked", true);
     } else {
@@ -1718,44 +1701,21 @@ $(".child_document").change(function(){
 });
 
 $(function () {
-    $("#tab17 #checkAll17").click(function () {
-        if ($("#tab17 #checkAll17").is(':checked')) {
-            $("#tab17 input[type=checkbox]").each(function () {
+    $("#tab10 #checkAll10").click(function () {
+        if ($("#tab10 #checkAll10").is(':checked')) {
+            $("#tab10 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab17 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_report").change(function(){
-    var all = $('.child_report');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll17").prop("checked", true);
-    } else {
-        $("#checkAll17").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab11 #checkAll10").click(function () {
-        if ($("#tab11 #checkAll10").is(':checked')) {
-            $("#tab11 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab11 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-$(".child_auction").change(function(){
-    var all = $('.child_auction');
+$(".denomination").change(function(){
+    var all = $('.denomination');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll10").prop("checked", true);
     } else {
@@ -1765,21 +1725,21 @@ $(".child_auction").change(function(){
 
 
 $(function () {
-    $("#tab12 #checkAll11").click(function () {
-        if ($("#tab12 #checkAll11").is(':checked')) {
-            $("#tab12 input[type=checkbox]").each(function () {
+    $("#tab11 #checkAll11").click(function () {
+        if ($("#tab11 #checkAll11").is(':checked')) {
+            $("#tab11 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab12 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_collection").change(function(){
-    var all = $('.child_collection');
+$(".account_type").change(function(){
+    var all = $('.account_type');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll11").prop("checked", true);
     } else {
@@ -1787,23 +1747,22 @@ $(".child_collection").change(function(){
     }
 });
 
-
 $(function () {
-    $("#tab13 #checkAll12").click(function () {
-        if ($("#tab13 #checkAll12").is(':checked')) {
-            $("#tab13 input[type=checkbox]").each(function () {
+    $("#tab12 #checkAll12").click(function () {
+        if ($("#tab12 #checkAll12").is(':checked')) {
+            $("#tab12 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab13 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_payment").change(function(){
-    var all = $('.child_payment');
+$(".department").change(function(){
+    var all = $('.department');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll12").prop("checked", true);
     } else {
@@ -1813,25 +1772,49 @@ $(".child_payment").change(function(){
 
 
 $(function () {
-    $("#tab16 #checkAll16").click(function () {
-        if ($("#tab16 #checkAll16").is(':checked')) {
-            $("#tab16 input[type=checkbox]").each(function () {
+    $("#tab13 #checkAll13").click(function () {
+        if ($("#tab13 #checkAll13").is(':checked')) {
+            $("#tab13 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
         } else {
-            $("#tab16 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_config").change(function(){
-    var all = $('.child_config');
+$(".designation").change(function(){
+    var all = $('.designation');
     if (all.length === all.filter(':checked').length) {
-        $("#checkAll16").prop("checked", true);
+        $("#checkAll13").prop("checked", true);
     } else {
-        $("#checkAll16").prop("checked", false);
+        $("#checkAll13").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab14 #checkAll14").click(function () {
+        if ($("#tab14 #checkAll14").is(':checked')) {
+            $("#tab14 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".employee").change(function(){
+    var all = $('.employee');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll14").prop("checked", true);
+    } else {
+        $("#checkAll14").prop("checked", false);
     }
 });
 
@@ -1843,14 +1826,14 @@ $(function () {
             });
        
         } else {
-            $("#tab15 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_feedback").change(function(){
-    var all = $('.child_feedback');
+$(".user").change(function(){
+    var all = $('.user');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll15").prop("checked", true);
     } else {
@@ -1858,6 +1841,74 @@ $(".child_feedback").change(function(){
     }
 });
 
+$(function () {
+    $("#tab16 #checkAll16").click(function () {
+        if ($("#tab16 #checkAll16").is(':checked')) {
+            $("#tab16 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".role").change(function(){
+    var all = $('.role');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll16").prop("checked", true);
+    } else {
+        $("#checkAll16").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab17 #checkAll17").click(function () {
+        if ($("#tab17 #checkAll17").is(':checked')) {
+            $("#tab17 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".gift_voucher").change(function(){
+    var all = $('.gift_voucher');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll17").prop("checked", true);
+    } else {
+        $("#checkAll17").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab18 #checkAll18").click(function () {
+        if ($("#tab18 #checkAll18").is(':checked')) {
+            $("#tab18 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".offers").change(function(){
+    var all = $('.offers');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll18").prop("checked", true);
+    } else {
+        $("#checkAll18").prop("checked", false);
+    }
+});
 
 
 $(function () {
@@ -1868,20 +1919,44 @@ $(function () {
             });
        
         } else {
-            $("#tab19 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_bank").change(function(){
-    var all = $('.child_bank');
+$(".category").change(function(){
+    var all = $('.category');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll19").prop("checked", true);
     } else {
         $("#checkAll19").prop("checked", false);
     }
 });
+
+$(function () {
+    $("#tab20 #checkAll20").click(function () {
+        if ($("#tab20 #checkAll20").is(':checked')) {
+            $("#tab20 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".brand").change(function(){
+    var all = $('.brand');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll20").prop("checked", true);
+    } else {
+        $("#checkAll20").prop("checked", false);
+    }
+});
+
 
 $(function () {
     $("#tab21 #checkAll21").click(function () {
@@ -1891,20 +1966,20 @@ $(function () {
             });
        
         } else {
-            $("#tab21 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_area").change(function(){
-    var all = $('.child_area');
+$(".language").change(function(){
+    var all = $('.language');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll21").prop("checked", true);
     } else {
         $("#checkAll21").prop("checked", false);
     }
-}); 
+});
 
 $(function () {
     $("#tab22 #checkAll22").click(function () {
@@ -1914,20 +1989,184 @@ $(function () {
             });
        
         } else {
-            $("#tab22 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_designation").change(function(){
-    var all = $('.child_designation');
+$(".uom").change(function(){
+    var all = $('.uom');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll22").prop("checked", true);
     } else {
         $("#checkAll22").prop("checked", false);
     }
 });
+
+$(function () {
+    $("#tab23 #checkAll23").click(function () {
+        if ($("#tab23 #checkAll23").is(':checked')) {
+            $("#tab23 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".tax").change(function(){
+    var all = $('.tax');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll23").prop("checked", true);
+    } else {
+        $("#checkAll23").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab24 #checkAll24").click(function () {
+        if ($("#tab24 #checkAll24").is(':checked')) {
+            $("#tab24 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".items").change(function(){
+    var all = $('.items');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll24").prop("checked", true);
+    } else {
+        $("#checkAll24").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab25 #checkAll25").click(function () {
+        if ($("#tab25 #checkAll25").is(':checked')) {
+            $("#tab25 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".item_tax_detail").change(function(){
+    var all = $('.item_tax_detail');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll25").prop("checked", true);
+    } else {
+        $("#checkAll25").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab26 #checkAll26").click(function () {
+        if ($("#tab26 #checkAll26").is(':checked')) {
+            $("#tab26 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".agent").change(function(){
+    var all = $('.agent');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll26").prop("checked", true);
+    } else {
+        $("#checkAll26").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab27 #checkAll27").click(function () {
+        if ($("#tab27 #checkAll27").is(':checked')) {
+            $("#tab27 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".customer").change(function(){
+    var all = $('.customer');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll27").prop("checked", true);
+    } else {
+        $("#checkAll27").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab28 #checkAll28").click(function () {
+        if ($("#tab28 #checkAll28").is(':checked')) {
+            $("#tab28 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".supplier").change(function(){
+    var all = $('.supplier');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll28").prop("checked", true);
+    } else {
+        $("#checkAll28").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab29 #checkAll29").click(function () {
+        if ($("#tab29 #checkAll29").is(':checked')) {
+            $("#tab29 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".salesman").change(function(){
+    var all = $('.salesman');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll29").prop("checked", true);
+    } else {
+        $("#checkAll29").prop("checked", false);
+    }
+});
+
 
 $(function () {
     $("#tab30 #checkAll30").click(function () {
@@ -1937,14 +2176,14 @@ $(function () {
             });
        
         } else {
-            $("#tab30 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_charge").change(function(){
-    var all = $('.child_charge');
+$(".area").change(function(){
+    var all = $('.area');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll30").prop("checked", true);
     } else {
@@ -1960,14 +2199,14 @@ $(function () {
             });
        
         } else {
-            $("#tab31 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_cash_entry").change(function(){
-    var all = $('.child_cash_entry');
+$(".account_group").change(function(){
+    var all = $('.account_group');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll31").prop("checked", true);
     } else {
@@ -1983,14 +2222,14 @@ $(function () {
             });
        
         } else {
-            $("#tab32 input[type=checkbox]").each(function () {
+            $("#tab1 input[type=checkbox]").each(function () {
                 $(this).prop("checked", false);
             });
         }
     });
 });
-$(".child_lead").change(function(){
-    var all = $('.child_lead');
+$(".account_head").change(function(){
+    var all = $('.account_head');
     if (all.length === all.filter(':checked').length) {
         $("#checkAll32").prop("checked", true);
     } else {
@@ -1999,149 +2238,9 @@ $(".child_lead").change(function(){
 });
 
 $(function () {
-    $("#tab29 #checkAll29").click(function () {
-        if ($("#tab29 #checkAll29").is(':checked')) {
-            $("#tab29 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab29 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-$(".child_extra_charge").change(function(){
-    var all = $('.child_extra_charge');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll29").prop("checked", true);
-    } else {
-        $("#checkAll29").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab23 #checkAll23").click(function () {
-        if ($("#tab23 #checkAll23").is(':checked')) {
-            $("#tab23 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab23 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-$(".child_role").change(function(){
-    var all = $('.child_role');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll23").prop("checked", true);
-    } else {
-        $("#checkAll23").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab25 #checkAll25").click(function () {
-        if ($("#tab25 #checkAll25").is(':checked')) {
-            $("#tab25 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab25 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-$(".child_city").change(function(){
-    var all = $('.child_city');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll25").prop("checked", true);
-    } else {
-        $("#checkAll25").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab20 #checkAll20").click(function () {
-        if ($("#tab20 #checkAll20").is(':checked')) {
-            $("#tab20 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab20 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-$(".child_slab").change(function(){
-    var all = $('.child_slab');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll20").prop("checked", true);
-    } else {
-        $("#checkAll20").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab14 #checkAll13").click(function () {
-        if ($("#tab14 #checkAll13").is(':checked')) {
-            $("#tab14 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab14 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-
-$(function () {
-    $("#tab141 #checkAll113").click(function () {
-        if ($("#tab141 #checkAll113").is(':checked')) {
-            $("#tab141 input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
-            });
-       
-        } else {
-            $("#tab141 input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-});
-
-$(".child_recpt").change(function(){
-    var all = $('.child_recpt');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll13").prop("checked", true);
-    } else {
-        $("#checkAll13").prop("checked", false);
-    }
-});
-
-$(".child_recpt").change(function(){
-    var all = $('.child_recpt');
-    if (all.length === all.filter(':checked').length) {
-        $("#checkAll113").prop("checked", true);
-    } else {
-        $("#checkAll113").prop("checked", false);
-    }
-});
-
-$(function () {
-    $("#tab1 #checkAll").load(function () {
-        if ($("#tab1 #checkAll").is(':checked')) {
-            $("#tab1 input[type=checkbox]").each(function () {
+    $("#tab33 #checkAll33").click(function () {
+        if ($("#tab33 #checkAll33").is(':checked')) {
+            $("#tab33 input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
             });
        
@@ -2152,113 +2251,765 @@ $(function () {
         }
     });
 });
-$("#tab1").load(function(){
-    var all = $('.child_zone');
+$(".tax_for_account_grp").change(function(){
+    var all = $('.tax_for_account_grp');
     if (all.length === all.filter(':checked').length) {
-        $("#checkAll").prop("checked", true);
+        $("#checkAll33").prop("checked", true);
     } else {
-        $("#checkAll").prop("checked", false);
+        $("#checkAll33").prop("checked", false);
     }
 });
 
 
+$(function () {
+    $("#tab34 #checkAll34").click(function () {
+        if ($("#tab34 #checkAll34").is(':checked')) {
+            $("#tab34 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
 });
-//submit validation
-$(document).ready(function(){
-	$("#submit_chk").click(function(){ 
-		var mas_id = $("#masters_head");		 
-		var masters_id = $(".masters");	
-		
-		if (mas_id.is(':checked')) {		 
-		
-				if (masters_id.is(':checked')) { 
-					$(".masters").prop("required", false);
-				} else { 
-					$(".masters").prop("required", true);
-				}
-		 
-		
-		}
-	});
-	
-	
-	$("#submit_chk").click(function(){ 
-		var mas_id = $("#employee_head");		 
-		var masters_id = $(".emply");	
-		
-		if (mas_id.is(':checked')) {		 
-		
-				if (masters_id.is(':checked')) { 
-					$(".emply").prop("required", false);
-				} else {
-					$(".emply").prop("required", true);
-				}
-		}
-	});
-	
-	$("#submit_chk").click(function(){ 
-		var mas_id = $("#lead_head");		 
-		var masters_id = $(".lead");	
-		
-		if (mas_id.is(':checked')) {		 
-		
-				if (masters_id.is(':checked')) { 
-					$(".lead").prop("required", false);
-				} else {
-					$(".lead").prop("required", true);
-				}
-		}
-	});
-	
-	$("#submit_chk").click(function(){ 
-		var mas_id = $("#customer_head");		 
-		var masters_id = $(".customer");	
-		
-		if (mas_id.is(':checked')) {		 
-		
-				if (masters_id.is(':checked')) { 
-					$(".customer").prop("required", false);
-				} else {
-				 
-					$(".customer").prop("required", true);
-				}
-		}
+$(".estimation").change(function(){
+    var all = $('.estimation');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll34").prop("checked", true);
+    } else {
+        $("#checkAll34").prop("checked", false);
+    }
+});
 
-	});
-	
-	$("#submit_chk").click(function(){ 
-		var mas_id = $("#report_head");		 
-		var masters_id = $(".report");	
-		
-		if (mas_id.is(':checked')) {		 
-		
-				if (masters_id.is(':checked')) { 
-					$(".report").prop("required", false);
-				} else {
-				 
-					$(".report").prop("required", true);
-				}
-		}
 
-	});
-	
-	$("#submit_chk").click(function(){ 
-		var mas_id = $("#trans_head");		 
-		var masters_id = $(".trans");	
-		
-		if (mas_id.is(':checked')) {		 
-		
-				if (masters_id.is(':checked')) { 
-					$(".trans").prop("required", false);
-				} else {
-				 
-					$(".trans").prop("required", true);
-				}
-		}
+$(function () {
+    $("#tab35 #checkAll35").click(function () {
+        if ($("#tab35 #checkAll35").is(':checked')) {
+            $("#tab35 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".purchase").change(function(){
+    var all = $('.purchase');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll35").prop("checked", true);
+    } else {
+        $("#checkAll35").prop("checked", false);
+    }
+});
 
-	});
-	
-	
+$(function () {
+    $("#tab36 #checkAll36").click(function () {
+        if ($("#tab36 #checkAll36").is(':checked')) {
+            $("#tab36 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".receipt_note").change(function(){
+    var all = $('.receipt_note');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll36").prop("checked", true);
+    } else {
+        $("#checkAll36").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab37 #checkAll37").click(function () {
+        if ($("#tab37 #checkAll37").is(':checked')) {
+            $("#tab37 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".purchase_entry").change(function(){
+    var all = $('.purchase_entry');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll37").prop("checked", true);
+    } else {
+        $("#checkAll37").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab38 #checkAll38").click(function () {
+        if ($("#tab38 #checkAll38").is(':checked')) {
+            $("#tab38 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".rejection_out").change(function(){
+    var all = $('.rejection_out');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll38").prop("checked", true);
+    } else {
+        $("#checkAll38").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab39 #checkAll39").click(function () {
+        if ($("#tab39 #checkAll39").is(':checked')) {
+            $("#tab39 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".purchase_gate_entry").change(function(){
+    var all = $('.purchase_gate_entry');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll39").prop("checked", true);
+    } else {
+        $("#checkAll39").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab40 #checkAll40").click(function () {
+        if ($("#tab40 #checkAll40").is(':checked')) {
+            $("#tab40 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".debit_note").change(function(){
+    var all = $('.debit_note');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll40").prop("checked", true);
+    } else {
+        $("#checkAll40").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab41 #checkAll41").click(function () {
+        if ($("#tab41 #checkAll41").is(':checked')) {
+            $("#tab41 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".sales_estimation").change(function(){
+    var all = $('.sales_estimation');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll41").prop("checked", true);
+    } else {
+        $("#checkAll41").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab42 #checkAll42").click(function () {
+        if ($("#tab42 #checkAll42").is(':checked')) {
+            $("#tab42 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".sales_order").change(function(){
+    var all = $('.sales_order');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll42").prop("checked", true);
+    } else {
+        $("#checkAll42").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab43 #checkAll43").click(function () {
+        if ($("#tab43 #checkAll43").is(':checked')) {
+            $("#tab43 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".delivery_notes").change(function(){
+    var all = $('.delivery_notes');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll43").prop("checked", true);
+    } else {
+        $("#checkAll43").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab44 #checkAll44").click(function () {
+        if ($("#tab44 #checkAll44").is(':checked')) {
+            $("#tab44 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".sales_entry").change(function(){
+    var all = $('.sales_entry');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll44").prop("checked", true);
+    } else {
+        $("#checkAll44").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab45 #checkAll45").click(function () {
+        if ($("#tab45 #checkAll45").is(':checked')) {
+            $("#tab45 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".rejection_in").change(function(){
+    var all = $('.rejection_in');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll45").prop("checked", true);
+    } else {
+        $("#checkAll45").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab46 #checkAll46").click(function () {
+        if ($("#tab46 #checkAll46").is(':checked')) {
+            $("#tab46 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".sales_gate_entry").change(function(){
+    var all = $('.sales_gate_entry');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll46").prop("checked", true);
+    } else {
+        $("#checkAll46").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab47 #checkAll47").click(function () {
+        if ($("#tab47 #checkAll47").is(':checked')) {
+            $("#tab47 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".credit_note").change(function(){
+    var all = $('.credit_note');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll47").prop("checked", true);
+    } else {
+        $("#checkAll47").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab48 #checkAll48").click(function () {
+        if ($("#tab48 #checkAll48").is(':checked')) {
+            $("#tab48 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".payment_request").change(function(){
+    var all = $('.payment_request');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll48").prop("checked", true);
+    } else {
+        $("#checkAll48").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab49 #checkAll49").click(function () {
+        if ($("#tab49 #checkAll49").is(':checked')) {
+            $("#tab49 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".payment_process").change(function(){
+    var all = $('.payment_process');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll49").prop("checked", true);
+    } else {
+        $("#checkAll49").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab50 #checkAll50").click(function () {
+        if ($("#tab50 #checkAll50").is(':checked')) {
+            $("#tab50 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".payment_expense").change(function(){
+    var all = $('.payment_expense');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll50").prop("checked", true);
+    } else {
+        $("#checkAll50").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab51 #checkAll51").click(function () {
+        if ($("#tab51 #checkAll51").is(':checked')) {
+            $("#tab51 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".receipt_request").change(function(){
+    var all = $('.receipt_request');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll51").prop("checked", true);
+    } else {
+        $("#checkAll51").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab52 #checkAll52").click(function () {
+        if ($("#tab52 #checkAll52").is(':checked')) {
+            $("#tab52 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".receipt_process").change(function(){
+    var all = $('.receipt_process');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll52").prop("checked", true);
+    } else {
+        $("#checkAll52").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab53 #checkAll53").click(function () {
+        if ($("#tab53 #checkAll53").is(':checked')) {
+            $("#tab53 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".payment_expense").change(function(){
+    var all = $('.payment_expense');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll53").prop("checked", true);
+    } else {
+        $("#checkAll53").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab54 #checkAll54").click(function () {
+        if ($("#tab54 #checkAll54").is(':checked')) {
+            $("#tab54 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".payment_advance").change(function(){
+    var all = $('.payment_advance');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll54").prop("checked", true);
+    } else {
+        $("#checkAll54").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab55 #checkAll55").click(function () {
+        if ($("#tab55 #checkAll55").is(':checked')) {
+            $("#tab55 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".receipt_advance").change(function(){
+    var all = $('.receipt_advance');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll55").prop("checked", true);
+    } else {
+        $("#checkAll55").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab56 #checkAll56").click(function () {
+        if ($("#tab56 #checkAll56").is(':checked')) {
+            $("#tab56 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".account_expense").change(function(){
+    var all = $('.account_expense');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll56").prop("checked", true);
+    } else {
+        $("#checkAll56").prop("checked", false);
+    }
+});
+
+$(function () {
+    $("#tab57 #checkAll57").click(function () {
+        if ($("#tab57 #checkAll57").is(':checked')) {
+            $("#tab57 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".price_updation").change(function(){
+    var all = $('.price_updation');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll57").prop("checked", true);
+    } else {
+        $("#checkAll57").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab58 #checkAll58").click(function () {
+        if ($("#tab58 #checkAll58").is(':checked')) {
+            $("#tab58 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".receivables").change(function(){
+    var all = $('.receivables');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll58").prop("checked", true);
+    } else {
+        $("#checkAll58").prop("checked", false);
+    }
+});
+
+
+$(function () {
+    $("#tab59 #checkAll59").click(function () {
+        if ($("#tab59 #checkAll59").is(':checked')) {
+            $("#tab59 input[type=checkbox]").each(function () {
+                $(this).prop("checked", true);
+            });
+       
+        } else {
+            $("#tab1 input[type=checkbox]").each(function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+});
+$(".payables").change(function(){
+    var all = $('.payables');
+    if (all.length === all.filter(':checked').length) {
+        $("#checkAll59").prop("checked", true);
+    } else {
+        $("#checkAll59").prop("checked", false);
+    }
+});
+
+
+// $(function () {
+    // $("#tab60 #checkAll60").click(function () {
+        // if ($("#tab60 #checkAll60").is(':checked')) {
+            // $("#tab60 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", true);
+            // });
+       
+        // } else {
+            // $("#tab1 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", false);
+            // });
+        // }
+    // });
+// });
+// $(".payables").change(function(){
+    // var all = $('.payables');
+    // if (all.length === all.filter(':checked').length) {
+        // $("#checkAll60").prop("checked", true);
+    // } else {
+        // $("#checkAll60").prop("checked", false);
+    // }
+// });
+
+
+// $(function () {
+    // $("#tab61 #checkAll61").click(function () {
+        // if ($("#tab61 #checkAll61").is(':checked')) {
+            // $("#tab61 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", true);
+            // });
+       
+        // } else {
+            // $("#tab1 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", false);
+            // });
+        // }
+    // });
+// });
+// $(".receivables").change(function(){
+    // var all = $('.receivables');
+    // if (all.length === all.filter(':checked').length) {
+        // $("#checkAll61").prop("checked", true);
+    // } else {
+        // $("#checkAll61").prop("checked", false);
+    // }
+// });
+
+
+// $(function () {
+    // $("#tab62 #checkAll62").click(function () {
+        // if ($("#tab62 #checkAll62").is(':checked')) {
+            // $("#tab62 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", true);
+            // });
+       
+        // } else {
+            // $("#tab1 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", false);
+            // });
+        // }
+    // });
+// });
+// $(".bank").change(function(){
+    // var all = $('.bank');
+    // if (all.length === all.filter(':checked').length) {
+        // $("#checkAll62").prop("checked", true);
+    // } else {
+        // $("#checkAll62").prop("checked", false);
+    // }
+// });
+
+// $(function () {
+    // $("#tab63 #checkAll63").click(function () {
+        // if ($("#tab63 #checkAll63").is(':checked')) {
+            // $("#tab63 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", true);
+            // });
+       
+        // } else {
+            // $("#tab1 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", false);
+            // });
+        // }
+    // });
+// });
+// $(".bank").change(function(){
+    // var all = $('.bank');
+    // if (all.length === all.filter(':checked').length) {
+        // $("#checkAll63").prop("checked", true);
+    // } else {
+        // $("#checkAll63").prop("checked", false);
+    // }
+// });
+
+// $(function () {
+    // $("#tab64 #checkAll64").click(function () {
+        // if ($("#tab64 #checkAll64").is(':checked')) {
+            // $("#tab64 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", true);
+            // });
+       
+        // } else {
+            // $("#tab1 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", false);
+            // });
+        // }
+    // });
+// });
+// $(".bank").change(function(){
+    // var all = $('.bank');
+    // if (all.length === all.filter(':checked').length) {
+        // $("#checkAll64").prop("checked", true);
+    // } else {
+        // $("#checkAll64").prop("checked", false);
+    // }
+// });
+
+// $(function () {
+    // $("#tab65 #checkAll65").click(function () {
+        // if ($("#tab65 #checkAll65").is(':checked')) {
+            // $("#tab65 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", true);
+            // });
+       
+        // } else {
+            // $("#tab1 input[type=checkbox]").each(function () {
+                // $(this).prop("checked", false);
+            // });
+        // }
+    // });
+// });
+// $(".bank").change(function(){
+    // var all = $('.bank');
+    // if (all.length === all.filter(':checked').length) {
+        // $("#checkAll65").prop("checked", true);
+    // } else {
+        // $("#checkAll65").prop("checked", false);
+    // }
+// });
 });
 
 $(document).ready(function(){

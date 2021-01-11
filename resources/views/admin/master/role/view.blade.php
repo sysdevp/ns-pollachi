@@ -32,7 +32,7 @@
           @foreach($roles as $key=>$value)
             <tr>
               <td>{{ $key+1 }}</td>
-              <td>{{ $value->designation_det->name}}</td>
+              <td>{{ $value->name}}</td>
                <td> 
                 <a href="{{url('master/role/show/'.$value->id )}}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{url('master/role/edit/'.$value->id )}}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>

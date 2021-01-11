@@ -53,7 +53,27 @@ class PayablePartywiseController extends Controller
      */
     public function show($id)
     {
-        //
+        $purchaseentry_datas = PurchaseEntry::where('supplier_id',$id)->get();
+        $paid_amount = 0;
+        $remaining_value =0;
+        $result = '';
+        foreach($purchaseentry_datas as $purchaseentry_data){
+         $paid_amount = PaymentProcess::where('p_no',$purchaseentry_data->s_no)->sum('payment_amount');
+         $purchaseentry_data['paid_amount'] = $paid_amount;
+         $pending_amount = $purchaseentry_data->total_net_value - $paid_amount;
+         $purchaseentry_data['pending_amount'] = $pending_amount;
+
+         //no of days calculation
+         $fdate = $purchaseentry_data->s_date;
+         $tdate = date('Y-m-d');
+         $datetime1 = new DateTime($fdate);
+         $datetime2 = new DateTime($tdate);
+         $interval = $datetime1->diff($datetime2);
+         $days = $interval->format('%a');
+         $purchaseentry_data['no_of_days'] = $days;
+                   
+        }
+        return view('admin.outstanding.payables.billwise.party_ledger_billwise',compact('purchaseentry_datas'));
     }
 
     /**
@@ -93,17 +113,18 @@ class PayablePartywiseController extends Controller
      public function report(Request $request){
         $supplier = Supplier::all();
         $cond = [];
-        if(isset($request->supplier_id)){
-                $cond['supplier_id'] = $request->supplier_id; 
-            }
-            if(isset($request->from)) { 
-                $from = date('Y-m-d',strtotime($request->from)); 
-            }           
-            if(isset($request->to)) {
-                $to = date('Y-m-d',strtotime($request->to)); 
-            }
-        $initial_page = "0";
-        $purchaseentry_datas = PurchaseEntry::where($cond)->whereBetween('p_date',[$from,$to])->get();
+        // if(isset($request->supplier_id)){
+                // $cond['supplier_id'] = $request->supplier_id; 
+            // }
+            // if(isset($request->from)) { 
+                // $from = date('Y-m-d',strtotime($request->from)); 
+            // }           
+            // if(isset($request->to)) {
+                // $to = date('Y-m-d',strtotime($request->to)); 
+            // }
+        // $initial_page = "0";
+        // $purchaseentry_datas = PurchaseEntry::where($cond)->whereBetween('p_date',[$from,$to])->get();
+		$purchaseentry_datas = Supplier::get();
         $paid_amount = 0;
         $remaining_value =0;
         $result = '';

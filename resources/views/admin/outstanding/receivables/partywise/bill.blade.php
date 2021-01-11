@@ -236,41 +236,33 @@ table, th, td {
           <table class="table table-striped table-bordered" id="receivable_party">
                   <thead>
                     <th> S.no </th>
-                    <th id="bill_no"> Bill.no </th>
-                    <th id="bill_date"> Bill Date</th>
-                    <th id="party"> Party Name</th>
-                    <th id="bill_amount"> Bill Amount</th>
-                    <th id="cleared_amount"> Cleared Amount</th>
-                    <th id="pending_amount"> Pending Amount</th>
+                    <th id="party"> Customer Name</th>
+                    <th id="bill_amount">Total Bill Amount</th>
+                    <th id="cleared_amount">Total Cleared Amount</th>
+                    <th id="pending_amount">Total Pending Amount</th>
                     <th id="0-30" style="display: none;">0-30 Days</th>
                     <th id="31-60" style="display: none;">31-60 Days</th>
                     <th id="61-90" style="display: none;">61-90 Days</th>
                     <th id="91-120" style="display: none;">91-120 Days</th>
                     <th id="120" style="display: none;">(>120 Days)</th>
-                    <th id="no_days"> No Of Days From Bill Date</th>
-                    <th id="due_date\"> No Of Days From Due Date</th>
-                    <th id="salesman"> Sales Man Name</th>
-                    <th id="supplier"> Supplier Contact Name</th>
-                    <th id="contact"> Supplier Contact Number</th>
-                    <th id="email"> Supplier Contact Email Id</th>
+                    <th id="supplier"> Customer Contact Name</th>
+                    <th id="contact"> Customer Contact Number</th>
+                    <th id="email"> Customer Contact Email Id</th>
+                    <th> View Full Details</th>
                     
                   </thead>
                   <tbody>
                    @foreach($purchaseentry_datas as $key=> $value)
                     <tr>
                       <td>{{ $key+1 }}</td>
-                      <td>{{ $value->s_no }}</td>
-                      <td>{{ $value->s_date }}</td>
-                      <td>{{ $value->customer->name }}</td>
-                      <td>{{ $value->total_net_value }}</td>
+                      <td>{{ $value->name }}</td>
+                      <td>{{ $value->bill_amount }}</td>
                       <td>{{ $value->paid_amount }}</td>
                       <td>{{ $value->pending_amount }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->salesman->name }}</td>
-                      <td>{{ $value->customer->name }}</td>
-                      <td>{{ $value->customer->phone_no }}</td>
-                      <td>{{ $value->customer->email }}</td>
+                      <td>{{ $value->name }}</td>
+                      <td>{{ $value->phone_no }}</td>
+                      <td>{{ $value->email }}</td>
+                      <td><a href="{{url('single_ledger/'.$value->id )}}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a> </td>
                      
             </tr>
          @endforeach

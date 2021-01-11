@@ -31,7 +31,7 @@
           <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
               <td><?php echo e($key+1); ?></td>
-              <td><?php echo e($value->designation_det->name); ?></td>
+              <td><?php echo e($value->name); ?></td>
                <td> 
                 <a href="<?php echo e(url('master/role/show/'.$value->id )); ?>" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="<?php echo e(url('master/role/edit/'.$value->id )); ?>" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
