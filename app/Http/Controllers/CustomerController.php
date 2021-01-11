@@ -12,6 +12,7 @@ use App\Models\BankDetails;
 use App\Models\Customer;
 use App\Models\CustomerSupplier;
 use App\Models\State;
+use App\Models\PriceLevel;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Redirect;
@@ -31,9 +32,10 @@ class CustomerController extends Controller
         $address_type = AddressType::all();
         $state = State::all();
         $bank = Bank::all();
+        $price_level = PriceLevel::all();
         $account_type = AccountType::all();
         $exist_customer_dets = CustomerSupplier::where('type', 'Customer')->get();
-        return view('admin.master.customer.add', compact('address_type', 'state', 'bank', 'account_type', 'exist_customer_dets'));
+        return view('admin.master.customer.add', compact('address_type', 'state', 'bank', 'account_type', 'exist_customer_dets','price_level'));
     }
 
 
@@ -147,10 +149,11 @@ class CustomerController extends Controller
         $bank = Bank::all();
         $account_type = AccountType::all();
         $customer = Customer::find($id);
+        $price_level = PriceLevel::all();
         $exist_customer_dets = CustomerSupplier::where('type', 'Customer')->get();
         $customer_bank_details = BankDetails::where('bank_ref_id', $id)->where('ref_table', 'Cus')->get();
         $customer_address_details = AddressDetails::where('address_ref_id', $id)->where('address_table', 'Cus')->get();
-        return view('admin.master.customer.edit', compact('exist_customer_dets', 'customer', 'customer_bank_details', 'customer_address_details', 'address_type', 'state', 'bank', 'account_type'));
+        return view('admin.master.customer.edit', compact('exist_customer_dets', 'customer', 'customer_bank_details', 'customer_address_details', 'address_type', 'state', 'bank', 'account_type','price_level'));
     }
 
 

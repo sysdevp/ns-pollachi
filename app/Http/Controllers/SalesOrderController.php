@@ -23,6 +23,8 @@ use App\Models\SaleEstimationTax;
 use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationExpense;
 use App\Models\Customer;
+use DB;
+use App\Models\PriceLevel;
 use App\Models\SalesMan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
@@ -33,10 +35,13 @@ use App\Models\PurchaseEntryBlackItem;
 use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseOrderBlackItem;
 use App\Models\SaleOrder;
+use App\Models\SaleOrderBeta;
 use App\Models\SaleOrderTax;
+use App\Models\SaleOrderBetaTax;
 use App\Models\SaleOrderItem;
-use App\Models\SaleOrderBlackItem;
+use App\Models\SaleOrderBetaItem;
 use App\Models\SaleOrderExpense;
+use App\Models\SaleOrderBetaExpense;
 
 class SalesOrderController extends Controller
 {
@@ -48,6 +53,7 @@ class SalesOrderController extends Controller
     public function index($id)
     {
         $check_id = $id;
+        /*Alpha*/
         $saleorder = SaleOrder::orderBy('so_no','ASC')->get();
 
         if(count($saleorder) == 0)
@@ -81,7 +87,7 @@ class SalesOrderController extends Controller
             $item_amount = $value->qty * $value->rate_exclusive_tax;
             $item_gst_rs = $item_amount * $value->gst / 100;
             $item_discount = $value->discount + $value->overall_disc;
-            $item_net_value = $item_amount + $item_gst_rs - $item_discount +$value->expenses;
+            $item_net_value = $item_amount + $item_gst_rs + $value->expenses - $item_discount;
 
             $item_net_value_total += $item_net_value;
             $item_gst_rs_total += $item_gst_rs;
@@ -99,14 +105,78 @@ class SalesOrderController extends Controller
 
             $taxable_value[] =  $item_amount_total;
             $tax_value[] = $item_gst_rs_total;
-            $total[] = $item_net_value_total + $total_expense;
+            $total[] = $item_net_value_total;
             $expense_total[] = $total_expense;
             $total_discount[] = $discount;
 
         }
     }
 
-        return view('admin.sales_order.view',compact('saleorder','check_id','taxable_value','tax_value','total','expense_total','total_discount'));
+    /*Beta*/
+
+    $saleorder_beta = SaleOrderBeta::orderBy('so_no','ASC')->get();
+
+        if(count($saleorder_beta) == 0)
+        {
+            $taxable_value_beta[] = 0;
+            $tax_value_beta[] = 0;
+            $total_beta[] = 0;
+            $expense_total_beta[] = 0;
+            $total_discount_beta[] = 0;
+        }
+        else
+        {
+
+        foreach ($saleorder_beta as $key => $datas) 
+        {
+            $saleorder_items = SaleOrderBetaItem::where('so_no',$datas->so_no)->get();
+
+            $saleorder_expense = SaleOrderBetaExpense::where('so_no',$datas->so_no)->get();
+
+            $item_net_value_total = 0;
+            $item_gst_rs_total = 0;
+            $item_amount_total = 0;
+            $discount = 0;
+
+            $total_expense = 0;
+            $total_net_price = 0;
+
+            foreach ($saleorder_items as $j => $value) 
+            {
+
+            $item_amount = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs = $item_amount * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value = $item_amount + $item_gst_rs + $value->expenses - $item_discount;
+
+            $item_net_value_total += $item_net_value;
+            $item_gst_rs_total += $item_gst_rs;
+            $item_amount_total += $item_amount;
+            $discount += $item_discount;
+
+
+            }
+
+            foreach ($saleorder_expense as $k => $values) 
+            {
+                $total_expense += $values->expense_amount;
+
+            }
+
+            $taxable_value_beta[] =  $item_amount_total;
+            $tax_value_beta[] = $item_gst_rs_total;
+            $total_beta[] = $item_net_value_total;
+            $expense_total_beta[] = $total_expense;
+            $total_discount_beta[] = $discount;
+
+        }
+    }
+
+    $customer = Customer::all();
+    $sales_man = SalesMan::all();
+    $location = Location::all();
+
+        return view('admin.sales_order.view',compact('saleorder','saleorder_beta','check_id','taxable_value','tax_value','total','expense_total','total_discount','taxable_value_beta','tax_value_beta','total_beta','expense_total_beta','total_discount_beta','customer','sales_man','location'));
     }
 
     /**
@@ -162,9 +232,20 @@ class SalesOrderController extends Controller
      */
     public function store(Request $request)
     {
-        $so_no=SaleOrder::orderBy('so_no','DESC')
+
+        if($request->has('check'))
+         {
+            $so_no=SaleOrderBeta::orderBy('so_no','DESC')
                            ->select('so_no')
                            ->first();
+         }
+         else
+         {
+            $so_no=SaleOrder::orderBy('so_no','DESC')
+                           ->select('so_no')
+                           ->first();
+         }
+        
 
         $tax = Tax::all();
 
@@ -183,8 +264,17 @@ class SalesOrderController extends Controller
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
 
+         if($request->has('check'))
+         {
+            $saleorder = new SaleOrderBeta();
+         }
+         else
+         {
+            $saleorder = new SaleOrder();   
+         }
 
-         $saleorder = new SaleOrder();
+
+         
 
          $saleorder->so_no = $voucher_no;
          $saleorder->so_date = $voucher_date;
@@ -207,9 +297,16 @@ class SalesOrderController extends Controller
 
         {
 
-            if($request->black_or_white[$i] == 1)
-            {
-                $saleorder_items = new SaleOrderItem();
+                if($request->has('check'))
+                 {
+                    $saleorder_items = new SaleOrderBetaItem();
+                 }
+                 else
+                 {
+                    $saleorder_items = new SaleOrderItem();   
+                 }
+
+                
 
                 $saleorder_items->so_no = $voucher_no;
                 $saleorder_items->so_date = $voucher_date;
@@ -226,35 +323,11 @@ class SalesOrderController extends Controller
                 $saleorder_items->discount = $request->discount[$i];
                 $saleorder_items->overall_disc = $request->overall_disc[$i];
                 $saleorder_items->expenses = $request->expenses[$i];
-                $saleorder_items->b_or_w = $request->black_or_white[$i];
+                // $saleorder_items->b_or_w = $request->black_or_white[$i];
 
                 $saleorder_items->save();
 
-            }
-
-            else
-            {
-                $saleorder_black_items = new SaleOrderBlackItem();
-
-                $saleorder_black_items->so_no = $voucher_no;
-                $saleorder_black_items->so_date = $voucher_date;
-                $saleorder_black_items->estimation_no = $request->estimation_no;
-                $saleorder_black_items->estimation_date = $request->estimation_date;
-                $saleorder_black_items->item_sno = $request->invoice_sno[$i];
-                $saleorder_black_items->item_id = $request->item_code[$i];
-                $saleorder_black_items->mrp = $request->mrp[$i];
-                $saleorder_black_items->gst = $request->tax_rate[$i];
-                $saleorder_black_items->rate_exclusive_tax = $request->exclusive[$i];
-                $saleorder_black_items->rate_inclusive_tax = $request->inclusive[$i];
-                $saleorder_black_items->qty = $request->quantity[$i];
-                $saleorder_black_items->uom_id = $request->uom[$i];
-                $saleorder_black_items->discount = $request->discount[$i];
-                $saleorder_black_items->overall_disc = $request->overall_disc[$i];
-                $saleorder_black_items->expenses = $request->expenses[$i];
-                $saleorder_black_items->b_or_w = $request->black_or_white[$i];
-
-                $saleorder_black_items->save();
-            }
+            
             
         }
          
@@ -269,7 +342,16 @@ class SalesOrderController extends Controller
             }
             else
             {
-                $saleorder_expense = new SaleOrderExpense();
+
+                if($request->has('check'))
+                 {
+                    $saleorder_expense = new SaleOrderBetaExpense();
+                 }
+                 else
+                 {
+                    $saleorder_expense = new SaleOrderExpense();
+                 }
+                
 
                 $saleorder_expense->so_no = $voucher_no;
                 $saleorder_expense->so_date = $voucher_date;
@@ -290,7 +372,16 @@ class SalesOrderController extends Controller
             $tax_name = str_replace('"', '', $str_json);
             $value_name = $tax_name.'_id';
 
-               $tax_details = new SaleOrderTax;
+            if($request->has('check'))
+             {
+                $tax_details = new SaleOrderBetaTax;
+             }
+             else
+             {
+                $tax_details = new SaleOrderTax;
+             }
+
+               
 
                $tax_details->so_no = $voucher_no;
                $tax_details->so_date = $voucher_date;
@@ -303,22 +394,45 @@ class SalesOrderController extends Controller
 
 
         $sale_order_no = $saleorder->so_no;
-        
-        $sale_order_print_data = SaleOrder::where('so_no',$sale_order_no)->first();
+
+        if($request->has('check'))
+         {
+            $sale_order_print_data = SaleOrderBeta::where('so_no',$sale_order_no)->first();
         $address = AddressDetails::where('address_ref_id',$sale_order_print_data->customer_id)
                                  ->where('address_table','=','Cus')
                                  ->first();
 
-        $sale_order_black_item_print_data = SaleOrderBlackItem::where('so_no',$sale_order_no);                        
+        // $sale_order_black_item_print_data = SaleOrderBlackItem::where('so_no',$sale_order_no);                        
+
+        $sale_order_item_print_data = SaleOrderBetaItem::where('so_no',$sale_order_no)
+                                                    // ->union($sale_order_black_item_print_data)
+                                                    ->get();
+
+
+        $sale_order_expense_print_data = SaleOrderBetaExpense::where('so_no',$sale_order_no)->get(); 
+
+        $amnt = $sale_order_print_data->total_net_value;
+         }
+         else
+         {
+            $sale_order_print_data = SaleOrder::where('so_no',$sale_order_no)->first();
+        $address = AddressDetails::where('address_ref_id',$sale_order_print_data->customer_id)
+                                 ->where('address_table','=','Cus')
+                                 ->first();
+
+        // $sale_order_black_item_print_data = SaleOrderBlackItem::where('so_no',$sale_order_no);                        
 
         $sale_order_item_print_data = SaleOrderItem::where('so_no',$sale_order_no)
-                                                    ->union($sale_order_black_item_print_data)
+                                                    // ->union($sale_order_black_item_print_data)
                                                     ->get();
 
 
         $sale_order_expense_print_data = SaleOrderExpense::where('so_no',$sale_order_no)->get(); 
 
         $amnt = $sale_order_print_data->total_net_value;
+         }
+        
+        
 
         //amount in words
 
@@ -471,7 +585,120 @@ class SalesOrderController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
+
             $item_data = SaleOrderItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+
+            $amount = $item_data->qty * $item_data->rate_exclusive_tax;
+            $gst_rs = $amount * $item_data->gst / 100;
+            $total_discount = $item_data->discount + $item_data->overall_disc;
+            $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
+
+            $net_value[] = $sum / $item_data->qty;
+
+        }     
+
+        $item_sgst = $item_gst_rs_sum/2;
+        $item_cgst = $item_gst_rs_sum/2;    
+
+        return view('admin.sales_order.show',compact('saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+    }
+
+    public function show_beta($id)
+    {
+        $saleorder = SaleOrderBeta::where('so_no',$id)->first();
+        $saleorder_items = SaleOrderBetaItem::where('so_no',$id)->get();
+        $saleorder_expense = SaleOrderBetaExpense::where('so_no',$id)->get();
+        $tax = SaleOrderBetaTax::where('so_no',$id)->get();
+
+        $item_row_count = count($saleorder_items);
+        $expense_row_count = count($saleorder_expense);
+
+
+        if(isset($saleorder->customer->name) && !empty($saleorder->customer->name))
+        {
+            $customer_id = $saleorder->customer->id;
+
+            $address_details = AddressDetails::where('address_ref_id',$customer_id)
+                                            ->where('address_table','=','Cus')
+                                            ->first();
+                                            
+
+       $count=0;
+
+       $address="";
+      
+        if(isset($address_details->address_line_1) && !empty($address_details->address_line_1))
+          {
+            $address.=$address_details->address_line_1.", \n";
+            
+          }
+
+          if(isset($address_details->address_line_2) && !empty($address_details->address_line_2)){
+            $address.=$address_details->address_line_2.",  \n ";
+            
+          }
+
+
+         if(isset($address_details->city->name)  || isset($address_details->district->name)){
+
+            if(!empty($address_details->city->name)){
+                $address.=$address_details->city->name." ,";
+               
+            }
+           
+
+            if(!empty($address_details->district->name)){
+                $address.=$address_details->district->name." ,";
+                $data[] = $address_details->district->id;
+            }
+            
+
+            $address.="\n";
+
+         }
+
+
+
+         if(isset($address_details->state->name)  && !empty($address_details->state->name)){
+             $address.=$address_details->state->name." -";
+             
+        if(isset($address_details->postal_code) && !empty($address_details->postal_code)){
+            // $address.=" - ";
+            $address.=$address_details->postal_code.',';
+            
+        }
+             
+             $address.="\n";
+             $address.="GST Number :".$address_details->customer->gst_no;
+         }
+                                          
+        }
+        else
+        {
+            $address = '';
+        }   
+        $item_amount_sum = 0;
+        $item_net_value_sum = 0;
+        $item_gst_rs_sum = 0;
+        $item_discount_sum = 0;
+        foreach($saleorder_items as $key => $value)  
+        {
+            $item_amount[] = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
+
+
+            $item_amount_sum = $item_amount_sum + $item_amount[$key];         
+            $item_net_value_sum = $item_net_value_sum + $item_net_value[$key];
+            $item_gst_rs_sum = $item_gst_rs_sum + $item_gst_rs[$key];
+            $discount_sum = $value->discount + $value->overall_disc;
+            $item_discount_sum = $item_discount_sum + $discount_sum;
+
+
+            $item_data = SaleOrderBetaItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
                                     ->first();
 
@@ -498,6 +725,7 @@ class SalesOrderController extends Controller
      */
     public function edit($id)
     {
+        $beta_checking_value = 0;
         $date = date('Y-m-d');
         $categories = Category::all();
         $supplier = Supplier::all();
@@ -512,8 +740,7 @@ class SalesOrderController extends Controller
         $location = Location::all();
 
         $saleorder = SaleOrder::where('so_no',$id)->first();
-        $saleorder_black_items = SaleOrderBlackItem::where('so_no',$id);
-        $saleorder_items = SaleOrderItem::where('so_no',$id)->union($saleorder_black_items)->get();
+        $saleorder_items = SaleOrderItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderExpense::where('so_no',$id)->get();
         $tax = SaleOrderTax::where('so_no',$id)->get();
 
@@ -602,12 +829,9 @@ class SalesOrderController extends Controller
             $discount_sum = $value->discount + $value->overall_disc;
             $item_discount_sum = $item_discount_sum + $discount_sum;
 
-            $item_black_data = SaleOrderBlackItem::where('item_id',$value->item_id)
-                                    ->orderBy('updated_at','DESC');
 
             $item_data = SaleOrderItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
-                                    ->union($item_black_data)
                                     ->first();
 
             $amount = $item_data->qty * $item_data->rate_exclusive_tax;
@@ -622,7 +846,134 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location'));
+        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+    }
+
+    public function edit_beta($id)
+    {
+        $beta_checking_value = 1;
+        $date = date('Y-m-d');
+        $categories = Category::all();
+        $supplier = Supplier::all();
+        $item = Item::all();
+        $agent = Agent::all();
+        $brand = Brand::all();
+        $expense_type = ExpenseType::all();
+        $estimation = SaleEstimation::where('cancel_status',0)->get();
+        $customer = Customer::all();
+        $sales_man = SalesMan::all();
+        $account_head = AccountHead::all();
+        $location = Location::all();
+
+        $saleorder = SaleOrderBeta::where('so_no',$id)->first();
+        $saleorder_items = SaleOrderBetaItem::where('so_no',$id)->get();
+        $saleorder_expense = SaleOrderBetaExpense::where('so_no',$id)->get();
+        $tax = SaleOrderBetaTax::where('so_no',$id)->get();
+
+        $item_row_count = count($saleorder_items);
+        $expense_row_count = count($saleorder_expense);
+
+
+        if(isset($saleorder->customer->name) && !empty($saleorder->customer->name))
+        {
+            $customer_id = $saleorder->customer->id;
+
+            $address_details = AddressDetails::where('address_ref_id',$customer_id)
+                                            ->where('address_table','=','Cus')
+                                            ->first();
+                                            
+
+       $count=0;
+
+       $address="";
+      
+        if(isset($address_details->address_line_1) && !empty($address_details->address_line_1))
+          {
+            $address.=$address_details->address_line_1.", \n";
+            
+          }
+
+          if(isset($address_details->address_line_2) && !empty($address_details->address_line_2)){
+            $address.=$address_details->address_line_2.",  \n ";
+            
+          }
+
+
+         if(isset($address_details->city->name)  || isset($address_details->district->name)){
+
+            if(!empty($address_details->city->name)){
+                $address.=$address_details->city->name." ,";
+               
+            }
+           
+
+            if(!empty($address_details->district->name)){
+                $address.=$address_details->district->name." ,";
+                $data[] = $address_details->district->id;
+            }
+            
+
+            $address.="\n";
+
+         }
+
+
+
+         if(isset($address_details->state->name)  && !empty($address_details->state->name)){
+             $address.=$address_details->state->name." -";
+             
+        if(isset($address_details->postal_code) && !empty($address_details->postal_code)){
+            // $address.=" - ";
+            $address.=$address_details->postal_code.',';
+            
+        }
+             
+             $address.="\n";
+             $address.="GST Number :".$address_details->customer->gst_no;
+         }
+                                          
+        }
+        else
+        {
+            $address = '';
+        }   
+        $item_amount_sum = 0;
+        $item_net_value_sum = 0;
+        $item_gst_rs_sum = 0;
+        $item_discount_sum = 0;
+        foreach($saleorder_items as $key => $value)  
+        {
+            $item_amount[] = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
+
+
+            $item_amount_sum = $item_amount_sum + $item_amount[$key];         
+            $item_net_value_sum = $item_net_value_sum + $item_net_value[$key];
+            $item_gst_rs_sum = $item_gst_rs_sum + $item_gst_rs[$key];
+            $discount_sum = $value->discount + $value->overall_disc;
+            $item_discount_sum = $item_discount_sum + $discount_sum;
+
+
+            $item_data = SaleOrderBetaItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+
+            $amount = $item_data->qty * $item_data->rate_exclusive_tax;
+            $gst_rs = $amount * $item_data->gst / 100;
+            $total_discount = $item_data->discount + $item_data->overall_disc;
+            $sum = $amount + $gst_rs - $total_discount + $item_data->expenses; 
+
+            $net_value[] = $sum / $item_data->qty;
+
+        }     
+
+        $item_sgst = $item_gst_rs_sum/2;
+        $item_cgst = $item_gst_rs_sum/2;    
+
+        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+
     }
 
     /**
@@ -634,27 +985,50 @@ class SalesOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $saleorder_data = SaleOrder::where('so_no',$id);
-        $saleorder_data->delete();
+        if($request->beta_checking_value == 1)
+        {
+            $saleorder_data = SaleOrderBeta::where('so_no',$id);
+            $saleorder_data->delete();
 
-        $saleorder_tax_data = SaleOrderTax::where('so_no',$id);
-        $saleorder_tax_data->delete();
+            $saleorder_tax_data = SaleOrderBetaTax::where('so_no',$id);
+            $saleorder_tax_data->delete();
 
-        $saleorder_item_data = SaleOrderItem::where('so_no',$id);
-        $saleorder_item_data->delete();
+            $saleorder_item_data = SaleOrderBetaItem::where('so_no',$id);
+            $saleorder_item_data->delete();
 
-        $saleorder_black_item_data = SaleOrderBlackItem::where('so_no',$id);
-        $saleorder_black_item_data->delete(); 
+            $saleorder_expense_data = SaleOrderBetaExpense::where('so_no',$id);
+            $saleorder_expense_data->delete();
+        }
+        else
+        {
+            $saleorder_data = SaleOrder::where('so_no',$id);
+            $saleorder_data->delete();
 
-        $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
-        $saleorder_expense_data->delete();
+            $saleorder_tax_data = SaleOrderTax::where('so_no',$id);
+            $saleorder_tax_data->delete();
+
+            $saleorder_item_data = SaleOrderItem::where('so_no',$id);
+            $saleorder_item_data->delete();
+
+            $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
+            $saleorder_expense_data->delete();
+        }
+        
 
         $voucher_date = $request->voucher_date;
         $voucher_no = $request->voucher_no;
 
         $tax = Tax::all();
 
-         $saleorder = new SaleOrder();
+        if($request->beta_checking_value == 1)
+        {
+            $saleorder = new SaleOrderBeta();
+        }
+        else
+        {
+            $saleorder = new SaleOrder();
+        }
+         
 
          $saleorder->so_no = $voucher_no;
          $saleorder->so_date = $voucher_date;
@@ -681,10 +1055,15 @@ class SalesOrderController extends Controller
 
         {
 
-            if($request->black_or_white[$i] == 1)
+            if($request->beta_checking_value == 1)
             {
-
+                $saleorder_items = new SaleOrderBetaItem();
+            }
+            else
+            {
                 $saleorder_items = new SaleOrderItem();
+            }
+                
 
                 $saleorder_items->so_no = $voucher_no;
                 $saleorder_items->so_date = $voucher_date;
@@ -701,34 +1080,11 @@ class SalesOrderController extends Controller
                 $saleorder_items->discount = $request->discount[$i];
                 $saleorder_items->overall_disc = $request->overall_disc[$i];
                 $saleorder_items->expenses = $request->expenses[$i];
-                $saleorder_items->b_or_w = $request->black_or_white[$i];
+                // $saleorder_items->b_or_w = $request->black_or_white[$i];
 
                 $saleorder_items->save();
 
-            }
-            else
-            {
-                $saleorder_black_items = new SaleOrderBlackItem();
-
-                $saleorder_black_items->so_no = $voucher_no;
-                $saleorder_black_items->so_date = $voucher_date;
-                $saleorder_black_items->estimation_no = $request->estimation_no;
-                $saleorder_black_items->estimation_date = $request->estimation_date;
-                $saleorder_black_items->item_sno = $request->invoice_sno[$i];
-                $saleorder_black_items->item_id = $request->item_code[$i];
-                $saleorder_black_items->mrp = $request->mrp[$i];
-                $saleorder_black_items->gst = $request->tax_rate[$i];
-                $saleorder_black_items->rate_exclusive_tax = $request->exclusive[$i];
-                $saleorder_black_items->rate_inclusive_tax = $request->inclusive[$i];
-                $saleorder_black_items->qty = $request->quantity[$i];
-                $saleorder_black_items->uom_id = $request->uom[$i];
-                $saleorder_black_items->discount = $request->discount[$i];
-                $saleorder_black_items->overall_disc = $request->overall_disc[$i];
-                $saleorder_black_items->expenses = $request->expenses[$i];
-                $saleorder_black_items->b_or_w = $request->black_or_white[$i];
-
-                $saleorder_black_items->save();
-            }
+            
             
         }
          
@@ -743,7 +1099,15 @@ class SalesOrderController extends Controller
             }
             else
             {
-                $saleorder_expense = new SaleOrderExpense();
+                if($request->beta_checking_value == 1)
+                {
+                    $saleorder_expense = new SaleOrderBetaExpense();
+                }
+                else
+                {
+                    $saleorder_expense = new SaleOrderExpense();
+                }
+                
 
                 $saleorder_expense->so_no = $voucher_no;
                 $saleorder_expense->so_date = $voucher_date;
@@ -764,7 +1128,14 @@ class SalesOrderController extends Controller
             $tax_name = str_replace('"', '', $str_json);
             $value_name = $tax_name.'_id';
 
-               $tax_details = new SaleOrderTax;
+                if($request->beta_checking_value == 1)
+                {
+                    $tax_details = new SaleOrderBetaTax;
+                }
+                else
+                {
+                    $tax_details = new SaleOrderTax;
+                }
 
                $tax_details->so_no = $voucher_no;
                $tax_details->so_date = $voucher_date;
@@ -777,18 +1148,37 @@ class SalesOrderController extends Controller
 
 
         $sale_order_no = $saleorder->so_no;
+
+        if($request->beta_checking_value == 1)
+        {
+            $sale_order_print_data = SaleOrderBeta::where('so_no',$sale_order_no)->first();
+            $address = AddressDetails::where('address_ref_id',$sale_order_print_data->customer_id)
+                                     ->where('address_table','=','Cus')
+                                     ->first();
+
+            $sale_order_item_print_data = SaleOrderBetaItem::where('so_no',$sale_order_no)
+                                                        ->get();
+
+            $sale_order_expense_print_data = SaleOrderBetaExpense::where('so_no',$sale_order_no)->get(); 
+
+            $amnt = $sale_order_print_data->total_net_value;
+        }
+        else
+        {
+            $sale_order_print_data = SaleOrder::where('so_no',$sale_order_no)->first();
+            $address = AddressDetails::where('address_ref_id',$sale_order_print_data->customer_id)
+                                     ->where('address_table','=','Cus')
+                                     ->first();
+
+            $sale_order_item_print_data = SaleOrderItem::where('so_no',$sale_order_no)
+                                                        ->get();
+
+            $sale_order_expense_print_data = SaleOrderExpense::where('so_no',$sale_order_no)->get(); 
+
+            $amnt = $sale_order_print_data->total_net_value;
+        }
         
-        $sale_order_print_data = SaleOrder::where('so_no',$sale_order_no)->first();
-        $address = AddressDetails::where('address_ref_id',$sale_order_print_data->customer_id)
-                                 ->where('address_table','=','Cus')
-                                 ->first();
-
-        $sale_order_item_print_data = SaleOrderItem::where('so_no',$sale_order_no)
-                                                    ->get();
-
-        $sale_order_expense_print_data = SaleOrderExpense::where('so_no',$sale_order_no)->get(); 
-
-        $amnt = $sale_order_print_data->total_net_value;
+        
 
         //amount in words
 
@@ -854,7 +1244,6 @@ class SalesOrderController extends Controller
     {
         $saleorder_data = SaleOrder::where('so_no',$id);
         $saleorder_item_data = SaleOrderItem::where('so_no',$id);
-        $saleorder_black_item_data = SaleOrderBlackItem::where('so_no',$id);
         $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
         $saleorder_tax_data = SaleOrderTax::where('so_no',$id);
         
@@ -866,9 +1255,32 @@ class SalesOrderController extends Controller
          {
             $saleorder_item_data->delete();
          }
-         if($saleorder_black_item_data)
+         if($saleorder_expense_data)
          {
-            $saleorder_black_item_data->delete();
+            $saleorder_expense_data->delete();
+         }
+         if($saleorder_tax_data)
+         {
+            $saleorder_tax_data->delete();
+         }   
+        
+        return Redirect::back()->with('success', 'Deleted Successfully');
+    }
+
+    public function delete_beta($id)
+    {
+        $saleorder_data = SaleOrderBeta::where('so_no',$id);
+        $saleorder_item_data = SaleOrderBetaItem::where('so_no',$id);
+        $saleorder_expense_data = SaleOrderBetaExpense::where('so_no',$id);
+        $saleorder_tax_data = SaleOrderBetaTax::where('so_no',$id);
+        
+        if($saleorder_data)
+        {
+            $saleorder_data->delete();
+        }
+         if($saleorder_item_data)
+         {
+            $saleorder_item_data->delete();
          }
          if($saleorder_expense_data)
          {
@@ -1169,6 +1581,104 @@ class SalesOrderController extends Controller
         }
 
         $data['selling_price_type'] = $selling_price_setup->setup;
+
+
+        $request->customer_id;
+
+        @$customer = Customer::where('id',$request->customer_id)->first();
+
+        $level = @$customer->price_level; 
+
+        @$price_level = PriceLevel::where('id',$level)->first();
+
+        $price_value = @$price_level->value;
+        $type = @$price_level->type;
+
+
+
+        if($type == 1)
+        {
+            $selling_price_rate = $data['selling_price'];
+             $rate = $selling_price_rate * $price_value /100;
+
+            $data['selling_price'] = $selling_price_rate - $rate;
+        }
+        else
+        {
+            $selling_price_rate = $data['selling_price'];
+
+            $data['selling_price'] = $selling_price_rate - $price_value;
+
+        }
+
+        $offers = DB::table('offers')->whereRaw('FIND_IN_SET(?,item_id)', [$id])->count();
+        if($offers > 0)
+        {
+            $offer_data = DB::table('offers')
+                                ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
+                                ->whereDate('valid_from', '<=', Carbon::now())
+                                ->whereDate('valid_to', '>=',Carbon::now())
+                                ->first();
+                                           
+
+         if($offer_data->offer_type == 'time')
+         {
+                $current_time = date('H:i:s');
+
+                if(strtotime($offer_data->from_time) <= strtotime($current_time) && strtotime($offer_data->to_time) >= strtotime($current_time))
+                {
+                    if($offer_data->variable == 'percentage')
+                    {
+                        $data['discount'] = $offer_data->percentage;
+                        $data['variable'] = '1';
+                    }
+                    else
+                    {
+                        $data['discount'] = $offer_data->fixed_amount;
+                        $data['variable'] = '0';
+                    }
+                }
+         }  
+         else if($offer_data->offer_type == 'day')
+         {
+            $current_date = date('d-m-Y');
+              
+            $offer_datas = DB::table('offers')
+                                ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
+                                ->whereRaw('FIND_IN_SET(?,day_range_offers)', [$current_date])
+                                ->whereDate('valid_from', '<=', Carbon::now())
+                                ->whereDate('valid_to', '>=',Carbon::now())
+                                ->first();
+
+
+             if($offer_datas->variable == 'percentage')
+                {
+                    $data['discount'] = $offer_datas->percentage;
+                    $data['variable'] = '1';
+                }
+                else
+                {
+                    $data['discount'] = $offer_datas->fixed_amount;
+                    $data['variable'] = '0';
+                }                   
+
+         }
+         else if($offer_data->offer_type == 'date')   
+         {
+            if($offer_data->variable == 'percentage')
+                {
+                    $data['discount'] = $offer_data->percentage;
+                    $data['variable'] = '1';
+                }
+                else
+                {
+                    $data['discount'] = $offer_data->fixed_amount;
+                    $data['variable'] = '0';
+                }
+         }                  
+
+        }
+
 
         return $data;
 
@@ -1755,9 +2265,28 @@ $result=[];
     return view('admin.sales_order.item_details',compact('item_details','gst_rs','amount','net_value'));
     }
 
+    public function item_beta_details($id)
+    {
+
+        $item_details = SaleOrderBetaItem::where('so_no',$id)->get();
+        foreach ($item_details as $key => $value) 
+        {
+            $amount[] = $value->qty * $value->rate_exclusive_tax;
+            $gst_rs[] = $amount[$key] * $value->gst / 100;
+            $net_value[] = $amount[$key] + $gst_rs[$key] - $value->discount;
+        }
+    return view('admin.sales_order.item_details',compact('item_details','gst_rs','amount','net_value'));
+    }
+
     public function expense_details($id)
     {
         $expense_details = SaleOrderExpense::where('so_no',$id)->get();
+        return view('admin.sales_order.expense_details',compact('expense_details'));
+    }
+
+    public function expense_beta_details($id)
+    {
+        $expense_details = SaleOrderBetaExpense::where('so_no',$id)->get();
         return view('admin.sales_order.expense_details',compact('expense_details'));
     }
 
@@ -1865,7 +2394,7 @@ $result=[];
             $net_value = $sum / $item_data->qty;
 
 
-            $table_tbody.='<tr id="row'.$i.'" class="'.$i.' tables"><td><span class="item_s_no"> '.$i.' </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'.$i.'" type="hidden" id="invoice'.$i.'" value="'.$value['item_sno'].'" name="invoice_sno[]"><font class="item_no'.$i.'">'.$value['item_sno'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'.$i.'" value="'.$value['item_id'].'" name="item_code[]"><font class="items'.$i.'">'.$value->item['code'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'.$i.'" type="hidden" value="'.$value->item['name'].'" name="item_name[]"><font class="font_item_name'.$i.'">'.$value->item['name'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'.$i.'" type="hidden" value="'.$value->item['hsn'].'" name="hsn[]"><font class="font_hsn'.$i.'">'.$value->item['hsn'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'.$i.'" value="'.$value['mrp'].'" name="mrp[]"><font class="font_mrp'.$i.'">'.$value['mrp'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'.$i.'" value="'.$value['rate_exclusive_tax'].'" name="exclusive[]"><font class="font_exclusive'.$i.'">'.$value['rate_exclusive_tax'].'</font><input type="hidden" class="inclusive'.$i.'" value="'.$value['rate_inclusive_tax'].'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'.$i.'" value="'.$value['qty'].'" name="quantity[]"><font class="font_quantity'.$i.'">'.$value['qty'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'.$i.'" value="'.$value['uom_id'].'" name="uom[]"><font class="font_uom'.$i.'">'.$value->uom['name'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'.$i.'" value="'.$item_amount.'" name="amount[]"><font class="font_amount'.$i.'">'.$item_amount.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts" value="'.$value['discount'].'" id="input_discount'.$i.'" ><input class="discount_val'.$i.'" type="hidden" value="'.$value['discount'].'" name="discount[]"><font class="font_discount" id="font_discount'.$i.'">'.$value['discount'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'.$i.'" value="'.$value['overall_disc'].'" name="overall_disc[]"><font class="font_overall_disc'.$i.'">'.$value['overall_disc'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '.$i.'" id="expenses'.$i.'" value="'.$value['expenses'].'" name="expenses[]"><font class="font_expenses'.$i.'">'.$value['expenses'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'.$i.'" value="'.$item_gst_rs.'" name="gst[]"><input type="hidden" class="tax_gst'.$i.'"  value="'.$value['gst'].'" name="tax_rate[]"><font class="font_gst'.$i.'">'.$item_gst_rs.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'.$i.'" value="'.$item_net_value.'" name="net_price[]"><input type="hidden" class="black_or_white'.$i.'"  value="1" name="black_or_white[]"><font class="font_net_price'.$i.'">'.$item_net_value.'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'.$i.'">'.$net_value.'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'.$i.'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'.$i.'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'.$i.'" aria-hidden="true"></i></td></tr>';
+            $table_tbody.='<tr id="row'.$i.'" class="'.$i.' tables"><td><span class="item_s_no"> '.$i.' </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'.$i.'" type="hidden" id="invoice'.$i.'" value="'.$value['item_sno'].'" name="invoice_sno[]"><font class="item_no'.$i.'">'.$value['item_sno'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="items_id" value="'.$value['item_id'].'"><input type="hidden" class="item_code'.$i.'" value="'.$value['item_id'].'" name="item_code[]"><font class="items'.$i.'">'.$value->item['code'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'.$i.'" type="hidden" value="'.$value->item['name'].'" name="item_name[]"><font class="font_item_name'.$i.'">'.$value->item['name'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'.$i.'" type="hidden" value="'.$value->item['hsn'].'" name="hsn[]"><font class="font_hsn'.$i.'">'.$value->item['hsn'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'.$i.'" value="'.$value['mrp'].'" name="mrp[]"><font class="font_mrp'.$i.'">'.$value['mrp'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'.$i.'" value="'.$value['rate_exclusive_tax'].'" name="exclusive[]"><font class="font_exclusive'.$i.'">'.$value['rate_exclusive_tax'].'</font><input type="hidden" class="inclusive'.$i.'" value="'.$value['rate_inclusive_tax'].'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'.$i.'" value="'.$value['qty'].'" name="quantity[]"><font class="font_quantity'.$i.'">'.$value['qty'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'.$i.'" value="'.$value['uom_id'].'" name="uom[]"><font class="font_uom'.$i.'">'.$value->uom['name'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'.$i.'" value="'.$item_amount.'" name="amount[]"><font class="font_amount'.$i.'">'.$item_amount.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts" value="'.$value['discount'].'" id="input_discount'.$i.'" ><input class="discount_val'.$i.'" type="hidden" value="'.$value['discount'].'" name="discount[]"><font class="font_discount" id="font_discount'.$i.'">'.$value['discount'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'.$i.'" value="'.$value['overall_disc'].'" name="overall_disc[]"><font class="font_overall_disc'.$i.'">'.$value['overall_disc'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '.$i.'" id="expenses'.$i.'" value="'.$value['expenses'].'" name="expenses[]"><font class="font_expenses'.$i.'">'.$value['expenses'].'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'.$i.'" value="'.$item_gst_rs.'" name="gst[]"><input type="hidden" class="tax_gst'.$i.'"  value="'.$value['gst'].'" name="tax_rate[]"><font class="font_gst'.$i.'">'.$item_gst_rs.'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'.$i.'" value="'.$item_net_value.'" name="net_price[]"><input type="hidden" class="black_or_white'.$i.'"  value="1" name="black_or_white[]"><font class="font_net_price'.$i.'">'.$item_net_value.'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'.$i.'">'.$net_value.'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'.$i.'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'.$i.'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'.$i.'" aria-hidden="true"></i></td></tr>';
 
             $item_amounts[] = $value->qty * $value->rate_exclusive_tax;
             $item_gst_rss[] = $item_amounts[$key] * $value->gst / 100;
@@ -1943,6 +2472,16 @@ echo "<pre>"; print_r($data); exit;
         return Redirect::back()->with('success', 'Cancelled');
     }
 
+    public function cancel_beta($id)
+    {
+        $saleorder = SaleOrderBeta::where('so_no',$id)->first();
+
+        $saleorder->cancel_status = 1;
+        $saleorder->save();
+
+        return Redirect::back()->with('success', 'Cancelled');
+    }
+
     public function retrieve($id)
     {
         $saleorder = SaleOrder::where('so_no',$id)->first();
@@ -1952,6 +2491,154 @@ echo "<pre>"; print_r($data); exit;
 
         return Redirect::back()->with('success', 'Retrieved');
     }
+
+    public function retrieve_beta($id)
+    {
+        $saleorder = SaleOrderBeta::where('so_no',$id)->first();
+
+        $saleorder->cancel_status = 0;
+        $saleorder->save();
+
+        return Redirect::back()->with('success', 'Retrieved');
+    }
+
+    public function report(Request $request)
+    {
+        $cond = [];
+        if(isset($request->customer_id)){$cond['customer_id'] = $request->customer_id; }
+        if(isset($request->salesman_id)) {$cond['salesman_id'] = $request->salesman_id;}
+        if(isset($request->location)) {$cond['location'] = $request->location;}
+
+        if(isset($request->from)) {$from = date('Y-m-d',strtotime($request->from)); }           
+        if(isset($request->to)) {$to = date('Y-m-d',strtotime($request->to)); }
+           // print_r($cond);exit;
+        $check_id = "";
+
+        $saleorder = SaleOrder::where($cond)->whereBetween('so_date',[$from,$to])->orderBy('so_no','ASC')->get();
+
+        if(count($saleorder) == 0)
+        {
+            $taxable_value[] = 0;
+            $tax_value[] = 0;
+            $total[] = 0;
+            $expense_total[] = 0;
+            $total_discount[] = 0;
+        }
+        else
+        {
+
+        foreach ($saleorder as $key => $datas) 
+        {
+            $saleorder_items = SaleOrderItem::where('so_no',$datas->so_no)->get();
+
+            $saleorder_expense = SaleOrderExpense::where('so_no',$datas->so_no)->get();
+
+            $item_net_value_total = 0;
+            $item_gst_rs_total = 0;
+            $item_amount_total = 0;
+            $discount = 0;
+
+            $total_expense = 0;
+            $total_net_price = 0;
+
+            foreach ($saleorder_items as $j => $value) 
+            {
+
+            $item_amount = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs = $item_amount * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value = $item_amount + $item_gst_rs + $value->expenses - $item_discount;
+
+            $item_net_value_total += $item_net_value;
+            $item_gst_rs_total += $item_gst_rs;
+            $item_amount_total += $item_amount;
+            $discount += $item_discount;
+
+
+            }
+
+            foreach ($saleorder_expense as $k => $values) 
+            {
+                $total_expense += $values->expense_amount;
+
+            }
+
+            $taxable_value[] =  $item_amount_total;
+            $tax_value[] = $item_gst_rs_total;
+            $total[] = $item_net_value_total;
+            $expense_total[] = $total_expense;
+            $total_discount[] = $discount;
+
+        }
+    }
+
+    /*Beta*/
+
+    $saleorder_beta = SaleOrderBeta::orderBy('so_no','ASC')->get();
+
+        if(count($saleorder_beta) == 0)
+        {
+            $taxable_value_beta[] = 0;
+            $tax_value_beta[] = 0;
+            $total_beta[] = 0;
+            $expense_total_beta[] = 0;
+            $total_discount_beta[] = 0;
+        }
+        else
+        {
+
+        foreach ($saleorder_beta as $key => $datas) 
+        {
+            $saleorder_items = SaleOrderBetaItem::where('so_no',$datas->so_no)->get();
+
+            $saleorder_expense = SaleOrderBetaExpense::where('so_no',$datas->so_no)->get();
+
+            $item_net_value_total = 0;
+            $item_gst_rs_total = 0;
+            $item_amount_total = 0;
+            $discount = 0;
+
+            $total_expense = 0;
+            $total_net_price = 0;
+
+            foreach ($saleorder_items as $j => $value) 
+            {
+
+            $item_amount = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs = $item_amount * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value = $item_amount + $item_gst_rs + $value->expenses - $item_discount;
+
+            $item_net_value_total += $item_net_value;
+            $item_gst_rs_total += $item_gst_rs;
+            $item_amount_total += $item_amount;
+            $discount += $item_discount;
+
+
+            }
+
+            foreach ($saleorder_expense as $k => $values) 
+            {
+                $total_expense += $values->expense_amount;
+
+            }
+
+            $taxable_value_beta[] =  $item_amount_total;
+            $tax_value_beta[] = $item_gst_rs_total;
+            $total_beta[] = $item_net_value_total;
+            $expense_total_beta[] = $total_expense;
+            $total_discount_beta[] = $discount;
+
+        }
+    }
+
+    $customer = Customer::all();
+    $sales_man = SalesMan::all();
+    $location = Location::all();
+
+        return view('admin.sales_order.view',compact('saleorder','saleorder_beta','check_id','taxable_value','tax_value','total','expense_total','total_discount','taxable_value_beta','tax_value_beta','total_beta','expense_total_beta','total_discount_beta','customer','sales_man','location','from','to','cond'));
+    }
+
 
 
 }

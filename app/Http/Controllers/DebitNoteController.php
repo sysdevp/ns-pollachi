@@ -24,21 +24,30 @@ use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseOrderBlackItem;
 use App\Models\PurchaseOrderExpense;
 use App\Models\PurchaseEntry;
+use App\Models\PurchaseEntryBeta;
 use App\Models\PurchaseEntryItem;
-use App\Models\PurchaseEntryBlackItem;
+use App\Models\PurchaseEntryBetaItem;
 use App\Models\PurchaseEntryExpense;
+use App\Models\PurchaseEntryBetaExpense;
 use App\Models\PurchaseEntryTax;
+use App\Models\PurchaseEntryBetaTax;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\DebitNote;
+use App\Models\DebitNoteBeta;
 use App\Models\DebitNoteItem;
-use App\Models\DebitNoteBlackItem;
+use App\Models\DebitNoteBetaItem;
 use App\Models\DebitNoteExpense;
+use App\Models\DebitNoteBetaExpense;
 use App\Models\DebitNoteTax;
+use App\Models\DebitNoteBetaTax;
 use App\Models\RejectionOut;
+use App\Models\RejectionOutBeta;
 use App\Models\RejectionOutItem;
-use App\Models\RejectionOutBlackItem;
+use App\Models\RejectionOutBetaItem;
 use App\Models\RejectionOutExpense;
+use App\Models\RejectionOutBetaExpense;
 use App\Models\RejectionOutTax;
+use App\Models\RejectionOutBetaTax;
 
 class DebitNoteController extends Controller
 {
@@ -50,8 +59,14 @@ class DebitNoteController extends Controller
     public function index($id)
     {
         $check_id = $id;
+        /*Alpha*/
         $debit_note = DebitNote::where('active',1)->get();
-        return view('admin.debit_note.view',compact('debit_note','check_id'));
+        /*Beta*/
+        $debit_note_beta = DebitNoteBeta::where('active',1)->get();
+
+         $supplier = Supplier::all();
+        $location = Location::all();
+        return view('admin.debit_note.view',compact('debit_note','debit_note_beta','check_id','supplier','location'));
     }
 
     /**
@@ -139,8 +154,15 @@ class DebitNoteController extends Controller
         //      $voucher_no=$current_voucher_num+1;
         
         //  }
-
-        $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
+        if($request->has('check'))
+        {
+            $voucher_num=DebitNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+        }
+        else
+        {
+            $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
+        }
+        
         $append = "DBN";
         if ($voucher_num == null) 
          {
@@ -162,18 +184,36 @@ class DebitNoteController extends Controller
 
     if($request->p_no != '')
     {
-
-        DebitNote::where('p_no',$request->p_no)->update(['active' => 0]);
-        DebitNoteItem::where('p_no',$request->p_no)->update(['active' => 0]);
-        DebitNoteBlackItem::where('p_no',$request->p_no)->update(['active' => 0]);
-        DebitNoteExpense::where('p_no',$request->p_no)->update(['active' => 0]);
-        DebitNoteTax::where('p_no',$request->p_no)->update(['active' => 0]);
+        if($request->has('check'))
+        {
+            DebitNoteBeta::where('p_no',$request->p_no)->update(['active' => 0]);
+            DebitNoteBetaItem::where('p_no',$request->p_no)->update(['active' => 0]);
+            DebitNoteBetaExpense::where('p_no',$request->p_no)->update(['active' => 0]);
+            DebitNoteBetaTax::where('p_no',$request->p_no)->update(['active' => 0]);
+        }
+        else
+        {
+            DebitNote::where('p_no',$request->p_no)->update(['active' => 0]);
+            DebitNoteItem::where('p_no',$request->p_no)->update(['active' => 0]);
+            DebitNoteExpense::where('p_no',$request->p_no)->update(['active' => 0]);
+            DebitNoteTax::where('p_no',$request->p_no)->update(['active' => 0]);
+        }
+        
 
         foreach ($request->item_code as $key => $value) 
         {
-            $purchase_entry_item = PurchaseEntryItem::where('p_no',$request->p_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'debited_qty' => $request->debited_qty[$key]]);
 
-            $purchase_entry_black_item = PurchaseEntryBlackItem::where('p_no',$request->p_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'debited_qty' => $request->debited_qty[$key]]);
+            if($request->has('check'))
+            {
+                $purchase_entry_item = PurchaseEntryBetaItem::where('p_no',$request->p_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'debited_qty' => $request->debited_qty[$key]]);
+            }
+            else
+            {
+                $purchase_entry_item = PurchaseEntryItem::where('p_no',$request->p_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'debited_qty' => $request->debited_qty[$key]]);
+            }
+            
+
+            // $purchase_entry_black_item = PurchaseEntryBlackItem::where('p_no',$request->p_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'debited_qty' => $request->debited_qty[$key]]);
 
             // RejectionOutItem::where('p_no',$request->p_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'r_out_debited_qty' => $request->debited_qty[$key], 'rejected_qty' => $request->rejected_item_qty[$key]]);
 
@@ -191,34 +231,64 @@ class DebitNoteController extends Controller
     else if($request->r_out_no != '')
     {
 
-        DebitNote::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
-        DebitNoteItem::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
-        DebitNoteBlackItem::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
-        DebitNoteExpense::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
-        DebitNoteTax::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+        if($request->has('check'))
+        {
+            DebitNoteBeta::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+            DebitNoteBetaItem::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+            DebitNoteBetaExpense::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+            DebitNoteBetaTax::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+        }
+        else
+        {
+            DebitNote::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+            DebitNoteItem::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+            DebitNoteExpense::where('r_out_no',$request->r_out_no)->update(['active' => 0]);
+            DebitNoteTax::where('r_out_no',$request->r_out_no)->update(['active' => 0]);   
+        }
+        
 
         foreach ($request->item_code as $key => $value) 
         {
 
-            $rejection_out_black_items = RejectionOutBlackItem::where('r_out_no',$request->r_out_no)->where('item_id',$value);
-
-            $rejection_out_items = RejectionOutItem::where('r_out_no',$request->r_out_no)   
+            // $rejection_out_black_items = RejectionOutBlackItem::where('r_out_no',$request->r_out_no)->where('item_id',$value);
+            if($request->has('check'))
+            {
+                $rejection_out_items = RejectionOutBetaItem::where('r_out_no',$request->r_out_no)   
                                                     ->where('item_id',$value)
-                                                    ->union($rejection_out_black_items)
                                                     ->get();
 
-            foreach ($rejection_out_items as $keys => $values) 
+                foreach ($rejection_out_items as $keys => $values) 
+                {
+                    $p_no = $values->p_no;
+                }                                         
+
+            RejectionOutBetaItem::where('r_out_no',$request->r_out_no)->where('item_id',$value)->update(['debited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+
+            PurchaseEntryBetaItem::where('p_no',$p_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);                                                    
+            }
+            else
             {
-                $p_no = $values->p_no;
-            }                                         
+                $rejection_out_items = RejectionOutItem::where('r_out_no',$request->r_out_no)   
+                                                    ->where('item_id',$value)
+                                                    ->get();
+                foreach ($rejection_out_items as $keys => $values) 
+                {
+                    $p_no = $values->p_no;
+                }                                         
 
             RejectionOutItem::where('r_out_no',$request->r_out_no)->where('item_id',$value)->update(['debited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+            
+            PurchaseEntryItem::where('p_no',$p_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);                                                    
+            }
+            
 
-            RejectionOutBlackItem::where('r_out_no',$request->r_out_no)->where('item_id',$value)->update(['debited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+            
 
-            PurchaseEntryItem::where('p_no',$p_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
+            // RejectionOutBlackItem::where('r_out_no',$request->r_out_no)->where('item_id',$value)->update(['debited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
 
-            PurchaseEntryBlackItem::where('p_no',$p_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
+            
+
+            // PurchaseEntryBlackItem::where('p_no',$p_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
 
                 // $r_out_items->r_out_debited_qty = $request->debited_qty[$key];
                 // $r_out_items->rejected_qty = $request->rejected_item_qty[$key];
@@ -232,8 +302,16 @@ class DebitNoteController extends Controller
         }
     }
 
+        if($request->has('check'))
+        {
+            $debit_note = new DebitNoteBeta();
+        }
+        else
+        {
+            $debit_note = new DebitNote();   
+        }
 
-         $debit_note = new DebitNote();
+         
 
          $debit_note->dn_no = $voucher_no;
          $debit_note->dn_date = $voucher_date;
@@ -255,11 +333,16 @@ class DebitNoteController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
-
-            if($request->black_or_white[$i] == 1)
-            {
-
-                $debit_note_items = new DebitNoteItem();
+                if($request->has('check'))
+                {
+                    $debit_note_items = new DebitNoteBetaItem();
+                }
+                else
+                {
+                    $debit_note_items = new DebitNoteItem();  
+                }
+            
+                
 
                 $debit_note_items->dn_no = $voucher_no;
                 $debit_note_items->dn_date = $voucher_date;
@@ -283,43 +366,11 @@ class DebitNoteController extends Controller
                 $debit_note_items->discount = $request->discount[$i];
                 $debit_note_items->overall_disc = $request->overall_disc[$i];
                 $debit_note_items->expenses = $request->expenses[$i];
-                $debit_note_items->b_or_w = $request->black_or_white[$i];
+                // $debit_note_items->b_or_w = $request->black_or_white[$i];
 
                 $debit_note_items->save();
 
-            }
-            else
-            {
-
-                $debit_note_black_items = new DebitNoteBlackItem();
-
-                $debit_note_black_items->dn_no = $voucher_no;
-                $debit_note_black_items->dn_date = $voucher_date;
-                $debit_note_black_items->p_no = $request->p_no;
-                $debit_note_black_items->p_date = $request->p_date;
-                $debit_note_black_items->r_out_no = $request->r_out_no;
-                $debit_note_black_items->r_out_date = $request->r_out_date;
-                $debit_note_black_items->item_sno = $request->invoice_sno[$i];
-                $debit_note_black_items->item_id = $request->item_code[$i];
-                $debit_note_black_items->mrp = $request->mrp[$i];
-                $debit_note_black_items->gst = $request->tax_rate[$i];
-                $debit_note_black_items->rate_exclusive_tax = $request->exclusive[$i];
-                $debit_note_black_items->rate_inclusive_tax = $request->inclusive[$i];
-                // $debit_note_black_items->remaining_after_debit = $request->remaining_after_debit[$i];
-                $debit_note_black_items->qty = $request->actual_quantity[$i];
-                $debit_note_black_items->rejected_qty = $request->rejected_item_qty[$i];
-                $debit_note_black_items->remaining_qty = $request->quantity[$i];
-                $debit_note_black_items->debited_qty = $request->debited_qty[$i];  
-                $debit_note_black_items->uom_id = $request->uom[$i];
-                $debit_note_black_items->actual_purchase_qty = $request->actual_purchase_quantity[$i];
-                $debit_note_black_items->discount = $request->discount[$i];
-                $debit_note_black_items->overall_disc = $request->overall_disc[$i];
-                $debit_note_black_items->expenses = $request->expenses[$i];
-                $debit_note_black_items->b_or_w = $request->black_or_white[$i];
-
-                $debit_note_black_items->save();
-
-            }
+            
             
         }
          
@@ -334,7 +385,17 @@ class DebitNoteController extends Controller
             }
             else
             {
-                $debit_note_expense = new DebitNoteExpense();
+
+                if($request->has('check'))
+                {
+                    $debit_note_expense = new DebitNoteBetaExpense();
+                }
+                else
+                {
+                    $debit_note_expense = new DebitNoteExpense();
+                }
+
+                
 
                 $debit_note_expense->dn_no = $voucher_no;
                 $debit_note_expense->dn_date = $voucher_date;
@@ -359,7 +420,16 @@ class DebitNoteController extends Controller
             $tax_name = str_replace('"', '', $str_json);
             $value_name = $tax_name.'_id';
 
-               $tax_details = new DebitNoteTax;
+                if($request->has('check'))
+                {
+                    $tax_details = new DebitNoteBetaTax;
+                }
+                else
+                {
+                    $tax_details = new DebitNoteTax;
+                }
+
+               
 
                $tax_details->dn_no = $voucher_no;
                $tax_details->dn_date = $voucher_date;
@@ -376,21 +446,43 @@ class DebitNoteController extends Controller
 
 
         $debit_note_no = $debit_note->dn_no;
-        
-        $debit_note_print_data = DebitNote::where('dn_no',$debit_note_no)->first();
+
+        if($request->has('check'))
+        {
+            $debit_note_print_data = DebitNoteBeta::where('dn_no',$debit_note_no)->first();
         $address = AddressDetails::where('address_ref_id',$debit_note_print_data->supplier_id)
                                  ->where('address_table','=','Supplier')
                                  ->first();
 
-        $debit_note_black_item_print_data = DebitNoteBlackItem::where('dn_no',$debit_note_no);
+        // $debit_note_black_item_print_data = DebitNoteBlackItem::where('dn_no',$debit_note_no);
+
+        $debit_note_item_print_data = DebitNoteBetaItem::where('dn_no',$debit_note_no)
+                                                    // ->union($debit_note_black_item_print_data)
+                                                    ->get();
+
+        $debit_note_expense_print_data = DebitNoteBetaExpense::where('dn_no',$debit_note_no)->get(); 
+
+        $amnt = $debit_note_print_data->total_net_value;
+        }
+        else
+        {
+            $debit_note_print_data = DebitNote::where('dn_no',$debit_note_no)->first();
+        $address = AddressDetails::where('address_ref_id',$debit_note_print_data->supplier_id)
+                                 ->where('address_table','=','Supplier')
+                                 ->first();
+
+        // $debit_note_black_item_print_data = DebitNoteBlItem::where('dn_no',$debit_note_no);
 
         $debit_note_item_print_data = DebitNoteItem::where('dn_no',$debit_note_no)
-                                                    ->union($debit_note_black_item_print_data)
+                                                    // ->union($debit_note_black_item_print_data)
                                                     ->get();
 
         $debit_note_expense_print_data = DebitNoteExpense::where('dn_no',$debit_note_no)->get(); 
 
         $amnt = $debit_note_print_data->total_net_value;
+        }
+        
+        
 
         //amount in words
 
@@ -923,7 +1015,7 @@ class DebitNoteController extends Controller
                 $debit_note_items->discount = $request->discount[$i];
                 $debit_note_items->overall_disc = $request->overall_disc[$i];
                 $debit_note_items->expenses = $request->expenses[$i];
-                $debit_note_items->b_or_w = $request->black_or_white[$i];
+                // $debit_note_items->b_or_w = $request->black_or_white[$i];
 
                 $debit_note_items->save();
 
@@ -955,7 +1047,7 @@ class DebitNoteController extends Controller
                 $debit_note_black_items->discount = $request->discount[$i];
                 $debit_note_black_items->overall_disc = $request->overall_disc[$i];
                 $debit_note_black_items->expenses = $request->expenses[$i];
-                $debit_note_black_items->b_or_w = $request->black_or_white[$i];
+                // $debit_note_black_items->b_or_w = $request->black_or_white[$i];
 
                 $debit_note_black_items->save();
 
@@ -1095,7 +1187,6 @@ class DebitNoteController extends Controller
     {
         $debit_note_data = DebitNote::where('dn_no',$id)->where('active',1);
         $debit_note_item_data = DebitNoteItem::where('dn_no',$id)->where('active',1);
-        $debit_note_black_item_data = DebitNoteBlackItem::where('dn_no',$id)->where('active',1);
         $debit_note_expense_data = DebitNoteExpense::where('dn_no',$id)->where('active',1);
         $debit_note_tax = DebitNoteTax::where('dn_no',$id)->where('active',1);
 
@@ -1114,15 +1205,6 @@ class DebitNoteController extends Controller
 
         }
 
-        $purchase_entry_black_item = PurchaseEntryBlackItem::where('p_no',$p_no)->get();
-        foreach ($purchase_entry_black_item as $key => $value) 
-        {
-            $qty = $value->debited_qty + $value->remaining_qty;
-            $item_id = $value->item_id;
-            PurchaseEntryBlackItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
-
-        }
-
         $r_out_item = RejectionOutItem::where('r_out_no',$r_out_no)->get();
         foreach ($r_out_item as $key => $value) 
         {
@@ -1131,13 +1213,57 @@ class DebitNoteController extends Controller
             RejectionOutItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
 
         }
+        
+        if($debit_note_data)
+        {
+            $debit_note_data->update(['active' => 0]);
+        }
+         if($debit_note_item_data)
+         {
+            $debit_note_item_data->update(['active' => 0]);
+         }
 
-        $r_out_black_item = RejectionOutBlackItem::where('r_out_no',$r_out_no)->get();
-        foreach ($r_out_black_item as $key => $value) 
+         if($debit_note_expense_data)
+         {
+            $debit_note_expense_data->update(['active' => 0]);
+         }
+
+         if($debit_note_tax)
+         {
+            $debit_note_tax->update(['active' => 0]);
+         }   
+        
+        return Redirect::back()->with('success', 'Deleted Successfully');
+    }
+
+    public function delete_beta($id)
+    {
+        $debit_note_data = DebitNoteBeta::where('dn_no',$id)->where('active',1);
+        $debit_note_item_data = DebitNoteBetaItem::where('dn_no',$id)->where('active',1);
+        $debit_note_expense_data = DebitNoteBetaExpense::where('dn_no',$id)->where('active',1);
+        $debit_note_tax = DebitNoteBetaTax::where('dn_no',$id)->where('active',1);
+
+        $debit_note = DebitNoteBeta::where('dn_no',$id)->where('active',1)->first();
+
+        $p_no = $debit_note->p_no;
+        $r_out_no = $debit_note->r_out_no;
+
+
+        $purchase_entry_item = PurchaseEntryBetaItem::where('p_no',$p_no)->get();
+        foreach ($purchase_entry_item as $key => $value) 
         {
             $qty = $value->debited_qty + $value->remaining_qty;
             $item_id = $value->item_id;
-            RejectionOutBlackItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
+            PurchaseEntryBetaItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
+
+        }
+
+        $r_out_item = RejectionOutBetaItem::where('r_out_no',$r_out_no)->get();
+        foreach ($r_out_item as $key => $value) 
+        {
+            $qty = $value->debited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            RejectionOutBetaItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
 
         }
         
@@ -1865,9 +1991,28 @@ $result=[];
     return view('admin.debit_note.item_details',compact('item_details','gst_rs','amount','net_value'));
     }
 
+    public function item_beta_details($id)
+    {
+
+        $item_details = DebitNoteBetaItem::where('dn_no',$id)->get();
+        foreach ($item_details as $key => $value) 
+        {
+            $amount[] = $value->qty * $value->rate_exclusive_tax;
+            $gst_rs[] = $amount[$key] * $value->gst / 100;
+            $net_value[] = $amount[$key] + $gst_rs[$key] - $value->discount;
+        }
+    return view('admin.debit_note.item_details',compact('item_details','gst_rs','amount','net_value'));
+    }
+
     public function expense_details($id)
     {
         $expense_details = DebitNoteExpense::where('dn_no',$id)->get();
+        return view('admin.debit_note.expense_details',compact('expense_details'));
+    }
+
+    public function expense_beta_details($id)
+    {
+        $expense_details = DebitNoteBetaExpense::where('dn_no',$id)->get();
         return view('admin.debit_note.expense_details',compact('expense_details'));
     }
 
@@ -1896,10 +2041,93 @@ $result=[];
                                   
     }
 
+    function po_alpha_beta(Request $request)
+    {
+
+      $p_no = "";
+      $r_out_no = "";
+      if($request->id == 1)
+      {
+
+        $voucher_num=DebitNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+        $append = "DBN";
+        if ($voucher_num == null) 
+         {
+             $voucher_no=$append.'1';
+
+                             
+         }                  
+         else
+         {
+             $current_voucher_num=$voucher_num->id;
+             $next_no=$current_voucher_num+1;
+
+             $voucher_no = $append.$next_no;
+        
+         
+         }
+
+        $purchaseorder = PurchaseEntryBeta::where('cancel_status',0)->get();
+
+        $rejection_out = RejectionOutBeta::where('cancel_status',0)->get();
+
+        foreach ($purchaseorder as $key => $value) {
+         $p_no.= "<option value=".$value->p_no.">".$value->p_no."</option>";
+        }
+
+       foreach ($rejection_out as $key => $value) {
+         $r_out_no.= "<option value=".$value->r_out_no.">".$value->r_out_no."</option>";
+        }
+        
+
+        $result_array = array('p_no' => $p_no, 'r_out_no' => $r_out_no, 'voucher_no' => $voucher_no);
+      }
+      else
+      {
+
+        $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
+        $append = "DBN";
+        if ($voucher_num == null) 
+         {
+             $voucher_no=$append.'1';
+
+                             
+         }                  
+         else
+         {
+             $current_voucher_num=$voucher_num->id;
+             $next_no=$current_voucher_num+1;
+
+             $voucher_no = $append.$next_no;
+        
+         
+         }
+
+        $purchaseorder = PurchaseEntry::where('cancel_status',0)->get();
+
+        $rejection_out = RejectionOut::where('cancel_status',0)->get();
+
+        foreach ($purchaseorder as $key => $value) {
+         $p_no.= "<option value=".$value->p_no.">".$value->p_no."</option>";
+        }
+
+       foreach ($rejection_out as $key => $value) {
+         $r_out_no.= "<option value=".$value->r_out_no.">".$value->r_out_no."</option>";
+        }
+        
+
+        $result_array = array('p_no' => $p_no, 'r_out_no' => $r_out_no, 'voucher_no' => $voucher_no);
+      }
+
+      echo json_encode($result_array); exit();
+
+    }
+
 
     public function p_details(Request $request)
     {
         $p_no = $request->p_no;
+        $alpha_beta = $request->alpha_beta;
         $date = date('Y-m-d');
         $categories = Category::all();
         $supplier = Supplier::all();
@@ -1927,15 +2155,28 @@ $result=[];
          
         //  }
 
-        $purchase_entry = PurchaseEntry::where('p_no',$p_no)->first();
-        $purchase_entry_black_item = PurchaseEntryBlackItem::where('p_no',$p_no);
+        if($alpha_beta == 1)
+        {
+            $purchase_entry = PurchaseEntryBeta::where('p_no',$p_no)->first();
 
-        $purchase_entry_item = PurchaseEntryItem::where('p_no',$p_no)
-                                                ->union($purchase_entry_black_item)
-                                                ->get();
+            $purchase_entry_item = PurchaseEntryBetaItem::where('p_no',$p_no)
+                                                    ->get();
 
-        $purchase_entry_expense = PurchaseEntryExpense::where('p_no',$p_no)->get();
-        $purchase_entry_tax = PurchaseEntryTax::where('p_no',$p_no)->get();
+            $purchase_entry_expense = PurchaseEntryBetaExpense::where('p_no',$p_no)->get();
+            $purchase_entry_tax = PurchaseEntryBetaTax::where('p_no',$p_no)->get();
+        }
+        else
+        {
+            $purchase_entry = PurchaseEntry::where('p_no',$p_no)->first();
+
+            $purchase_entry_item = PurchaseEntryItem::where('p_no',$p_no)
+                                                    ->get();
+
+            $purchase_entry_expense = PurchaseEntryExpense::where('p_no',$p_no)->get();
+            $purchase_entry_tax = PurchaseEntryTax::where('p_no',$p_no)->get();
+        }
+
+        
 
         $round_off = $purchase_entry->round_off;
         $overall_discount = $purchase_entry->overall_discount;
@@ -1972,14 +2213,22 @@ $result=[];
             $item_gst_rs = $item_amount * $value->gst / 100;
             $item_net_value = $item_amount + $item_gst_rs - $value->discount;
 
-            $item_black_data = PurchaseEntryBlackItem::where('item_id',$value->item_id)
-                                    ->orderBy('updated_at','DESC');
+            // $item_black_data = PurchaseEntryBlackItem::where('item_id',$value->item_id)
+            //                         ->orderBy('updated_at','DESC');
 
-
-            $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
+            if($alpha_beta == 1)
+            {
+                $item_data = PurchaseEntryBetaItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
-                                    ->union($item_black_data)
                                     ->first();
+            }
+            else
+            {
+                $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+            }
+            
             // $item_sum = $item_data->rejected_qty + $item_data->debited_qty;
             // $item_remaining_qty = $item_data->actual_qty - $item_sum;
                                     
@@ -2060,6 +2309,7 @@ echo "<pre>"; print_r($data); exit;
     public function r_out_details(Request $request)
     {
         $r_out_no = $request->r_out_no;
+        $alpha_beta = $request->alpha_beta;
         $date = date('Y-m-d');
         $categories = Category::all();
         $supplier = Supplier::all();
@@ -2086,15 +2336,25 @@ echo "<pre>"; print_r($data); exit;
         
          
         //  }
+        if($alpha_beta == 1)
+        {
+            $rejection_out = RejectionOutBeta::where('r_out_no',$r_out_no)->first();
+            $rejection_out_item = RejectionOutBetaItem::where('r_out_no',$r_out_no)
+                                                    ->get();
 
-        $rejection_out = RejectionOut::where('r_out_no',$r_out_no)->first();
-        $rejection_out_black_item = RejectionOutBlackItem::where('r_out_no',$r_out_no);
-        $rejection_out_item = RejectionOutItem::where('r_out_no',$r_out_no)
-                                                ->union($rejection_out_black_item)
-                                                ->get();
+            $rejection_out_expense = RejectionOutBetaExpense::where('r_out_no',$r_out_no)->get();
+            $rejection_out_tax = RejectionOutBetaTax::where('r_out_no',$r_out_no)->get();
+        }
+        else
+        {
+            $rejection_out = RejectionOut::where('r_out_no',$r_out_no)->first();
+            $rejection_out_item = RejectionOutItem::where('r_out_no',$r_out_no)
+                                                    ->get();
 
-        $rejection_out_expense = RejectionOutExpense::where('r_out_no',$r_out_no)->get();
-        $rejection_out_tax = RejectionOutTax::where('r_out_no',$r_out_no)->get();
+            $rejection_out_expense = RejectionOutExpense::where('r_out_no',$r_out_no)->get();
+            $rejection_out_tax = RejectionOutTax::where('r_out_no',$r_out_no)->get();
+        }
+        
 
         $round_off = $rejection_out->round_off;
         $overall_discount = $rejection_out->overall_discount;
@@ -2145,14 +2405,22 @@ echo "<pre>"; print_r($data); exit;
             $item_gst_rs = $item_amount * $value->gst / 100;
             $item_net_value = $item_amount + $item_gst_rs - $value->discount;
 
-            $item_black_data = RejectionOutBlackItem::where('item_id',$value->item_id)
-                                    ->orderBy('updated_at','DESC');
+            // $item_black_data = RejectionOutBlackItem::where('item_id',$value->item_id)
+                                    // ->orderBy('updated_at','DESC');
 
-
-            $item_data = RejectionOutItem::where('item_id',$value->item_id)
+            if($alpha_beta == 1)
+            {
+                $item_data = RejectionOutBetaItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
-                                    ->union($item_black_data)
                                     ->first();
+            }
+            else
+            {
+                $item_data = RejectionOutItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+            }
+            
 
             $last_purchase_amount = $item_data->rejected_qty;        
 
@@ -2272,6 +2540,49 @@ echo "<pre>"; print_r($data); exit;
         return Redirect::back()->with('success', 'Cancelled');
     }
 
+    public function cancel_beta($id)
+    {
+
+        $debit_note_data = DebitNoteBeta::where('dn_no',$id)->where('active',1);
+        $debit_note_item_data = DebitNoteBetaItem::where('dn_no',$id)->where('active',1);
+        $debit_note_expense_data = DebitNoteBetaExpense::where('dn_no',$id)->where('active',1);
+        $debit_note_tax = DebitNoteBetaTax::where('dn_no',$id)->where('active',1);
+
+        $debit_note = DebitNoteBeta::where('dn_no',$id)->where('active',1)->first();
+
+        $p_no = $debit_note->p_no;
+        $r_out_no = $debit_note->r_out_no;
+
+
+        $purchase_entry_item = PurchaseEntryBetaItem::where('p_no',$p_no)->get();
+        foreach ($purchase_entry_item as $key => $value) 
+        {
+            $qty = $value->debited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            PurchaseEntryBetaItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => 0]);
+
+        }
+
+        $r_out_item = RejectionOutBetaItem::where('r_out_no',$r_out_no)->get();
+        foreach ($r_out_item as $key => $value) 
+        {
+            $qty = $value->r_out_debited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            RejectionOutBetaItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_out_debited_qty' => 0]);
+
+        }
+
+
+        $debit_notes = DebitNoteBeta::where('dn_no',$id)->first();
+
+        $debit_notes->cancel_status = 1;
+        $debit_notes->save();
+
+
+
+        return Redirect::back()->with('success', 'Cancelled');
+    }
+
     public function retrieve($id)
     {
 
@@ -2319,6 +2630,72 @@ echo "<pre>"; print_r($data); exit;
         $debit_notes->save();
 
         return Redirect::back()->with('success', 'Retrieved');
+    }
+
+    public function retrieve_beta($id)
+    {
+
+
+        $debit_note_data = DebitNoteBeta::where('dn_no',$id)->where('active',1);
+        $debit_note_item_data = DebitNoteBetaItem::where('dn_no',$id)->where('active',1);
+        $debit_note_expense_data = DebitNoteBetaExpense::where('dn_no',$id)->where('active',1);
+        $debit_note_tax = DebitNoteBetaTax::where('dn_no',$id)->where('active',1);
+
+        $debit_note_items = DebitNoteBetaItem::where('dn_no',$id)->where('active',1)->get();
+
+        $debit_note = DebitNoteBeta::where('dn_no',$id)->where('active',1)->first();
+
+        $p_no = $debit_note->p_no;
+        $r_out_no = $debit_note->r_out_no;
+
+        foreach ($debit_note_items as $key => $value) 
+        {
+            $debited_qty[] = $value->debited_qty;
+        }
+
+
+        $purchase_entry_item = PurchaseEntryBetaItem::where('p_no',$p_no)->get();
+        foreach ($purchase_entry_item as $key => $value) 
+        {
+            $qty =$value->remaining_qty - $debited_qty[$key];
+            $item_id = $value->item_id;
+
+            PurchaseEntryBetaItem::where('p_no',$p_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'debited_qty' => $debited_qty[$key]]);
+
+        }
+
+        $r_out_item = RejectionOutBetaItem::where('r_out_no',$r_out_no)->get();
+        foreach ($r_out_item as $key => $value) 
+        {
+            $qty = $value->remaining_qty - $debited_qty[$key];
+            $item_id = $value->item_id;
+            RejectionOutBetaItem::where('r_out_no',$r_out_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_out_debited_qty' => $debited_qty[$key]]);
+
+        }
+
+        $debit_notes = DebitNoteBeta::where('dn_no',$id)->first();
+
+        $debit_notes->cancel_status = 0;
+        $debit_notes->save();
+
+        return Redirect::back()->with('success', 'Retrieved');
+    }
+
+    public function report(Request $request)
+    {
+
+        $cond = [];
+        if(isset($request->supplier_id)){$cond['supplier_id'] = $request->supplier_id; }
+        if(isset($request->from)) {$from = date('Y-m-d',strtotime($request->from)); }           
+        if(isset($request->to)) {$to = date('Y-m-d',strtotime($request->to)); }
+        if(isset($request->location)) {$cond['location'] = $request->location;}
+           // print_r($cond);exit;
+        $check_id = "";
+
+        $debit_note = DebitNote::where($cond)->whereBetween('dn_date',[$from,$to])->where('active',1)->get();
+        $supplier = Supplier::all();
+        $location = Location::all();
+        return view('admin.debit_note.view',compact('debit_note','check_id','supplier','location','cond','from','to'));
     }
 
 }

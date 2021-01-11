@@ -20,6 +20,57 @@
         </div>
       </div>
     </div>
+    <div class="card-body">
+    <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('estimation-report')}}" enctype="multipart/form-data">
+      {{csrf_field()}}
+      <div class="col-md-12 row mb-3">
+
+      <div class="col-md-12 form-row mb-3">
+            <div class="col-md-2">
+              <label>From</label>
+            <input type="date" class="form-control from" name="from" id="from" value="@if(isset($from)){{$from}}@endif" required>
+            </div>
+
+            <div class="col-md-2">
+              <label>To</label>
+            <input type="date" class="form-control to" name="to" id="to" value="@if(isset($to)){{$to}}@endif" required>
+            </div>
+
+           
+            <div class="col-md-3">
+              <label>Supplier</label>
+              <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id">
+                           <option value="">Choose Party Name</option>
+                           @foreach($supplier as $suppliers)
+                           <option value="{{ $suppliers->id }}" @if(isset($cond['supplier_id'])){{($suppliers->id==$cond['supplier_id']) ? 'selected' : '' }}@endif>{{ $suppliers->name }}</option>
+                           @endforeach
+                            </select>
+
+          </div>
+          <div class="col-md-3">
+              <label>Agent</label>
+              <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id">
+                           <option value="">Choose Agent Name</option>
+                           @foreach($agent as $data)
+                           <option value="{{ $data->id }}" @if(isset($cond['agent_id'])){{($data->id==$cond['agent_id']) ? 'selected' : '' }}@endif>{{ $data->name }}</option>
+                           @endforeach                        </select>
+
+          </div>
+
+
+          </div>
+
+           <div class="col-md-2">
+            <label> </label>
+            <input type="submit" class="btn btn-success" name="add" value="Submit">
+            
+          </div>
+        <br>
+
+    </form>
+
+    </div>
+    
     <!-- card header end@ -->
     <div class="card-body" id="DivIdToPrint">
       <table id="master" class="table table-striped table-bordered" style="width:100%">
