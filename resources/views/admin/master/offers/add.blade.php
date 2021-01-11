@@ -122,9 +122,26 @@
               <label for="validationCustom01" class="col-sm-4 col-form-label">Select Offer date<span class="mandatory">*</span></label>
               <div class="col-sm-8">
                 <div class="input-group input-daterange from_to">
-                  <input type="text" class="form-control from_date" placeholder="dd-mm-yyyy" name="valid_from" value="{{old('valid_from')}}" required>
+                  <input id="fromselectdate" type="text" class="form-control from_date" placeholder="dd-mm-yyyy" name="valid_from" value="{{old('valid_from')}}" required>
                     <div class="input-group-addon">&nbsp;&nbsp;to&nbsp;&nbsp;</div>
-                  <input type="text" class="form-control to_date" placeholder="dd-mm-yyyy" name="valid_to" value="{{old('valid_to')}}" required>
+                  <input id="toselectdate" type="text" class="form-control to_date" placeholder="dd-mm-yyyy" name="valid_to" value="{{old('valid_to')}}" required>
+                  <span class="mandatory"> {{ $errors->first('valid_from')  }} </span>
+                  <div class="invalid-feedback">
+                    Please select a valid date range
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6" id="day_ranges">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Select day Offer date(s)<span class="mandatory">*</span></label>
+              <div class="col-sm-8">
+                <div class="input-group input-daterange from_to_day">
+                  <input type="text" class="form-control from_date_day" placeholder="dd-mm-yyyy" name="day_range_offers" value="{{old('valid_from')}}" required><!-- 
+                    <div class="input-group-addon">&nbsp;&nbsp;to&nbsp;&nbsp;</div>
+                  <input type="text" class="form-control to_date_day" placeholder="dd-mm-yyyy" name="valid_to" value="{{old('valid_to')}}" required> -->
                   <span class="mandatory"> {{ $errors->first('valid_from')  }} </span>
                   <div class="invalid-feedback">
                     Please select a valid date range
@@ -211,7 +228,12 @@
   $(document).ready(function () {
 
     var date1 = new Date();
+    $("#day_ranges").hide();
+    var fromDay = $("input#fromselectdate").val();
+    var date2 = new Date(fromDay);
+    var toDay = $("input#toselectdate").val();
 
+    /* DAte wise select starts */
     $('.from_to input').each(function() {
       $(this).datepicker({
         format: 'dd-mm-yyyy',
@@ -222,21 +244,42 @@
         setDate: date1
       }).on('changeDate', function (selected) {
           var startDate = new Date(selected.date.valueOf());
+          var fromDay = $("input#fromselectdate").val();
+          var toDay = $("input#toselectdate").val();
           $('.to_date').datepicker('setStartDate', startDate);
+          $('.from_date_day').datepicker('setStartDate', fromDay);
+          $('.from_date_day').datepicker('setEndDate', toDay);
         }).on('clearDate', function (selected) {
           $('.to_date').datepicker('setStartDate', null);
         });
     });
+    /* DAte wise select ends */
 
+    /* Day wise multi select starts */
+    $('.from_to_day input').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight: false,
+        multidate: true,
+    });
+    /* Day wise multi select ends */
+
+    /* On Offer type change starts */
     $('#offer_type').on('change', function() {
       const selectedValue = this.value;
-      if (selectedValue == "day" || selectedValue == "date") {
+      if (selectedValue == "date") {
         $("#time_ranges").hide();
-      } else {
+        $("#day_ranges").hide();
+      } else if(selectedValue == "day"){
+        $("#time_ranges").hide();
+        $("#day_ranges").show();
+      } else if(selectedValue == "time") {
         $("#time_ranges").show();
+        $("#day_ranges").hide();
       }
     });
+    /* On Offer type change ends */
 
+    /* Fixed value and percentage starts */
     $('#f_and_c').on('change', function() {
       const fixed_and_c = this.value;
       if (fixed_and_c == "fixed") {
@@ -249,7 +292,9 @@
         $('span#basic-addon1').text('%');
       }
     });
+    /* Fixed value and percentage ends */
 
+    /* AJAX get category related items start */
     $('select#category_select').on('change', function() {
       const selectedValue = this.value;
       $.ajax({
@@ -265,6 +310,7 @@
         }
       });
     });
+    /* AJAX get category related items ends */
 
   });
 </script>
