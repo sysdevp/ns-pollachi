@@ -23,7 +23,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered" style="width:100%">
+      <table id="master" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>S.No</th>
@@ -74,9 +74,9 @@
               <td>{{ $total[$key] }}</td>
               <td> 
                 @if($value->cancel_status == 0)
-                <a href="{{ route('delivery_note.show',$value->d_no) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                <a href="{{ route('delivery_note.edit',$value->d_no) }}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="{{url('delivery_note/delete/'.$value->d_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a href="{{ route('delivery_note.show',$value->d_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="{{ route('delivery_note.edit',$value->d_no) }}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="{{url('delivery_note/delete/'.$value->d_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 <a href="{{ url('delivery_note/cancel/'.$value->d_no) }}" class="px-2 py-1 bg-warning text-white rounded">Cancel</a>
 
                 <br><br>
@@ -120,9 +120,9 @@
               <td>{{ $total_beta[$key] }}</td>
               <td> 
                 @if($value->cancel_status == 0)
-                <a href="{{ url('delivery_note/show_beta/'.$value->d_no) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                <a href="{{ url('delivery_note/edit_beta/'.$value->d_no) }}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="{{url('delivery_note/delete_beta/'.$value->d_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a href="{{ url('delivery_note/show_beta/'.$value->d_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="{{ url('delivery_note/edit_beta/'.$value->d_no) }}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="{{url('delivery_note/delete_beta/'.$value->d_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 <a href="{{ url('delivery_note/cancel_beta/'.$value->d_no) }}" class="px-2 py-1 bg-warning text-white rounded">Cancel</a>
 
                 <br><br>

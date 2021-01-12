@@ -23,7 +23,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered" style="width:100%">
+      <table id="master" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>S.No</th>
@@ -66,9 +66,9 @@
               <td>{{ $value->total_net_value }}</td>
               <td> 
                 @if($value->cancel_status == 0)
-                <!-- <a href="{{ route('credit_note.show',$value->cn_no) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
-                <!-- <a href="{{ route('credit_note.edit',$value->cn_no) }}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a> -->
-                <a href="{{url('credit_note/delete/'.$value->cn_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <!-- <a href="{{ route('credit_note.show',$value->cn_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a> -->
+                <!-- <a href="{{ route('credit_note.edit',$value->cn_no) }}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a> -->
+                <a href="{{url('credit_note/delete/'.$value->cn_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
                 <a href="{{ url('credit_note/cancel/'.$value->cn_no) }}" class="px-2 py-1 bg-warning text-white rounded">Cancel</a>
 
@@ -107,9 +107,9 @@
               <td>{{ $value->total_net_value }}</td>
               <td> 
                 @if($value->cancel_status == 0)
-                <!-- <a href="{{ route('credit_note.show',$value->cn_no) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
-                <!-- <a href="{{ route('credit_note.edit',$value->cn_no) }}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a> -->
-                <a href="{{url('credit_note/delete_beta/'.$value->cn_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <!-- <a href="{{ route('credit_note.show',$value->cn_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a> -->
+                <!-- <a href="{{ route('credit_note.edit',$value->cn_no) }}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a> -->
+                <a href="{{url('credit_note/delete_beta/'.$value->cn_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
                 <a href="{{ url('credit_note/cancel_beta/'.$value->cn_no) }}" class="px-2 py-1 bg-warning text-white rounded">Cancel</a>
 

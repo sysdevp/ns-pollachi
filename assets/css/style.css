@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+
 @font-face {
     font-family: 'Rubik Medium';
     font-style: normal;
@@ -20,7 +23,7 @@
 }
 
 body {
-    font-family: 'Muli Medium' !important;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 h1,
@@ -77,6 +80,7 @@ p {
 .body-sec h3 {
     margin-bottom: 0;
     font-size: 16px;
+	color:#000;
 }
 
 .body-sec h4 {
@@ -101,17 +105,19 @@ p {
 }
 
 .h-right-btn li button a {
-    padding: 3px 10px;
-    font-size: 14px;
-    font-weight: 600;
+  padding: 3px 10px;
+    font-size: 12px;
+    background: #28a745;
+   /*  font-weight: 600; */
 }
 
 .body-sec .card-header {
     margin: auto 0;
     padding: 6px 0px;
-    background: #a3d072;
+    /* background: #a3d072; */
     border: 0;
-    color: #fff;
+    color: #444;
+	border-bottom: solid 1px #d8e2e7;
 }
 
 .h-right-btn li button a {
@@ -218,7 +224,7 @@ p {
 
 table.dataTable thead th,
 table.dataTable tbody td {
-    padding: 5px 8px;
+    padding: 4px 8px;
 }
 
 table.dataTable thead .sorting_asc:before,
@@ -231,11 +237,12 @@ table.dataTable thead th,
 table.dataTable tbody td,
 div.dataTables_wrapper div.dataTables_filter label,
 div.dataTables_wrapper div.dataTables_info {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 div.dataTables_wrapper div.dataTables_info {
     padding-top: 5px;
+	    font-size: 10px;
 }
 
 .page-link {
@@ -274,17 +281,19 @@ table.dataTable {
 
 div.dt-buttons {
     position: absolute;
-    left: 50%;
+   /*  left: 90%; */
     margin-left: -50px;
+	border-bottom: #dee2e6 solid 1px;
+	    right: 0;
 }
 
 .dt-buttons .btn {
-    padding: 3px 15px;
+    padding: 2px 7px;
     font-size: 14px;
     background: white;
-    color: #000;
+    color: #333;
+    border-bottom: #dee2e6 solid 1px;
 }
-
 .custom-range::-webkit-slider-thumb {
     background: green !important;
 }
@@ -314,15 +323,20 @@ div.dt-buttons {
 }
 
 #master a i {
-    font-size: 12px;
+    font-size: 10px;
     position: relative;
     top: -1px;
+	    color: #444;
 }
 
 .form-horizontal .form-control {
-    height: 32px;
-    padding: 5px 6px;
+    height: 28px;
+    padding: 0px 10px;
     font-size: 12px;
+	    width: 100%;
+		border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de !important;
 }
 
 .form-horizontal .col-form-label {
@@ -330,14 +344,31 @@ div.dt-buttons {
 }
 
 .form-horizontal .btn {
-    padding: 2px 15px;
-    font-size: 14px;
+       padding-left: 7px !important;
+    font-size: 12px;
     line-height: 1.5;
+    margin-top: 8px;
+    /* text-align: center;*/
+}
+
+  select.form-control {
+   height: 28px !important;
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de !important;
+}
+
+  select.form-control:not([size]):not([multiple]) {
+   height: 28px !important;
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de !important;
 }
 
 #master_wrapper .dropdown-item.active,
 .dropdown-item:active {
-    background-color: #28a745;
+    background-color: #868585;
+	    font-size: 13px;;
 }
 
 .is-valid+.select2-container--default .select2-selection--single {
@@ -367,7 +398,7 @@ div.dt-buttons {
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #444 !important;
-    line-height: 22px !important;
+    line-height: 16px !important;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
@@ -446,9 +477,6 @@ div.dataTables_wrapper {
     margin: 0 auto;
 }
 
-table.dataTable {
-    width: 100% !important;
-}
 
 .r_pmission .row .w-20 {
     border: 1px solid #ccc;
@@ -539,3 +567,70 @@ th.tbl_wd {
         height: 32px !important;
     border-radius: 0 !important;
 }
+
+
+
+.cardborder {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0px !important;
+}
+
+.searchbutton{
+    border-bottom: #f20 solid 1px;
+    border-top: #fff solid 1px;
+	border-right: #fff solid 1px;
+	border-bottom: #fff solid 1px;
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+ table th, table td { overflow: hidden; }
+
+.dataTables_scrollHeadInner{box-sizing: content-box !important;
+    width: 100% !important;
+    padding-right: 0px !important;}
+
+
+
+
+table.dataTable {
+    width: auto !important;
+}
+
+.dataTables_filter input { width: 50px }
+table{table-layout:fixed;}
+td{width:1px;white-space:nowrap;}
+	
+.paginate_button.previous:before {
+  content: '< ';
+      padding: 25px 10px 0px 15px;
+    color: #666;
+    font-weight: bold;
+    line-height: 28px;    font-size: 10px;
+}
+
+.paginate_button.next:after {
+  content: ' >';
+      padding: 25px 10px 0px 7px;
+    color: #666;
+    font-weight: bold;
+    line-height: 28px;    font-size: 10px;
+}
+
+.btn-group > .btn:first-child {
+    margin-left: 0;
+    padding: 3px !important;
+}
+.tdshow{display:none;}
+tr:hover> td > .tdshow{display:inline-block;}

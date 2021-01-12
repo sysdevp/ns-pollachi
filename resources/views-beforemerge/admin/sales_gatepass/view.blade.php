@@ -22,7 +22,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered" style="width:100%">
+      <table id="master" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>S.No</th>
@@ -53,9 +53,9 @@
               <td>{{ $value->load_bill }}</td>
               <td>{{ $value->unload_bill }}</td>
               <td> 
-                <a href="{{ route('sales_gatepass_entry.show',$value->sales_gatepass_no) }}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                <a href="{{ route('sales_gatepass_entry.edit',$value->sales_gatepass_no) }}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="{{url('sales_gatepass_entry/delete/'.$value->sales_gatepass_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a href="{{ route('sales_gatepass_entry.show',$value->sales_gatepass_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="{{ route('sales_gatepass_entry.edit',$value->sales_gatepass_no) }}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="{{url('sales_gatepass_entry/delete/'.$value->sales_gatepass_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
                 
               </td>

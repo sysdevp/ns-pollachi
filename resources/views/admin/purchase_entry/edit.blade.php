@@ -811,10 +811,86 @@ table, th, td {
                       
                          </div>
                          @endforeach
-                          
-
                        </div>
 
+                       <div class="row col-md-12">
+        <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control amount" name="bill_amount" value="{{ $payment_process->payment_amount }}">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
+              <div class="col-sm-8">
+                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
+                           <option value="{{ $payment_process->payment_mode }}">@if($payment_process->payment_mode == 1)Cash @elseif($payment_process->payment_mode == 2)NEFT @elseif($payment_process->payment_mode == 3)Advance Adjustment @elseif($payment_process->payment_mode == 4)Cheque @else UPI @endif</option>
+                           <option value="1">Cash</option>
+                           <option value="2">NEFT</option>
+                           <option value="3">Advance Adjustment</option>
+                           <option value="4">Cheque</option>
+                           <option value="5">UPI</option>
+                        </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        @if($payment_process->payment_mode == 2 || $payment_process->payment_mode == 4 || $payment_process->payment_mode == 5) 
+        <div class="col-md-12 row mb-3" id="bank_reference">
+          @else
+          <div class="col-md-12 row mb-3" id="bank_reference" style="display: none;">
+            @endif
+          <div class="col-md-3">
+            <input type="text" placeholder="Reference No" class="form-control" name="reference_no" id="reference_no" value="{{ $payment_process->reference_no }}">
+          </div>
+          <div class="col-md-3">
+            <input type="date" class="form-control" value="{{ $date }}" name="payment_date" id="payment_date" value="{{ $payment_process->payment_date }}">
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Remarks" value="" name="remarks" id="remarks" value="{{ $payment_process->remarks }}">
+          </div>
+        </div>
+        @if($payment_process->payment_mode != 3)
+        <div id="adv_det" style="display:none">
+        @else
+        <div id="adv_det">
+        @endif
+        <div class="col-md-8">
+                       <div class="form-group row">
+                       <div class="col-md-4">
+                       <label for="validationCustom01" class=" col-form-label"><h4>Advance Bill Details:</h4> </label><br>
+                       
+                           
+                       </div>
+                         </div>
+              </div>
+
+        <div class="card-body" style="height: 100%;">
+      <table id="" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Advance Voucher.No</th>
+            <th>Voucher Date </th>
+            <th>Advance Amount </th>
+            <th>Advance Available Amount</th>
+            <th>Current Cleared Amount</th>
+          </tr>
+        </thead>
+        <tbody class="append_proof_details_adv" id="myTable_adv">
+        </tbody>
+        <tfoot>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th><input type="text" name="total_net_value" class="total_net_value" value="{{ $payment_process->net_value }}" id="total_net_value"></th>
+            </tfoot>
+      </table>
+    </div>
+</div>
 
                        
                        <div class="row col-md-12 text-center">
@@ -2925,6 +3001,75 @@ item_codes(uom_exclusive);
   $('#total_discount').val(q.toFixed(2));
   $('#disc_total').val(q.toFixed(2));
 }
+
+function payment_mode(val)
+{
+
+  var payment_mode=val;
+ if(payment_mode=="3"){
+    $('#adv_det').show();
+    $('#cash_bill').hide();
+    $('#bank_reference').hide();
+    var customer_id=$('#customer_id').val();
+     $.ajax({
+            
+            type: "POST",
+            url: "{{ url('payment_process/advance_entry_det/') }}",
+            data: { customer_id : customer_id },
+            success: function(data) {
+            var result = JSON.parse(data);
+            $('#myTable_adv').append(result);
+            
+           }
+        });
+
+ } 
+ else if(payment_mode=="2" || payment_mode=="5")
+ {
+  $('#adv_det').hide();
+  $('#cash_bill').hide();
+
+  $('#bank_reference').show();
+  $('#payment_date').attr('readonly','readonly');
+ }
+ else if(payment_mode=="4")
+ {
+  $('#adv_det').hide();
+  $('#cash_bill').hide();
+
+  $('#bank_reference').show();
+  $('#payment_date').removeAttr('readonly');
+
+ }
+ else 
+ {
+$('#adv_det').hide();
+$('#bank_reference').hide();
+$('#cash_bill').show();
+ }
+
+
+ 
+}
+
+function myfunction(val) {
+
+var sum = 0;
+  $('.payment_amount').each(function(){
+ sum = parseInt(sum) + parseInt($(this).val());
+  });
+
+  $('.total_net_value').val(sum);
+//                 var sum = 0;
+//                 var amounts = $('.amount').val();
+
+//                 for(var i=0; i<amounts.length; i++) {
+//                     var a = +amounts[i].value;
+//                     sum += parseFloat(a) || 0;
+//                 }
+// alert(sum);
+//                 $('#total_net_value').val(sum);
+            }
 
 
 </script>

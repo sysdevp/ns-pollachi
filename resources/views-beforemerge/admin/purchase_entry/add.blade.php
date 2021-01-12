@@ -740,7 +740,7 @@ table, th, td {
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>Advance Voucher.No</th>

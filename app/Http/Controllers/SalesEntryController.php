@@ -918,6 +918,7 @@ class SalesEntryController extends Controller
                                         ->get();
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
+        $receipt_process = ReceiptProcess::where('s_no',$id)->first();
 
         $item_row_count = count($sale_entry_items);
         $expense_row_count = count($sale_entry_expense);
@@ -1021,7 +1022,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process'));
     }
 
     public function edit_beta($id)
@@ -1048,6 +1049,7 @@ class SalesEntryController extends Controller
                                         ->get();
         $sale_entry_expense = SaleEntryBetaExpense::where('s_no',$id)->get();
         $tax = SaleEntryBetaTax::where('s_no',$id)->get();
+        $receipt_process = ReceiptProcess::where('s_no',$id)->first();
 
         $item_row_count = count($sale_entry_items);
         $expense_row_count = count($sale_entry_expense);
@@ -1151,7 +1153,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process'));
     }
 
     /**

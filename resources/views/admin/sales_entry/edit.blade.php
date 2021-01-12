@@ -838,6 +838,86 @@ table, th, td {
                        </div>
 
 
+                       <div class="row col-md-12">
+        <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control amount" name="bill_amount" value="{{ $receipt_process->receipt_amount }}">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
+              <div class="col-sm-8">
+                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
+                           <option value="{{ $receipt_process->payment_mode }}">@if($receipt_process->payment_mode == 1)Cash @elseif($receipt_process->payment_mode == 2)NEFT @elseif($receipt_process->payment_mode == 3)Advance Adjustment @elseif($receipt_process->payment_mode == 4)Cheque @else UPI @endif</option>
+                           <option value="1">Cash</option>
+                           <option value="2">NEFT</option>
+                           <option value="3">Advance Adjustment</option>
+                           <option value="4">Cheque</option>
+                           <option value="5">UPI</option>
+                        </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        @if($receipt_process->payment_mode == 2 || $receipt_process->payment_mode == 4 || $receipt_process->payment_mode == 5) 
+        <div class="col-md-12 row mb-3" id="bank_reference">
+          @else
+          <div class="col-md-12 row mb-3" id="bank_reference" style="display: none;">
+            @endif
+          <div class="col-md-3">
+            <input type="text" placeholder="Reference No" class="form-control" name="reference_no" id="reference_no" value="{{ $receipt_process->reference_no }}">
+          </div>
+          <div class="col-md-3">
+            <input type="date" class="form-control" value="{{ $date }}" name="payment_date" id="payment_date" value="{{ $receipt_process->payment_date }}">
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Remarks" value="" name="remarks" id="remarks" value="{{ $receipt_process->remarks }}">
+          </div>
+        </div>
+        @if($receipt_process->payment_mode != 3)
+        <div id="adv_det" style="display:none">
+        @else
+        <div id="adv_det">
+        @endif
+        <div class="col-md-8">
+                       <div class="form-group row">
+                       <div class="col-md-4">
+                       <label for="validationCustom01" class=" col-form-label"><h4>Advance Bill Details:</h4> </label><br>
+                       
+                           
+                       </div>
+                         </div>
+              </div>
+
+        <div class="card-body" style="height: 100%;">
+      <table id="" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Advance Voucher.No</th>
+            <th>Voucher Date </th>
+            <th>Advance Amount </th>
+            <th>Advance Available Amount</th>
+            <th>Current Cleared Amount</th>
+          </tr>
+        </thead>
+        <tbody class="append_proof_details_adv" id="myTable_adv">
+        </tbody>
+        <tfoot>
+              <th>Total</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th><input type="text" name="total_net_value" class="total_net_value" value="{{ $receipt_process->net_value }}" id="total_net_value"></th>
+            </tfoot>
+      </table>
+    </div>
+</div>
+
+
                        
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">

@@ -132,7 +132,7 @@ class RejectionOutController extends Controller
 
     $rejection_out_beta = RejectionOutBeta::where('status',0)->where('active',1)->get();
 
-        if(count($rejection_out) == 0)
+        if(count($rejection_out_beta) == 0)
         {
             $taxable_value_beta[] = 0;
             $tax_value_beta[] = 0;

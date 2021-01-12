@@ -79,7 +79,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                   <label style="font-family: Times new roman;">Customer Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id" required="">
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $customers)
                            <option value="{{ $customers->id }}">{{ $customers->name }}</option>
@@ -782,7 +782,7 @@ table, th, td {
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>Advance Voucher.No</th>
