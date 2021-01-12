@@ -41,10 +41,12 @@
               <td>{{ $value->email}}</td>
              
            
-              <td> 
-                <a href="{{url('master/agent/show/'.$value->id )}}" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                <a href="{{url('master/agent/edit/'.$value->id )}}" class="px-2 py-1 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a onclick="return confirm('Are you sure ?')" href="{{url('master/agent/delete/'.$value->id )}}" class="px-2 py-1 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+              <td class="icon">
+	<span class="tdshow">
+                <a href="{{url('master/agent/show/'.$value->id )}}" class="px-1 py-0 text-white rounded" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="{{url('master/agent/edit/'.$value->id )}}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a onclick="return confirm('Are you sure ?')" href="{{url('master/agent/delete/'.$value->id )}}" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				</span>
               </td>
             </tr>
           @endforeach

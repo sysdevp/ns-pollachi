@@ -1,6 +1,4 @@
 <?php $__env->startSection('content'); ?>
-<main class="page-content">
-
 <div class="col-12 body-sec">
   <div class="card px-0">
     <!-- card header start@ -->
@@ -35,7 +33,7 @@ table, th, td {
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(url('payable_partywise_report')); ?>" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('payable_partywise.store')); ?>" enctype="multipart/form-data">
       <?php echo e(csrf_field()); ?>
 
 
@@ -189,7 +187,7 @@ table, th, td {
             <input type="date" class="form-control to" name="to" id="to">
             </div>
 
-              <!-- <div class="col-sm-2">
+              <div class="col-sm-2">
                 <label>Nature </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
                   <option value="">Choose Nature</option>
@@ -198,7 +196,7 @@ table, th, td {
               <div class="col-md-2">
               <label>Head</label>
             <input type="text" class="form-control head" placeholder="Head" name="head" id="head">
-            </div> -->
+            </div>
 
             <div class="col-md-3">
               <label>Amount</label>
@@ -232,56 +230,48 @@ table, th, td {
               </div> -->
           </div>
 
-           <div class="col-md-2">
-            <label> </label>
-            <input type="submit" class="btn btn-success" name="add" value="Submit">
-            
-          </div>
-
         <div class="form-row">
           
           <table class="table table-striped table-bordered" id="payable_party">
                   <thead>
                     <th> S.no </th>
-                    <th id="party"> Supplier Name</th>
-                    <th id="bill_amount">Total Bill Amount</th>
-                    <th id="cleared_amount">Total Cleared Amount</th>
-                    <th id="pending_amount">Total Pending Amount</th>
+                    <th id="bill_no"> Bill.no </th>
+                    <th id="bill_date"> Bill Date</th>
+                    <th id="party"> Party Name</th>
+                    <th id="bill_amount"> Bill Amount</th>
+                    <th id="cleared_amount"> Cleared Amount</th>
+                    <th id="pending_amount"> Pending Amount</th>
+                    <th id="0-30" style="display: none;">0-30 Days</th>
+                    <th id="31-60" style="display: none;">31-60 Days</th>
+                    <th id="61-90" style="display: none;">61-90 Days</th>
+                    <th id="91-120" style="display: none;">91-120 Days</th>
+                    <th id="120" style="display: none;">(>120 Days)</th>
+                    <th id="no_days"> No Of Days From Bill Date</th>
+                    <th id="due_date\"> No Of Days From Due Date</th>
+                    <th id="salesman"> Sales Man Name</th>
                     <th id="supplier"> Supplier Contact Name</th>
                     <th id="contact"> Supplier Contact Number</th>
                     <th id="email"> Supplier Contact Email Id</th>
-                    <th> View Full Details</th>
                   </thead>
                   <tbody>
-                     <?php if($initial_page =='1'): ?>
-                     <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                     
-            </tr>
-
-                     <?php else: ?> 
                    <?php $__currentLoopData = $purchaseentry_datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
                       <td><?php echo e($key+1); ?></td>
+                      <td><?php echo e($value->p_no); ?></td>
+                      <td><?php echo e($value->p_date); ?></td>
                       <td><?php echo e($value->supplier->name); ?></td>
                       <td><?php echo e($value->total_net_value); ?></td>
                       <td><?php echo e($value->paid_amount); ?></td>
                       <td><?php echo e($value->pending_amount); ?></td>
+                      <td><?php echo e($value->no_of_days); ?></td>
+                      <td><?php echo e($value->no_of_days); ?></td>
+                      <td><?php echo e($value->no_of_days); ?></td>
                       <td><?php echo e($value->supplier->name); ?></td>
                       <td><?php echo e($value->supplier->phone_no); ?></td>
                       <td><?php echo e($value->supplier->email); ?></td>
-                      <td><a href="<?php echo e(url('payable_single_ledger/'.$value->id )); ?>" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a> </td>
                      
             </tr>
          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-         <?php endif; ?>
         </tbody>
                   
                 </table>

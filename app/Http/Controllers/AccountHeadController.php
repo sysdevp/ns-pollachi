@@ -17,7 +17,7 @@ class AccountHeadController extends Controller
      */
     public function index()
     {
-        $account_head = AccountHead::where('is_editable','0')->get();
+        $account_head = AccountHead::all();
         return view('admin.master.account_head.view',compact('account_head'));
     }
 
@@ -42,7 +42,7 @@ class AccountHeadController extends Controller
     public function store(Request $request)
     {
 
-            // echo $request->check; die();
+            echo $request->check; die();
             if($request->has('check'))
             {
                 $account_head = new AccountHead;

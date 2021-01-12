@@ -178,8 +178,8 @@
                @foreach($receipt_note_expense as $key => $value)
                 <tr>
                   <td>{{ $key+1 }}</td>
-                <td>@if(isset($value->expense_types->type) && !empty($value->expense_types->type))
-                {{ $value->expense_types->type }}
+                <td>@if(isset($value->expense_types->name) && !empty($value->expense_types->name))
+                {{ $value->expense_types->name }}
               @endif</td>
               <td>{{ $value->expense_amount }}</td>
                     </tr>

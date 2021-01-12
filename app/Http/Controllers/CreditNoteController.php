@@ -25,21 +25,30 @@ use App\Models\SaleOrderItem;
 use App\Models\SaleOrderBlackItem;
 use App\Models\SaleOrderExpense;
 use App\Models\SaleEntry;
+use App\Models\SaleEntryBeta;
 use App\Models\SaleEntryItem;
-use App\Models\SaleEntryBlackItem;
+use App\Models\SaleEntryBetaItem;
 use App\Models\SaleEntryExpense;
+use App\Models\SaleEntryBetaExpense;
 use App\Models\SaleEntryTax;
+use App\Models\SaleEntryBetaTax;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\CreditNote;
+use App\Models\CreditNoteBeta;
 use App\Models\CreditNoteItem;
-use App\Models\CreditNoteBlackItem;
+use App\Models\CreditNoteBetaItem;
 use App\Models\CreditNoteExpense;
+use App\Models\CreditNoteBetaExpense;
 use App\Models\CreditNoteTax;
+use App\Models\CreditNoteBetaTax;
 use App\Models\RejectionIn;
+use App\Models\RejectionInBeta;
 use App\Models\RejectionInItem;
-use App\Models\RejectionInBlackItem;
+use App\Models\RejectionInBetaItem;
 use App\Models\RejectionInExpense;
+use App\Models\RejectionInBetaExpense;
 use App\Models\RejectionInTax;
+use App\Models\RejectionInBetaTax;
 
 class CreditNoteController extends Controller
 {
@@ -51,8 +60,13 @@ class CreditNoteController extends Controller
     public function index($id)
     {
         $check_id = $id;
+        /*alpha*/
         $credit_note = CreditNote::where('active',1)->get();
-        return view('admin.credit_note.view',compact('credit_note','check_id'));
+        /*beta*/
+        $credit_note_beta = CreditNoteBeta::where('active',1)->get();
+        $customer = Customer::all();
+        $location = Location::all();
+        return view('admin.credit_note.view',compact('credit_note','credit_note_beta','check_id','customer','location'));
     }
 
     /**
@@ -123,8 +137,15 @@ class CreditNoteController extends Controller
         //      $voucher_no=$current_voucher_num+1;
         
         //  }
-
-        $voucher_num=CreditNote::orderBy('created_at','DESC')->select('id')->first();
+        if($request->has('check'))
+        {
+            $voucher_num=CreditNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+        }
+        else
+        {
+            $voucher_num=CreditNote::orderBy('created_at','DESC')->select('id')->first();
+        }
+        
         $append = "CN";
         if ($voucher_num == null) 
          {
@@ -147,18 +168,36 @@ class CreditNoteController extends Controller
 
     if($request->s_no != '')
     {
-
-        CreditNote::where('s_no',$request->s_no)->update(['active' => 0]);
-        CreditNoteBlackItem::where('s_no',$request->s_no)->update(['active' => 0]);
-        CreditNoteItem::where('s_no',$request->s_no)->update(['active' => 0]);
-        CreditNoteExpense::where('s_no',$request->s_no)->update(['active' => 0]);
-        CreditNoteTax::where('s_no',$request->s_no)->update(['active' => 0]);
+        if($request->has('check'))
+        {
+            CreditNoteBeta::where('s_no',$request->s_no)->update(['active' => 0]);
+            CreditNoteBetaItem::where('s_no',$request->s_no)->update(['active' => 0]);
+            CreditNoteBetaExpense::where('s_no',$request->s_no)->update(['active' => 0]);
+            CreditNoteBetaTax::where('s_no',$request->s_no)->update(['active' => 0]);
+        }
+        else
+        {
+            CreditNote::where('s_no',$request->s_no)->update(['active' => 0]);
+            CreditNoteItem::where('s_no',$request->s_no)->update(['active' => 0]);
+            CreditNoteExpense::where('s_no',$request->s_no)->update(['active' => 0]);
+            CreditNoteTax::where('s_no',$request->s_no)->update(['active' => 0]);
+        }
+        
 
         foreach ($request->item_code as $key => $value) 
         {
-            $sale_entry_item = SaleEntryItem::where('s_no',$request->s_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'credited_qty' => $request->debited_qty[$key]]);
 
-            $sale_entry_black_item = SaleEntryBlackItem::where('s_no',$request->s_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'credited_qty' => $request->debited_qty[$key]]);
+            if($request->has('check'))
+            {
+                $sale_entry_item = SaleEntryBetaItem::where('s_no',$request->s_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'credited_qty' => $request->debited_qty[$key]]);
+            }
+            else
+            {
+                $sale_entry_item = SaleEntryItem::where('s_no',$request->s_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'credited_qty' => $request->debited_qty[$key]]);
+            }
+            
+
+            // $sale_entry_black_item = SaleEntryBlackItem::where('s_no',$request->s_no)->where('item_id',$value)->update(['remaining_qty' => $request->quantity[$key], 'credited_qty' => $request->debited_qty[$key]]);
 
             // $sale_entry_item->remaining_qty = $request->quantity[$key];
             // $sale_entry_item->credited_qty = $request->debited_qty[$key];
@@ -171,39 +210,73 @@ class CreditNoteController extends Controller
 
     else if($request->r_in_no != '')
     {
-
-        CreditNote::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
-        CreditNoteBlackItem::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
-        CreditNoteItem::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
-        CreditNoteExpense::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
-        CreditNoteTax::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+        if($request->has('check'))
+        {
+            CreditNoteBeta::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+            CreditNoteBetaItem::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+            CreditNoteBetaExpense::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+            CreditNoteBetaTax::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+        }
+        else
+        {
+            CreditNote::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+            CreditNoteItem::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+            CreditNoteExpense::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+            CreditNoteTax::where('r_in_no',$request->r_in_no)->update(['active' => 0]);
+        }
+        
 
         foreach ($request->item_code as $key => $value) 
         {
 
-            $rejection_in_black_items = RejectionInBlackItem::where('r_in_no',$request->r_in_no)->where('item_id',$value);
-
-            $rejection_in_items = RejectionInItem::where('r_in_no',$request->r_in_no)   
+            // $rejection_in_black_items = RejectionInBlackItem::where('r_in_no',$request->r_in_no)->where('item_id',$value);
+            if($request->has('check'))
+            {
+                $rejection_in_items = RejectionInBetaItem::where('r_in_no',$request->r_in_no)   
                                                     ->where('item_id',$value)
-                                                    ->union($rejection_in_black_items)
+                                                    // ->union($rejection_in_black_items)
                                                     ->get();
 
-            foreach ($rejection_in_items as $keys => $values) 
+                foreach ($rejection_in_items as $keys => $values) 
+                {
+                    $s_no = $values->s_no;
+                }
+
+                $r_in_items = RejectionInBetaItem::where('r_in_no',$request->r_in_no)->where('item_id',$value)->update(['credited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+
+                $sale_entry_item = SaleEntryBetaItem::where('s_no',$s_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
+            }
+
+            else
             {
-                $s_no = $values->s_no;
+
+                $rejection_in_items = RejectionInItem::where('r_in_no',$request->r_in_no)   
+                                                    ->where('item_id',$value)
+                                                    // ->union($rejection_in_black_items)
+                                                    ->get();
+
+                foreach ($rejection_in_items as $keys => $values) 
+                {
+                    $s_no = $values->s_no;
+                }
+                
+                $r_in_items = RejectionInItem::where('r_in_no',$request->r_in_no)->where('item_id',$value)->update(['credited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+
+                $sale_entry_item = SaleEntryItem::where('s_no',$s_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
+
             }
 
 
-            $r_in_balck_items = RejectionInBlackItem::where('r_in_no',$request->r_in_no)->where('item_id',$value)->update(['credited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+            // $r_in_balck_items = RejectionInBlackItem::where('r_in_no',$request->r_in_no)->where('item_id',$value)->update(['credited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
 
 
-            $r_in_items = RejectionInItem::where('r_in_no',$request->r_in_no)->where('item_id',$value)->update(['credited_qty' => $request->debited_qty[$key], 'remaining_qty' => $request->quantity[$key]]);
+            
 
 
-            $sale_entry_black_item = SaleEntryBlackItem::where('s_no',$s_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
+            // $sale_entry_black_item = SaleEntryBlackItem::where('s_no',$s_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
 
 
-            $sale_entry_item = SaleEntryItem::where('s_no',$s_no)->where('item_id',$value)->update(['remaining_rejected_qty' => $request->quantity[$key]]);
+            
 
                 // $r_in_items->r_in_credited_qty = $request->debited_qty[$key];
                 // $r_in_items->rejected_qty = $request->rejected_item_qty[$key];
@@ -217,8 +290,15 @@ class CreditNoteController extends Controller
         }
     }
 
-
-         $credit_note = new CreditNote();
+        if($request->has('check'))
+        {
+            $credit_note = new CreditNoteBeta();
+        }
+        else
+        {
+            $credit_note = new CreditNote();
+        }
+         
 
          $credit_note->cn_no = $voucher_no;
          $credit_note->cn_date = $voucher_date;
@@ -240,11 +320,16 @@ class CreditNoteController extends Controller
          for($i=0;$i<$items_count;$i++)
 
         {
+                if($request->has('check'))
+                {
+                    $credit_note_items = new CreditNoteBetaItem();
+                }
+                else
+                {
+                    $credit_note_items = new CreditNoteItem();
+                }
 
-            if($request->black_or_white[$i] == 1)
-            {
-
-                $credit_note_items = new CreditNoteItem();
+                
 
                 $credit_note_items->cn_no = $voucher_no;
                 $credit_note_items->cn_date = $voucher_date;
@@ -268,41 +353,11 @@ class CreditNoteController extends Controller
                 $credit_note_items->discount = $request->discount[$i];
                 $credit_note_items->overall_disc = $request->overall_disc[$i];
                 $credit_note_items->expenses = $request->expenses[$i];
-                $credit_note_items->b_or_w = $request->black_or_white[$i];
+                // $credit_note_items->b_or_w = $request->black_or_white[$i];
 
                 $credit_note_items->save();
 
-            }
-            else
-            {
-                $credit_note_black_items = new CreditNoteBlackItem();
-
-                $credit_note_black_items->cn_no = $voucher_no;
-                $credit_note_black_items->cn_date = $voucher_date;
-                $credit_note_black_items->s_no = $request->s_no;
-                $credit_note_black_items->s_date = $request->s_date;
-                $credit_note_black_items->r_in_no = $request->r_in_no;
-                $credit_note_black_items->r_in_date = $request->r_in_date;
-                $credit_note_black_items->item_sno = $request->invoice_sno[$i];
-                $credit_note_black_items->item_id = $request->item_code[$i];
-                $credit_note_black_items->mrp = $request->mrp[$i];
-                $credit_note_black_items->gst = $request->tax_rate[$i];
-                $credit_note_black_items->rate_exclusive_tax = $request->exclusive[$i];
-                $credit_note_black_items->rate_inclusive_tax = $request->inclusive[$i];
-                // $credit_note_black_items->remaining_after_credit = $request->remaining_after_debit[$i];
-                $credit_note_black_items->qty = $request->actual_quantity[$i];
-                $credit_note_black_items->rejected_qty = $request->rejected_item_qty[$i];
-                $credit_note_black_items->remaining_qty = $request->quantity[$i];
-                $credit_note_black_items->credited_qty = $request->debited_qty[$i]; 
-                $credit_note_black_items->uom_id = $request->uom[$i];
-                $credit_note_black_items->actual_purchase_qty = $request->actual_purchase_quantity[$i];
-                $credit_note_black_items->discount = $request->discount[$i];
-                $credit_note_black_items->overall_disc = $request->overall_disc[$i];
-                $credit_note_black_items->expenses = $request->expenses[$i];
-                $credit_note_black_items->b_or_w = $request->black_or_white[$i];
-
-                $credit_note_black_items->save();
-            }
+            
             
         }
          
@@ -317,7 +372,16 @@ class CreditNoteController extends Controller
             }
             else
             {
-                $credit_note_expense = new CreditNoteExpense();
+
+                if($request->has('check'))
+                {
+                    $credit_note_expense = new CreditNoteBetaExpense();
+                }
+                else
+                {
+                    $credit_note_expense = new CreditNoteExpense();
+                }
+                
 
                 $credit_note_expense->cn_no = $voucher_no;
                 $credit_note_expense->cn_date = $voucher_date;
@@ -342,7 +406,16 @@ class CreditNoteController extends Controller
             $tax_name = str_replace('"', '', $str_json);
             $value_name = $tax_name.'_id';
 
-               $tax_details = new CreditNoteTax;
+            if($request->has('check'))
+            {
+                $tax_details = new CreditNoteBetaTax;
+            }
+            else
+            {
+                $tax_details = new CreditNoteTax;
+            }
+
+               
 
                $tax_details->cn_no = $voucher_no;
                $tax_details->cn_date = $voucher_date;
@@ -359,21 +432,43 @@ class CreditNoteController extends Controller
 
 
         $credit_note_no = $credit_note->cn_no;
-        
-        $credit_note_print_data = CreditNote::where('cn_no',$credit_note_no)->first();
+
+        if($request->has('check'))
+        {
+            $credit_note_print_data = CreditNoteBeta::where('cn_no',$credit_note_no)->first();
         $address = AddressDetails::where('address_ref_id',$credit_note_print_data->customer_id)
                                  ->where('address_table','=','Supplier')
                                  ->first();
 
-        $credit_note_black_item_print_data = CreditNoteBlackItem::where('cn_no',$credit_note_no);
+        // $credit_note_black_item_print_data = CreditNoteBlackItem::where('cn_no',$credit_note_no);
+
+        $credit_note_item_print_data = CreditNoteBetaItem::where('cn_no',$credit_note_no)
+                                                    // ->union($credit_note_black_item_print_data)
+                                                    ->get();
+
+        $credit_note_expense_print_data = CreditNoteBetaExpense::where('cn_no',$credit_note_no)->get(); 
+
+        $amnt = $credit_note_print_data->total_net_value;
+        }
+        else
+        {
+            $credit_note_print_data = CreditNote::where('cn_no',$credit_note_no)->first();
+        $address = AddressDetails::where('address_ref_id',$credit_note_print_data->customer_id)
+                                 ->where('address_table','=','Supplier')
+                                 ->first();
+
+        // $credit_note_black_item_print_data = CreditNoteBlackItem::where('cn_no',$credit_note_no);
 
         $credit_note_item_print_data = CreditNoteItem::where('cn_no',$credit_note_no)
-                                                    ->union($credit_note_black_item_print_data)
+                                                    // ->union($credit_note_black_item_print_data)
                                                     ->get();
 
         $credit_note_expense_print_data = CreditNoteExpense::where('cn_no',$credit_note_no)->get(); 
 
         $amnt = $credit_note_print_data->total_net_value;
+        }
+        
+        
 
         //amount in words
 
@@ -979,7 +1074,6 @@ class CreditNoteController extends Controller
     public function destroy($id)
     {
         $credit_note_data = CreditNote::where('cn_no',$id)->where('active',1);
-        $credit_note_black_item_data = CreditNoteBlackItem::where('cn_no',$id)->where('active',1);
         $credit_note_item_data = CreditNoteItem::where('cn_no',$id)->where('active',1);
         $credit_note_expense_data = CreditNoteExpense::where('cn_no',$id)->where('active',1);
         $credit_note_tax = CreditNoteTax::where('cn_no',$id)->where('active',1);
@@ -999,15 +1093,6 @@ class CreditNoteController extends Controller
 
         }
 
-        $sales_entry_black_item = SaleEntryBlackItem::where('s_no',$s_no)->get();
-        foreach ($sales_entry_black_item as $key => $value) 
-        {
-            $qty = $value->credited_qty + $value->remaining_qty;
-            $item_id = $value->item_id;
-            SaleEntryBlackItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
-
-        }
-
         $r_in_item = RejectionInItem::where('r_in_no',$r_in_no)->get();
         foreach ($r_in_item as $key => $value) 
         {
@@ -1015,16 +1100,6 @@ class CreditNoteController extends Controller
             $item_id = $value->item_id;
            
             RejectionInItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
-
-        }
-
-        $r_in_black_item = RejectionInBlackItem::where('r_in_no',$r_in_no)->get();
-        foreach ($r_in_black_item as $key => $value) 
-        {
-            $qty = $value->credited_qty + $value->remaining_qty;
-            $item_id = $value->item_id;
-
-            RejectionInBlackItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
 
         }
         
@@ -1037,9 +1112,56 @@ class CreditNoteController extends Controller
         $credit_note_item_data->update(['active' => 0]);
         }
 
-        if($credit_note_black_item_data)
+        if($credit_note_expense_data)
         {
-        $credit_note_black_item_data->update(['active' => 0]);
+        $credit_note_expense_data->update(['active' => 0]);
+        } 
+        if($credit_note_tax)
+        {
+            $credit_note_tax->update(['active' => 0]);
+        }    
+        
+        return Redirect::back()->with('success', 'Deleted Successfully');
+    }
+
+    public function delete_beta($id)
+    {
+        $credit_note_data = CreditNoteBeta::where('cn_no',$id)->where('active',1);
+        $credit_note_item_data = CreditNoteBetaItem::where('cn_no',$id)->where('active',1);
+        $credit_note_expense_data = CreditNoteBetaExpense::where('cn_no',$id)->where('active',1);
+        $credit_note_tax = CreditNoteBetaTax::where('cn_no',$id)->where('active',1);
+
+        $credit_note = CreditNoteBeta::where('cn_no',$id)->where('active',1)->first();
+
+        $s_no = $credit_note->s_no;
+        $r_in_no = $credit_note->r_in_no;
+
+        $sales_entry_item = SaleEntryBetaItem::where('s_no',$s_no)->get();
+        foreach ($sales_entry_item as $key => $value) 
+        {
+            $qty = $value->credited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            SaleEntryBetaItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
+
+        }
+
+        $r_in_item = RejectionInBetaItem::where('r_in_no',$r_in_no)->get();
+        foreach ($r_in_item as $key => $value) 
+        {
+            $qty = $value->credited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+           
+            RejectionInBetaItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
+
+        }
+        
+        if($credit_note_data)
+        {
+            $credit_note_data->update(['active' => 0]);
+        }
+        if($credit_note_item_data)
+        {
+        $credit_note_item_data->update(['active' => 0]);
         }
 
         if($credit_note_expense_data)
@@ -1747,9 +1869,28 @@ $result=[];
     return view('admin.credit_note.item_details',compact('item_details','gst_rs','amount','net_value'));
     }
 
+    public function item_beta_details($id)
+    {
+
+        $item_details = CreditNoteBetaItem::where('cn_no',$id)->get();
+        foreach ($item_details as $key => $value) 
+        {
+            $amount[] = $value->qty * $value->rate_exclusive_tax;
+            $gst_rs[] = $amount[$key] * $value->gst / 100;
+            $net_value[] = $amount[$key] + $gst_rs[$key] - $value->discount;
+        }
+    return view('admin.credit_note.item_details',compact('item_details','gst_rs','amount','net_value'));
+    }
+
     public function expense_details($id)
     {
         $expense_details = CreditNoteExpense::where('cn_no',$id)->get();
+        return view('admin.credit_note.expense_details',compact('expense_details'));
+    }
+
+    public function expense_beta_details($id)
+    {
+        $expense_details = CreditNoteBetaExpense::where('cn_no',$id)->get();
         return view('admin.credit_note.expense_details',compact('expense_details'));
     }
 
@@ -1768,9 +1909,91 @@ $result=[];
         return $net_value;                          
     }
 
+    function po_alpha_beta(Request $request)
+    {
+
+      $s_no = "";
+      $r_in_no = "";
+      if($request->id == 1)
+      {
+
+        $voucher_num=CreditNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+        $append = "CN";
+        if ($voucher_num == null) 
+         {
+             $voucher_no=$append.'1';
+
+                             
+         }                  
+         else
+         {
+             $current_voucher_num=$voucher_num->id;
+             $next_no=$current_voucher_num+1;
+
+             $voucher_no = $append.$next_no;
+        
+         
+         }
+
+        $sale_entry = SaleEntryBeta::where('cancel_status',0)->get();
+
+        $rejection_in = RejectionInBeta::where('cancel_status',0)->where('status',0)->where('active',1)->get();
+
+        foreach ($sale_entry as $key => $value) {
+         $s_no.= "<option value=".$value->s_no.">".$value->s_no."</option>";
+        }
+
+       foreach ($rejection_in as $key => $value) {
+         $r_in_no.= "<option value=".$value->r_in_no.">".$value->r_in_no."</option>";
+        }
+        
+
+        $result_array = array('s_no' => $s_no, 'r_in_no' => $r_in_no, 'voucher_no' => $voucher_no);
+      }
+      else
+      {
+
+        $voucher_num=CreditNote::orderBy('created_at','DESC')->select('id')->first();
+        $append = "CN";
+        if ($voucher_num == null) 
+         {
+             $voucher_no=$append.'1';
+
+                             
+         }                  
+         else
+         {
+             $current_voucher_num=$voucher_num->id;
+             $next_no=$current_voucher_num+1;
+
+             $voucher_no = $append.$next_no;
+        
+         
+         }
+
+        $sale_entry = SaleEntry::where('cancel_status',0)->get();
+
+        $rejection_in = RejectionIn::where('cancel_status',0)->where('status',0)->where('active',1)->get();
+
+        foreach ($sale_entry as $key => $value) {
+         $s_no.= "<option value=".$value->s_no.">".$value->s_no."</option>";
+        }
+
+       foreach ($rejection_in as $key => $value) {
+         $r_in_no.= "<option value=".$value->r_in_no.">".$value->r_in_no."</option>";
+        }
+        
+
+        $result_array = array('s_no' => $s_no, 'r_in_no' => $r_in_no, 'voucher_no' => $voucher_no);
+
+    }
+    echo json_encode($result_array); exit();
+}
+
     public function s_details(Request $request)
     {
         $s_no = $request->s_no;
+        $alpha_beta = $request->alpha_beta;
         $date = date('Y-m-d');
         $categories = Category::all();
         $supplier = Supplier::all();
@@ -1797,14 +2020,23 @@ $result=[];
         
          
         //  }
-
-        $sale_entry = SaleEntry::where('s_no',$s_no)->first();
-        $sale_entry_black_item = SaleEntryBlackItem::where('s_no',$s_no);
-        $sale_entry_item = SaleEntryItem::where('s_no',$s_no)
-                                        ->union($sale_entry_black_item)
-                                        ->get();
-        $sale_entry_expense = SaleEntryExpense::where('s_no',$s_no)->get();
-        $sale_entry_tax = SaleEntryTax::where('s_no',$s_no)->get();
+        if($alpha_beta == 1)
+        {
+            $sale_entry = SaleEntryBeta::where('s_no',$s_no)->first();
+            $sale_entry_item = SaleEntryBetaItem::where('s_no',$s_no)
+                                            ->get();
+            $sale_entry_expense = SaleEntryBetaExpense::where('s_no',$s_no)->get();
+            $sale_entry_tax = SaleEntryBetaTax::where('s_no',$s_no)->get();
+        }
+        else
+        {
+            $sale_entry = SaleEntry::where('s_no',$s_no)->first();
+            $sale_entry_item = SaleEntryItem::where('s_no',$s_no)
+                                            ->get();
+            $sale_entry_expense = SaleEntryExpense::where('s_no',$s_no)->get();
+            $sale_entry_tax = SaleEntryTax::where('s_no',$s_no)->get();   
+        }
+        
 
         $round_off = $sale_entry->round_off;
         $overall_discount = $sale_entry->overall_discount;
@@ -1840,13 +2072,21 @@ $result=[];
             $item_gst_rs = $item_amount * $value->gst / 100;
             $item_net_value = $item_amount + $item_gst_rs - $value->discount;
 
-            $item_black_data = SaleEntryBlackItem::where('item_id',$value->item_id)
-                                    ->orderBy('updated_at','DESC');
-
-            $item_data = SaleEntryItem::where('item_id',$value->item_id)
+            // $item_black_data = SaleEntryBlackItem::where('item_id',$value->item_id)
+            //                         ->orderBy('updated_at','DESC');
+            if($alpha_beta == 1)
+            {
+                $item_data = SaleEntryBetaItem::where('item_id',$value->item_id)
                                     ->orderBy('updated_at','DESC')
-                                    ->union($item_black_data)
                                     ->first();
+            }
+            else
+            {
+                $item_data = SaleEntryItem::where('item_id',$value->item_id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+            }
+            
                                     
             // $item_sum = $item_data->rejected_qty + $item_data->credited_qty;
             // $item_remaining_qty = $item_data->actual_qty - $item_sum;
@@ -1928,6 +2168,7 @@ echo "<pre>"; print_r($data); exit;
     public function rejection_in_details(Request $request)
     {
         $r_in_no = $request->r_in_no;
+        $alpha_beta = $request->alpha_beta;
         $date = date('Y-m-d');
         $categories = Category::all();
         $supplier = Supplier::all();
@@ -1954,15 +2195,25 @@ echo "<pre>"; print_r($data); exit;
         
          
         //  }
-
-        $rejection_in = RejectionIn::where('r_in_no',$r_in_no)->first();
-        $rejection_in_black_item = RejectionInBlackItem::where('r_in_no',$r_in_no)->where('active',1);
-        $rejection_in_item = RejectionInItem::where('r_in_no',$r_in_no)
-                                            ->where('active',1)
-                                            ->union($rejection_in_black_item)
-                                            ->get();
-        $rejection_in_expense = RejectionInExpense::where('r_in_no',$r_in_no)->get();
-        $rejection_in_tax = RejectionInTax::where('r_in_no',$r_in_no)->get();
+        if($alpha_beta == 1)
+        {
+            $rejection_in = RejectionInBeta::where('r_in_no',$r_in_no)->first();
+            $rejection_in_item = RejectionInBetaItem::where('r_in_no',$r_in_no)
+                                                ->where('active',1)
+                                                ->get();
+            $rejection_in_expense = RejectionInBetaExpense::where('r_in_no',$r_in_no)->get();
+            $rejection_in_tax = RejectionInBetaTax::where('r_in_no',$r_in_no)->get();
+        }
+        else
+        {
+            $rejection_in = RejectionIn::where('r_in_no',$r_in_no)->first();
+            $rejection_in_item = RejectionInItem::where('r_in_no',$r_in_no)
+                                                ->where('active',1)
+                                                ->get();
+            $rejection_in_expense = RejectionInExpense::where('r_in_no',$r_in_no)->get();
+            $rejection_in_tax = RejectionInTax::where('r_in_no',$r_in_no)->get();
+        }
+        
 
         $round_off = $rejection_in->round_off;
         $overall_discount = $rejection_in->overall_discount;
@@ -1994,16 +2245,25 @@ echo "<pre>"; print_r($data); exit;
             $item_gst_rs = $item_amount * $value->gst / 100;
             $item_net_value = $item_amount + $item_gst_rs - $value->discount;
 
-            $item_black_data = RejectionInBlackItem::where('item_id',$value->item_id)
-                                    ->where('active',1)
-                                    ->orderBy('updated_at','DESC');
+            // $item_black_data = RejectionInBlackItem::where('item_id',$value->item_id)
+            //                         ->where('active',1)
+            //                         ->orderBy('updated_at','DESC');
 
-
-            $item_data = RejectionInItem::where('item_id',$value->item_id)
+            if($alpha_beta == 1)
+            {
+                $item_data = RejectionInBetaItem::where('item_id',$value->item_id)
                                     ->where('active',1)
                                     ->orderBy('updated_at','DESC')
-                                    ->union($item_black_data)
                                     ->first();
+            }
+            else
+            {
+                $item_data = RejectionInItem::where('item_id',$value->item_id)
+                                    ->where('active',1)
+                                    ->orderBy('updated_at','DESC')
+                                    ->first();
+            }
+            
 
 
             // $last_purchase_amount = $item_data->rejected_qty - $item_data->credited_qty;
@@ -2121,6 +2381,46 @@ echo "<pre>"; print_r($data); exit;
         return Redirect::back()->with('success', 'Cancelled');
     }
 
+    public function cancel_beta($id)
+    {
+
+        $credit_note_data = CreditNoteBeta::where('cn_no',$id)->where('active',1);
+        $credit_note_item_data = CreditNoteBetaItem::where('cn_no',$id)->where('active',1);
+        $credit_note_expense_data = CreditNoteBetaExpense::where('cn_no',$id)->where('active',1);
+        $credit_note_tax = CreditNoteBetaTax::where('cn_no',$id)->where('active',1);
+
+        $credit_note = CreditNoteBeta::where('cn_no',$id)->where('active',1)->first();
+
+        $s_no = $credit_note->s_no;
+        $r_in_no = $credit_note->r_in_no;
+
+
+        $sales_entry_item = SaleEntryBetaItem::where('s_no',$s_no)->get();
+        foreach ($sales_entry_item as $key => $value) 
+        {
+            $qty = $value->credited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            SaleEntryBetaItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => 0]);
+
+        }
+
+        $r_in_item = RejectionInBetaItem::where('r_in_no',$r_in_no)->get();
+        foreach ($r_in_item as $key => $value) 
+        {
+            $qty = $value->r_in_credited_qty + $value->remaining_qty;
+            $item_id = $value->item_id;
+            RejectionInBetaItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_in_credited_qty' => 0]);
+
+        }
+
+        $credit_notes = CreditNoteBeta::where('cn_no',$id)->first();
+
+        $credit_notes->cancel_status = 1;
+        $credit_notes->save();
+
+        return Redirect::back()->with('success', 'Cancelled');
+    }
+
     public function retrieve($id)
     {
 
@@ -2166,6 +2466,69 @@ echo "<pre>"; print_r($data); exit;
         $credit_notes->save();
 
         return Redirect::back()->with('success', 'Retrieved');
+    }
+
+    public function retrieve_beta($id)
+    {
+
+        $credit_note_data = CreditNoteBeta::where('cn_no',$id)->where('active',1);
+        $credit_note_item_data = CreditNoteBetaItem::where('cn_no',$id)->where('active',1);
+        $credit_note_expense_data = CreditNoteBetaExpense::where('cn_no',$id)->where('active',1);
+        $credit_note_tax = CreditNoteBetaTax::where('cn_no',$id)->where('active',1);
+
+        $credit_note_items = CreditNoteBetaItem::where('cn_no',$id)->where('active',1)->get();
+
+        $credit_note = CreditNoteBeta::where('cn_no',$id)->where('active',1)->first();
+
+        $s_no = $credit_note->s_no;
+        $r_in_no = $credit_note->r_in_no;
+
+        foreach ($credit_note_items as $key => $value) 
+        {
+            $credited_qty[] = $value->credited_qty;
+        }
+
+
+        $sales_entry_item = SaleEntryBetaItem::where('s_no',$s_no)->get();
+        foreach ($sales_entry_item as $key => $value) 
+        {
+            $qty = $value->remaining_qty - $credited_qty[$key];
+            $item_id = $value->item_id;
+            SaleEntryBetaItem::where('s_no',$s_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'credited_qty' => $credited_qty[$key]]);
+
+        }
+
+        $r_in_item = RejectionInBetaItem::where('r_in_no',$r_in_no)->get();
+        foreach ($r_in_item as $key => $value) 
+        {
+            $qty = $value->remaining_qty - $credited_qty[$key];
+            $item_id = $value->item_id;
+            RejectionInBetaItem::where('r_in_no',$r_in_no)->where('item_id',$item_id)->update(['remaining_qty' => $qty, 'r_in_credited_qty' => $credited_qty[$key]]);
+
+        }
+
+        $credit_notes = CreditNoteBeta::where('cn_no',$id)->first();
+
+        $credit_notes->cancel_status = 0;
+        $credit_notes->save();
+
+        return Redirect::back()->with('success', 'Retrieved');
+    }
+
+    public function report(Request $request)
+    {
+
+        $cond = [];
+        if(isset($request->customer_id)){$cond['customer_id'] = $request->customer_id; }
+        if(isset($request->location)) {$cond['location'] = $request->location;}
+        if(isset($request->from)) {$from = date('Y-m-d',strtotime($request->from)); }           
+        if(isset($request->to)) {$to = date('Y-m-d',strtotime($request->to)); }
+        $check_id = "";
+
+       $credit_note = CreditNote::where($cond)->whereBetween('s_date',[$from,$to])->where('active',1)->get();
+        $customer = Customer::all();
+        $location = Location::all();
+        return view('admin.credit_note.view',compact('credit_note','credit_note_beta','check_id','customer','location','from','to','cond'));
     }
 
 }

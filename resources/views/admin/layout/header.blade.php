@@ -151,6 +151,7 @@
                             @can('accounts_type_list')
                             <li><a class="acnav__link acnav__link--level3" href="{{url('master/accounts-type')}}">Accounts Type</a></li>
                             @endcan
+                            <li><a class="acnav__link acnav__link--level3" href="{{route('company-bank.index')}}">Company Bank</a></li>
 													</ul>
 										</li>
 											<li class="has-children">
@@ -249,6 +250,14 @@
 							
 													</ul>
 										</li>
+
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Price Level Settings</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('price-level.index')}}">Price Levels</a></li>
+                          </ul>
+                    </li>
 										
 										<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Area</div>

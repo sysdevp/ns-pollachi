@@ -1,6 +1,4 @@
 <?php $__env->startSection('content'); ?>
-<main class="page-content">
-
 <div class="col-12 body-sec">
   <div class="card">
     <!-- card header start@ -->
@@ -11,7 +9,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="<?php echo e(url('purchase_entry/index/0')); ?>">Back</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="<?php echo e(route('purchase_entry.index')); ?>">Back</a></button></li>
           </ul>
         </div>
       </div>
@@ -26,16 +24,14 @@
            <th>Item Name</th>
            <th>MRP</th>
            <th>HSN</th>
-           <th>Tax %</th>
+           <th>GST</th>
            <th>Rate Exclusive Tax</th>
            <th>Rate Inclusive Tax</th>
            <th>Quantity</th>
            <th>UOM</th>
            <th>Amount</th>
-           <th>Tax Rs</th>
-           <!-- <th>Discount</th> -->
-           <th>Overall Discount</th>
-           <th>Expense</th>
+           <th>GST Rs</th>
+           <th>Discount</th>
            <th>Net Price</th>
            <!-- <th>Action</th> -->
           </tr>
@@ -68,9 +64,7 @@
               <?php endif; ?>
               <td><?php echo e($amount[$key]); ?></td>
               <td><?php echo e($gst_rs[$key]); ?></td>
-              <!-- <td><?php echo e($value->discount); ?></td> -->
-              <td><?php echo e($value->overall_disc); ?></td>
-              <td><?php echo e($value->expenses); ?></td>
+              <td><?php echo e($value->discount); ?></td>
               <td><?php echo e($net_value[$key]); ?></td>
               <!-- <td> 
                 <a href="" class="px-2 py-1 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
