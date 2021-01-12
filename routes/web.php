@@ -1104,6 +1104,29 @@ Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
 
+/* Itemwise offers  */
+Route::group(['prefix' => 'master/itemwiseoffer', 'middleware' => ['auth']], function () {
+    Route::any('/', 'ItemwiseOfferController@index');
+    Route::any('create', 'ItemwiseOfferController@create');
+    Route::any('store', 'ItemwiseOfferController@store');
+    Route::any('show/{id}', 'ItemwiseOfferController@show');
+    Route::any('edit/{id}', 'ItemwiseOfferController@edit');
+    Route::any('update/{id}', 'ItemwiseOfferController@update');
+    Route::any('delete/{id}', 'ItemwiseOfferController@destroy');
+});
+
+
+/* Item wastages  */
+Route::group(['prefix' => 'master/item_wastage', 'middleware' => ['auth']], function () {
+    Route::any('/', 'ItemWastageController@index');
+    Route::any('create', 'ItemWastageController@create');
+    Route::any('store', 'ItemWastageController@store');
+    Route::any('show/{id}', 'ItemWastageController@show');
+    Route::any('edit/{id}', 'ItemWastageController@edit');
+    Route::any('update/{id}', 'ItemWastageController@update');
+    Route::any('delete/{id}', 'ItemWastageController@destroy');
+});
+
 /*Individual Ledger Start Here*/
 
 Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);

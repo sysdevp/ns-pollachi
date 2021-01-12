@@ -182,13 +182,16 @@
 													</ul>
 										</li>
 										<li class="has-children">
-													<div class="acnav__label acnav__label--level2">Accounts</div>
+													<div class="acnav__label acnav__label--level2">Offers</div>
 													<ul class="acnav__list acnav__list--level3">
 														
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('gift_voucher_matser_list')): ?>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/gift-voucher')); ?>">Gift Voucher</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/offers')); ?>">Offers</a></li>
                             <?php endif; ?>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/itemwiseoffer')); ?>">Itemwise Offers</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/item_wastage')); ?>">Item Wastage</a></li>
+
 													</ul>
 										</li>
 										<li class="has-children">
