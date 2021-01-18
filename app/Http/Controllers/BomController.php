@@ -86,7 +86,10 @@ class BomController extends Controller
      */
     public function show($id)
     {
-        //
+        $bom = Bom::find($id);
+        $bom_items = BomItem::where('bom_id',$id)->get();
+
+        return view('admin.master.bom.show',compact('bom','bom_items'));
     }
 
     /**
