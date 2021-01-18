@@ -465,21 +465,31 @@ class PriceUpdationController extends Controller
             $last_selling_price = PriceUpdation::where('item_id',$value->id)
                                     ->where('status',0)
                                     ->orderBy('updated_at','DESC')
+                                    ->latest()
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
-                                    ->first(); 
-
-                                                           
-
+                                    ->first();                        
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
+                
+                $tax = 0;
+            }    
+            else
+            {
+                $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
+                
+                $tax = @$item_data->gst;
+            }                    
                                      
-            $unit_price = @$item_data->rate_inclusive_tax;
-            $discount = @$item_data->discount / @$item_data->qty;
-            $item_rate = $unit_price - $discount;
-
-            $tax = @$item_data->gst;
+            
 
             if(@$updated_selling_price == '')
             {
-                @$selling_price = '';
+                @$selling_price = 0;
             }
 
             else
@@ -588,13 +598,24 @@ class PriceUpdationController extends Controller
                                     ->latest()
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                     ->first();                        
-
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
+                
+                $tax = 0;
+            }    
+            else
+            {
+                $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
+                
+                $tax = @$item_data->gst;
+            }                    
                                      
-            $unit_price = @$item_data->rate_inclusive_tax;
-            $discount = @$item_data->discount / @$item_data->qty;
-            $item_rate = $unit_price - $discount;
             
-            $tax = @$item_data->gst;
 
             if(@$updated_selling_price == '')
             {
