@@ -13,7 +13,7 @@ class CompanyBank extends Model
 
     public function bank_branch()
     {
-    	return $this->belongsTo(BankBranch::class, 'bank_branch_id' ,'id');
+    	return $this->belongsTo(Bankbranch::class, 'bank_branch_id' ,'id');
     }
     public function account_types()
     {
