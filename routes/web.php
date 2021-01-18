@@ -1248,6 +1248,18 @@ Route::group(['prefix' => 'master/item_wastage', 'middleware' => ['auth']], func
     Route::any('delete/{id}', 'ItemWastageController@destroy');
 });
 
+
+/* Production Module  */
+Route::group(['prefix' => 'production', 'middleware' => ['auth']], function () {
+    Route::any('/', 'ProductionController@index');
+    Route::any('create', 'ProductionController@create');
+    Route::any('store', 'ProductionController@store');
+    Route::any('show/{id}', 'ProductionController@show');
+    Route::any('edit/{id}', 'ProductionController@edit');
+    Route::any('update/{id}', 'ProductionController@update');
+    Route::any('delete/{id}', 'ProductionController@destroy');
+});
+
 /*Individual Ledger Start Here*/
 
 Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);

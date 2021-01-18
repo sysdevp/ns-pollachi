@@ -395,7 +395,7 @@
                           <div class="acnav__label acnav__label--level2">Production Module</div>
                           <ul class="acnav__list acnav__list--level3">
                             
-                          <li><a class="acnav__link acnav__link--level3"  href="<?php echo e(route('expense.create')); ?>">Production</a></li>
+                          <li><a class="acnav__link acnav__link--level3"  href="<?php echo e(url('production')); ?>">Production</a></li>
                         
                                 </ul>
 
