@@ -23,69 +23,79 @@ class PriceUpdationController extends Controller
     public function index()
     {
         $updations = PriceUpdation::where('status',1)->get();
-        foreach ($updations as $key => $value) 
+        $count = count($updations);
+        // print_r($updations); exit();
+
+        if($count == 0)
         {
-
-            $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
-                                    ->orderBy('updated_at','DESC')
-                                    ->latest()
-                                    ->first();
-
-            $updated_selling_price = PriceUpdation::where('item_id',$value->item_id)
-                                    ->where('status',1)
-                                    ->orderBy('updated_at','DESC')
-                                    ->latest()
-                                    ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
-                                    ->first();
-
-            if($item_data == '')
-            {
-                $unit_price = 0;
-                $discount = 0;
-                $item_rate = 0;
-                $last_purchase_cost[] =0;
-                $tax = 0;
-            } 
-            else
-            {
-                $unit_price = @$item_data->rate_inclusive_tax;
-                $discount = @$item_data->discount / @$item_data->qty;
-                $item_rate = $unit_price - $discount;
-
-                $last_purchase_cost[] = $unit_price;
-                $tax = @$item_data->gst;
-            }                                 
-
             
-
-            if(@$updated_selling_price->mark_up_type == 1)
-            {
-                $percentage_val = $item_rate * @$updated_selling_price->mark_up_value / 100;
-                $total = $item_rate + $percentage_val;
-                @$selling_price[] = number_format($total, 2, '.', ',');
-            }
-            else if(@$updated_selling_price->mark_up_type == 2)
-            {
-                $total = $item_rate + @$updated_selling_price->mark_up_value;
-                @$selling_price[] = number_format($total, 2, '.', ',');
-                
-            }
-            
-            if(@$updated_selling_price->mark_down_type == 1)
-            {
-                $percentage_val = $item_rate * @$updated_selling_price->mark_down_value / 100;
-                $total = $item_rate - $percentage_val;
-                @$selling_price[] = number_format($total, 2, '.', ',');
-                
-            }
-            else if(@$updated_selling_price->mark_down_type == 2)
-            {
-               $total = $item_rate - @$updated_selling_price->mark_down_value;
-               @$selling_price[] = number_format($total, 2, '.', ',');
-            }
+            $selling_price[] = 0;
+            $last_purchase_cost[] = 0;
         }
+        else
+        {
+            foreach ($updations as $key => $value) 
+            {
 
-                                    
+                $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
+                                        ->orderBy('updated_at','DESC')
+                                        ->latest()
+                                        ->first();
+
+                $updated_selling_price = PriceUpdation::where('item_id',$value->item_id)
+                                        ->where('status',1)
+                                        ->orderBy('updated_at','DESC')
+                                        ->latest()
+                                        ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                        ->first();
+
+                if($item_data == '')
+                {
+                    $unit_price = 0;
+                    $discount = 0;
+                    $item_rate = 0;
+                    $last_purchase_cost[] =0;
+                    $tax = 0;
+                } 
+                else
+                {
+                    $unit_price = @$item_data->rate_inclusive_tax;
+                    $discount = @$item_data->discount / @$item_data->qty;
+                    $item_rate = $unit_price - $discount;
+
+                    $last_purchase_cost[] = $unit_price;
+                    $tax = @$item_data->gst;
+                }                                 
+
+                
+
+                if(@$updated_selling_price->mark_up_type == 1)
+                {
+                    $percentage_val = $item_rate * @$updated_selling_price->mark_up_value / 100;
+                    $total = $item_rate + $percentage_val;
+                    @$selling_price[] = number_format($total, 2, '.', ',');
+                }
+                else if(@$updated_selling_price->mark_up_type == 2)
+                {
+                    $total = $item_rate + @$updated_selling_price->mark_up_value;
+                    @$selling_price[] = number_format($total, 2, '.', ',');
+                    
+                }
+                
+                if(@$updated_selling_price->mark_down_type == 1)
+                {
+                    $percentage_val = $item_rate * @$updated_selling_price->mark_down_value / 100;
+                    $total = $item_rate - $percentage_val;
+                    @$selling_price[] = number_format($total, 2, '.', ',');
+                    
+                }
+                else if(@$updated_selling_price->mark_down_type == 2)
+                {
+                   $total = $item_rate - @$updated_selling_price->mark_down_value;
+                   @$selling_price[] = number_format($total, 2, '.', ',');
+                }
+            }
+        }                          
 
         return View('admin.price_updation.view',compact('updations','selling_price','last_purchase_cost'));
     }
@@ -715,17 +725,28 @@ class PriceUpdationController extends Controller
                                     ->latest()
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                     ->first();                        
-
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
+                
+                $tax = 0;
+            }    
+            else
+            {
+                $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
+                
+                $tax = @$item_data->gst;
+            }                    
                                      
-            $unit_price = @$item_data->rate_inclusive_tax;
-            $discount = @$item_data->discount / @$item_data->qty;
-            $item_rate = $unit_price - $discount;
             
-            $tax = @$item_data->gst;
 
             if(@$updated_selling_price == '')
             {
-                @$selling_price = '';
+                @$selling_price = 0;
             }
 
             else
