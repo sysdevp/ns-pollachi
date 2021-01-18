@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card container px-0">
     <!-- card header start@ -->
@@ -26,7 +28,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Location Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Location Name" name="name" value="<?php echo e(old('name')); ?>" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Location Name" name="name" value="<?php echo e(old('name')); ?>" required>
                 <span class="mandatory"> <?php echo e($errors->first('name')); ?> </span>
                 <div class="invalid-feedback">
                   Enter valid Location Name
@@ -39,7 +41,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">GST Number <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="Number" class="form-control gst_number" placeholder="Gst Number" name="gst_number" value="<?php echo e(old('gst_number')); ?>" required>
+                <input type="text" class="form-control gst_number" style="text-transform: uppercase;" placeholder="Gst Number" name="gst_number" value="<?php echo e(old('gst_number')); ?>" maxlength="15" required>
                 <span class="mandatory"> <?php echo e($errors->first('gst_number')); ?> </span>
                 <div class="invalid-feedback">
                   Enter valid GST Number
@@ -52,7 +54,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_1" placeholder="Address Line 1" name="address_line_1" value="<?php echo e(old('address_line_1')); ?>" required>
+                <input type="text" class="form-control address_line_1 caps" placeholder="Address Line 1" name="address_line_1" value="<?php echo e(old('address_line_1')); ?>" required>
                 <span class="mandatory"> <?php echo e($errors->first('address_line_1')); ?> </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -65,7 +67,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 2 </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_2" placeholder="Address Line 2" name="address_line_2" value="<?php echo e(old('address_line_2')); ?>">
+                <input type="text" class="form-control address_line_2 caps" placeholder="Address Line 2" name="address_line_2" value="<?php echo e(old('address_line_2')); ?>">
                 <span class="mandatory"> <?php echo e($errors->first('address_line_2')); ?> </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -78,7 +80,7 @@
             <div class="form-group row">
               <label for="land_mark" class="col-sm-4 col-form-label">Land Mark </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control land_mark" placeholder="Land Mark" name="land_mark" value="<?php echo e(old('land_mark')); ?>">
+                <input type="text" class="form-control land_mark caps" placeholder="Land Mark" name="land_mark" value="<?php echo e(old('land_mark')); ?>">
                 <span class="mandatory"> <?php echo e($errors->first('land_mark')); ?> </span>
                 <div class="invalid-feedback">
                 Enter valid Land Mark

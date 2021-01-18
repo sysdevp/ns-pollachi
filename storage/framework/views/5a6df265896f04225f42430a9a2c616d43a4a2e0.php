@@ -245,12 +245,12 @@
               <div class="col-sm-8">
                 <select class="js-example-basic-multiple col-12 form-control price_level select custom-select required_for_valid" error-data="Enter valid Price Level" data-placeholder="Choose Price Level " name="price_level">
                   <option value=""></option>
-                  <option value="1" <?php echo e(old('price_level') == '1' ? 'selected' : ''); ?>>Price Level 1</option>
-                  <option value="2" <?php echo e(old('price_level') == '2' ? 'selected' : ''); ?>>Price Level 2</option>
-                  <option value="3" <?php echo e(old('price_level') == '3' ? 'selected' : ''); ?>>Price Level 3</option>
+                  <?php $__currentLoopData = $price_level; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <option value="<?php echo e($value->id); ?>"><?php echo e($value->level); ?></option>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
 
-                <span class="mandatory"> <?php echo e($errors->first('price_level')); ?> </span>
+                <span class="mandatory"> </span>
                 <div class="invalid-feedback">
                   Enter valid Price Level
                 </div>

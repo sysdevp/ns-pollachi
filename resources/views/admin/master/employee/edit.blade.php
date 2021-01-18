@@ -40,7 +40,7 @@
              </select>
              <span class="mandatory"> {{ $errors->first('salutation')  }} </span>
            </div>
-           <input type="text" class="form-control  required_for_valid name" name="name" error-data="Employee Name Field is required" aria-label="Text input with dropdown button" value={{old('name',$employee->name)}}>
+           <input type="text" class="form-control  required_for_valid name caps" name="name" error-data="Employee Name Field is required" aria-label="Text input with dropdown button" value={{old('name',$employee->name)}}>
            
            <div class="invalid-feedback">
              Enter valid Employee Name

@@ -29,7 +29,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Name:</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name" placeholder="Name" required="" name="name" value="{{ $account_group->name }}">
+                <input type="text" class="form-control name caps" placeholder="Name" required="" name="name" value="{{ $account_group->name }}">
                 
               </div>
             </div>

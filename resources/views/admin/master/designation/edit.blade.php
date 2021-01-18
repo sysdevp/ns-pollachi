@@ -28,7 +28,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Role Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_numeric" placeholder="Designation Name" name="name" value="{{old('name',$designation->name)}}" required>
+                <input type="text" class="form-control name only_allow_alp_numeric caps" placeholder="Designation Name" name="name" value="{{old('name',$designation->name)}}" required>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Role Name

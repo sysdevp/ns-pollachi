@@ -23,6 +23,7 @@ class PayablePartywiseController extends Controller
         $paid_amount = 0;
         $remaining_value =0;
         $result = '';
+		$initial_page = 0;
         foreach($purchaseentry_datas as $purchaseentry_data){
          $paid_amount = PaymentProcess::where('p_no',$purchaseentry_data->p_no)->sum('payment_amount');
          $purchaseentry_data['paid_amount'] = $paid_amount;
@@ -39,7 +40,7 @@ class PayablePartywiseController extends Controller
          $purchaseentry_data['no_of_days'] = $days;
                    
         }
-        return view('admin.outstanding.payables.partywise.bill',compact('purchaseentry_datas','supplier'));
+        return view('admin.outstanding.payables.partywise.bill',compact('purchaseentry_datas','supplier','initial_page'));
     }
 
     /**

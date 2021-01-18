@@ -28,7 +28,7 @@
         <div class="form-row col-md-12 tax_details mb-3">
           <div class="col-md-4">
             <label for="validationCustom01" class="col-sm-4 col-form-label">Account Group</label><br>
-            <select class="js-example-basic-multiple col-12 form-control custom-select group"  name="group" id="group" required="">
+            <select class="js-example-basic-multiple col-12 form-control custom-select group caps"  name="group" id="group" required="">
                   <option value="{{@$account_group_tax->under_data->id}}">{{@$account_group_tax->under_data->name}}</option>
                   @foreach($account_group as $value)
                   <option value="{{ $value->id }}">{{ $value->name }}</option>

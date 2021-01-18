@@ -35,17 +35,17 @@
           </tr>
         </thead>
         <tbody>
-		 @foreach($payment_request as $key=>$value)
+		
             <tr>
-              <td>{{ $key+1 }}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
-              <td>{{ $value->name}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td class="icon">
 	<span class="tdshow">
                 <a href="" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
@@ -55,7 +55,7 @@
                 </span>
               </td>
             </tr>
-         @endforeach
+        
         </tbody>
       </table>
 
