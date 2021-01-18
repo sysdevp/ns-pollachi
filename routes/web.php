@@ -14,8 +14,12 @@
 use App\Spatie\Permission\Models\Permission;
 use App\Spatie\Permission\Models\Role;
 
+// Route::any('/', function () {
+//     return view('admin.master.dash');
+// })->middleware('auth');
+
 Route::any('/', function () {
-    return view('admin.master.dash');
+    return view('admin.master.empty');
 })->middleware('auth');
 
 Route::get('/view', function () {
@@ -1155,6 +1159,20 @@ Route::resource('account_group','AccountGroupController',['middleware' => ['auth
 Route::get('account_group/delete/{id}', 'AccountGroupController@destroy');
 
 /*Account Group End Here*/
+
+/*BOM Start Here*/
+
+Route::resource('bom','BomController',['middleware' => ['auth']]);
+
+Route::get('bom/getdata/{id}', 'BomController@getdata');
+Route::get('bom/change_items/{id}', 'BomController@change_items');
+Route::post('bom/brand_filter/', 'BomController@brand_filter');
+Route::get('bom/browse_item/{id}', 'BomController@browse_item');
+Route::get('bom/getdata_item/{id}', 'BomController@getdata_item');
+Route::get('bom/same_items/{id}', 'BomController@same_items');
+Route::get('bom/delete/{id}', 'BomController@destroy');
+
+/*BOM End Here*/
 
 /*Tax Account Group Start Here*/
 

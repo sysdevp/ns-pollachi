@@ -280,6 +280,16 @@
 							
 													</ul>
 										</li>
+
+
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">BOM</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('bom.index')}}">BOM</a></li>
+              
+                          </ul>
+                    </li>
 										
 										
 										
