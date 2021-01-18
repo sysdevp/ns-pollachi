@@ -71,5 +71,6 @@
     </div>
     <!-- card body end@ -->
   </div>
+  <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
 </div>
 @endsection

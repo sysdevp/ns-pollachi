@@ -15,7 +15,7 @@
         <div class="col-8 mr-auto">
           <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('state_create')): ?>
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="<?php echo e(url('master/state/create')); ?>">Add State</a></button></li>
+            <li><button type="button" class="btn"><a href="<?php echo e(url('master/state/create')); ?>"><i class="fa fa-plus"></i>  Add State</a></button></li>
           </ul>
           <?php endif; ?>
         </div>
@@ -23,7 +23,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered" style="width:100%">
+      <table id="master" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>S.No</th>
@@ -41,17 +41,18 @@
               <td><?php echo e($value->name); ?></td>
               <td><?php echo e($value->code); ?></td>
               <td><?php echo e($value->remark); ?></td>
-              <td> 
+                <td class="icon">
+					<span class="tdshow">	
                   <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('state_list')): ?>
-                <a href="<?php echo e(url('master/state/show/'.$value->id )); ?>" class="px-1 py-0 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="<?php echo e(url('master/state/show/'.$value->id )); ?>" class="px-1 py-0 bg-info text-white rounded" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <?php endif; ?>
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('state_edit')): ?>
-                <a href="<?php echo e(url('master/state/edit/'.$value->id )); ?>" class="px-1 py-0 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="<?php echo e(url('master/state/edit/'.$value->id )); ?>" class="px-1 py-0 bg-success text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <?php endif; ?>
                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('state_delete')): ?>
                 <a onclick="return confirm('Are you sure ?')" href="<?php echo e(url('master/state/delete/'.$value->id )); ?>" class="px-1 py-0 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 <?php endif; ?>
-                
+                </span>
               </td>
             </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

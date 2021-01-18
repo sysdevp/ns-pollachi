@@ -29,29 +29,41 @@ $(document).ready(function() {
         buttons: [
           {
               extend: 'copyHtml5',
+			   text: '<i class="fa fa-files-o"></i>',		
+				titleAttr: 'Copy',			   
               exportOptions: {
                   columns: [ 0, ':visible' ]
               }
           },
           {
               extend: 'excelHtml5',
+			   text: '<i class="fa fa-file-excel-o"></i>',
+			   titleAttr: 'Excel',
               exportOptions: {
                   columns: ':visible'
               }
           },
           {
               extend: 'pdfHtml5',
+			   text: '<i class="fa fa-file-pdf-o"></i>',
+			   titleAttr: 'PDF',
               exportOptions: {
                   columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
               }
           },
           {
               extend: 'print',
+			   text: '<i class="fa fa-print"></i>',
+			    titleAttr: 'Print',
               exportOptions: {
                   columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
               }
           },
-          'colvis'
+         {
+                    extend: 'colvis',
+                    text: '<i class="fa fa-columns"></i>',
+                    titleAttr: 'Columns',                   
+                },
       ]
     } );
 } );
@@ -119,3 +131,4 @@ function validation(){
 }
  
 // 
+

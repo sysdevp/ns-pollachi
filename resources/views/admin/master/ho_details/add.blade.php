@@ -41,7 +41,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">GST Number <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="Number" class="form-control gst_number" placeholder="Gst Number" name="gst_number" value="{{old('gst_number')}}" required>
+                <input type="text" class="form-control gst_number" style="text-transform: uppercase;" placeholder="Gst Number" name="gst_number" value="{{old('gst_number')}}" maxlength="15" required>
                 <span class="mandatory"> {{ $errors->first('gst_number')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid GST Number
@@ -54,7 +54,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_1" placeholder="Address Line 1" name="address_line_1" value="{{old('address_line_1')}}" required>
+                <input type="text" class="form-control address_line_1 caps" placeholder="Address Line 1" name="address_line_1" value="{{old('address_line_1')}}" required>
                 <span class="mandatory"> {{ $errors->first('address_line_1')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -67,7 +67,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 2 </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_2" placeholder="Address Line 2" name="address_line_2" value="{{old('address_line_2')}}">
+                <input type="text" class="form-control address_line_2 caps" placeholder="Address Line 2" name="address_line_2" value="{{old('address_line_2')}}">
                 <span class="mandatory"> {{ $errors->first('address_line_2')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -80,7 +80,7 @@
             <div class="form-group row">
               <label for="land_mark" class="col-sm-4 col-form-label">Land Mark </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control land_mark" placeholder="Land Mark" name="land_mark" value="{{old('land_mark')}}">
+                <input type="text" class="form-control land_mark caps" placeholder="Land Mark" name="land_mark" value="{{old('land_mark')}}">
                 <span class="mandatory"> {{ $errors->first('land_mark')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Land Mark
@@ -157,7 +157,7 @@
             <div class="form-group row">
               <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_digit postal_code" placeholder="Postal Code" name="postal_code" value="{{old('postal_code')}}" required>
+                <input type="text" class="form-control only_allow_digit postal_code" placeholder="Postal Code" name="postal_code" value="{{old('postal_code')}}" maxlength="6" required>
                 <span class="mandatory"> {{ $errors->first('postal_code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Postal Code

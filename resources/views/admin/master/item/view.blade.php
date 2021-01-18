@@ -19,7 +19,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-        <table id="master" class="table table-striped table-bordered" style="width:100%">
+        <table id="master" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>S.No</th>
@@ -74,14 +74,16 @@
               <td class="amount">{{ $value->mrp}}</td>
               <td>{{ isset($value->uom->name) ? $value->uom->name : ""}}</td>
               
-              <td> 
+              <td class="icon">
+	<span class="tdshow">
                 <a href="{{url('master/item/show/'.$value->id )}}" class="px-1 py-0 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{url('master/item/edit/'.$value->id )}}" class="px-1 py-0 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a onclick="return confirm('Are you sure ?')" href="{{url('master/item/delete/'.$value->id )}}" class="px-1 py-0 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 <!-- @if ($value->item_type == "Bulk")
                 <a href="{{url('master/item/uom-factor-convertion-for-item/'.$value->id )}}" class="px-1 py-0 bg-info text-white rounded"><i class="fa fa-plus" aria-hidden="true"></i>Uom Factor Convertion</a>
+				
                 @endif -->
-               
+               </span>
               </td>
             </tr>
           @endforeach

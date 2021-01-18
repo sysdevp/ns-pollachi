@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card container px-0">
     <!-- card header start@ -->
@@ -102,7 +104,7 @@
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>S.No</th>
@@ -145,7 +147,7 @@
         </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>CH.No</th>
@@ -207,7 +209,7 @@
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th rowspan="2">S.No</th>
@@ -255,7 +257,7 @@
         </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>CH.No</th>

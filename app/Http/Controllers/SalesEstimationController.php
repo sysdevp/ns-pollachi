@@ -16,6 +16,7 @@ use App\Models\ItemTaxDetails;
 use App\Models\ItemBracodeDetails;
 use App\Models\ExpenseType;
 use App\Models\Tax;
+use App\Models\PriceLevel;
 use App\Models\AccountHead;
 use App\Models\Customer;
 use App\Models\SalesMan;
@@ -25,6 +26,7 @@ use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationExpense;
 use App\Models\SaleEstimationTax;
 use App\Models\PriceUpdation;
+use DB;
 use App\Models\SellingPriceSetup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
@@ -72,7 +74,7 @@ class SalesEstimationController extends Controller
             $item_amount = $value->qty * $value->rate_exclusive_tax;
             $item_gst_rs = $item_amount * $value->gst / 100;
             $item_discount = $value->discount + $value->overall_disc;
-            $item_net_value = $item_amount + $item_gst_rs - $item_discount +$value->expenses;
+            $item_net_value = $item_amount + $item_gst_rs + $value->expenses - $item_discount;
 
             $item_net_value_total += $item_net_value;
             $item_gst_rs_total += $item_gst_rs;
@@ -90,14 +92,17 @@ class SalesEstimationController extends Controller
 
             $taxable_value[] =  $item_amount_total;
             $tax_value[] = $item_gst_rs_total;
-            $total[] = $item_net_value_total + $total_expense;
+            $total[] = $item_net_value_total;
             $expense_total[] = $total_expense;
             $total_discount[] = $discount;
 
         }
     }
+    $customer = Customer::all();
+    $sales_man = SalesMan::all();
+    $agent = Agent::all();
 
-        return view('admin.sales_estimation.view',compact('sale_estimation','check_id','tax_value','taxable_value','total','expense_total','total_discount'));
+        return view('admin.sales_estimation.view',compact('sale_estimation','check_id','tax_value','taxable_value','total','expense_total','total_discount','customer','sales_man','agent'));
     }
 
     /**
@@ -1053,6 +1058,212 @@ $count=0;
 
         $data['selling_price_type'] = $selling_price_setup->setup;
 
+        $request->customer_id;
+
+        @$customer = Customer::where('id',$request->customer_id)->first();
+
+        $level = @$customer->price_level; 
+
+        @$price_level = PriceLevel::where('id',$level)->first();
+
+        $price_value = @$price_level->value;
+        $type = @$price_level->type;
+
+
+
+        if($type == 1)
+        {
+            $selling_price_rate = $data['selling_price'];
+             $rate = $selling_price_rate * $price_value /100;
+
+            $data['selling_price'] = $selling_price_rate - $rate;
+        }
+        else
+        {
+            $selling_price_rate = $data['selling_price'];
+
+            $data['selling_price'] = $selling_price_rate - $price_value;
+
+        }
+
+        $offers = DB::table('offers')->whereRaw('FIND_IN_SET(?,item_id)', [$id])->count();
+        // print_r($offers); exit();
+        if($offers > 0)
+        {
+            $offer_data = DB::table('offers')
+                                ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
+                                ->whereDate('valid_from', '<=', Carbon::now())
+                                ->whereDate('valid_to', '>=',Carbon::now())
+                                ->first();
+            
+            // print_r($current_date); exit();                                
+
+         if($offer_data->offer_type == 'time')
+         {
+                $current_time = date('H:i:s');
+
+                if(strtotime($offer_data->from_time) <= strtotime($current_time) && strtotime($offer_data->to_time) >= strtotime($current_time))
+                {
+                    // print_r('hi'); exit();  
+                    if($offer_data->variable == 'percentage')
+                    {
+                        $data['discount'] = $offer_data->percentage;
+                        $data['variable'] = '1';
+                    }
+                    else
+                    {
+                        $data['discount'] = $offer_data->fixed_amount;
+                        $data['variable'] = '0';
+                    }
+                }
+         }  
+         else if($offer_data->offer_type == 'day')
+         {
+            $current_date = date('d-m-Y');
+              
+            $offer_datas = DB::table('offers')
+                                ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
+                                ->whereRaw('FIND_IN_SET(?,day_range_offers)', [$current_date])
+                                ->whereDate('valid_from', '<=', Carbon::now())
+                                ->whereDate('valid_to', '>=',Carbon::now())
+                                ->first();
+
+
+             if($offer_datas->variable == 'percentage')
+                {
+                    $data['discount'] = $offer_datas->percentage;
+                    $data['variable'] = '1';
+                }
+                else
+                {
+                    $data['discount'] = $offer_datas->fixed_amount;
+                    $data['variable'] = '0';
+                }                   
+
+         }
+         else if($offer_data->offer_type == 'date')   
+         {
+            if($offer_data->variable == 'percentage')
+                {
+                    $data['discount'] = $offer_data->percentage;
+                    $data['variable'] = '1';
+                }
+                else
+                {
+                    $data['discount'] = $offer_data->fixed_amount;
+                    $data['variable'] = '0';
+                }
+         }                  
+
+        }
+
+
+        // SELECT count(id) as cid FROM offers WHERE FIND_IN_SET(1, `item_id`) > 0
+
+        // $data['offers'] = $offers;
+        // array_search($id, $offers);
+        // $array_data = array();
+        // $array_data_date = array();
+        // $new_arrray_data = [];
+        // foreach ($offers as $key => $value) 
+        // { 
+        //     $data['offers'] = $value->item_id;
+        //     $data['day_range_offers'] = $value->day_range_offers;
+        //     $data['offer_id'] = $value->id;
+
+        // }
+        // // array_push($new_arrray_data,$data['offers']);
+        // $array_data = explode(',',$data['offers']);
+        // $array_data_date = explode(',',$data['day_range_offers']);
+
+        // if(in_array($id,$array_data))
+        // {
+        //     $offer_id = $data['offer_id'];
+
+        //     $offer_data = DB::table('offers')->find($offer_id);
+
+            
+        //         $current_time = date('H:i:s');
+        //         $current_date = date('d-m-Y');
+
+        //         if($offer_data->valid_from <= $current_date && $offer_data->valid_to >= $current_date)
+        //         {
+        //             if($offer_data->offer_type == 'time')
+        //             {
+        //                 // return $data['discount_val'] = 'time';
+        //                 if(strtotime($offer_data->from_time) <= strtotime($current_time) && strtotime($offer_data->to_time) >= strtotime($current_time))
+        //                 {
+        //                     if($offer_data->variable == 'percentage')
+        //                     {
+        //                         $data['discount'] = $offer_data->percentage;
+        //                         $data['variable'] = '1';
+        //                     }
+        //                     else
+        //                     {
+        //                         $data['discount'] = $offer_data->fixed_amount;
+        //                         $data['variable'] = '0';
+        //                     }
+        //                 }
+        //             }
+        //                 else if($offer_data->offer_type == 'day')
+        //                 {
+        //                     // return $data['discount_val'] = 'day';
+        //                     if(in_array($current_date,$array_data_date))
+        //                     {
+        //                         return $data['discount_val'] = 'day';
+        //                         if($offer_data->variable == 'percentage')
+        //                         {
+        //                             $data['discount'] = $offer_data->percentage;
+        //                             $data['variable'] = '1';
+        //                         }
+        //                         else
+        //                         {
+        //                             $data['discount'] = $offer_data->fixed_amount;
+        //                             $data['variable'] = '0';
+        //                         }
+        //                     }
+        //                     else
+        //                     {
+        //                         return $data['discount_val'] = 'no';
+        //                     }
+        //                 }
+        //                 else if($offer_data->offer_type == 'date')
+        //                 {
+        //                     return $data['discount_val'] = 'date';
+        //                     // if($offer_data->valid_from <= $current_date && $offer_data->valid_to >= $current_date)
+        //                     // {
+        //                     //     if($offer_data->variable == 'percentage')
+        //                     //     {
+        //                     //         $data['discount'] = $offer_data->percentage;
+        //                     //         $data['variable'] = '1';
+        //                     //     }
+        //                     //     else
+        //                     //     {
+        //                     //         $data['discount'] = $offer_data->fixed_amount;
+        //                     //         $data['variable'] = '0';
+        //                     //     }
+        //                     // }
+        //                     // else
+        //                     // {
+
+        //                     // }
+
+        //                 }
+
+        //             }
+
+                
+
+        //         }
+            
+            // $data['offer_data'] = $offer_data;
+        // }
+        // else
+        // {
+        //     $data['new'] = 'no';
+        // }
+        
+
         return $data;
 
     }
@@ -1615,4 +1826,82 @@ $result=[];
 
         return Redirect::back()->with('success', 'Retrieved');
     }
+
+    public function report(Request $request)
+    {
+
+        $cond = [];
+        if(isset($request->customer_id)){$cond['customer_id'] = $request->customer_id; }
+        if(isset($request->salesman_id)) {$cond['salesman_id'] = $request->salesman_id;}
+        if(isset($request->agent_id)) {$cond['agent_id'] = $request->agent_id;}
+
+        if(isset($request->from)) {$from = date('Y-m-d',strtotime($request->from)); }           
+        if(isset($request->to)) {$to = date('Y-m-d',strtotime($request->to)); }
+           // print_r($cond);exit;
+        $check_id = "";
+
+        $sale_estimation = SaleEstimation::where($cond)->whereBetween('sale_estimation_date',[$from,$to])->orderBy('sale_estimation_no','ASC')->get();
+
+        if(count($sale_estimation) == 0)
+        {
+            $taxable_value[] = 0;
+            $tax_value[] = 0;
+            $total[] = 0;
+            $expense_total[] = 0;
+            $total_discount[] = 0;
+        }
+        else
+        {
+
+        foreach ($sale_estimation as $key => $datas) 
+        {
+            $sale_estimation_items = SaleEstimationItem::where('sale_estimation_no',$datas->sale_estimation_no)->get();
+
+            $sale_estimation_expense = SaleEstimationExpense::where('sale_estimation_no',$datas->sale_estimation_no)->get();
+
+            $item_net_value_total = 0;
+            $item_gst_rs_total = 0;
+            $item_amount_total = 0;
+            $discount = 0;
+
+            $total_expense = 0;
+            $total_net_price = 0;
+
+            foreach ($sale_estimation_items as $j => $value) 
+            {
+
+            $item_amount = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs = $item_amount * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value = $item_amount + $item_gst_rs + $value->expenses - $item_discount;
+
+            $item_net_value_total += $item_net_value;
+            $item_gst_rs_total += $item_gst_rs;
+            $item_amount_total += $item_amount;
+            $discount += $item_discount;
+
+
+            }
+
+            foreach ($sale_estimation_expense as $k => $values) 
+            {
+                $total_expense += $values->expense_amount;
+
+            }
+
+            $taxable_value[] =  $item_amount_total;
+            $tax_value[] = $item_gst_rs_total;
+            $total[] = $item_net_value_total;
+            $expense_total[] = $total_expense;
+            $total_discount[] = $discount;
+
+        }
+    }
+    $customer = Customer::all();
+    $sales_man = SalesMan::all();
+    $agent = Agent::all();
+
+        return view('admin.sales_estimation.view',compact('sale_estimation','check_id','tax_value','taxable_value','total','expense_total','total_discount','customer','sales_man','agent','from','to','cond'));
+    }   
+
 }

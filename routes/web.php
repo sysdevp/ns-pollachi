@@ -14,8 +14,12 @@
 use App\Spatie\Permission\Models\Permission;
 use App\Spatie\Permission\Models\Role;
 
+// Route::any('/', function () {
+//     return view('admin.master.dash');
+// })->middleware('auth');
+
 Route::any('/', function () {
-    return view('admin.master.dash');
+    return view('admin.master.empty');
 })->middleware('auth');
 
 Route::get('/view', function () {
@@ -206,6 +210,22 @@ Route::group(['prefix' => 'master/denomination', 'middleware' => ['auth']], func
     Route::any('delete/{id}', 'DenominationController@destroy')->middleware('permission:denomination_delete');
 });
 /* Denomination Master  End Here  */
+
+
+/*Company Bank Master Starts Here*/
+
+Route::resource('company-bank', 'CompanyBankController',['middleware' => ['auth']]);
+Route::get('company-bank/delete/{id}', 'CompanyBankController@destroy');
+Route::post('company-bank/branch_details/', 'CompanyBankController@branch_details');
+
+/*Company Bank Master Ends Here*/
+
+/*Price Level Settings Master Starts Here*/
+
+Route::resource('price-level', 'PriceLevelController',['middleware' => ['auth']]);
+Route::get('price-level/delete/{id}', 'PriceLevelController@destroy');
+
+/*Price Level Settings Master Ends Here*/
 
 /* Department Master  Start Here  */
 Route::group(['prefix' => 'master/department', 'middleware' => ['auth']], function () {
@@ -644,6 +664,16 @@ Route::post('purchase_order/estimation_details/', 'PurchaseOrderController@estim
 
 Route::get('purchase_order/cancel/{id}', 'PurchaseOrderController@cancel');
 Route::get('purchase_order/retrieve/{id}', 'PurchaseOrderController@retrieve');
+
+Route::post('purchase_order/beta_data/', 'PurchaseOrderController@beta_data');
+
+Route::get('purchase_order/show_beta/{id}', 'PurchaseOrderController@show_beta');
+Route::get('purchase_order/edit_beta/{id}', 'PurchaseOrderController@edit_beta');
+Route::get('purchase_order/delete_beta/{id}', 'PurchaseOrderController@delete_beta');
+Route::get('purchase_order/cancel_beta/{id}', 'PurchaseOrderController@cancel_beta');
+Route::get('purchase_order/retrieve_beta/{id}', 'PurchaseOrderController@retrieve_beta');
+Route::get('purchase_order/item_beta_details/{id}', 'PurchaseOrderController@item_beta_details');
+Route::get('purchase_order/expense_beta_details/{id}', 'PurchaseOrderController@expense_beta_details');
 /* Purchase Order End Here  */
 
 /* Purchase Gate Pass entry Start Here  */
@@ -682,6 +712,16 @@ Route::post('purchase_entry/receipt_details/', 'PurchaseEntryController@receipt_
 
 Route::get('purchase_entry/cancel/{id}', 'PurchaseEntryController@cancel');
 Route::get('purchase_entry/retrieve/{id}', 'PurchaseEntryController@retrieve');
+
+Route::post('purchase_entry/po_alpha_beta/', 'PurchaseEntryController@po_alpha_beta');
+
+Route::get('purchase_entry/show_beta/{id}', 'PurchaseEntryController@show_beta');
+Route::get('purchase_entry/edit_beta/{id}', 'PurchaseEntryController@edit_beta');
+Route::get('purchase_entry/delete_beta/{id}', 'PurchaseEntryController@delete_beta');
+Route::get('purchase_entry/cancel_beta/{id}', 'PurchaseEntryController@cancel_beta');
+Route::get('purchase_entry/retrieve_beta/{id}', 'PurchaseEntryController@retrieve_beta');
+Route::get('purchase_entry/item_beta_details/{id}', 'PurchaseEntryController@item_beta_details');
+Route::get('purchase_entry/expense_beta_details/{id}', 'PurchaseEntryController@expense_beta_details');
 
 
 /* Purchase entry End Here  */
@@ -733,6 +773,14 @@ Route::post('sales_order/estimation_details/', 'SalesOrderController@se_details'
 Route::get('sale_order/cancel/{id}', 'SalesOrderController@cancel');
 Route::get('sale_order/retrieve/{id}', 'SalesOrderController@retrieve');
 
+Route::get('sale_order/show_beta/{id}', 'SalesOrderController@show_beta');
+Route::get('sale_order/edit_beta/{id}', 'SalesOrderController@edit_beta');
+Route::get('sale_order/delete_beta/{id}', 'SalesOrderController@delete_beta');
+Route::get('sale_order/cancel_beta/{id}', 'SalesOrderController@cancel_beta');
+Route::get('sale_order/retrieve_beta/{id}', 'SalesOrderController@retrieve_beta');
+Route::get('sale_order/item_beta_details/{id}', 'SalesOrderController@item_beta_details');
+Route::get('sale_order/expense_beta_details/{id}', 'SalesOrderController@expense_beta_details');
+
 /* Sales Order End Here  */
 
 /* Sales entry Start Here  */
@@ -758,6 +806,14 @@ Route::post('sales_entry/delivery_details/', 'SalesEntryController@delivery_deta
 
 Route::get('sales_entry/cancel/{id}', 'SalesEntryController@cancel');
 Route::get('sales_entry/retrieve/{id}', 'SalesEntryController@retrieve');
+
+Route::post('sales_entry/po_alpha_beta/', 'SalesEntryController@po_alpha_beta');
+
+Route::get('sales_entry/edit_beta/{id}', 'SalesEntryController@edit_beta');
+Route::get('sales_entry/cancel_beta/{id}', 'SalesEntryController@cancel_beta');
+Route::get('sales_entry/retrieve_beta/{id}', 'SalesEntryController@retrieve_beta');
+Route::get('sales_entry/item_beta_details/{id}', 'SalesEntryController@item_beta_details');
+Route::get('sales_entry/expense_beta_details/{id}', 'SalesEntryController@expense_beta_details');
 
 
 /* Sales entry End Here  */
@@ -799,6 +855,16 @@ Route::post('receipt_note/r_out_details/', 'ReceiptNoteController@r_out_details'
 Route::get('receipt_note/cancel/{id}', 'ReceiptNoteController@cancel');
 Route::get('receipt_note/retrieve/{id}', 'ReceiptNoteController@retrieve');
 
+Route::post('receipt_note/po_alpha_beta/', 'ReceiptNoteController@po_alpha_beta');
+
+Route::get('receipt_note/show_beta/{id}', 'ReceiptNoteController@show_beta');
+Route::get('receipt_note/edit_beta/{id}', 'ReceiptNoteController@edit_beta');
+Route::get('receipt_note/delete_beta/{id}', 'ReceiptNoteController@delete_beta');
+Route::get('receipt_note/cancel_beta/{id}', 'ReceiptNoteController@cancel_beta');
+Route::get('receipt_note/retrieve_beta/{id}', 'ReceiptNoteController@retrieve_beta');
+Route::get('receipt_note/item_beta_details/{id}', 'ReceiptNoteController@item_beta_details');
+Route::get('receipt_note/expense_beta_details/{id}', 'ReceiptNoteController@expense_beta_details');
+
 
 /* Receipt Note End Here  */
 
@@ -824,6 +890,13 @@ Route::post('debit_note/r_out_details/', 'DebitNoteController@r_out_details');
 
 Route::get('debit_note/cancel/{id}', 'DebitNoteController@cancel');
 Route::get('debit_note/retrieve/{id}', 'DebitNoteController@retrieve');
+
+Route::post('debit_note/po_alpha_beta/', 'DebitNoteController@po_alpha_beta');
+Route::get('debit_note/delete_beta/{id}', 'DebitNoteController@delete_beta');
+Route::get('debit_note/cancel_beta/{id}', 'DebitNoteController@cancel_beta');
+Route::get('debit_note/retrieve_beta/{id}', 'DebitNoteController@retrieve_beta');
+Route::get('debit_note/item_beta_details/{id}', 'DebitNoteController@item_beta_details');
+Route::get('debit_note/expense_beta_details/{id}', 'DebitNoteController@expense_beta_details');
 
 
 /* Debit Note End Here  */
@@ -853,6 +926,16 @@ Route::post('delivery_note/rejection_in_details/', 'DeliveryNoteController@rejec
 Route::get('delivery_note/cancel/{id}', 'DeliveryNoteController@cancel');
 Route::get('delivery_note/retrieve/{id}', 'DeliveryNoteController@retrieve');
 
+Route::post('delivery_note/po_alpha_beta/', 'DeliveryNoteController@po_alpha_beta');
+
+Route::get('delivery_note/show_beta/{id}', 'DeliveryNoteController@show_beta');
+Route::get('delivery_note/edit_beta/{id}', 'DeliveryNoteController@edit_beta');
+Route::get('delivery_note/delete_beta/{id}', 'DeliveryNoteController@delete_beta');
+Route::get('delivery_note/cancel_beta/{id}', 'DeliveryNoteController@cancel_beta');
+Route::get('delivery_note/retrieve_beta/{id}', 'DeliveryNoteController@retrieve_beta');
+Route::get('delivery_note/item_beta_details/{id}', 'DeliveryNoteController@item_beta_details');
+Route::get('delivery_note/expense_beta_details/{id}', 'DeliveryNoteController@expense_beta_details');
+
 /* Delivery Note End Here  */
 
 /* Credit Note Start Here  */
@@ -877,6 +960,13 @@ Route::post('credit_note/rejection_in_details/', 'CreditNoteController@rejection
 
 Route::get('credit_note/cancel/{id}', 'CreditNoteController@cancel');
 Route::get('credit_note/retrieve/{id}', 'CreditNoteController@retrieve');
+
+Route::get('credit_note/item_beta_details/{id}', 'CreditNoteController@item_beta_details');
+Route::get('credit_note/expense_beta_details/{id}', 'CreditNoteController@expense_beta_details');
+Route::post('credit_note/po_alpha_beta/', 'CreditNoteController@po_alpha_beta');
+Route::get('credit_note/delete_beta/{id}', 'CreditNoteController@delete_beta');
+Route::get('credit_note/cancel_beta/{id}', 'CreditNoteController@cancel_beta');
+Route::get('credit_note/retrieve_beta/{id}', 'CreditNoteController@retrieve_beta');
 
 /* Credit Note End Here  */
 
@@ -905,6 +995,13 @@ Route::post('rejection_in/check_qty/', 'RejectionInController@check_qty');
 
 Route::get('rejection_in/cancel/{id}', 'RejectionInController@cancel');
 Route::get('rejection_in/retrieve/{id}', 'RejectionInController@retrieve');
+
+Route::post('rejection_in/po_alpha_beta/', 'RejectionInController@po_alpha_beta');
+Route::get('rejection_in/delete_beta/{id}', 'RejectionInController@delete_beta');
+Route::get('rejection_in/cancel_beta/{id}', 'RejectionInController@cancel_beta');
+Route::get('rejection_in/retrieve_beta/{id}', 'RejectionInController@retrieve_beta');
+Route::get('rejection_in/item_beta_details/{id}', 'RejectionInController@item_beta_details');
+Route::get('rejection_in/expense_beta_details/{id}', 'RejectionInController@expense_beta_details');
 
 /* Rejection In End Here  */
 
@@ -936,6 +1033,14 @@ Route::post('rejection_out/receipt_details/', 'RejectionOutController@receipt_de
 Route::get('rejection_out/cancel/{id}', 'RejectionOutController@cancel');
 Route::get('rejection_out/retrieve/{id}', 'RejectionOutController@retrieve');
 
+Route::post('rejection_out/po_alpha_beta/', 'RejectionOutController@po_alpha_beta');
+
+Route::get('rejection_out/delete_beta/{id}/{r_out}', 'RejectionOutController@delete_beta');
+Route::get('rejection_out/cancel_beta/{id}', 'RejectionOutController@cancel_beta');
+Route::get('rejection_out/retrieve_beta/{id}', 'RejectionOutController@retrieve_beta');
+Route::get('rejection_out/item_beta_details/{id}', 'RejectionOutController@item_beta_details');
+Route::get('rejection_out/expense_beta_details/{id}', 'RejectionOutController@expense_beta_details');
+
 
 /* Rejection Out End Here  */
 
@@ -958,7 +1063,9 @@ Route::resource('daybook','DayBookController',['middleware' => ['auth']]);
 
 Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']]);
 
+/*Individual Ledger Start Here*/
 
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
 /*Individual Ledger End Here*/
 
@@ -1049,10 +1156,23 @@ Route::resource('receipt_income','ReceiptIncomeController',['middleware' => ['au
 /*Account Group Start Here*/
 
 Route::resource('account_group','AccountGroupController',['middleware' => ['auth']]);
-Route::group(['middleware' => ['auth']], function () {
-Route::get('account_group/delete/{id}', 'AccountGroupController@destroy')->middleware('permission:account_group_delete');
-});
+Route::get('account_group/delete/{id}', 'AccountGroupController@destroy');
+
 /*Account Group End Here*/
+
+/*BOM Start Here*/
+
+Route::resource('bom','BomController',['middleware' => ['auth']]);
+
+Route::get('bom/getdata/{id}', 'BomController@getdata');
+Route::get('bom/change_items/{id}', 'BomController@change_items');
+Route::post('bom/brand_filter/', 'BomController@brand_filter');
+Route::get('bom/browse_item/{id}', 'BomController@browse_item');
+Route::get('bom/getdata_item/{id}', 'BomController@getdata_item');
+Route::get('bom/same_items/{id}', 'BomController@same_items');
+Route::get('bom/delete/{id}', 'BomController@destroy');
+
+/*BOM End Here*/
 
 /*Tax Account Group Start Here*/
 
@@ -1095,14 +1215,38 @@ Route::group(['prefix' => 'master/ho_details', 'middleware' => ['auth']], functi
 
 
 
+/*tax dummy strat*/
 
 Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 /*tax dummy end*/
 
-/*IExpense Start Here*/
+
 
 Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
+
+/* Itemwise offers  */
+Route::group(['prefix' => 'master/itemwiseoffer', 'middleware' => ['auth']], function () {
+    Route::any('/', 'ItemwiseOfferController@index');
+    Route::any('create', 'ItemwiseOfferController@create');
+    Route::any('store', 'ItemwiseOfferController@store');
+    Route::any('show/{id}', 'ItemwiseOfferController@show');
+    Route::any('edit/{id}', 'ItemwiseOfferController@edit');
+    Route::any('update/{id}', 'ItemwiseOfferController@update');
+    Route::any('delete/{id}', 'ItemwiseOfferController@destroy');
+});
+
+
+/* Item wastages  */
+Route::group(['prefix' => 'master/item_wastage', 'middleware' => ['auth']], function () {
+    Route::any('/', 'ItemWastageController@index');
+    Route::any('create', 'ItemWastageController@create');
+    Route::any('store', 'ItemWastageController@store');
+    Route::any('show/{id}', 'ItemWastageController@show');
+    Route::any('edit/{id}', 'ItemWastageController@edit');
+    Route::any('update/{id}', 'ItemWastageController@update');
+    Route::any('delete/{id}', 'ItemWastageController@destroy');
+});
 
 /*Individual Ledger Start Here*/
 
@@ -1119,6 +1263,24 @@ Route::post('payable_partywise_report','PayablePartywiseController@report');
 Route::post('receivable_billwise_report','ReceivableeBillwiseController@report');
 
 Route::post('receivable_partywise_report','ReceivablePartywiseController@report');
+/*Register Report ->Purchase Start Here*/
+Route::post('estimation-report','EstimationController@report');
+Route::post('purchase-order-report','PurchaseOrderController@report');
+Route::post('receipt-note-report','ReceiptNoteController@report');
+Route::post('purchase-entry-report','PurchaseEntryController@report');
+Route::post('rejection-out-report','RejectionOutController@report');
+Route::post('debit-note-report','DebitNoteController@report');
+/*Register Report ->Sales Start Here*/
+Route::post('sales-estimation-report','SalesEstimationController@report');
+Route::post('sales-order-report','SalesOrderController@report');
+Route::post('delivery-note-report','DeliveryNoteController@report');
+Route::post('sales-entry-report','SalesEntryController@report');
+Route::post('rejection-in-report','RejectionInController@report');
+Route::post('salesgatepass-entry-report','SalesGatepassEntryController@report');
+Route::post('credit-note-report','CreditNoteController@report');
+Route::post('stock-report','StockReportController@report');
+Route::post('stock-summary-report','StockSummaryController@report');
+
 
 Auth::routes(['register' => false]);
 

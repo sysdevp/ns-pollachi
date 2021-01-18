@@ -96,10 +96,16 @@ class EstimationController extends Controller
         }
     }
 
+$supplier = Supplier::all();
+    $agent = Agent::all();
         
-        
-        return view('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total'));
+
+        return view('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total','supplier','agent'));
     }
+        
+        
+    //     return view('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total'));
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -1674,6 +1680,82 @@ $result=[];
         $estimation->save();
 
         return Redirect::back()->with('success', 'Retrieved');
+    }
+
+
+    public function report(Request $request)
+    {
+        $cond = [];
+        if(isset($request->supplier_id)){$cond['supplier_id'] = $request->supplier_id;}
+        if(isset($request->from)){$from = date('Y-m-d',strtotime($request->from));}           
+        if(isset($request->to)) {$to = date('Y-m-d',strtotime($request->to));}
+        if(isset($request->agent_id)){ $cond['agent_id'] = $request->agent_id;}
+        $estimation = Estimation::where($cond)->whereBetween('estimation_date',[$from,$to])->orderBy('estimation_no','ASC')->get();
+       // echo "<pre>";print_r($estimation);exit;
+        if(count($estimation) == 0)
+        {
+            $taxable_value[] = 0;
+            $tax_value[] = 0;
+            $total[] = 0;
+            $expense_total[] = 0;
+            $total_discount[] = 0;
+        }
+        else
+        {
+        
+
+        foreach ($estimation as $key => $datas) 
+        {
+            $estimation_items = Estimation_Item::where('estimation_no',$datas->estimation_no)->get();
+
+
+            $estimation_expense = Estimation_Expense::where('estimation_no',$datas->estimation_no)->get();
+
+
+
+            $item_net_value_total = 0;
+            $item_gst_rs_total = 0;
+            $item_amount_total = 0;
+            $discount = 0;
+
+            $total_expense = 0;
+            $total_net_price = 0;
+
+            foreach ($estimation_items as $j => $value) 
+            {
+
+            $item_amount = $value->qty * $value->rate_exclusive_tax;
+            $item_gst_rs = $item_amount * $value->gst / 100;
+            $item_discount = $value->discount + $value->overall_disc;
+            $item_net_value = $item_amount + $item_gst_rs - $item_discount;
+
+            $item_net_value_total += $item_net_value;
+            $item_gst_rs_total += $item_gst_rs;
+            $item_amount_total += $item_amount;
+            $discount += $item_discount;
+
+
+            }
+
+            foreach ($estimation_expense as $k => $values) 
+            {
+                $total_expense += $values->expense_amount;
+
+            }
+
+            $taxable_value[] =  $item_amount_total;
+            $tax_value[] = $item_gst_rs_total;
+            $total[] = $item_net_value_total + $total_expense;
+            $expense_total[] = $total_expense;
+            $total_discount[] = $discount;
+
+        }
+    }
+    $check_id ="";
+    $supplier = Supplier::all();
+    $agent = Agent::all();        
+        return view('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total','supplier','agent','from','to','cond'));
+         
     }
 
 }

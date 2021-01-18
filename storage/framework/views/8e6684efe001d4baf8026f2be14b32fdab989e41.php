@@ -152,6 +152,7 @@
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('accounts_type_list')): ?>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/accounts-type')); ?>">Accounts Type</a></li>
                             <?php endif; ?>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('company-bank.index')); ?>">Company Bank</a></li>
 													</ul>
 										</li>
 											<li class="has-children">
@@ -182,13 +183,16 @@
 													</ul>
 										</li>
 										<li class="has-children">
-													<div class="acnav__label acnav__label--level2">Accounts</div>
+													<div class="acnav__label acnav__label--level2">Offers</div>
 													<ul class="acnav__list acnav__list--level3">
 														
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('gift_voucher_matser_list')): ?>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/gift-voucher')); ?>">Gift Voucher</a></li>
                             <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/offers')); ?>">Offers</a></li>
                             <?php endif; ?>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/itemwiseoffer')); ?>">Itemwise Offers</a></li>
+                            <li><a class="acnav__link acnav__link--level3" href="<?php echo e(url('master/item_wastage')); ?>">Item Wastage</a></li>
+
 													</ul>
 										</li>
 										<li class="has-children">
@@ -247,6 +251,14 @@
 							
 													</ul>
 										</li>
+
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Price Level Settings</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('price-level.index')); ?>">Price Levels</a></li>
+                          </ul>
+                    </li>
 										
 										<li class="has-children">
 													<div class="acnav__label acnav__label--level2">Area</div>
@@ -269,6 +281,16 @@
 							
 													</ul>
 										</li>
+
+
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">BOM</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3" href="<?php echo e(route('bom.index')); ?>">BOM</a></li>
+              
+                          </ul>
+                    </li>
 										
 										
 										
@@ -362,10 +384,24 @@
                           <li><a class="acnav__link acnav__link--level3"  href="<?php echo e(route('expense.create')); ?>">Account Transaction</a></li>
                         
                                 </ul>
+
+
                     </li>
                     </ul> 
 			
-			
+			<ul class="acnav__list acnav__list--level2">  
+                      <!--1st Add sub menu--> 
+                  <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Production Module</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3"  href="<?php echo e(route('expense.create')); ?>">Production</a></li>
+                        
+                                </ul>
+
+                      
+                    </li>
+                    </ul> 
 			</li>
 			
 			<!--3rdt li menu-->

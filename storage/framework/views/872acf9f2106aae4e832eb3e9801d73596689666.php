@@ -63,7 +63,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <div class="col-md-1">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
                                   <div class="">
-                                    <font size="2"><?php echo e($voucher_no); ?></font>
+                                    <font size="2" id="voucher_no"><?php echo e($voucher_no); ?></font>
                                   </div>
                                 
                                  
@@ -79,7 +79,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                   <label style="font-family: Times new roman;">Customer Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id" required="">
                            <option value="">Choose Customer Name</option>
                            <?php $__currentLoopData = $customer; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $customers): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <option value="<?php echo e($customers->id); ?>"><?php echo e($customers->name); ?></option>
@@ -265,6 +265,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                  </select>
                                 </div>
+
+                                <input type="checkbox" name="check" class="po_alpha_beta" value="1">
                                 
                               </div>
                               
@@ -491,10 +493,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="number" class="form-control discount_rs  required_for_proof_valid" placeholder="Discount Rs" id="discount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" oninput="discount_calc()" name="discount" value="" >
                         </div>
 
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
                         <input type="number" class="form-control batch_no required_for_proof_valid" placeholder="Batch No" id="batch_no" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="batch_no" value="" >
-                        </div>
+                        </div> -->
 
                         <input type="hidden" name="discounts" id="discounts" value="0">
                         <input type="hidden" name="disc_total" id="disc_total" value="0">
@@ -502,7 +504,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
 
                     </div>
-                    <div class="col-md-12 row" id="b_w">
+                    <!-- <div class="col-md-12 row" id="b_w">
                         <div class="col-md-2">
                           <label style="font-family: Times new roman;">Balck OR White</label>
                         <select class="form-control" id="b_or_w">
@@ -510,7 +512,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <option value="0">B</option>
                        </select>
                         </div>
-                      </div>
+                      </div> -->
                       <br>
                                                           
                      <div class="" align="center">
@@ -531,7 +533,7 @@ table, th, td {
              
               <div class="col-md-12" id="middlecol">
                 
-                <table class="table" id="team-list">
+                <table class="table table-responsive" id="team-list">
                   <thead>
                     <th> S.no </th>
                     <th> Item S.no </th>
@@ -633,7 +635,7 @@ table, th, td {
                 </table>
                 
                        </div>
-                       <div class="row col-md-12">
+                       <div class="row col-md-12" id="discount_div">
 
                         <div class="col-md-2">
                         <label style="font-family: Times new roman;">Discount(-)</label>
@@ -746,13 +748,28 @@ table, th, td {
                 <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
                            <option value="">Choose Mode</option>
                            <option value="1">Cash</option>
-                           <option value="2">Bank</option>
+                           <option value="2">NEFT</option>
                            <option value="3">Advance Adjustment</option>
+                           <option value="4">Cheque</option>
+                           <option value="5">UPI</option>
                         </select>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="col-md-12 row mb-3" id="bank_reference" style="display: none;">
+          <div class="col-md-3">
+            <input type="text" placeholder="Reference No" class="form-control" name="reference_no" id="reference_no">
+          </div>
+          <div class="col-md-3">
+            <input type="date" class="form-control" value="<?php echo e($date); ?>" name="payment_date" id="payment_date">
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Remarks" value="" name="remarks" id="remarks">
+          </div>
+        </div>
+
         <div id="adv_det" style="display:none">
         <div class="col-md-8">
                        <div class="form-group row">
@@ -765,7 +782,7 @@ table, th, td {
               </div>
 
         <div class="card-body" style="height: 100%;">
-      <table id="" class="table table-striped table-bordered" style="width:100%">
+      <table id="" class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>Advance Voucher.No</th>
@@ -775,11 +792,11 @@ table, th, td {
             <th>Current Cleared Amount</th>
           </tr>
         </thead>
-<<<<<<< HEAD
+<!-- <<<<<<< HEAD
         <tbody class="" id="myTable_adv">
-=======
+======= -->
         <tbody class="append_proof_details_adv" id="myTable_adv">
->>>>>>> origin/master
+<!-- >>>>>>> origin/master -->
         </tbody>
         <tfoot>
               <th>Total</th>
@@ -810,6 +827,58 @@ table, th, td {
         <script type="text/javascript">
           var i=1;
           var discount_total = 0;
+
+$(document).on('click','.po_alpha_beta',function(){
+  $( "#discount_div" ).load(window.location.href + " #discount_div" );
+  // $( ".table" ).load(window.location.href + " .table" );
+  $( "#team-list" ).load(window.location.href + " #team-list" );
+  $( ".append_expense" ).load(window.location.href + " .append_expense" );
+  $( ".taxes" ).load(window.location.href + " .taxes" );
+  $('.total_net_value').text('00.00');
+  $('.round_off').val('0');
+  $('.no_items').text('');
+  $('.invoice_val').text('');
+  $('.sale_type').text('');
+  $('.sale_date').text('');
+  $('.estimation_no').text('');
+  $('.estimation_dateim').text('');
+
+if($(this).prop('checked'))
+{
+  var val = 1;
+  
+}
+else
+{
+  var val = 0;
+}
+
+$.ajax({
+           type: "POST",
+            url: "<?php echo e(url('sales_entry/po_alpha_beta/')); ?>",
+            data: { id: val },
+           success: function(data) {
+            var result = JSON.parse(data);
+
+            // console.log(result.r_out_no);
+            var so_data = result.so_no;
+            var d_no = result.d_no;
+
+            $('.so_no').children('option:not(:first)').remove();
+            $('.d_no').children('option:not(:first)').remove();
+            
+            $(so_data).appendTo('.so_no'); 
+            $(d_no).appendTo('.d_no');
+            $('#voucher_no').text(result.voucher_no);
+            
+           }
+
+
+
+      });
+
+
+});          
 
 function calculate_total_net_price(){
   var total_net_price=0;
@@ -885,6 +954,7 @@ $(document).on("keyup",".expense_amount",function()
     }
     
     total_expense_cal();
+    overall_discounts();
     individual_expense();
     roundoff_cal();
   }
@@ -1073,41 +1143,74 @@ function add_items()
 
   var last_purchase_rate = $('#last_purchase_rate').val();
  
-  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'+i+'" type="hidden" id="invoice'+i+'" value="'+invoice_no+'" name="invoice_sno[]"><font class="item_no'+i+'">'+invoice_no+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><input type="hidden" value="'+item_name1+'" name="item_name1[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'+i+'" value="0" name="overall_disc[]"><font class="font_overall_disc'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '+i+'" id="expenses'+i+'" value="0" name="expenses[]"><font class="font_expenses'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><input type="hidden" class="black_or_white'+i+'"  value="'+black_or_white+'" name="black_or_white[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>';
+  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'+i+'" type="hidden" id="invoice'+i+'" value="'+invoice_no+'" name="invoice_sno[]"><font class="item_no'+i+'">'+invoice_no+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="items_id" value="'+items_codes+'"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><input type="hidden" value="'+item_name1+'" name="item_name1[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'+i+'" value="0" name="overall_disc[]"><font class="font_overall_disc'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '+i+'" id="expenses'+i+'" value="0" name="expenses[]"><font class="font_expenses'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><input type="hidden" class="black_or_white'+i+'"  value="'+black_or_white+'" name="black_or_white[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>';
 
-  $("#b_w").load(" #b_w > *");
 
-  $('.append_proof_details').append(items);
-var length=$('#mytable tr:last').attr('class').split(' ')[0];
+  var result_val;
 
-for(var m=0;m<length+1;m++)
+if($('.tables').length == 0)
 {
+  $('.append_proof_details').append(items);
+}
+else
+{
+  $('.items_id').each(function(){
 
-  var invoice_num = $('#invoice'+m).val();
-  
-  for(var n=m+1;n<=length+1;n++)
-  {
-    
-    if(typeof $('#invoice'+n).val() == 'undefined')
+    if($(this).val() == items_codes)
     {
-
+      result_val = 1;
+      return false;
     }
     else
     {
-      var invoice_num1 = $('#invoice'+n).val();
-
-      if(invoice_num == invoice_num1)
-      {
-        alert('Item S.No is Alredy Taken!');
-        $('#row'+i).remove();
-      }
-      else
-      {
-        
-      }
+      result_val = 0;
     }
+
+  });
+
+  if(result_val == 1)
+  {
+    alert('Item Alredy Taken');
+  }
+  else
+  {
+    $('.append_proof_details').append(items);
   }
 }
+
+//   $("#b_w").load(" #b_w > *");
+
+//   $('.append_proof_details').append(items);
+// var length=$('#mytable tr:last').attr('class').split(' ')[0];
+
+// for(var m=0;m<length+1;m++)
+// {
+
+//   var invoice_num = $('#invoice'+m).val();
+  
+//   for(var n=m+1;n<=length+1;n++)
+//   {
+    
+//     if(typeof $('#invoice'+n).val() == 'undefined')
+//     {
+
+//     }
+//     else
+//     {
+//       var invoice_num1 = $('#invoice'+n).val();
+
+//       if(invoice_num == invoice_num1)
+//       {
+//         alert('Item S.No is Alredy Taken!');
+//         $('#row'+i).remove();
+//       }
+//       else
+//       {
+        
+//       }
+//     }
+//   }
+// }
 
 // for(var m=0;m<length+1;m++)
 // {
@@ -1161,8 +1264,8 @@ var q=calculate_total_discount();
 $('#total_discount').val(q.toFixed(2));
 $('#disc_total').val(q.toFixed(2));
 total_expense_cal();
-individual_expense();
 overall_discounts();
+individual_expense();
 roundoff_cal();
 
 var len=$('.tables').length;
@@ -1267,8 +1370,8 @@ $(document).on("click",".remove_items",function(){
     $("#cgst").val(half_gst.toFixed(2));
     $("#sgst").val(half_gst.toFixed(2));
     total_expense_cal();
-    individual_expense();
     overall_discounts();
+    individual_expense();
     roundoff_cal();
 
     $.ajax({
@@ -1515,9 +1618,9 @@ $(document).on("click",".update_items",function(){
   var to_html_total_amount = total_amount.toFixed(2);
   $(".total_net_price").html(parseFloat(to_html_total_net));
   $(".total_amount").html(parseFloat(to_html_total_amount));
+  total_expense_cal();
   overall_discounts();
   individual_expense();
-  total_expense_cal();
   roundoff_cal();
 
   
@@ -1607,8 +1710,8 @@ $(document).on("click",".remove_expense",function(){
 
   }
   total_expense_cal();
-  individual_expense();
   overall_discounts();
+  individual_expense();
   roundoff_cal();
 
   });
@@ -1632,9 +1735,13 @@ function item_details_sno(){
   }    
     });
 
+
+
   
 function qty()
 {
+
+  total_discounts();
 
   var actual_qty= $('#actual_qty').val();
   var qty = $('.quantity').val();
@@ -1995,8 +2102,20 @@ function discount_calc1()
   
 }
 
+function total_discounts()
+{
+
+  var disc_val_exclusive = $(".discount_rs").val();
+  var quantity = $('#quantity').val(); 
+  var discounts = parseInt(quantity) * parseFloat(disc_val_exclusive);  
+  $('#discounts').val(discounts.toFixed(2));
+
+}
+
 function item_codes(item_code,append_value)
 {
+
+ var customer_id = $('#customer_id').val();
 
 if(append_value == 1)
 {
@@ -2006,7 +2125,7 @@ if(append_value == 1)
         
         type: "GET",
         url: "<?php echo e(url('sales_entry/getdata/{id}')); ?>",
-        data: { id: item_code },             
+        data: { id: item_code, customer_id : customer_id },             
                         
         success: function(data){ 
 
@@ -2027,6 +2146,8 @@ if(append_value == 1)
              barcode = data[2].barcode;
              selling_price = data.selling_price;
              selling_price_type = data.selling_price_type;
+             variable = data['variable'];
+             discount_value = data['discount'];
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
@@ -2091,6 +2212,51 @@ if(append_value == 1)
              $('.item_display').dialog('close');
              $('#exclusive').focus();
 
+             if(variable == 1)
+             {
+              $('#discount_percentage').val(discount_value);
+
+              var exclusive = $('#exclusive').val();
+              var inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+
+              var disc_rate = parseFloat(discount_value)/100;
+              var disc_val_exclusive = parseFloat(exclusive)*parseFloat(disc_rate);
+              var disc_val_inclusive = parseFloat(inclusive)*parseFloat(disc_rate);
+              
+              var disc_amount_exclusive = parseFloat(exclusive)-parseFloat(disc_val_exclusive);
+              var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
+
+              $(".discount_rs").val(disc_val_exclusive.toFixed(2));
+
+              total_discounts();
+
+             }
+
+             else if(variable == 0)
+             {
+              $('.discount_rs').val(discount_value);
+
+              var exclusive = $('#exclusive').val();
+              var inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+
+              var disc_amount_exclusive = parseFloat(discount_value)*100/parseFloat(exclusive);
+
+              $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
+
+              total_discounts();
+
+
+             }
+             
+             else
+             {
+              $('#discount_percentage').val(discount_value);
+              $('.discount_rs').val(discount_value);
+             }
+
+
               
             //   var rate_exclusive = $('#exclusive').val();
             //   var rate_inclusive = $('#inclusive').val();
@@ -2137,7 +2303,7 @@ else if(append_value == 2)
         
         type: "GET",
         url: "<?php echo e(url('sales_entry/getdata/{id}')); ?>",
-        data: { id: item_code },             
+        data: { id: item_code, customer_id : customer_id },             
                         
         success: function(data){ 
 
@@ -2158,6 +2324,8 @@ else if(append_value == 2)
              barcode = data[2].barcode;
              selling_price = data.selling_price;
              selling_price_type = data.selling_price_type;
+             variable = data['variable'];
+             discount_value = data['discount'];
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
@@ -2222,6 +2390,50 @@ else if(append_value == 2)
              $('.item_display').dialog('close');
              $('#exclusive').focus();
 
+             if(variable == 1)
+             {
+              $('#discount_percentage').val(discount_value);
+
+              var exclusive = $('#exclusive').val();
+              var inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+
+              var disc_rate = parseFloat(discount_value)/100;
+              var disc_val_exclusive = parseFloat(exclusive)*parseFloat(disc_rate);
+              var disc_val_inclusive = parseFloat(inclusive)*parseFloat(disc_rate);
+              
+              var disc_amount_exclusive = parseFloat(exclusive)-parseFloat(disc_val_exclusive);
+              var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
+
+              $(".discount_rs").val(disc_val_exclusive.toFixed(2));
+
+              total_discounts();
+
+             }
+
+             else if(variable == 0)
+             {
+              $('.discount_rs').val(discount_value);
+
+              var exclusive = $('#exclusive').val();
+              var inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+
+              var disc_amount_exclusive = parseFloat(discount_value)*100/parseFloat(exclusive);
+
+              $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
+
+              total_discounts();
+
+
+             }
+
+             else
+             {
+              $('#discount_percentage').val(discount_value);
+              $('.discount_rs').val(discount_value);
+             }
+
               
             //   var rate_exclusive = $('#exclusive').val();
             //   var rate_inclusive = $('#inclusive').val();
@@ -2267,7 +2479,7 @@ else
         
         type: "GET",
         url: "<?php echo e(url('sales_entry/getdata/{id}')); ?>",
-        data: { id: item_code },             
+        data: { id: item_code, customer_id : customer_id },             
                         
         success: function(data){ 
           //console.log(data);
@@ -2286,6 +2498,8 @@ else
              barcode = data[2].barcode;
              selling_price = data.selling_price;
              selling_price_type = data.selling_price_type;
+             variable = data['variable'];
+             discount_value = data['discount'];
              
 
              for(var new_val = 0; new_val < data[1].cnt; new_val++)
@@ -2350,6 +2564,50 @@ else
              
              $('#cat').dialog('close');
              $('#exclusive').focus();
+
+             if(variable == 1)
+             {
+              $('#discount_percentage').val(discount_value);
+
+              var exclusive = $('#exclusive').val();
+              var inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+
+              var disc_rate = parseFloat(discount_value)/100;
+              var disc_val_exclusive = parseFloat(exclusive)*parseFloat(disc_rate);
+              var disc_val_inclusive = parseFloat(inclusive)*parseFloat(disc_rate);
+              
+              var disc_amount_exclusive = parseFloat(exclusive)-parseFloat(disc_val_exclusive);
+              var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
+
+              $(".discount_rs").val(disc_val_exclusive.toFixed(2));
+
+              total_discounts();
+
+             }
+
+             else if(variable == 0)
+             {
+              $('.discount_rs').val(discount_value);
+
+              var exclusive = $('#exclusive').val();
+              var inclusive = $('#inclusive').val();
+              var quantity = $('#quantity').val();
+
+              var disc_amount_exclusive = parseFloat(discount_value)*100/parseFloat(exclusive);
+
+              $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
+
+              total_discounts();
+
+
+             }
+
+             else
+             {
+              $('#discount_percentage').val(discount_value);
+              $('.discount_rs').val(discount_value);
+             }
               
               // var rate_exclusive = $('#exclusive').val();
               // var rate_inclusive = $('#inclusive').val();
@@ -2755,6 +3013,14 @@ $(".total_amount").html(parseFloat(to_html_total_amount));
 function so_details()
 {
 
+  if($('.po_alpha_beta').prop('checked'))
+  {
+    var alpha_beta = 1;
+  }
+  else
+  {
+    var alpha_beta = 0;
+  }  
   var so_no=$('.so_no').val();
   $('.d_no').val('');
   $('.sale_estimation_no').val('');
@@ -2766,7 +3032,7 @@ function so_details()
   $.ajax({
            type: "POST",
             url: "<?php echo e(url('sales_entry/so_details/')); ?>",
-            data: { so_no : so_no },
+            data: { so_no : so_no, alpha_beta : alpha_beta },
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
@@ -2842,6 +3108,14 @@ $(".total_amount").html(parseFloat(to_html_total_amount));
 function delivery_details()
 {
 
+  if($('.po_alpha_beta').prop('checked'))
+  {
+    var alpha_beta = 1;
+  }
+  else
+  {
+    var alpha_beta = 0;
+  }
   var d_no=$('.d_no').val();
   $('.so_no').val('');
   $('.sale_estimation_no').val('');
@@ -2852,7 +3126,7 @@ function delivery_details()
   $.ajax({
            type: "POST",
             url: "<?php echo e(url('sales_entry/delivery_details/')); ?>",
-            data: { d_no : d_no },
+            data: { d_no : d_no, $alpha_beta : alpha_beta },
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
@@ -2998,6 +3272,7 @@ function payment_mode(val)
  if(payment_mode=="3"){
     $('#adv_det').show();
     $('#cash_bill').hide();
+    $('#bank_reference').hide();
     var customer_id=$('#customer_id').val();
      $.ajax({
             
@@ -3011,8 +3286,28 @@ function payment_mode(val)
            }
         });
 
- } else {
+ } 
+ else if(payment_mode=="2" || payment_mode=="5")
+ {
+  $('#adv_det').hide();
+  $('#cash_bill').hide();
+
+  $('#bank_reference').show();
+  $('#payment_date').attr('readonly','readonly');
+ }
+ else if(payment_mode=="4")
+ {
+  $('#adv_det').hide();
+  $('#cash_bill').hide();
+
+  $('#bank_reference').show();
+  $('#payment_date').removeAttr('readonly');
+
+ }
+ else 
+ {
 $('#adv_det').hide();
+$('#bank_reference').hide();
 $('#cash_bill').show();
  }
 

@@ -16,12 +16,31 @@ class PayablePartywiseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $supplier = Supplier::all();
-        $initial_page = "1";
-       
-        return view('admin.outstanding.payables.partywise.bill',compact('initial_page','supplier'));
+        $purchaseentry_datas = PurchaseEntry::get();
+        $paid_amount = 0;
+        $remaining_value =0;
+        $result = '';
+		$initial_page = 0;
+        foreach($purchaseentry_datas as $purchaseentry_data){
+         $paid_amount = PaymentProcess::where('p_no',$purchaseentry_data->p_no)->sum('payment_amount');
+         $purchaseentry_data['paid_amount'] = $paid_amount;
+         $pending_amount = $purchaseentry_data->total_net_value - $paid_amount;
+         $purchaseentry_data['pending_amount'] = $pending_amount;
+
+         //no of days calculation
+         $fdate = $purchaseentry_data->p_date;
+         $tdate = date('Y-m-d');
+         $datetime1 = new DateTime($fdate);
+         $datetime2 = new DateTime($tdate);
+         $interval = $datetime1->diff($datetime2);
+         $days = $interval->format('%a');
+         $purchaseentry_data['no_of_days'] = $days;
+                   
+        }
+        return view('admin.outstanding.payables.partywise.bill',compact('purchaseentry_datas','supplier','initial_page'));
     }
 
     /**

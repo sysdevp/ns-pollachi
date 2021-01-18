@@ -522,6 +522,7 @@
     <!-- card body end@ -->
   </div>
 </div>
+</div>
 <div style="clear:both;"></div>
 
 <script type="text/javascript">

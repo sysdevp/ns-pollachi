@@ -76,7 +76,7 @@
                       </select>
                       <span class="mandatory"> {{ $errors->first('salutation')  }} </span>
                     </div>
-                    <input type="text" class="form-control only_allow_alp_num_dot_com_amp name" name="name" error-data="Customer Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value={{old('name',$customer->name)}}>
+                    <input type="text" class="form-control only_allow_alp_num_dot_com_amp name caps" name="name" error-data="Customer Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value={{old('name',$customer->name)}}>
   
                     <div class="invalid-feedback">
                       Enter valid Customer Name
@@ -176,7 +176,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Gst No <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control gst_no required_for_valid" input-type="gst_no" error_data="Enter valid Gst No" placeholder="Gst No" name="gst_no" value="{{old('gst_no',$customer->gst_no)}}" >
+                <input type="text" class="form-control gst_no required_for_valid" style="text-transform: uppercase;" maxlength="15" input-type="gst_no" error_data="Enter valid Gst No" placeholder="Gst No" name="gst_no" value="{{old('gst_no',$customer->gst_no)}}" >
                 <span class="mandatory"> {{ $errors->first('gst_no')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gst No
@@ -244,10 +244,11 @@
               <div class="col-sm-8">
               <select class="js-example-basic-multiple col-12 form-control price_level select custom-select required_for_valid" 
               error-data="Enter valid Price Level" data-placeholder="Choose Price Level " name="price_level" >
-              <option value=""></option>
-                 <option value="1"  {{ old('price_level',$customer->price_level) == '1' ? 'selected' : '' }}>Price Level 1</option>
-                  <option value="2" {{ old('price_level',$customer->price_level) == '2' ? 'selected' : '' }}>Price Level 2</option>
-                  <option value="3" {{ old('price_level',$customer->price_level) == '3' ? 'selected' : '' }}>Price Level 3</option> 
+              <option value="{{ @$customer->price_level }}">{{ @$customer->pricelevel->level }}</option>
+              @foreach($price_level as $value)
+              <option value="{{ $value->id }}">{{ $value->level }}</option>
+              @endforeach
+                  
                </select>
                
                   <span class="mandatory"> {{ $errors->first('price_level')  }} </span>

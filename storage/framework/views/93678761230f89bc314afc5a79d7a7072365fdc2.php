@@ -35,7 +35,7 @@ table, th, td {
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(url('daybook_report')); ?>" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="<?php echo e(route('daybook.store')); ?>" enctype="multipart/form-data">
       <?php echo e(csrf_field()); ?>
 
 
@@ -89,19 +89,14 @@ table, th, td {
                 <label>Nature </label>
                 <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
                   <option value="">Choose Nature</option>
-                  <option value="1">Purchase</option>
-                  <option value="2">Sales</option>
                         </select>
               </div>
-             
-            <div class="col-md-12 mb-3">
-            <div class="col-md-2">
-            <input type="submit" class="btn btn-success" name="add" value="Submit">
+              <div class="col-md-2">
+              <label>Head</label>
+            <input type="text" class="form-control head" placeholder="Head" name="head" id="head">
             </div>
-          </div>
-</form>
 
-            <!-- <div class="col-md-3">
+            <div class="col-md-3">
               <label>Amount</label>
             <div class="input-group">
               <input type="text" class="form-control col-md-9" aria-label="Text input with dropdown button" placeholder="Amount" name="amount">
@@ -116,7 +111,7 @@ table, th, td {
 
               </div>
             </div>
-          </div> -->
+          </div>
 
             <!-- <div class="col-md-2">
               <label>Amount</label>
@@ -137,25 +132,13 @@ table, th, td {
                   <thead>
                     <th> S.no </th>
                     <th> Date </th>
-                    <th> Voucher No </th>
                     <th id="particulars"> Particulars</th>
                     <th id="natures"> Nature</th>
                     <th id="debit"> Debit Amount</th>
                     <th id="credit"> Credit Amount</th>
                   </thead>
                   <tbody>
-                    <?php $__currentLoopData = $array_details; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <tr>
-                      
-                      <td><?php echo e($key+1); ?></td>
-                      <td><?php echo e($value['date']); ?></td>
-                      <td><?php echo e($value['voucher_no']); ?></td>
-                      <td><?php echo e($value['particular_db']); ?></td>
-                      <td><?php echo e($value['nature']); ?></td>
-                      <td><?php echo e($value['debit']); ?></td>
-                      <td><?php echo e($value['credit']); ?></td>
-                    </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
                   </tbody>
                   
                 </table>

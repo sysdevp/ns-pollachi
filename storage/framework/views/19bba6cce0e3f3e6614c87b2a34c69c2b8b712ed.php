@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.css" type="text/css" />
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card container px-0">
     <!-- card header start@ -->
@@ -39,12 +41,12 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Gift Voucher Code <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Gift Voucher Prefix Code <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_alp_num_dot_com_amp code" placeholder="Gift Voucher Code" name="code" value="<?php echo e(old('code')); ?>" required>
+                <input type="text" class="form-control only_allow_alp_num_dot_com_amp code" placeholder="Gift Voucher Prefix Code" name="code" value="<?php echo e(old('code')); ?>" required>
                 <span class="mandatory"> <?php echo e($errors->first('name')); ?> </span>
                 <div class="invalid-feedback">
-                  Enter valid Gift Voucher Code
+                  Enter valid Gift Voucher Prefix Code
                 </div>
               </div>
             </div>
@@ -58,6 +60,19 @@
                 <span class="mandatory"> <?php echo e($errors->first('value')); ?> </span>
                 <div class="invalid-feedback">
                   Enter valid Gift Voucher Value
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Quantity<span class="mandatory">*</span></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="quantity" value="<?php echo e(old('quantity')); ?>" required>
+                <span class="mandatory"> <?php echo e($errors->first('value')); ?> </span>
+                <div class="invalid-feedback">
+                  Enter valid Gift Voucher Quantity
                 </div>
               </div>
             </div>
@@ -88,8 +103,6 @@
               </div>
             </div>
           </div>
-
-
 
           <div class="col-md-6">
             <div class="form-group row">
