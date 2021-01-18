@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Bank;
-use App\Models\BankBranch;
+use App\Models\Bankbranch;
 use App\Models\AccountType; 
 use App\Models\CompanyBank;
 use Illuminate\Support\Facades\Redirect;
@@ -32,7 +32,7 @@ class CompanyBankController extends Controller
     public function create()
     {
         $bank = Bank::all();
-        $branch = BankBranch::all();
+        $branch = Bankbranch::all();
         $account_type = AccountType::all();
 
         return view('admin.master.company_bank.add',compact('bank','branch','account_type'));
@@ -79,7 +79,7 @@ class CompanyBankController extends Controller
     public function edit($id)
     {
         $bank = Bank::all();
-        $branch = BankBranch::all();
+        $branch = Bankbranch::all();
         $account_type = AccountType::all();
 
         $company_bank = CompanyBank::find($id);
@@ -128,7 +128,7 @@ class CompanyBankController extends Controller
     {
         
         $option = "";
-        $branch_details = BankBranch::where('bank_id',$request->value)->get();
+        $branch_details = Bankbranch::where('bank_id',$request->value)->get();
 
         foreach ($branch_details as $key => $value) 
         {
