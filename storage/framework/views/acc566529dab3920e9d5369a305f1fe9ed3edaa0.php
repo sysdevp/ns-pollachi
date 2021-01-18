@@ -1,4 +1,6 @@
 <?php $__env->startSection('content'); ?>
+<main class="page-content">
+
 <div class="col-12 body-sec">
   <div class="card container px-0">
     <!-- card header start@ -->
@@ -519,6 +521,7 @@
     <script src="<?php echo e(asset('assets/js/master/capitalize.js')); ?>"></script>
     <!-- card body end@ -->
   </div>
+</div>
 </div>
 <div style="clear:both;"></div>
 

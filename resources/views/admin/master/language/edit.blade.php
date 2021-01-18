@@ -28,7 +28,7 @@
                 <div class="form-group row">
                   <label for="validationCustom01" class="col-sm-4 col-form-label">Language 1<span class="mandatory">*</span></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control language_1 only_allow_alp_num_dot_com_amp" placeholder="Language 1" name="language_1" value="{{old('language_1',$language->language_1)}}" required>
+                    <input type="text" class="form-control language_1 only_allow_alp_num_dot_com_amp caps" placeholder="Language 1" name="language_1" value="{{old('language_1',$language->language_1)}}" required>
                     <span class="mandatory"> {{ $errors->first('language_1')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Language 1
@@ -41,7 +41,7 @@
                 <div class="form-group row">
                   <label for="validationCustom01" class="col-sm-4 col-form-label">Language 2<span class="mandatory">*</span></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control language_2 only_allow_alp_num_dot_com_amp" placeholder="Language 2" name="language_2" value="{{old('language_2',$language->language_2)}}" required>
+                    <input type="text" class="form-control language_2 only_allow_alp_num_dot_com_amp caps" placeholder="Language 2" name="language_2" value="{{old('language_2',$language->language_2)}}" required>
                     <span class="mandatory"> {{ $errors->first('language_2')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Language 2
@@ -53,7 +53,7 @@
                 <div class="form-group row">
                   <label for="validationCustom01" class="col-sm-4 col-form-label">Language 3<span class="mandatory">*</span></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control language_3 only_allow_alp_num_dot_com_amp" placeholder="Language 3" name="language_3" value="{{old('language_3',$language->language_3)}}" required>
+                    <input type="text" class="form-control language_3 only_allow_alp_num_dot_com_amp caps" placeholder="Language 3" name="language_3" value="{{old('language_3',$language->language_3)}}" required>
                     <span class="mandatory"> {{ $errors->first('language_3')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Language 3
