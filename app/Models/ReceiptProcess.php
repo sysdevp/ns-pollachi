@@ -14,4 +14,8 @@ class ReceiptProcess extends Model
     {
         return $this->belongsTo(PurchaseEntry::class, 'purchase_id', 'id');
     }
+    public function customers()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }

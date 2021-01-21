@@ -18,6 +18,7 @@ use App\Models\ExpenseType;
 use App\Models\EstimationTax;
 use App\Models\Tax;
 use App\Models\AccountHead;
+use App\Models\TermsAndCondition;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 
@@ -125,6 +126,9 @@ $supplier = Supplier::all();
         $expense_type = ExpenseType::all();
         $tax = Tax::all();
         $account_head = AccountHead::all();
+        $terms = TermsAndCondition::where('name','Estimation')->get();
+
+        // echo '<pre>'; print_r($terms); exit();
         
 
         $voucher_num=Estimation::orderBy('estimation_no','DESC')
@@ -167,7 +171,7 @@ $supplier = Supplier::all();
 
         //                    exit;
 
-        return view('admin.estimation.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','tax','account_head'));
+        return view('admin.estimation.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','tax','account_head','terms'));
     }
 
     /**
@@ -281,7 +285,7 @@ $supplier = Supplier::all();
 
                        $tax_details->save();
 
-                    }
+                    }                  
                     
         $estimation_num = $estimation->estimation_no;
         

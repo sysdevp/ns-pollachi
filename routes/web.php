@@ -815,6 +815,8 @@ Route::get('sales_entry/retrieve_beta/{id}', 'SalesEntryController@retrieve_beta
 Route::get('sales_entry/item_beta_details/{id}', 'SalesEntryController@item_beta_details');
 Route::get('sales_entry/expense_beta_details/{id}', 'SalesEntryController@expense_beta_details');
 
+Route::post('sales_entry/getdata_offer/', 'SalesEntryController@getdata_offer');
+
 
 /* Sales entry End Here  */
 
@@ -1093,6 +1095,13 @@ Route::post('pos/get_pos_hold_data/', 'PosController@get_pos_hold_data');
 Route::post('pos/get_pos_load_data/', 'PosController@get_pos_load_data');
 Route::post('pos/check_voucher_code/', 'PosController@check_voucher_code');
 
+Route::get('pos/change_items/{id}', 'PosController@change_items');
+Route::post('pos/brand_filter/', 'PosController@brand_filter');
+Route::get('pos/browse_item/{id}', 'PosController@browse_item');
+
+Route::get('pos/getdata/{id}', 'PosController@getdata');
+Route::post('pos/getdata_offer/', 'PosController@getdata_offer');
+
 /*POS End Here*/
 
 /*Payment Request Start Here*/
@@ -1174,6 +1183,13 @@ Route::get('bom/delete/{id}', 'BomController@destroy');
 
 /*BOM End Here*/
 
+/*Terms And Conditions Start Here*/
+
+Route::resource('terms-and-condition','TermsAndConditionController',['middleware' => ['auth']]);
+Route::get('terms-and-condition/delete/{id}', 'TermsAndConditionController@destroy');
+
+/*Terms And Conditions End Here*/
+
 /*Tax Account Group Start Here*/
 
 Route::resource('account_group_tax','AccountGroupTaxController',['middleware' => ['auth']]);
@@ -1224,6 +1240,21 @@ Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 
 Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
+
+/* Received starts here  */
+
+Route::resource('received','ReceivedController',['middleware' => ['auth']]);
+Route::post('received/branch_details/', 'ReceivedController@branch_details');
+Route::post('received/act_type_details/', 'ReceivedController@act_type_details');
+
+
+/*  Received end here */
+
+/* Paid starts here  */
+
+Route::resource('paid','PaidController',['middleware' => ['auth']]);
+
+/*  Paid end here */
 
 /* Itemwise offers  */
 Route::group(['prefix' => 'master/itemwiseoffer', 'middleware' => ['auth']], function () {

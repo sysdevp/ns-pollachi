@@ -291,6 +291,14 @@
                           </ul>
                     </li>
 										
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Terms And Conditions</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('terms-and-condition.index')}}">Terms And Condition</a></li>
+              
+                          </ul>
+                    </li>
 										
 										
 									</li>
@@ -400,6 +408,19 @@
 
                       
                     </li>
+
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Uncleared Cheques</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3"  href="{{ route('received.index') }}">Received </a></li>
+                          
+                          <li><a class="acnav__link acnav__link--level3"  href="{{ route('paid.index') }}">Paid</a></li>
+                                </ul>
+
+                      
+                    </li>
+
                     </ul> 
 			</li>
 			
