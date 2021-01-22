@@ -37,9 +37,9 @@
               <td>{{ $value->remark}}</td>
               <td class="icon">
 	<span class="tdshow">
-                <a href="{{url('master/address-type/show/'.$value->id )}}" class="px-1 py-0 bg-info text-white rounded"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                <a href="{{url('master/address-type/edit/'.$value->id )}}" class="px-1 py-0 bg-success text-white rounded"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a onclick="return confirm('Are you sure ?')" href="{{url('master/address-type/delete/'.$value->id )}}" class="px-1 py-0 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a href="{{url('master/address-type/show/'.$value->id )}}" class="px-1 py-0 bg-info text-white rounded" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="{{url('master/address-type/edit/'.$value->id )}}" class="px-1 py-0 bg-success text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a onclick="return confirm('Are you sure ?')" href="{{url('master/address-type/delete/'.$value->id )}}" class="px-1 py-0 bg-danger text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 				</span>
               </td>
             </tr>

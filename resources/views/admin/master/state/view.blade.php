@@ -51,7 +51,7 @@
                 <a href="{{url('master/state/edit/'.$value->id )}}" class="px-1 py-0 bg-success text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 @endcan
                 @can('state_delete')
-                <a onclick="return confirm('Are you sure ?')" href="{{url('master/state/delete/'.$value->id )}}" class="px-1 py-0 bg-danger text-white rounded"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a onclick="return confirm('Are you sure ?')" href="{{url('master/state/delete/'.$value->id )}}" class="px-1 py-0 bg-danger text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 @endcan
                 </span>
               </td>

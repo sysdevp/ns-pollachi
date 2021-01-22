@@ -114,7 +114,7 @@ class DesignationController extends Controller
      * @param  \App\Models\Designation  $designation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Designation $designation)
+    public function destroy(Designation $designation,$id)
     {
         $designation = Designation::find($id);
         if ($designation->delete()) {

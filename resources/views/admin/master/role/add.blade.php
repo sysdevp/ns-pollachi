@@ -1,5 +1,40 @@
 @extends('admin.layout.app')
 @section('content')
+<style>
+.maseterheading{
+	background: #e0dddd;
+    padding: 13px;
+    margin-bottom: 10px;
+}
+.mastersubheading{
+width: 100%;
+    background: #efefef;
+    padding: 15px;
+    margin: 21px;
+    margin-top: 0px;
+}
+.mastersubheading1{
+    width: 100%;
+    background: #efefef;
+    padding: 15px;
+    margin: 21px;
+    margin-top: 0px;
+    margin-left: 15px;
+    margin-right: -59px;
+}
+.mastersubheading2{
+background: #fff;
+    margin: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 4px;
+	-webkit-box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
+-moz-box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
+box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
+	}
+	.masterdivleft{margin-left: 8px;}
+</style>
+
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -46,21 +81,26 @@
           </div>
 
          
-
+<div class="form-group col-sm-12 col-md-12"> 
           	<div class="container">
                              <div class="panel panel-default" id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;"> 
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;"> 
 							 <input style=" text-align: center;" value="h1" type="checkbox"  class="masters_head" id="masters_head" name="permission[]"/> <b>Masters</b></h4>
 							 </div>
                              </div>
                              </div>
-						<div id="masters_div" class="masters_div form-group" style="display:none; width:100%">
+						</div>
+							<div class="container mastersubheading"  id="masters_div"  style="display:none;">
 							
+					
 							<div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+								<input type="checkbox" name="checkAll" id="location_head"/></label>
 								<label class="control-label"><b>location</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								
+								
+								<div class="row masterdivleft" id="location_div" style="display:none; width:100%;">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab1">		
 								<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label">Select All</label>
@@ -80,7 +120,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab2">	
 							    <input type="checkbox" name="checkAll2" id="checkAll2"/></label>
 								<label class="control-label">Select All</label>
@@ -100,7 +140,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 											<div class="" id="tab3">
                                 <input type="checkbox" name="checkAll3" id="checkAll3"/></label>
 								<label class="control-label">Select All</label>
@@ -123,7 +163,7 @@
 								
 								
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab4">	
 							    <input type="checkbox" name="checkAll4" id="checkAll4"/></label>
 								<label class="control-label">Select All</label>
@@ -142,7 +182,7 @@
 							</div>	
 									</div>
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab5">	
 							    <input type="checkbox" name="checkAll5" id="checkAll5"/></label>
 								<label class="control-label">Select All</label>
@@ -161,7 +201,7 @@
 							</div>	
 									</div>
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab6">	
 							    <input type="checkbox" name="checkAll6" id="checkAll6"/></label>
 								<label class="control-label">Select All</label>
@@ -181,7 +221,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab7">	
 							    <input type="checkbox" name="checkAll7" id="checkAll7"/></label>
 								<label class="control-label">Select All</label>
@@ -203,13 +243,15 @@
 								
 									
 								</div>
-							</div>	</br> </br>		
 							
-							<div class="container">
-							<input type="checkbox" name="checkAll8" id="checkAll8"/></label>
+							
+
+							<div class="container" >
+							<input type="checkbox" name="checkAll8" id="bank_head"/></label>
 								<label class="control-label"><b>Bank</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="bank_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab8">		
 								<input type="checkbox" name="checkAll8" id="checkAll8"/></label>
 								<label class="control-label">Select All</label>
@@ -229,7 +271,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab9">	
 							    <input type="checkbox" name="checkAll9" id="checkAll9"/></label>
 								<label class="control-label">Select All</label>
@@ -249,7 +291,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 											<div class="" id="tab10">
                                 <input type="checkbox" name="checkAll10" id="checkAll10"/></label>
 								<label class="control-label">Select All</label>
@@ -272,7 +314,7 @@
 								
 								
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab11">	
 							    <input type="checkbox" name="checkAll11" id="checkAll11"/></label>
 								<label class="control-label">Select All</label>
@@ -294,15 +336,14 @@
 								
 									
 								</div>
-							</div>	
 							
-							 </br></br></br>
 							
 							<div class="container">
-							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							<input type="checkbox" name="checkAll1" id="employee_head"/></label>
 								<label class="control-label"><b>Employee</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="employee_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab12">		
 								<input type="checkbox" name="checkAll12" id="checkAll12"/></label>
 								<label class="control-label">Select All</label>
@@ -322,7 +363,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab13">	
 							    <input type="checkbox" name="checkAll13" id="checkAll13"/></label>
 								<label class="control-label">Select All</label>
@@ -342,7 +383,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 											<div class="" id="tab14">
                                 <input type="checkbox" name="checkAll14" id="checkAll14"/></label>
 								<label class="control-label">Select All</label>
@@ -364,14 +405,15 @@
 							
 									
 								</div>
-							</div>	
-							 </br></br></br>
+							
+							
 							 
 							 <div class="container">
-							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							<input type="checkbox" name="checkAll1" id="user_head"/></label>
 								<label class="control-label"><b>User</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="user_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab15">		
 								<input type="checkbox" name="checkAll15" id="checkAll15"/></label>
 								<label class="control-label">Select All</label>
@@ -391,7 +433,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab16">	
 							    <input type="checkbox" name="checkAll16" id="checkAll16"/></label>
 								<label class="control-label">Select All</label>
@@ -411,15 +453,16 @@
 									</div>
 									
 								</div>
-							</div>	
+						
 							
-							 </br></br></br>
+							
 							 
 							  <div class="container">
-							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							<input type="checkbox" name="checkAll1" id="account_head"/></label>
 								<label class="control-label"><b>Accounts</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="account_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab17">		
 								<input type="checkbox" name="checkAll17" id="checkAll17"/></label>
 								<label class="control-label">Select All</label>
@@ -439,7 +482,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab18">	
 							    <input type="checkbox" name="checkAll18" id="checkAll18"/></label>
 								<label class="control-label">Select All</label>
@@ -459,14 +502,15 @@
 									</div>
 									
 								</div>
-							</div>	
 							
-							 </br></br></br>
+							
+							
 							  <div class="container">
-							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							<input type="checkbox" name="checkAll1" id="Category_head"/></label>
 								<label class="control-label"><b>Category</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="Category_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab19">		
 								<input type="checkbox" name="checkAll19" id="checkAll19"/></label>
 								<label class="control-label">Select All</label>
@@ -486,7 +530,7 @@
 									</div>
 									
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab20">	
 							    <input type="checkbox" name="checkAll20" id="checkAll20"/></label>
 								<label class="control-label">Select All</label>
@@ -506,20 +550,20 @@
 									</div>
 									
 								</div>
-							</div>	
-							  </br></br></br>
+							
 							  
 							  <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll" id="Language_head"/></label>
 								<label class="control-label"><b>Language</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="Language_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab21">		
 								<input type="checkbox" name="checkAll21" id="checkAll21"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="u1" class="language masters"  id="zone" name="permission[]"/></label>
-								<label class="control-label">Category</label>
+								<label class="control-label">Language</label>
 								<br>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="u2" class="language masters " id="language_add" name="permission[]"/></label>
 								<span class="control-label">Add</span>
@@ -533,13 +577,13 @@
 									</div>
 									
 								</div>
-							</div>	
-							 </br></br></br>
+							
 							 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll" id="item_head"/></label>
 								<label class="control-label"><b>Item</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="item_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab22">	
 								<input type="checkbox" name="checkAll22" id="checkAll22"/></label>
 								<label class="control-label">Select All</label>
@@ -558,7 +602,7 @@
 							</div>	
 									</div>
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab23">		
 								<input type="checkbox" name="checkAll23" id="checkAll23"/></label>
 								<label class="control-label">Select All</label>
@@ -577,7 +621,7 @@
 							</div>	
 									</div>
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab24">		
 								<input type="checkbox" name="checkAll24" id="checkAll24"/></label>
 								<label class="control-label">Select All</label>
@@ -596,7 +640,7 @@
 							</div>	
 									</div>
 									
-																		<div class="col-lg-2">
+																		<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab25">		
 								<input type="checkbox" name="checkAll25" id="checkAll25"/></label>
 								<label class="control-label">Select All</label>
@@ -616,14 +660,13 @@
 									</div>
 									
 								</div>
-							</div>	
-							</br></br></br>
 							
 							 <div class="container">
-							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							<input type="checkbox" name="checkAll1" id="Vendor_head"/></label>
 								<label class="control-label"><b>Vendor</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="Vendor_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab26">		
 								<input type="checkbox" name="checkAll26" id="checkAll26"/></label>
 								<label class="control-label">Select All</label>
@@ -642,7 +685,7 @@
 							</div>	
 									</div>
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab27">		
 								<input type="checkbox" name="checkAll27" id="checkAll27"/></label>
 								<label class="control-label">Select All</label>
@@ -661,7 +704,7 @@
 							</div>	
 									</div>
 									
-									<div class="col-lg-2">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab28">		
 								<input type="checkbox" name="checkAll28" id="checkAll28"/></label>
 								<label class="control-label">Select All</label>
@@ -680,7 +723,7 @@
 							</div>	
 									</div>
 									
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 								<div class="" id="tab29">		
 								<input type="checkbox" name="checkAll29" id="checkAll29"/></label>
 								<label class="control-label">Select All</label>
@@ -700,14 +743,14 @@
 									</div>
 									
 								</div>
-							</div>	
-							 </br></br></br>
+							
 							 
 							 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll" id="Area_head"/></label>
 								<label class="control-label"><b>Area</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="Area_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab30">		
 								<input type="checkbox" name="checkAll30" id="checkAll30"/></label>
 								<label class="control-label">Select All</label>
@@ -726,13 +769,13 @@
 							</div>	
 								</div>
 								</div>
-							</div>
-							 </br></br></br>
+							
 							 <div class="container">
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll" id="AccountGroup_head"/></label>
 								<label class="control-label"><b>Account Group</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								</div>
+								<div class="row masterdivleft" id="AccountGroup_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab31">		
 								<input type="checkbox" name="checkAll31" id="checkAll31"/></label>
 								<label class="control-label">Select All</label>
@@ -751,7 +794,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab32">		
 								<input type="checkbox" name="checkAll32" id="checkAll32"/></label>
 								<label class="control-label">Select All</label>
@@ -770,7 +813,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab33">		
 								<input type="checkbox" name="checkAll33" id="checkAll33"/></label>
 								<label class="control-label">Select All</label>
@@ -789,25 +832,31 @@
 							</div>	
 								</div>
 								</div>
-							</div>
-							 </br></br></br>
+							
 						
 						</div> 
 						 </br></br></br>
 						
+						
+						
+						
+						
+						
 						<div class="form-group col-sm-12 col-md-12">
 						    <div class="container">
                              <div class="panel panel-default"  id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;">
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
 							 <input style=" text-align: center;" type="checkbox" value="h2" class="employee_head" id="transaction_management" name="permission[]"/>
 							 <b>Transaction Management</b></h4></div>
                              </div>
                             </div>
-							<div id="transaction_management_div" class="trans_div form-group" style="display:none; width:100%">
-							<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+							
+
+							<div id="transaction_management_div" class="trans_div form-group container mastersubheading1" style="display:none; width:97%">
+							<input type="checkbox" name="checkAll1" id="purchase_head"/></label>
 								<label class="control-label"><b>Purchase</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="purchase_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab34">		
 								<input type="checkbox" name="checkAll34" id="checkAll34"/></label>
 								<label class="control-label">Select All</label>
@@ -826,7 +875,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab35">		
 								<input type="checkbox" name="checkAll35" id="checkAll35"/></label>
 								<label class="control-label">Select All</label>
@@ -845,7 +894,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab36">		
 								<input type="checkbox" name="checkAll36" id="checkAll36"/></label>
 								<label class="control-label">Select All</label>
@@ -864,7 +913,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab37">		
 								<input type="checkbox" name="checkAll37" id="checkAll37"/></label>
 								<label class="control-label">Select All</label>
@@ -883,7 +932,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab38">		
 								<input type="checkbox" name="checkAll38" id="checkAll38"/></label>
 								<label class="control-label">Select All</label>
@@ -901,7 +950,7 @@
 								<span class="control-label">Delete</span>
 							</div>	
 								</div>
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab39">		
 								<input type="checkbox" name="checkAll39" id="checkAll39"/></label>
 								<label class="control-label">Select All</label>
@@ -920,7 +969,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab40">		
 								<input type="checkbox" name="checkAll40" id="checkAll40"/></label>
 								<label class="control-label">Select All</label>
@@ -941,11 +990,11 @@
 								
 								</div>
 							
-							</br></br></br>
-							   <input type="checkbox" name="checkAll" id="checkAll"/>
+							</br>
+							   <input type="checkbox" name="checkAll" id="Sales_head"/>
 								<label class="control-label"><b>Sales</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="Sales_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab41">		
 								<input type="checkbox" name="checkAll41" id="checkAll41"/></label>
 								<label class="control-label">Select All</label>
@@ -964,7 +1013,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab42">		
 								<input type="checkbox" name="checkAll42" id="checkAll42"/></label>
 								<label class="control-label">Select All</label>
@@ -983,7 +1032,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab43">		
 								<input type="checkbox" name="checkAll43" id="checkAll43"/></label>
 								<label class="control-label">Select All</label>
@@ -1003,7 +1052,7 @@
 								</div>
 							
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab44">		
 								<input type="checkbox" name="checkAll44" id="checkAll44"/></label>
 								<label class="control-label">Select All</label>
@@ -1022,7 +1071,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab45">		
 								<input type="checkbox" name="checkAll45" id="checkAll45"/></label>
 								<label class="control-label">Select All</label>
@@ -1040,7 +1089,7 @@
 								<span class="control-label">Delete</span>
 							</div>	
 								</div>
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab46">		
 								<input type="checkbox" name="checkAll46" id="checkAll46"/></label>
 								<label class="control-label">Select All</label>
@@ -1059,7 +1108,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab47">		
 								<input type="checkbox" name="checkAll47" id="checkAll47"/></label>
 								<label class="control-label">Select All</label>
@@ -1080,12 +1129,12 @@
 								
 								</div>
 							
-							 </br></br></br>
+							 </br>
 								
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+								<input type="checkbox" name="checkAll" id="Payments_head"/></label>
 								<label class="control-label"><b>Payments</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="Payments_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab48">		
 								<input type="checkbox" name="checkAll48" id="checkAll48"/></label>
 								<label class="control-label">Select All</label>
@@ -1104,7 +1153,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab49">		
 								<input type="checkbox" name="checkAll49" id="checkAll49"/></label>
 								<label class="control-label">Select All</label>
@@ -1123,7 +1172,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab50">		
 								<input type="checkbox" name="checkAll50" id="checkAll50"/></label>
 								<label class="control-label">Select All</label>
@@ -1142,14 +1191,14 @@
 							</div>	
 								</div>
 
-							</div> <br> <br> <br>
+							</div> <br> 
 						
 						
 						
-								<input type="checkbox" name="checkAll" id="checkAll"/></label>
+								<input type="checkbox" name="checkAll" id="Receipts_head"/></label>
 								<label class="control-label"><b>Receipts</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="Receipts_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab51">		
 								<input type="checkbox" name="checkAll51" id="checkAll51"/></label>
 								<label class="control-label">Select All</label>
@@ -1168,7 +1217,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab52">		
 								<input type="checkbox" name="checkAll52" id="checkAll52"/></label>
 								<label class="control-label">Select All</label>
@@ -1187,7 +1236,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-2">
+								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab53">		
 								<input type="checkbox" name="checkAll53" id="checkAll53"/></label>
 								<label class="control-label">Select All</label>
@@ -1206,13 +1255,13 @@
 							</div>	
 								</div>
 
-							</div> <br> <br> <br>
+							</div> <br>
 							
 							
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll" id="Advance_head"/></label>
 								<label class="control-label"><b>Advance</b></label>
-								<div class="row">
-									<div class="col-lg-3">
+								<div class="row" id="Advance_div" style="display:none; width:100%">
+									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab54">		
 								<input type="checkbox" name="checkAll54" id="checkAll54"/></label>
 								<label class="control-label">Select All</label>
@@ -1231,7 +1280,7 @@
 							</div>	
 								</div>
 								
-								<div class="col-lg-3">
+								<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab55">		
 								<input type="checkbox" name="checkAll55" id="checkAll55"/></label>
 								<label class="control-label">Select All</label>
@@ -1249,12 +1298,12 @@
 								<span class="control-label">Delete</span>
 							</div>	
 								</div>
-								</div> <br> <br> <br>
+								</div> <br>
 							
-							<input type="checkbox" name="checkAll" id="checkAll"/></label>
+							<input type="checkbox" name="checkAll" id="AccountExpense_head"/></label>
 								<label class="control-label"><b>Account Expense</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="AccountExpense_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab56">		
 								<input type="checkbox" name="checkAll56" id="checkAll56"/></label>
 								<label class="control-label">Select All</label>
@@ -1272,18 +1321,18 @@
 								<span class="control-label">Delete</span>
 							</div>	
 								</div>
-								</div></div></div> <br> <br> <br>
+								</div></div></div> <br> 
 								
 						<div class="form-group col-sm-12 col-md-12"> 
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;">
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
 							 <input style=" text-align: center;" type="checkbox" value="h3" class="prize_updation" id="prize_updation" name="permission[]"/>
 							 <b>Price Updation</b></h4></div>
                              </div>
                              </div>
-							 						<div id="prize_updation_div" class="prize_updation_div form-group" style="display:none; width:100%">
-							 <div class="col-lg-3">
+							 						<div id="prize_updation_div" class="prize_updation_div form-group mastersubheading1" style="display:none; width:97%">
+							 <div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab57">		
 								<input type="checkbox" name="checkAll57" id="checkAll57"/></label>
 								<label class="control-label">Select All</label>
@@ -1304,23 +1353,23 @@
 								
 							 
 							 
-							 </div> </div> </br></br></br>
+							 </div> </div> </br>
 							
 					
 						
 						<div class="form-group col-sm-12 col-md-12"> 
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;">
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
 							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="outstanding" name="permission[]"/>
 							 <b>Outstanding</b></h4></div>
                              </div>
                              </div>
-							 <div id="outstanding_div" class="outstanding_div form-group" style="display:none; width:100%">
-							 <input type="checkbox" name="checkAll" id="checkAll"/></label>
+							 <div id="outstanding_div" class="outstanding_div form-group mastersubheading1" style="display:none; width:97%">
+							 <input type="checkbox" name="checkAll" id="Receivables_head"/></label>
 								<label class="control-label"><b>Receivables</b></label>
-								<div class="row">
-									<div class="col-lg-3">
+								<div class="row" id="Receivables_div" style="display:none; width:100%">
+									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab58">		
 								<input type="checkbox" name="checkAll58" id="checkAll58"/></label>
 								<label class="control-label">Select All</label>
@@ -1331,10 +1380,14 @@
 								<label class="control-label">Partywise Receivables</label>
 							</div>	
 								</div>
-							 
-									<div class="col-lg-3">
-									 <input type="checkbox" name="checkAll" id="checkAll"/></label>
+								</div>
+								
+								<br/>
+								
+							  <input type="checkbox" name="checkAll" id="Payables_head"/></label>
 								<label class="control-label"><b>Payables</b></label>
+								<div class="row" id="Payables_div" style="display:none; width:100%">
+									<div class="col-lg-3 mastersubheading2">									
 										<div class="" id="tab59">		
 								<input type="checkbox" name="checkAll59" id="checkAll59"/></label>
 								<label class="control-label">Select All</label>
@@ -1346,21 +1399,21 @@
 							</div>	
 								</div>
 							 </div> 
-							 </div></div> </br></br></br>
+							 </div></div> </br>
 						
 						<div class="form-group col-sm-12 col-md-12"> 
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;">
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
 							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="settings" name="permission[]"/>
 							 <b>Settings</b></h4></div>
                              </div>
                              </div>
-							 <div id="settings_div" class="outstanding_div form-group" style="display:none; width:100%">
+							 <div id="settings_div" class="outstanding_div form-group mastersubheading1" style="display:none; width:97%">
 							 <input type="checkbox" name="checkAll60" id="checkAll60"/></label>
 								<label class="control-label"><b>Selling Price</b></label>
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab60">		
 								
 								<input type="checkbox" value="jjj1" class="receivables masters"  id="zone" name="permission[]"/></label>
@@ -1374,16 +1427,16 @@
 						<div class="form-group col-sm-12 col-md-12"> 
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;">
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
 							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="pos" name="permission[]"/>
 							 <b>POS</b></h4></div>
                              </div>
                              </div>
-							 <div id="pos_div" class="prize_updation_div form-group" style="display:none; width:100%">
+							 <div id="pos_div" class="prize_updation_div form-group mastersubheading1" style="display:none; width:97%">
 							<input type="checkbox" name="checkAll61" id="checkAll61"/></label>
 								<label class="control-label"><b>POS</b></label>
 								<div class="row">
-									<div class="col-lg-3">
+									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab61">		
 								
 								<input type="checkbox" value="kkk1" class="receivables masters"  id="zone" name="permission[]"/></label>
@@ -1397,17 +1450,17 @@
 					<div class="form-group col-sm-12 col-md-12"> 
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
-                             <div class="panel-heading"><h4 style=" text-align: center;">
+                             <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
 							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="reports" name="permission[]"/>
 							 <b>Reports</b></h4></div>
                              </div>
                              </div>	
-							 <div id="reports_div" class="reports_div form-group" style="display:none; width:100%">
+							 <div id="reports_div" class="reports_div form-group mastersubheading1" style="display:none; width:97%">
 						<div class="container">
-							<input type="checkbox" name="checkAll62" id="checkAll62"/></label>
+							<input type="checkbox" name="checkAll62" id="day_head"/></label>
 								<label class="control-label"><b>Day Book</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="day_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab62">		
 								
 								<input type="checkbox" value="lll1" class="bank masters"  id="zone" name="permission[]"/></label>
@@ -1416,13 +1469,13 @@
 									</div>
 								</div>
 								
-							</div>	</br></br></br>
+							</div>
 							
 							<div class="container">
-							<input type="checkbox" name="checkAll63" id="checkAll63"/></label>
+							<input type="checkbox" name="checkAll63" id="StockReport_div"/></label>
 								<label class="control-label"><b>Stock Report</b></label>
-								<div class="row">
-									<div class="col-lg-3">
+								<div class="row" id="StockReport_div" style="display:none; width:100%">
+									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab63">		
 								
 								<input type="checkbox" value="mmm1" class="bank masters"  id="zone" name="permission[]"/></label>
@@ -1439,13 +1492,13 @@
 									</div>
 								</div>
 								
-							</div>	</br></br></br>
+							</div>
                          
 						 <div class="container">
-							<input type="checkbox" name="checkAll64" id="checkAll64"/></label>
+							<input type="checkbox" name="checkAll64" id="IndividualReport_head"/></label>
 								<label class="control-label"><b>Individual Report</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="IndividualReport_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab64">		
 								
 								<input type="checkbox" value="ppp1" class="bank masters"  id="zone" name="permission[]"/></label>
@@ -1454,13 +1507,13 @@
 									</div>
 								</div>
 								
-							</div>	</br></br></br>
+							</div>
                          
 						 <div class="container">
-							<input type="checkbox" name="checkAll65" id="checkAll65"/></label>
+							<input type="checkbox" name="checkAll65" id="GSTReport_head"/></label>
 								<label class="control-label"><b>GST Report</b></label>
-								<div class="row">
-									<div class="col-lg-2">
+								<div class="row" id="GSTReport_div" style="display:none; width:100%">
+									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab65">		
 								
 								<input type="checkbox" value="qqq1" class="bank masters"  id="zone" name="permission[]"/></label>
@@ -3166,6 +3219,314 @@ $(document).ready(function(){
 
     });
 });
+
+$(document).ready(function(){
+	var mas_id = $("#location_head");
+    $('#location_head').change(function(){
+        if(this.checked)
+            $('#location_div').fadeIn('slow');
+        else
+            $('#location_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#bank_head");
+    $('#bank_head').change(function(){
+        if(this.checked)
+            $('#bank_div').fadeIn('slow');
+        else
+            $('#bank_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#employee_head");
+    $('#employee_head').change(function(){
+        if(this.checked)
+            $('#employee_div').fadeIn('slow');
+        else
+            $('#employee_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#user_head");
+    $('#user_head').change(function(){
+        if(this.checked)
+            $('#user_div').fadeIn('slow');
+        else
+            $('#user_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#account_head");
+    $('#account_head').change(function(){
+        if(this.checked)
+            $('#account_div').fadeIn('slow');
+        else
+            $('#account_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#Category_head");
+    $('#Category_head').change(function(){
+        if(this.checked)
+            $('#Category_div').fadeIn('slow');
+        else
+            $('#Category_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#Language_head");
+    $('#Language_head').change(function(){
+        if(this.checked)
+            $('#Language_div').fadeIn('slow');
+        else
+            $('#Language_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#item_head");
+    $('#item_head').change(function(){
+        if(this.checked)
+            $('#item_div').fadeIn('slow');
+        else
+            $('#item_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#Vendor_head");
+    $('#Vendor_head').change(function(){
+        if(this.checked)
+            $('#Vendor_div').fadeIn('slow');
+        else
+            $('#Vendor_div').fadeOut('slow');
+
+    });
+});
+
+
+
+$(document).ready(function(){
+	var mas_id = $("#Area_head");
+    $('#Area_head').change(function(){
+        if(this.checked)
+            $('#Area_div').fadeIn('slow');
+        else
+            $('#Area_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#AccountGroup_head");
+    $('#AccountGroup_head').change(function(){
+        if(this.checked)
+            $('#AccountGroup_div').fadeIn('slow');
+        else
+            $('#AccountGroup_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#purchase_head");
+    $('#purchase_head').change(function(){
+        if(this.checked)
+            $('#purchase_div').fadeIn('slow');
+        else
+            $('#purchase_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#Sales_head");
+    $('#Sales_head').change(function(){
+        if(this.checked)
+            $('#Sales_div').fadeIn('slow');
+        else
+            $('#Sales_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#Payments_head");
+    $('#Payments_head').change(function(){
+        if(this.checked)
+            $('#Payments_div').fadeIn('slow');
+        else
+            $('#Payments_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#Receipts_head");
+    $('#Receipts_head').change(function(){
+        if(this.checked)
+            $('#Receipts_div').fadeIn('slow');
+        else
+            $('#Receipts_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#Receipts_head");
+    $('#Receipts_head').change(function(){
+        if(this.checked)
+            $('#Receipts_div').fadeIn('slow');
+        else
+            $('#Receipts_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#Advance_head");
+    $('#Advance_head').change(function(){
+        if(this.checked)
+            $('#Advance_div').fadeIn('slow');
+        else
+            $('#Advance_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#AccountExpense_head");
+    $('#AccountExpense_head').change(function(){
+        if(this.checked)
+            $('#AccountExpense_div').fadeIn('slow');
+        else
+            $('#AccountExpense_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#Receivables_head");
+    $('#Receivables_head').change(function(){
+        if(this.checked)
+            $('#Receivables_div').fadeIn('slow');
+        else
+            $('#Receivables_div').fadeOut('slow');
+
+    });
+});
+
+
+
+$(document).ready(function(){
+	var mas_id = $("#Payables_head");
+    $('#Payables_head').change(function(){
+        if(this.checked)
+            $('#Payables_div').fadeIn('slow');
+        else
+            $('#Payables_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#day_head");
+    $('#day_head').change(function(){
+        if(this.checked)
+            $('#day_div').fadeIn('slow');
+        else
+            $('#day_div').fadeOut('slow');
+
+    });
+});
+
+
+$(document).ready(function(){
+	var mas_id = $("#StockReport_head");
+    $('#StockReport_head').change(function(){
+        if(this.checked)
+            $('#StockReport_div').fadeIn('slow');
+        else
+            $('#StockReport_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#IndividualReport_head");
+    $('#IndividualReport_head').change(function(){
+        if(this.checked)
+            $('#IndividualReport_div').fadeIn('slow');
+        else
+            $('#IndividualReport_div').fadeOut('slow');
+
+    });
+});
+
+$(document).ready(function(){
+	var mas_id = $("#GSTReport_head");
+    $('#GSTReport_head').change(function(){
+        if(this.checked)
+            $('#GSTReport_div').fadeIn('slow');
+        else
+            $('#GSTReport_div').fadeOut('slow');
+
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 @endsection
 

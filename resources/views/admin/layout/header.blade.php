@@ -86,7 +86,7 @@
     <div class="sidebar-content">
       <div class="sidebar-brand">
         <a href="#">
-			<img src="http://15.206.73.49/nspollachi/new/assets/image/logo.png" class="img-fluid dashboardlog" alt="logo">
+			<img src="http://15.206.73.49/ns_pollachi/assets/image/xlogo.png.pagespeed.ic.2_rssvuSxU.webp" class="img-fluid dashboardlog" alt="logo">
 		</a>
         <div id="close-sidebar">
           <i class="fas fa-times"></i>
@@ -280,16 +280,6 @@
 							
 													</ul>
 										</li>
-
-
-                    <li class="has-children">
-                          <div class="acnav__label acnav__label--level2">BOM</div>
-                          <ul class="acnav__list acnav__list--level3">
-                            
-                          <li><a class="acnav__link acnav__link--level3" href="{{route('bom.index')}}">BOM</a></li>
-              
-                          </ul>
-                    </li>
 										
 										
 										
@@ -383,26 +373,28 @@
                           <li><a class="acnav__link acnav__link--level3"  href="{{ route('expense.create') }}">Account Transaction</a></li>
                         
                                 </ul>
-
-
                     </li>
                     </ul> 
-			
-			<ul class="acnav__list acnav__list--level2">  
-                      <!--1st Add sub menu--> 
-                  <li class="has-children">
-                          <div class="acnav__label acnav__label--level2">Production Module</div>
+					<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+											<li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Uncleared Cheques</div>
                           <ul class="acnav__list acnav__list--level3">
                             
-                          <li><a class="acnav__link acnav__link--level3"  href="{{url('production')}}">Production</a></li>
-                        
+                          <li><a class="acnav__link acnav__link--level3"  href="{{ route('received.index') }}">Received </a></li>
+                          
+                          <li><a class="acnav__link acnav__link--level3"  href="{{ route('paid.index') }}">Paid</a></li>
                                 </ul>
 
                       
                     </li>
-                    </ul> 
+
+										</ul>	
+			
 			</li>
 			
+			
+
 			<!--3rdt li menu-->
 			<li class="has-children"><div class="acnav__label"> <i class="fa fa-tag" aria-hidden="true"></i>   Price Updation </div>
 					
@@ -542,6 +534,16 @@
                                  						</ul>
 										</li>
 										</ul>	
+										<ul class="acnav__list acnav__list--level2">	
+											<!--1st Add sub menu-->	
+									<li class="has-children">
+													<div class="acnav__label acnav__label--level2">Mail Setting</div>
+													<ul class="acnav__list acnav__list--level3">
+													<li><a class="acnav__link acnav__link--level3" href="{{ route('mailsetting-setup.index') }}">Mail Setup</a></li>
+                       
+                                 						</ul>
+										</li>
+										</ul>	
 				
 			</li>
 			
@@ -615,4 +617,37 @@
    </div>
 </div>
 </div>
+@if ($message=Session::get('success'))
+   
+   <!-- <div class="alert alert-success alert-dismissible fade show container py-1 mt-2 mb-0" role="alert"> -->
+   <div class="alert alert-success alert-dismissible fade show " role="alert" align="center">
+	 <strong>{{ $message }}</strong>
+	 <button type="button" class="close py-1" data-dismiss="alert" aria-label="Close">
+	   <span aria-hidden="true">&times;</span>
+	 </button>
+   </div>  
+ 
+   @endif
+
+   @if ($message=Session::get('failure'))
+   
+   <div class="alert alert-danger alert-dismissible fade show" role="alert" align="center">
+	 <strong>{{ $message }}</strong>
+	 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	   <span aria-hidden="true">&times;</span>
+	 </button>
+   </div>  
   
+	  
+   @endif
+
+   @if (isset($errors) && count($errors)>0)
+  
+   <div class="alert alert-danger alert-dismissible fade show container py-1 mt-2 mb-0" role="alert" align="center">
+	 <strong>Validation Errros </strong>
+	 <button type="button" class="close py-1" data-dismiss="alert" aria-label="Close">
+	   <span aria-hidden="true">&times;</span>
+	 </button>
+   </div>  
+ 
+   @endif

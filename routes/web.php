@@ -18,9 +18,12 @@ use App\Spatie\Permission\Models\Role;
 //     return view('admin.master.dash');
 // })->middleware('auth');
 
-Route::any('/', function () {
-    return view('admin.master.empty');
-})->middleware('auth');
+// Route::any('/', function () {
+//     return view('admin.master.empty');
+// })->middleware('auth');
+
+
+Route::resource('/', 'DashboardController',['middleware' => ['auth']]);
 
 Route::get('/view', function () {
     return view('Masters.Sample.View');
@@ -1293,8 +1296,39 @@ Route::post('credit-note-report','CreditNoteController@report');
 Route::post('stock-report','StockReportController@report');
 Route::post('stock-summary-report','StockSummaryController@report');
 
-//dashboard 
+Route::resource('mailsetting-setup','MailSettingController',['middleware' => ['auth']]);
+Route::any('mailsetting-setup/show/{id}', 'MailSettingController@show');
+Route::any('mailsetting-setup/edit/{id}', 'MailSettingController@edit');
+Route::any('mailsetting-setup/send_email/{id}', 'MailSettingController@send_email');
 
+// Route::group(['prefix' => 'mailsetting-setup', 'middleware' => ['auth']], function () {
+//     Route::any('/mailsetting-setup', 'MailSettingController@index')->middleware('permission:bank_branch_list');
+//     Route::any('create', 'MailSettingController@create')->middleware('permission:bank_branch_create');
+//     Route::any('store', 'MailSettingController@store')->middleware('permission:bank_branch_create');
+//     Route::any('show/{id}', 'MailSettingController@show')->middleware('permission:bank_branch_list');
+//     Route::any('edit/{id}', 'MailSettingController@edit')->middleware('permission:bank_branch_edit');
+//     Route::any('update/{id}', 'MailSettingController@update')->middleware('permission:bank_branch_edit');
+//     Route::any('delete/{id}', 'MailSettingController@destroy')->middleware('permission:bank_branch_delete');
+// });
+Route::get('generate-pdf', 'PdfGenerateController@pdfview')->name('generate-pdf');
+
+
+
+/* Received starts here  */
+
+Route::resource('received','ReceivedController',['middleware' => ['auth']]);
+Route::post('received/branch_details/', 'ReceivedController@branch_details');
+Route::post('received/act_type_details/', 'ReceivedController@act_type_details');
+Route::post('received/store_pos/', 'ReceivedController@store_pos');
+
+    
+/*  Received end here */
+
+/* Paid starts here  */
+
+Route::resource('paid','PaidController',['middleware' => ['auth']]);
+
+/*  Paid end here */
 
 Auth::routes(['register' => false]);
 

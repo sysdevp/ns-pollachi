@@ -101,6 +101,7 @@
                            <option value="1">Cash</option>
                            <option value="2">Bank</option>
                            <option value="3">Advance Adjustment</option>
+                           <option value="4">Cheque</option>
                         </select>
               </div>
             </div>

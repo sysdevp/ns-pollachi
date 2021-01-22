@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use PDF;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Estimation;
@@ -98,9 +98,10 @@ class EstimationController extends Controller
 
 $supplier = Supplier::all();
     $agent = Agent::all();
-        
-
-        return view('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total','supplier','agent'));
+    // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+    // $pdf = PDF::loadView('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total','supplier','agent'));
+    // return $pdf->download('SSSS.pdf');
+       return view('admin.estimation.view',compact('estimation','check_id','taxable_value','tax_value','total','total_discount','expense_total','supplier','agent'));
     }
         
         
@@ -464,8 +465,10 @@ $supplier = Supplier::all();
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.estimation.show',compact('estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+       $pdf = PDF::loadView('admin.estimation.show_pdf',compact('estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+       return $pdf->download('tester.pdf');
 
+  return view('admin.estimation.show_pdf',compact('estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
 
         //return view('admin.estimation.show');
     }

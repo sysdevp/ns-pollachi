@@ -44,20 +44,19 @@ class OffersController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $out = array_values($request->items);
+        $myJSON = json_encode($out);
+        $myJSONDateRange = json_encode($request->day_range_offers);
+
+
         $offers = new Offers();
         $offers->offers_category_id = $request->parent_id;
         $offers->offer_name = $request->name;
-        $out = $request->items;
-        $req_items = implode(',',$out);
-        $offers->item_id = $req_items;
-        $out_dates = $request->day_range_offers;
-        $myJSONDateRange = implode(',',$out_dates);
-        $offers->day_range_offers = $myJSONDateRange;
+        $offers->item_id = $myJSON;
         $offers->offer_type = $request->offer_type;
         $offers->valid_from = date('Y-m-d',strtotime($request->valid_from));
         $offers->valid_to = date('Y-m-d',strtotime($request->valid_to));
-        
+        $offers->day_range_offers = $myJSONDateRange;
         $offers->variable =  $request->variable;
         if ($request->offer_type == "time") {
             $offers->from_time = $request->from_time;
@@ -113,7 +112,7 @@ class OffersController extends Controller
      */
     public function update(Request $request, Offers $offers, $id)
     {
-        $giftvoucher = Giftvoucher::find($id);
+        $giftvoucher = Offers::find($id);
                 $validator = Validator::make($request->all(), [
                     'name' => 'required|unique:giftvouchers,name,'.$id.',id,deleted_at,NULL',
                     'code' => 'required|unique:giftvouchers,code,'.$id.',id,deleted_at,NULL',

@@ -29,7 +29,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Branch Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp branch" placeholder="Branch Name" name="branch" value="{{old('branch')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp branch caps" placeholder="Branch Name" name="branch" value="{{old('branch')}}" required>
                 <span class="mandatory"> {{ $errors->first('branch')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Branch Name
@@ -77,7 +77,7 @@
         </div>
       </form>
     </div>
-    <!-- <script src="{{asset('assets/js/master/capitalize.js')}}"></script> -->
+    <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
     <!-- card body end@ -->
   </div>
 </div>

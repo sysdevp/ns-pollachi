@@ -1,1 +1,0 @@
-<?php /**PATH C:\xampp\htdocs\ns_pollachi\resources\views/admin/master/account_expense/view.blade.php ENDPATH**/ ?>

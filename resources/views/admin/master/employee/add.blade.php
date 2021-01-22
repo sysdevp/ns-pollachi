@@ -183,7 +183,7 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Photo <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Photo</label>
               <div class="col-sm-8">
                 <input type="file" class="form-control profile " placeholder="Father's Name" name="profile" value="{{old('profile')}}" >
                 <button type="button" id="cus-btn">CHOOSE A FILE</button>

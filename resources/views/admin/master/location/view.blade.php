@@ -71,7 +71,7 @@
              </td>
               <td class="icon">
 	<span class="tdshow">
-                <a href="{{url('master/location/show/'.$value->id )}}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="{{url('master/location/show/'.$value->id )}}" class="px-1 py-0 text-white rounded" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{url('master/location/edit/'.$value->id )}}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a onclick="return confirm('Are you sure ?')" href="{{url('master/location/delete/'.$value->id )}}" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 				</span>

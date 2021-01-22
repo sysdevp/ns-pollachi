@@ -37,10 +37,6 @@ class StateController extends Controller
 
     public function store(StateRequest $request)
     {
-            // $validator = Validator::make($request->all(), [
-            //     'name' => 'required|unique:states,name,NULL,id,deleted_at,NULL',
-            //     'code' => 'required|unique:states,code,NULL,id,deleted_at,NULL',
-            // ]);
 
             $state = new State;
             $state->name       = Input::get('name');

@@ -10,18 +10,15 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
-	 public $details;
-   
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct()
     {
-         $this->details = $details;
-       
+        //
     }
 
     /**
@@ -31,7 +28,6 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Maze Freelancer Account Activation')
-                    ->view('mail.register_mail');
+        return $this->view('mail')->subject('Test Mail');
     }
 }

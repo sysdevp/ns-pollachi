@@ -24,6 +24,7 @@
         <thead>
           <tr>
             <th>S.No</th>
+            <th>Offer Name</th>
             <th>Offer type</th>
             <th>Valid from</th>
             <th>Valid to</th>
@@ -40,6 +41,7 @@
           @foreach($offers as $key=>$value)
             <tr>
               <td>{{ $key+1 }}</td>
+              <td>{{ $value->offer_name}}</td>
               <td>{{ $value->offer_type}}</td>
               <td>{{ $value->valid_from !="" ? date('d-m-Y',strtotime($value->valid_from)) : ""}}</td>
               <td>{{ $value->valid_to !="" ? date('d-m-Y',strtotime($value->valid_to)) : ""}}</td>

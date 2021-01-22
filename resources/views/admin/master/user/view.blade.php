@@ -38,7 +38,7 @@
           @foreach($users as $key=>$value)
           @if (isset($value->employee->name))
              <tr>
-             <td>{{ $i+1 }} </td>
+             <td>{{ $key }} </td>
               <td>{{ isset($value->employee->name) ? $value->employee->name : ""}}</td>
               <td>{{ $value->user_name}}</td>
               <td>{{ $value->role->name}}</td>

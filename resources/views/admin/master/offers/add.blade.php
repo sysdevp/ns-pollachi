@@ -139,7 +139,7 @@
               <label for="validationCustom01" class="col-sm-4 col-form-label">Select day Offer date(s)<span class="mandatory">*</span></label>
               <div class="col-sm-8">
                 <div class="input-group input-daterange from_to_day">
-                  <input type="text" class="form-control from_date_day" placeholder="dd-mm-yyyy" name="day_range_offers[]" value="{{old('valid_from')}}" ><!-- 
+                  <input type="text" class="form-control from_date_day" placeholder="dd-mm-yyyy" name="day_range_offers" value="{{old('valid_from')}}" required><!-- 
                     <div class="input-group-addon">&nbsp;&nbsp;to&nbsp;&nbsp;</div>
                   <input type="text" class="form-control to_date_day" placeholder="dd-mm-yyyy" name="valid_to" value="{{old('valid_to')}}" required> -->
                   <span class="mandatory"> {{ $errors->first('valid_from')  }} </span>

@@ -40,7 +40,7 @@ $(document).ready(function() {
 			   text: '<i class="fa fa-file-excel-o"></i>',
 			   titleAttr: 'Excel',
               exportOptions: {
-                  columns: ':visible'
+                columns: [ 0, ':visible' ]
               }
           },
           {
@@ -48,7 +48,7 @@ $(document).ready(function() {
 			   text: '<i class="fa fa-file-pdf-o"></i>',
 			   titleAttr: 'PDF',
               exportOptions: {
-                  columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+                columns: [ 0, ':visible' ]
               }
           },
           {
@@ -56,7 +56,7 @@ $(document).ready(function() {
 			   text: '<i class="fa fa-print"></i>',
 			    titleAttr: 'Print',
               exportOptions: {
-                  columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+                columns: [ 0, ':visible' ]
               }
           },
          {
