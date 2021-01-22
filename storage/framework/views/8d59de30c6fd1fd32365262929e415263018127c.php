@@ -235,7 +235,7 @@ table, th, td {
                       <td><?php echo e($value->pending_amount); ?></td>
                       <td><?php echo e($value->no_of_days); ?></td>
                       <td><?php echo e($value->no_of_days); ?></td>
-                      <td><?php echo e($value->salesman->name); ?></td>
+                      <td></td>
                       <td><?php echo e($value->customer->name); ?></td>
                       <td><?php echo e($value->customer->phone_no); ?></td>
                       <td><?php echo e($value->customer->email); ?></td>

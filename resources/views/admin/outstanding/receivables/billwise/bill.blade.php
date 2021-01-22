@@ -235,7 +235,7 @@ table, th, td {
                       <td>{{ $value->pending_amount }}</td>
                       <td>{{ $value->no_of_days }}</td>
                       <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->salesman->name }}</td>
+                      <td></td>
                       <td>{{ $value->customer->name }}</td>
                       <td>{{ $value->customer->phone_no }}</td>
                       <td>{{ $value->customer->email }}</td>

@@ -331,4 +331,32 @@ class StockSummaryController extends Controller
     {
         //
     }
+
+    public function emptydash()
+    {
+      $supplier_cnt = Supplier::count('id');
+      $customer_cnt = Customer::count('id');
+
+      $from_date = date('Y-m-01');
+      $to_date = date('Y-m-31');
+
+      $current_month_received_amount = ReceiptProcess::whereBetween('voucher_date', [$from_date, $to_date]);->sum('receipt_amount');
+
+      $current_month_payment_amount = PaymentProcess::whereBetween('voucher_date',[$from_date, $to_date])->sum('payment_amount');
+
+      $sales_entry = SaleEntry::sum('total_net_value');
+
+      $purchase_entry = PurchaseEntry::sum('total_net_value');
+
+      $received_amount = ReceiptProcess::sum('receipt_amount');
+
+      $payment_amount = PaymentProcess::sum('payment_amount');
+
+      $receivables = $sales_entry - $received_amount;
+
+      $payables    = $purchase_entry - $payment_amount;
+
+      $expenses = Expense::sum('debit_amount');
+      
+    }
 }

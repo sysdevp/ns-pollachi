@@ -1,8 +1,49 @@
+<style>
+.bg-video-wrap {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  background: url(https://designsupply-web.com/samplecontent/vender/codepen/20181014.png) no-repeat center center/cover;
+}
+video {
+  min-width: 100%;
+  min-height: 100vh;
+  z-index: 1;
+}
+.overlay {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(45deg, rgba(0,0,0,.3) 50%, rgba(0,0,0,.7) 50%);
+  background-size: 3px 3px;
+  z-index: 2;
+}
+</style>
+
+
+
+<div class="bg-video-wrap">
+    <video src="assets/image/background.mov" loop muted autoplay>
+    </video>
+    <div class="overlay">
+    </div>
+  </div>
+
+
+
+
+
+
+
 <?php $__env->startSection('content'); ?>
+
 <div class="container" id="login-page">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" style="background: rgb(255 255 255 / 90%)">
                 <div class="card-header"><?php echo e(__('Login')); ?></div>
 
                 <div class="card-body">

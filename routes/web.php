@@ -1293,6 +1293,8 @@ Route::post('credit-note-report','CreditNoteController@report');
 Route::post('stock-report','StockReportController@report');
 Route::post('stock-summary-report','StockSummaryController@report');
 
+//dashboard 
+
 
 Auth::routes(['register' => false]);
 
