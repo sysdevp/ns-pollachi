@@ -291,14 +291,14 @@
                           </ul>
                     </li>
 										
-                    <li class="has-children">
+                    <!-- <li class="has-children">
                           <div class="acnav__label acnav__label--level2">Terms And Conditions</div>
                           <ul class="acnav__list acnav__list--level3">
                             
                           <li><a class="acnav__link acnav__link--level3" href="{{route('terms-and-condition.index')}}">Terms And Condition</a></li>
               
                           </ul>
-                    </li>
+                    </li> -->
 										
 										
 									</li>
