@@ -680,7 +680,7 @@ class SalesEstimationController extends Controller
         $sale_estimation_num = $sale_estimation->sale_estimation_no;
         
         $sale_estimation_print_data = SaleEstimation::where('sale_estimation_no',$sale_estimation_num)->first();
-        $address = AddressDetails::where('address_ref_id',$customer_id)
+        $address = AddressDetails::where('address_ref_id',$sale_estimation_print_data->customer_id)
                                  ->where('address_table','=','Cus')
                                  ->first();
 

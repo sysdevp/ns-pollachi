@@ -203,7 +203,7 @@
                 <a href="{{ route('sales_entry.show',$value->s_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{ url('sales_entry/edit_beta/'.$value->s_no) }}" class="px-2 py-1 bg-success text-white rounded"  title="Edit">
 				<i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="{{url('sales_entry/delete/'.$value->s_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a href="{{url('sales_entry/delete_beta/'.$value->s_no )}}" onclick="return confirm('Are you sure ?')" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
                 <a href="{{ url('sales_entry/cancel_beta/'.$value->s_no) }}" class="px-2 py-1   bg-info text-white rounded" title="Cancel">
 				<i class="fa fa-ban" aria-hidden="true" ></i></a>

@@ -3130,7 +3130,7 @@ function se_details()
 
   $.ajax({
            type: "POST",
-            url: "{{ url('delivery_note/se_details/') }}",
+            url: "{{ url('sales_entry/se_details/') }}",
             data: { se_no : se_no },
            success: function(data) {
             $('.tables').remove();

@@ -559,16 +559,6 @@ table, th, td {
 
                        </div>
 
-                       <!-- <div class="row col-md-12 mb-3">
-                        @foreach($terms as $value)
-                         <div class="col-md-6">
-                      <input type="checkbox" class="" readonly="" id="" name="terms" value="{{ $value->id }}">
-                      <label style="font-family: Times new roman;">{{ $value->terms }}</label>
-                      
-                         </div>
-                          @endforeach
-                       </div> -->
-
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
                             

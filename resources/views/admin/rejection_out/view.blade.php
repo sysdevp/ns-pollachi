@@ -189,7 +189,7 @@
                 <!-- <a href="{{ route('rejection_out.show',$value->r_out_no) }}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a> -->
                 @if($value->cancel_status == 0)
                 @if($value->rn_no == '')
-                <a href="{{url('rejection_out/delete/'.$value->p_no,$value->r_out_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded" title="Delete">
+                <a href="{{url('rejection_out/delete_beta/'.$value->p_no,$value->r_out_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded" title="Delete">
 				<i class="fa fa-trash" aria-hidden="true" ></i></a>
                 @else
                 <a href="{{url('rejection_out/delete_beta/'.$value->rn_no,$value->r_out_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-success text-white rounded"  title="Edit">

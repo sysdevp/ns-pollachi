@@ -800,6 +800,7 @@ Route::get('sales_entry/item_details/{id}', 'SalesEntryController@item_details')
 Route::get('sales_entry/expense_details/{id}', 'SalesEntryController@expense_details');
 Route::post('sales_entry/last_purchase_rate/', 'SalesEntryController@last_purchase_rate');
 Route::get('sales_entry/delete/{id}', 'SalesEntryController@destroy');
+Route::get('sales_entry/delete_beta/{id}', 'SalesEntryController@delete_beta');
 Route::post('sales_entry/se_details/', 'SalesEntryController@se_details');
 Route::post('sales_entry/so_details/', 'SalesEntryController@so_details');
 Route::post('sales_entry/delivery_details/', 'SalesEntryController@delivery_details');
