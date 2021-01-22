@@ -1257,6 +1257,9 @@ class PurchaseEntryController extends Controller
 
             $purchase_entry_expense_data = PurchaseEntryBetaExpense::where('p_no',$id);
             $purchase_entry_expense_data->delete();
+
+            $purchase_entry_payment_data = PaymentProcess::where('voucher_no',$id); 
+            $purchase_entry_payment_data->delete(); 
         }
         else
         {
@@ -1271,6 +1274,9 @@ class PurchaseEntryController extends Controller
 
             $purchase_entry_expense_data = PurchaseEntryExpense::where('p_no',$id);
             $purchase_entry_expense_data->delete();  
+
+            $purchase_entry_payment_data = PaymentProcess::where('voucher_no',$id); 
+            $purchase_entry_payment_data->delete();
         }
         
 
@@ -1547,6 +1553,55 @@ class PurchaseEntryController extends Controller
         $words[$point = $point % 10] : '';
 
         //amount in words ends here
+
+        //payment save coding
+         $payment_process = new PaymentProcess();
+        $payment_process->voucher_no       = $voucher_no;
+        $payment_process->voucher_date      =  $voucher_date;
+        $payment_process->supplier_id      = $request->supplier_id;
+        $payment_process->p_no =  $voucher_no;
+        
+        $payment_process->payment_mode =  $request->mode;
+        if($request->mode==3){
+        $payment_process->payment_amount =  $request->total_net_value;
+        $payment_process->net_value =  $request->total_net_value;
+        }
+        else if($request->mode==2 || $request->mode==4 || $request->mode==5) {
+        $payment_process->payment_amount =  $request->bill_amount;
+        $payment_process->net_value =  $request->bill_amount;
+        $payment_process->payment_date =  $request->payment_date;
+        $payment_process->reference_no =  $request->reference_no;
+        $payment_process->remarks =  $request->remarks;
+        }
+        else {
+        $payment_process->payment_amount =  $request->bill_amount;
+        $payment_process->net_value =  $request->bill_amount;    
+        }
+
+        $payment_process->remarks =  $request->remark;    
+        $payment_process->active_status = 1;
+        $payment_process->created_by = 0;
+        $payment_process->updated_by = 0;
+        $payment_process->save();
+        $adv_array = isset($request->adv_id) ? ($request->adv_id) : 0;
+        if($adv_array==0){
+         $adv_id_cnt = 0;
+        } else {
+         $adv_id_cnt = count($request->adv_id);    
+        }
+        
+       
+        // for($i=0;$i<$adv_id_cnt;$i++)
+        // {
+        // $payment_process_adjustments = new PaymentProcessAdjustments();
+        // $payment_process_adjustments->payment_process_id = $request->voucher_no;
+        // $payment_process_adjustments->advance_voucher_no = $request->adv_id[$i];
+        // $payment_process_adjustments->amount = $request->amount[$i];
+        // $payment_process_adjustments->active_status = "1";
+        // $payment_process_adjustments->created_by = 0;
+        // $payment_process_adjustments->updated_by = 0;
+        // $payment_process_adjustments->save();
+        // }
                          
 
         if($request->save == 1)
@@ -1570,6 +1625,7 @@ class PurchaseEntryController extends Controller
         $purchase_entry_item_data = PurchaseEntryItem::where('p_no',$id);
         $purchase_entry_expense_data = PurchaseEntryExpense::where('p_no',$id);
         $purchase_entry_tax_data = PurchaseEntryTax::where('p_no',$id);
+        $purchase_entry_payment_data = PaymentProcess::where('voucher_no',$id);
 
         $rejection_out = RejectionOut::where('p_no',$id);
         $rejection_out_item = RejectionOutItem::where('p_no',$id);
@@ -1586,6 +1642,7 @@ class PurchaseEntryController extends Controller
             $purchase_entry_data->delete();
             $rejection_out->delete();
             $debit_note->delete();
+            $purchase_entry_payment_data->delete();
         }
          if($purchase_entry_item_data)
          {
