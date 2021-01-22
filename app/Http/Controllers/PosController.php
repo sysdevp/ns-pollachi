@@ -42,6 +42,9 @@ use App\Models\HoldPosPayment;
 use App\Models\HoldPosTax;
 use App\Models\HoldPosItem;
 
+use App\Models\PriceLevel;
+use App\Models\ItemwiseOffer;
+
 use App\Models\PosBlackItem;
 use App\Models\PosExpense;
 // use APP\Models\Giftvoucher;
@@ -253,6 +256,7 @@ class PosController extends Controller
                 $saleorder_items->amount = $request->amount[$i];
                 $saleorder_items->tax = $request->gst[$i];
                 $saleorder_items->tot_amt = $request->net_price[$i];
+                $saleorder_items->free = $request->itemwiseoffer[$i];
                 // $saleorder_items->b_or_w = $request->black_or_white[$i];
 
                 $saleorder_items->save();
@@ -443,12 +447,14 @@ $count=0;
     public function getdata(Request $request,$id)
     {
         $id=$request->id;
+
         $items=Item::where('id',$id)->first();
 
         $data[]=Item::join('uoms','uoms.id','=','items.uom_id')
                     ->where('items.id','=',$id)
-                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc')
+                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc','default_selling_price')
                     ->first();
+
 
         if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
         {
@@ -481,7 +487,7 @@ $count=0;
 
             $cnt = count($tax_master);               
 
-            /* end dynamic tax value */                  
+            /* end dynamic tax value */                    
 
             $sum = $tax_value + $items->category->gst_no;                            
             $data[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
@@ -506,8 +512,9 @@ $count=0;
                                 ->where('tax_master_id','!=',$tax_master_sgst->id)
                                 ->sum('value');
 
-            /* start dynamic tax value */      
-                          
+
+            /* start dynamic tax value */
+
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
                                 ->where('valid_from',$tax_date->valid_from)
                                 ->get();
@@ -516,11 +523,11 @@ $count=0;
             {
               $tax_val[] = $value->value;
               $tax_master[] = $value->tax_master_id;
-            }   
+            }      
 
-            $cnt = count($tax_master);                  
+            $cnt = count($tax_master);               
 
-            /* end dynamic tax value */                    
+            /* end dynamic tax value */                     
 
             $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
 
@@ -529,42 +536,33 @@ $count=0;
         $data[] =ItemBracodeDetails::where('item_id','=',$id)
                                     ->select('barcode')
                                     ->first();
-        if($data[1]=='')  
-        {
-            $data[1]=0;
-        } 
-        else if($data[2]=='')  
-        {
-            $data[2]='';
-        }  
+ 
 
-        //return $items->item_type;
-
-        if($items->item_type != 'Parent')
-        {
-        $item_id=$this->get_parent_item_id($id);
-          //dd($item_id);
-        $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
+        // if($items->item_type != 'Parent')
+        // {
+        // $item_id=$this->get_parent_item_id($id);
+        //   //dd($item_id);
+        // $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
           
-        $uom=array();
-        $count=0;
-        foreach($item_uom as $value){
-        if(isset($value->uom->name) && !empty($value->uom->name))
-        {
-            $count++;
-            $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
-                //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
-        }
+        // $uom=array();
+        // $count=0;
+        // foreach($item_uom as $value){
+        // if(isset($value->uom->name) && !empty($value->uom->name))
+        // {
+        //     $count++;
+        //     $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
+        //         //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
+        // }
 
-        }
+        // }
 
-        $result = array_unique($uom, SORT_REGULAR);
+        // $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
-        return $data;
-        }
-        else
-        {
+        // $data[]=$result;   
+
+        // }
+        // else
+        // {
         $item_id=$this->get_item_id($id);
 
         $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
@@ -583,9 +581,434 @@ $count=0;
 
         $result = array_unique($uom, SORT_REGULAR);
 
-        $data[]=$result;                              
+        $data[]=$result;   
+        
+    // }
+
+        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+
+        if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
+        {
+            $item_data = PurchaseEntryItem::where('item_id',$id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $updated_selling_price = PriceUpdation::where('item_id',$id)
+                                        ->where('status',1)
+                                        ->whereDate('effective_from', '<=', Carbon::now())
+                                        ->orderBy('updated_at','DESC')
+                                        ->latest()
+                                        ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                        ->first();
+
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
+                $tax = 0;
+            }  
+            else
+            {
+               $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
+
+                $tax = @$item_data->gst; 
+            }                                      
+
+            
+
+            if(@$updated_selling_price == '')
+            {
+                $data['selling_price'] = @$items->default_selling_price;
+            }
+            else
+            {
+
+            if(@$updated_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $item_rate * @$updated_selling_price->mark_up_value / 100;
+                $total = $item_rate + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_up_type == 2)
+            {
+                $total = $item_rate + @$updated_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            if(@$updated_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $item_rate * @$updated_selling_price->mark_down_value / 100;
+                $total = $item_rate - $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_down_type == 2)
+            {
+               $total = $item_rate - @$updated_selling_price->mark_down_value;
+               @$selling_price = number_format($total, 2, '.', ',');
+            }
+
+            $data['selling_price'] = @$selling_price;
+        }
+        }  
+        else
+        {
+            $data['selling_price'] = @$items->default_selling_price;
+        }
+
+        $data['selling_price_type'] = $selling_price_setup->setup;
+
+
+        $request->customer_id;
+
+        @$customer = Customer::where('id',$request->customer_id)->first();
+
+        $level = @$customer->price_level; 
+
+        @$price_level = PriceLevel::where('id',$level)->first();
+
+        $price_value = @$price_level->value;
+        $type = @$price_level->type;
+
+
+
+        if($type == 1)
+        {
+            $selling_price_rate = $data['selling_price'];
+             $rate = $selling_price_rate * $price_value /100;
+
+            $data['selling_price'] = $selling_price_rate - $rate;
+        }
+        else
+        {
+            $selling_price_rate = $data['selling_price'];
+
+            $data['selling_price'] = $selling_price_rate - $price_value;
+
+        }
+
+        $offers = DB::table('offers')->whereRaw('FIND_IN_SET(?,item_id)', [$id])->count();
+        if($offers > 0)
+        {
+            $offer_data = DB::table('offers')
+                                ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
+                                ->whereDate('valid_from', '<=', Carbon::now())
+                                ->whereDate('valid_to', '>=',Carbon::now())
+                                ->first();
+                                           
+
+         if(@$offer_data->offer_type == 'time')
+         {
+                $current_time = date('H:i:s');
+
+                if(strtotime($offer_data->from_time) <= strtotime($current_time) && strtotime($offer_data->to_time) >= strtotime($current_time))
+                {
+                    if(@$offer_data->variable == 'percentage')
+                    {
+                        $data['discount'] = @$offer_data->percentage;
+                        $data['variable'] = '1';
+                    }
+                    else
+                    {
+                        $data['discount'] = @$offer_data->fixed_amount;
+                        $data['variable'] = '0';
+                    }
+                }
+         }  
+         else if(@$offer_data->offer_type == 'day')
+         {
+            $current_date = date('d-m-Y');
+              
+            $offer_datas = DB::table('offers')
+                                ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
+                                ->whereRaw('FIND_IN_SET(?,day_range_offers)', [$current_date])
+                                ->whereDate('valid_from', '<=', Carbon::now())
+                                ->whereDate('valid_to', '>=',Carbon::now())
+                                ->first();
+
+
+             if(@$offer_datas->variable == 'percentage')
+                {
+                    $data['discount'] = @$offer_datas->percentage;
+                    $data['variable'] = '1';
+                }
+                else
+                {
+                    $data['discount'] = @$offer_datas->fixed_amount;
+                    $data['variable'] = '0';
+                }                   
+
+         }
+         else if(@$offer_data->offer_type == 'date')   
+         {
+            if(@$offer_data->variable == 'percentage')
+                {
+                    $data['discount'] = @$offer_data->percentage;
+                    $data['variable'] = '1';
+                }
+                else
+                {
+                    $data['discount'] = @$offer_data->fixed_amount;
+                    $data['variable'] = '0';
+                }
+         }                  
+
+        }
+
+        @$itemwise_data = ItemwiseOffer::where('buy_item_id',$id)
+                                        ->whereDate('valid_from', '<=', Carbon::now())
+                                        ->whereDate('valid_to', '>=',Carbon::now())
+                                        ->first();
+
+        if(@$itemwise_data != '')
+        {
+            $data['itemwise_offer'] = '1';
+            $data['itemwise_offer_item_id'] = $itemwise_data->get_item_id;
+            $data['get_item_qty'] = $itemwise_data->get_item_quantity;
+            $data['buy_item_qty'] = $itemwise_data->buy_item_quantity;
+        }
+        else
+        {
+            $data['itemwise_offer'] = '0';
+            $data['itemwise_offer_item_id'] = '';
+            $data['get_item_qty'] = '0';
+            $data['buy_item_qty'] = '0';
+        }
+
+
         return $data;
+
     }
+
+    function getdata_offer(Request $request)
+    {
+        $id = $request->id;
+        $get_qty = $request->get_item_qty;
+        $buy_qty = $request->buy_item_qty;
+
+        // print_r($id); exit();
+
+        $items=Item::where('id',$id)->first();
+
+        $datas[]=Item::join('uoms','uoms.id','=','items.uom_id')
+                    ->where('items.id','=',$id)
+                    ->select('items.id as item_id','items.name as item_name','mrp','hsn','code','uoms.id as uom_id','uoms.name as uom_name','items.ptc','default_selling_price')
+                    ->first();
+
+
+        if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
+        {
+            $tax_master_cgst = Tax::where('name','cgst')->first();
+            $tax_master_sgst = Tax::where('name','sgst')->first();
+
+            $tax_date = ItemTaxDetails::where('item_id',$id)
+                                        ->orderBy('valid_from','DESC')
+                                        ->whereDate('valid_from', '<=', Carbon::now())
+                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->first('valid_from');
+
+            $tax_value =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->sum('value');
+
+            /* start dynamic tax value */                    
+            $tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->get();
+
+            foreach ($tax_view as $key => $value) 
+            {
+              $tax_val[] = $value->value;
+              $tax_master[] = $value->tax_master_id;
+            }      
+
+            $cnt = count($tax_master);               
+
+            /* end dynamic tax value */                    
+
+            $sum = $tax_value + $items->category->gst_no;                            
+            $datas[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
+            
+            
+        }  
+        else
+        {
+            $tax_master_cgst = Tax::where('name','cgst')->first();
+            $tax_master_sgst = Tax::where('name','sgst')->first();
+
+            $tax_date = ItemTaxDetails::where('item_id',$id)
+                                        ->orderBy('valid_from','DESC')
+                                        ->whereDate('valid_from', '<=', Carbon::now())
+                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->first('valid_from');
+
+            $tax_value =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->sum('value');
+
+
+            /* start dynamic tax value */
+
+            $tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->get();
+
+            foreach ($tax_view as $key => $value) 
+            {
+              $tax_val[] = $value->value;
+              $tax_master[] = $value->tax_master_id;
+            }      
+
+            $cnt = count($tax_master);               
+
+            /* end dynamic tax value */                     
+
+            $datas[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+
+        }          
+         
+        $datas[] =ItemBracodeDetails::where('item_id','=',$id)
+                                    ->select('barcode')
+                                    ->first();
+ 
+
+        // if($items->item_type != 'Parent')
+        // {
+        // $item_id=$this->get_parent_item_id($id);
+        //   //dd($item_id);
+        // $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
+          
+        // $uom=array();
+        // $count=0;
+        // foreach($item_uom as $value){
+        // if(isset($value->uom->name) && !empty($value->uom->name))
+        // {
+        //     $count++;
+        //     $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
+        //         //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
+        // }
+
+        // }
+
+        // $result = array_unique($uom, SORT_REGULAR);
+
+        // $datas[]=$result;   
+
+        // }
+        // else
+        // {
+        $item_id=$this->get_item_id($id);
+
+        $item_uom=item::with('uom')->whereIn('id',$item_id)->get();
+          
+        $uom=array();
+        $count=0;
+        foreach($item_uom as $value){
+        if(isset($value->uom->name) && !empty($value->uom->name))
+        {
+            $count++;
+            $uom[]=array('id'=>$value->uom->id,'name'=>$value->uom->name,'item_id'=>$value->id);
+                //array_push($uom,array('id'=>$value->uom->id,'name'=>$value->uom->name));
+        }
+
+        }
+
+        $result = array_unique($uom, SORT_REGULAR);
+
+        $datas[]=$result;   
+        
+    // }
+
+        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+
+        if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
+        {
+            $item_data = PurchaseEntryItem::where('item_id',$id)
+                                    ->orderBy('updated_at','DESC')
+                                    ->latest()
+                                    ->first();
+
+            $updated_selling_price = PriceUpdation::where('item_id',$id)
+                                        ->where('status',1)
+                                        ->whereDate('effective_from', '<=', Carbon::now())
+                                        ->orderBy('updated_at','DESC')
+                                        ->latest()
+                                        ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
+                                        ->first();
+
+            if($item_data == '')
+            {
+                $unit_price = 0;
+                $discount = 0;
+                $item_rate = 0;
+                $tax = 0;
+            }  
+            else
+            {
+               $unit_price = @$item_data->rate_inclusive_tax;
+                $discount = @$item_data->discount / @$item_data->qty;
+                $item_rate = $unit_price - $discount;
+
+                $tax = @$item_data->gst; 
+            }                                      
+
+            
+
+            if(@$updated_selling_price == '')
+            {
+                $datas['selling_price'] = @$items->default_selling_price;
+            }
+            else
+            {
+
+            if(@$updated_selling_price->mark_up_type == 1)
+            {
+                $percentage_val = $item_rate * @$updated_selling_price->mark_up_value / 100;
+                $total = $item_rate + $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_up_type == 2)
+            {
+                $total = $item_rate + @$updated_selling_price->mark_up_value;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            if(@$updated_selling_price->mark_down_type == 1)
+            {
+                $percentage_val = $item_rate * @$updated_selling_price->mark_down_value / 100;
+                $total = $item_rate - $percentage_val;
+                @$selling_price = number_format($total, 2, '.', ',');
+            }
+            else if(@$updated_selling_price->mark_down_type == 2)
+            {
+               $total = $item_rate - @$updated_selling_price->mark_down_value;
+               @$selling_price = number_format($total, 2, '.', ',');
+            }
+
+            $datas['selling_price'] = @$selling_price;
+        }
+        }  
+        else
+        {
+            $datas['selling_price'] = @$items->default_selling_price;
+        }
+
+        $datas['selling_price_type'] = $selling_price_setup->setup;
+
+        $datas['get_qty'] = $get_qty;
+        $datas['buy_qty'] = $buy_qty;
+
+        
+
+        return $datas;
+
     }
 
     public function remove_data(Request $request,$id)

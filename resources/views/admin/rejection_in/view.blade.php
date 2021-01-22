@@ -208,7 +208,7 @@
                 <a href="{{url('rejection_in/delete_beta/'.$value->s_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded" title="Delete">
 				<i class="fa fa-trash" aria-hidden="true" ></i></a>
                 @else
-                <a href="{{url('rejection_in/delete/'.$value->d_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded" title="Delete">
+                <a href="{{url('rejection_in/delete_beta/'.$value->d_no )}}" onclick="return confirm('Are you sure ?')" class="px-2 py-1 bg-danger text-white rounded" title="Delete">
 				<i class="fa fa-trash" aria-hidden="true" ></i></a>
                 @endif
                 <a href="{{ url('rejection_in/cancel_beta/'.$value->r_in_no) }}" class="px-2 py-1   bg-info text-white rounded" title="Cancel">
