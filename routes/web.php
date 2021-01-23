@@ -50,8 +50,8 @@ Route::any('import', 'ItemImportExportController@import');
 Route::get('/charts', 'ChartController@index')->name('charts');
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
-Route::get('change-password', 'Auth\RegisterController@indexshow')->name('change.password')->middleware(['auth']);
-Route::any('update-password', 'Auth\RegisterController@updatePassword')->name('changePassword')->middleware(['auth']);
+Route::any('change-password/{id}', 'UserController@change_password');
+Route::any('update-password/{id}', 'UserController@update_password');
 
 /* Common Master Details Start Here */
 Route::any('common-master-details/get-state-master-details', 'CommonMasterDetailController@get_state_master_details');
