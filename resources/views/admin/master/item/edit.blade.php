@@ -3,6 +3,7 @@
 <main class="page-content">
 
 <div class="col-12 body-sec">
+   <div class="card container-fluid px-0">
     <!-- card header start@ -->
     <div class="card-header px-2">
       <div class="row">
@@ -554,6 +555,8 @@
          
 
 
+@if($tax_detail_count != 0)
+
  <div class="form-row">
   <div class="col-md-8">
   <h4> Item Tax Details :</h4>
@@ -577,7 +580,7 @@
     </thead>
     <tbody class="append_row">
       @foreach($tax_details as $i =>$val) 
-      <tr>
+      <tr class="row_count">
          <td class="s_no">{{$i+1}}</td>
         @foreach($tax as $key=> $value)
         
@@ -674,6 +677,9 @@
   </table>
        
  </div>
+ @else
+ @endif
+
 
  <div class="form-row">
   <table class="table">
@@ -714,7 +720,7 @@
                  <label class="btn btn-success add_barcode_details">+</label>
               </div>
               <div class="col-sm-3 mx-1">
-                 <label class="btn btn-danger remove_existing_barcode">-</label>
+                 <label class="btn btn-danger remove_barcode_details">-</label>
               </div>
            </div>
         </td>

@@ -563,9 +563,9 @@
          </div> 
          <input type="hidden" name="opening_cnt" id="opening_cnt" value="0">
 
+         <input type="hidden" name="count" id="count" value="1">
 
-            </div>
-            <input type="hidden" name="count" id="count" value="1">
+         @if($tax_count != 0)
             <div class="form-row">
                <table class="table">
                   <thead class="thead-gray">
@@ -640,6 +640,10 @@
                   </tbody>
                </table>
             </div>
+            @else
+            @endif
+
+
             <div class="form-row">
                <table class="table">
                   <thead class="thead-gray">
@@ -724,10 +728,14 @@
                   </tbody>
                </table>
             </div>
+
             <div class="col-md-7 text-right">
                <button class="btn btn-success" name="add" type="submit">Submit</button>
             </div>
          </form>
+            
+            
+            
       </div>
       <!-- <script src="{{asset('assets/js/master/capitalize.js')}}"></script> -->
       <!-- card body end@ -->

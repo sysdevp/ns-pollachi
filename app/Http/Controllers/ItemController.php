@@ -82,11 +82,12 @@ class ItemController extends Controller
         $supplier = Supplier::orderBy('name', 'asc')->get();
         $uom = Uom::all();
         $tax = Tax::all();
+        $tax_count = count($tax);
         $language = Language::all();
         $date = date('Y-m-d');
         $location = Location::all();
         $bulk_item = Item::where('item_type', 'Bulk')->get();
-        return view('admin.master.item.add', compact('supplier', 'brand', 'category', 'bulk_item', 'uom', 'language', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3','tax','date','location'));
+        return view('admin.master.item.add', compact('supplier', 'brand', 'category', 'bulk_item', 'uom', 'language', 'language_1', 'language_2', 'language_3', 'category_1', 'category_2', 'category_3','tax','date','location','tax_count'));
     }
 
     /**
@@ -300,20 +301,28 @@ class ItemController extends Controller
                                     ->select('item_id','valid_from')
                                     ->groupBy('item_id','valid_from')
                                     ->get();
-                                    
-         foreach ($tax_details as $key => $value) 
-         {
+
+        if(count($tax_details) == 0)
+        {
+           $tax_value[] = 0; 
+           $tax_count = 0;
+           $tax_detail_count = 0;
+        }   
+        else
+        {
+            foreach ($tax_details as $key => $value) 
+            {
                 $tax_value[] = ItemTaxDetails::where('item_id',$value->item_id)
                                             ->where('valid_from',$value->valid_from)
                                             ->get();
-        }      
+            }                
 
-        // echo "<pre>"; print_r($tax_value); exit();                         
-
-               
-                                       
         $tax_count = count($tax);
         $tax_detail_count = count($tax_details);
+
+        }                               
+                                    
+         
 
         @$opening = OpeningStock::where('item_id',$id)->get();
         // 
