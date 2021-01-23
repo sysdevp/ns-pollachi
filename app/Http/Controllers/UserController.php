@@ -22,8 +22,9 @@ class UserController extends Controller
     public function create()
     {
         $employee=Employee::all();
+        $role = Role::all();
         
-        return view('admin.master.user.add',compact('employee'));
+        return view('admin.master.user.add',compact('employee','role'));
     }
 
     public function store(Request $request)
@@ -37,11 +38,15 @@ class UserController extends Controller
             'confirm_password' => 'required|same:password',
           ])->validate();
 
+
+        $employee=Employee::where('id',$request->employee_id)->first();
+
         $user = new User();
         $user->employee_id       = $request->employee_id;
         $user->user_name       = $request->user_name;
         $user->password       = Hash::make($request->password);
         $user->role_id       = $request->role_id;
+        $user->email =  $employee->email;
         $user->created_by = 0;
         $user->updated_by = 0;
       if ($user->save()) {

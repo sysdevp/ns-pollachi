@@ -11,6 +11,7 @@ use App\Models\LocationType;
 use App\Models\ProofDetails;
 use App\Models\State;
 use Carbon\Carbon;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -155,6 +156,11 @@ class EmployeeController extends Controller
     public function update(EmployeeCreateRequest $request, Employee $employee,$id)
     { 
        // echo "<pre>";print_r($request->all());exit;
+
+        $user=User::where('employee_id',$id)->update(['email' => $request->email]);
+
+        // print_r($request->email); exit();
+
         $employee = Employee::find($id);
         $profile_name=$employee->profile;
         $destinationPath = 'storage/employee_profile/';
@@ -198,7 +204,7 @@ class EmployeeController extends Controller
                 'address_line_1'=>$request->address_line_1[$key],
                 'address_line_2'=>$request->address_line_2[$key],
                 'land_mark'=>$request->land_mark[$key],
-                'country_id'=>$request->country_id[$key],
+                // 'country_id'=>$request->country_id[$key],
                 'state_id'=>$request->state_id[$key],
                 'district_id'=>$request->district_id[$key],
                 'city_id'=>$request->city_id[$key],
@@ -255,7 +261,7 @@ class EmployeeController extends Controller
                 $address_details->address_line_1=$request->old_address_line_1[$key];
                 $address_details->address_line_2=$request->old_address_line_2[$key];
                 $address_details->land_mark=$request->old_land_mark[$key];
-                $address_details->country_id=$request->old_country_id[$key];
+                // $address_details->country_id=$request->old_country_id[$key];
                 $address_details->state_id=$request->old_state_id[$key];
                 $address_details->district_id=$request->old_district_id[$key];
                 $address_details->city_id=$request->old_city_id[$key];
