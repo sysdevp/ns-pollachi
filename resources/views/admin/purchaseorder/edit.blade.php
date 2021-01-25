@@ -83,7 +83,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                      <div class="col-sm-8">
                       <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
                         @if(isset($purchaseorder->supplier->name) && !empty($purchaseorder->supplier->name))
-                           <option value="{{ $purchaseorder->supplier->id }}">{{ $purchaseorder->supplier->name }}</option>
+                           <option value="{{ @$purchaseorder->supplier->id }}">{{ @$purchaseorder->supplier->name }}</option>
                            @else
                            <option value="">Choose Supplier Name</option>
                            @endif
@@ -704,12 +704,12 @@ table, th, td {
 
                        
                        <div class="row col-md-12 taxes mb-3">
-                        @foreach($tax as $value)
+                        @foreach(@$tax as $value)
                          <div class="col-md-2">
-                           <label style="font-family: Times new roman;">{{ $value->taxes->name }}</label>
-                      <input type="text" class="form-control {{ $value->taxes->id }}" readonly="" id="{{ $value->taxes->id }}" name="{{ $value->taxes->name }}" value="{{ $value->value }}">
+                           <label style="font-family: Times new roman;">{{ @$value->taxes->name }}</label>
+                      <input type="text" class="form-control {{ @$value->taxes->id }}" readonly="" id="{{ @$value->taxes->id }}" name="{{ @$value->taxes->name }}" value="{{ @$value->value }}">
 
-                      <input type="hidden" name="{{ $value->taxes->name }}_id" value="{{ $value->taxes->id }}">
+                      <input type="hidden" name="{{ @$value->taxes->name }}_id" value="{{ @$value->taxes->id }}">
                       
                          </div>
                          @endforeach

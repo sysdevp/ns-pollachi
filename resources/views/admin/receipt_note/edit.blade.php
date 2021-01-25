@@ -786,12 +786,12 @@ table, th, td {
 
                        
                        <div class="row col-md-12 taxes mb-3">
-                        @foreach($tax as $value)
+                        @foreach(@$tax as $value)
                          <div class="col-md-2">
-                           <label style="font-family: Times new roman;">{{ $value->taxes->name }}</label>
-                      <input type="text" class="form-control {{ $value->taxes->id }}" readonly="" id="{{ $value->taxes->id }}" name="{{ $value->taxes->name }}" value="{{ $value->value }}">
+                           <label style="font-family: Times new roman;">{{ @$value->taxes->name }}</label>
+                      <input type="text" class="form-control {{ @$value->taxes->id }}" readonly="" id="{{ @$value->taxes->id }}" name="{{ @$value->taxes->name }}" value="{{ @$value->value }}">
 
-                      <input type="hidden" name="{{ $value->taxes->name }}_id" value="{{ $value->taxes->id }}">
+                      <input type="hidden" name="{{ @$value->taxes->name }}_id" value="{{ @$value->taxes->id }}">
                       
                          </div>
                          @endforeach
