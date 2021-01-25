@@ -458,78 +458,78 @@ $count=0;
 
         if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
         {
-            $tax_master_cgst = Tax::where('name','cgst')->first();
-            $tax_master_sgst = Tax::where('name','sgst')->first();
+            @$tax_master_cgst = Tax::where('name','cgst')->first();
+            @$tax_master_sgst = Tax::where('name','sgst')->first();
 
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */                    
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
-            foreach ($tax_view as $key => $value) 
+            foreach (@$tax_view as $key => $value) 
             {
-              $tax_val[] = $value->value;
-              $tax_master[] = $value->tax_master_id;
+              $tax_val[] = @$value->value;
+              $tax_master[] = @$value->tax_master_id;
             }      
 
-            $cnt = count($tax_master);               
+            $cnt = count(@$tax_master);               
 
             /* end dynamic tax value */                    
 
-            $sum = $tax_value + $items->category->gst_no;                            
-            $data[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
+            $sum = @$tax_value + $items->category->gst_no;                            
+            $data[] = array('igst' => $sum,'tax_val' => @$tax_val,'tax_master' =>@$tax_master,'cnt' => $cnt);
             
             
         }  
         else
         {
-            $tax_master_cgst = Tax::where('name','cgst')->first();
-            $tax_master_sgst = Tax::where('name','sgst')->first();
+            @$tax_master_cgst = Tax::where('name','cgst')->first();
+            @$tax_master_sgst = Tax::where('name','sgst')->first();
 
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
 
             /* start dynamic tax value */
 
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
-            foreach ($tax_view as $key => $value) 
+            foreach (@$tax_view as $key => $value) 
             {
-              $tax_val[] = $value->value;
-              $tax_master[] = $value->tax_master_id;
+              $tax_val[] = @$value->value;
+              $tax_master[] = @$value->tax_master_id;
             }      
 
-            $cnt = count($tax_master);               
+            $cnt = count(@$tax_master);               
 
             /* end dynamic tax value */                     
 
-            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+            $data[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => $cnt);    
 
         }          
          
@@ -800,78 +800,78 @@ $count=0;
 
         if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
         {
-            $tax_master_cgst = Tax::where('name','cgst')->first();
-            $tax_master_sgst = Tax::where('name','sgst')->first();
+            @$tax_master_cgst = Tax::where('name','cgst')->first();
+            @$tax_master_sgst = Tax::where('name','sgst')->first();
 
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */                    
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
-            foreach ($tax_view as $key => $value) 
+            foreach (@$tax_view as $key => $value) 
             {
-              $tax_val[] = $value->value;
-              $tax_master[] = $value->tax_master_id;
+              $tax_val[] = @$value->value;
+              $tax_master[] = @$value->tax_master_id;
             }      
 
-            $cnt = count($tax_master);               
+            $cnt = count(@$tax_master);               
 
             /* end dynamic tax value */                    
 
-            $sum = $tax_value + $items->category->gst_no;                            
-            $datas[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
+            $sum = @$tax_value + $items->category->gst_no;                            
+            $datas[] = array('igst' => $sum,'tax_val' => @$tax_val,'tax_master' =>@$tax_master,'cnt' => $cnt);
             
             
         }  
         else
         {
-            $tax_master_cgst = Tax::where('name','cgst')->first();
-            $tax_master_sgst = Tax::where('name','sgst')->first();
+            @$tax_master_cgst = Tax::where('name','cgst')->first();
+            @$tax_master_sgst = Tax::where('name','sgst')->first();
 
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
 
             /* start dynamic tax value */
 
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
-            foreach ($tax_view as $key => $value) 
+            foreach (@$tax_view as $key => $value) 
             {
-              $tax_val[] = $value->value;
-              $tax_master[] = $value->tax_master_id;
+              $tax_val[] = @$value->value;
+              $tax_master[] = @$value->tax_master_id;
             }      
 
-            $cnt = count($tax_master);               
+            $cnt = count(@$tax_master);               
 
             /* end dynamic tax value */                     
 
-            $datas[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+            $datas[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => $cnt);    
 
         }          
          
