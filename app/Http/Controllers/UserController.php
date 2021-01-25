@@ -26,7 +26,28 @@ class UserController extends Controller
         
         return view('admin.master.user.add',compact('employee','role'));
     }
+    public function change_password($id)
+    {
+        
+        $user = User::find($id);
+     //   print_r($user->employee_id);exit;
+        @$employee=Employee::find($user->employee_id);
+        @$role = Role::find($user->role_id);
+        return view('admin.master.user.change_password',compact('user','employee','role')); 
+    }
+    public function update_password(Request $request,$id)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:3',
+            'confirm_password' => 'required|same:password',
+          ])->validate();
+          $password       = Hash::make($request->password);
 
+             User::where('id',$id)->update(["password"=>$password]);
+            return Redirect::back()->with('success', 'Successfully Updated');
+
+
+      }
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

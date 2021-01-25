@@ -600,7 +600,11 @@
              
                <li>
                  <div class="text-center">
-                   <a class="changepass" href="{{ url('master/password_change/index') }}">
+				 <?php
+				 
+				 
+				 $id = auth()->user()->id;?>
+                   <a class="changepass" href="{{ url('change-password/'.$id) }}">
                      <strong><i class="fa fa-lock" aria-hidden="true"></i> Change Password</strong>
                    </a>
 
