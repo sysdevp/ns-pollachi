@@ -38,8 +38,6 @@ class PriceUpdationController extends Controller
                                     ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                     ->first();
 
-                                    print_r($updated_selling_price); 
-
             if($item_data == '')
             {
                 $unit_price = 0;
@@ -86,7 +84,7 @@ class PriceUpdationController extends Controller
                @$selling_price[] = number_format($total, 2, '.', ',');
             }
         }
-        exit();
+        // exit();
 
                                     
 
