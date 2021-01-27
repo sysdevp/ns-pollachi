@@ -567,12 +567,12 @@ Route::group(['prefix' => 'master/user', 'middleware' => ['auth']], function () 
 
 /* Role Master Group Start Here  */
 Route::group(['prefix' => 'master/role', 'middleware' => ['auth'], 'middleware' => ['auth']], function () {
-    Route::any('/', 'RoleController@index')->middleware('permission:role_list');
-    Route::any('create', 'RoleController@create')->middleware('permission:role_create');
-    Route::any('store', 'RoleController@store')->middleware('permission:role_create');
-    Route::any('show/{id}', 'RoleController@show')->middleware('permission:role_list');
-    Route::any('edit/{id}', 'RoleController@edit')->middleware('permission:role_edit');
-    Route::any('update/{id}', 'RoleController@update')->middleware('permission:role_edit');
+    Route::any('/', 'RoleController@index');
+    Route::any('create', 'RoleController@create');
+    Route::any('store', 'RoleController@store');
+    Route::any('show/{id}', 'RoleController@show');
+    Route::any('edit/{id}', 'RoleController@edit');
+    Route::any('update/{id}', 'RoleController@update');
     Route::any('delete/{id}', 'RoleController@destroy')->middleware('permission:role_delete');
 });
 /* Role Master Group End Here  */

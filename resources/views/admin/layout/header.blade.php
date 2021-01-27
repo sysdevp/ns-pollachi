@@ -173,12 +173,12 @@
 													<div class="acnav__label acnav__label--level2">User</div>
 													<ul class="acnav__list acnav__list--level3">
 														
-                            @can('user_list')
+                            <!-- @can('user_list') -->
                           <li><a class="acnav__link acnav__link--level3" href="{{url('master/user')}}">User Creation</a></li>
-                          @endcan
-                          @can('role_list')
+                          <!-- @endcan -->
+                          <!-- @can('role_list') -->
                           <li><a class="acnav__link acnav__link--level3" href="{{url('master/role')}}">User Access</a></li>
-                          @endcan
+                          <!-- @endcan -->
 													</ul>
 										</li>
 										<li class="has-children">

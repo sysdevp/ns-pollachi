@@ -110,7 +110,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "state_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -133,7 +133,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "district_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach                        
@@ -155,7 +155,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "city_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach   
@@ -174,13 +174,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Address Type</label>
+                        <label class="control-label">Address Type List</label>
                         <br>
                 @endif
                     @if($value->class == "address_type_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach   
@@ -194,13 +194,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Location Type</label>
+                        <label class="control-label">Location Type List</label>
                         <br>
                 @endif
                     @if($value->class == "location_type_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach   
@@ -210,17 +210,17 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab6">	
                                         @foreach($permission as $value)
-                @if($value->label == "Company Location List")
+                @if($value->label == "Company Location")
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
                         <label class="control-label">Company Location</label>
                         <br>
                 @endif
-                    @if($value->class == "company_location_list")
+                    @if($value->class == "company_location")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -241,7 +241,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "head_office_detail")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -266,13 +266,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Bank</label>
+                        <label class="control-label">Bank List</label>
                         <br>
                 @endif
                     @if($value->class == "bank_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -287,13 +287,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Bank Branch</label>
+                        <label class="control-label">Bank Branch List</label>
                         <br>
                 @endif
                     @if($value->class == "bank_branch_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -308,13 +308,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Denomination</label>
+                        <label class="control-label">Denomination List</label>
                         <br>
                 @endif
                     @if($value->class == "denomination_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -333,13 +333,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Accounts Type</label>
+                        <label class="control-label">Accounts Type List</label>
                         <br>
                 @endif
                     @if($value->class == "accounts_type_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -363,13 +363,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Accounts Type</label>
+                        <label class="control-label">Accounts Type List</label>
                         <br>
                 @endif
                     @if($value->class == "department_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -384,13 +384,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Desigination</label>
+                        <label class="control-label">Desigination List</label>
                         <br>
                 @endif
                     @if($value->class == "desigination_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -405,13 +405,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Employee</label>
+                        <label class="control-label">Employee List</label>
                         <br>
                 @endif
                     @if($value->class == "employee_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -436,13 +436,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">User</label>
+                        <label class="control-label">User List</label>
                         <br>
                 @endif
                     @if($value->class == "user_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach							</div>	
@@ -456,13 +456,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Role</label>
+                        <label class="control-label">Role List</label>
                         <br>
                 @endif
                     @if($value->class == "role_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach		
@@ -492,7 +492,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "gift_voucher_matser_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach		
@@ -503,7 +503,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab18">	
                                         @foreach($permission as $value)
-                @if($value->label == "Offers List")
+                @if($value->label == "Offers")
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
@@ -513,7 +513,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "offer_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach	
@@ -542,7 +542,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "category_name_master_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -563,7 +563,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "branch_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -591,7 +591,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "language_master_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -618,7 +618,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "item_master_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -628,17 +628,17 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab23">		
 							            @foreach($permission as $value)
-                @if($value->label == "Tax List")
+                @if($value->label == "Item Tax Details List")
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
                         <label class="control-label">Tax</label>
                         <br>
                 @endif
-                    @if($value->class == "tax_list")
+                    @if($value->class == "item_tax_details_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -658,7 +658,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "item_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -668,17 +668,17 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 																		<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab25">		
                                         @foreach($permission as $value)
-                @if($value->label == "Item Tax Details List")
+                @if($value->label == "Item")
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Item Tax Details</label>
+                        <label class="control-label">Item Tax</label>
                         <br>
                 @endif
-                    @if($value->class == "item_tax_details_list")
+                    @if($value->class == "item_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -694,81 +694,77 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="row masterdivleft" id="Vendor_div" style="display:none; width:100%">
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab26">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Agent List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Agent</label>
-                        <br>
-                @endif
-                    @if($value->class == "agent_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll26" id="checkAll26"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="z1" class="agent masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Agent</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="z2" class="agent masters " id="agent_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="z3" class="agent masters" id="agent_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="z4" class="agent masters" id="agent_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 									</div>
 									
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab27">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Customer Name List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Customer Name List</label>
-                        <br>
-                @endif
-                    @if($value->class == "customer_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll27" id="checkAll27"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="aa1" class="customer masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Customer</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="aa2" class="customer masters " id="customer_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="aa3" class="customer masters" id="customer_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="aa4" class="customer masters" id="customer_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 									</div>
 									
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab28">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Supplier List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Supplier</label>
-                        <br>
-                @endif
-                    @if($value->class == "supplier_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll28" id="checkAll28"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="bb1" class="supplier masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Supplier</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="bb2" class="supplier masters " id="supplier_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="bb3" class="supplier masters" id="supplier_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="bb4" class="supplier masters" id="supplier_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 									</div>
 									
 								<div class="col-lg-2 mastersubheading2">
 								<div class="" id="tab29">		
-                                @foreach($permission as $value)
-                @if($value->label == "Salesman List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Salesman</label>
-                        <br>
-                @endif
-                    @if($value->class == "salesman_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll29" id="checkAll29"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="cc1" class="salesman masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Salesman</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="cc2" class="salesman masters " id="salesman_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="cc3" class="salesman masters" id="salesman_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="cc4" class="salesman masters" id="salesman_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 									</div>
 									
@@ -899,7 +895,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "estimation_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -909,17 +905,17 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab35">		
                                         @foreach($permission as $value)
-                @if($value->label == "Purchase Order List")
+                @if($value->label == "Purchase List")
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Purchase</label>
+                        <label class="control-label">Purchase List</label>
                         <br>
                 @endif
-                    @if($value->class == "purchase_order_list")
+                    @if($value->class == "purchase_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -933,13 +929,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Receipt Note</label>
+                        <label class="control-label">Receipt Note List</label>
                         <br>
                 @endif
                     @if($value->class == "receipt_note_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach			</div>	
@@ -952,13 +948,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Purchase Entry</label>
+                        <label class="control-label">Purchase Entry List</label>
                         <br>
                 @endif
                     @if($value->class == "purchase_entry_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach	
@@ -972,13 +968,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Rejection Out</label>
+                        <label class="control-label">Rejection Out List</label>
                         <br>
                 @endif
                     @if($value->class == "rejection_out_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach	
@@ -991,13 +987,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Purchase Gate Pass Entry</label>
+                        <label class="control-label">Purchase Gate Pass Entry List</label>
                         <br>
                 @endif
                     @if($value->class == "purchase_gate_entry_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach	
@@ -1011,13 +1007,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Debit Note</label>
+                        <label class="control-label">Debit Note List</label>
                         <br>
                 @endif
                     @if($value->class == "debit_note_List")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach	
@@ -1037,13 +1033,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Sales Estimation</label>
+                        <label class="control-label">Sales Estimation List</label>
                         <br>
                 @endif
                     @if($value->class == "sales_estimation_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1057,13 +1053,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Sales Order</label>
+                        <label class="control-label">Sales Order List</label>
                         <br>
                 @endif
                     @if($value->class == "sales_order_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1077,13 +1073,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Delivery Notes</label>
+                        <label class="control-label">Delivery Notes List</label>
                         <br>
                 @endif
                     @if($value->class == "delivery_note_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1104,7 +1100,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                     @if($value->class == "sales_entry_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1118,13 +1114,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Rejection In</label>
+                        <label class="control-label">Rejection In List</label>
                         <br>
                 @endif
                     @if($value->class == "rejection_in_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1137,13 +1133,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Sales Gatepass Entry</label>
+                        <label class="control-label">Sales Gatepass Entry List</label>
                         <br>
                 @endif
                     @if($value->class == "sales_gatepass_entry_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1157,13 +1153,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Credit Note</label>
+                        <label class="control-label">Credit Note List</label>
                         <br>
                 @endif
                     @if($value->class == "credit_note_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1184,13 +1180,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Payment Request</label>
+                        <label class="control-label">Payment Request List</label>
                         <br>
                 @endif
                     @if($value->class == "payment_request_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1204,13 +1200,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Payment Process</label>
+                        <label class="control-label">Payment Process List</label>
                         <br>
                 @endif
                     @if($value->class == "payment_process_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1224,13 +1220,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Payment Expenses</label>
+                        <label class="control-label">Payment Expenses List</label>
                         <br>
                 @endif
                     @if($value->class == "payment_expenses_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
+					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
@@ -1246,62 +1242,58 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="row" id="Receipts_div" style="display:none; width:100%">
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab51">		
-                                       	
-                                @foreach($permission as $value)
-                @if($value->label == "Receipt Request List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Receipt Request</label>
-                        <br>
-                @endif
-                    @if($value->class == "receipt_request_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll51" id="checkAll51"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="yy1" class="receipt_request masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Receipt Request</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="yy2" class="receipt_request masters " id="sales_estimation_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="yy3" class="receipt_request masters" id="sales_estimation_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="yy4" class="receipt_request masters" id="sales_estimation_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 								</div>
 								
 								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab52">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Receipt Process List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Receipt Process</label>
-                        <br>
-                @endif
-                    @if($value->class == "receipt_process_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll52" id="checkAll52"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="zz1" class="receipt_process masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Receipt Process</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="zz2" class="receipt_process masters " id="sales_order_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="zz3" class="receipt_process masters" id="sales_order_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="zz4" class="receipt_process masters" id="sales_order_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 								</div>
 								
 								<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab53">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Receipt Income List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Receipt Income</label>
-                        <br>
-                @endif
-                    @if($value->class == "receipt_income_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll53" id="checkAll53"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="aaa1" class="payment_expense masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Receipt Income</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="aaa2" class="payment_expense masters " id="delivery_notes_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="aaa3" class="payment_expense masters" id="delivery_notes_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="aaa4" class="payment_expense masters" id="delivery_notes_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 								</div>
 
@@ -1313,41 +1305,39 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="row" id="Advance_div" style="display:none; width:100%">
 									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab54">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Advance To Suppliers List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Advance To Suppliers</label>
-                        <br>
-                @endif
-                    @if($value->class == "advance_to_suppliers_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll54" id="checkAll54"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="bbb1" class="payment_advance masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Advance to Suppliers</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="bbb2" class="payment_advance masters " id="sales_estimation_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="bbb3" class="payment_advance masters" id="sales_estimation_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="bbb4" class="payment_advance masters" id="sales_estimation_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 								</div>
 								
 								<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab55">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Advance From Customers List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Advance From Customers</label>
-                        <br>
-                @endif
-                    @if($value->class == "advance_from_customers_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll55" id="checkAll55"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="ccc1" class="receipt_advance masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Advance from Customers</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="ccc2" class="receipt_advance masters " id="sales_order_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="ccc3" class="receipt_advance masters" id="sales_order_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="ccc4" class="receipt_advance masters" id="sales_order_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 								</div>
 								</div> <br>
@@ -1357,21 +1347,20 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="row" id="AccountExpense_div" style="display:none; width:100%">
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab56">		
-                                        @foreach($permission as $value)
-                @if($value->label == "Account Expense List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Account Expense</label>
-                        <br>
-                @endif
-                    @if($value->class == "account_expense_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" name="checkAll56" id="checkAll56"/></label>
+								<label class="control-label">Select All</label>
+								<br>
+								<input type="checkbox" value="ddd1" class="account_expense masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Account Expense</label>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="ddd2" class="account_expense masters " id="sales_estimation_add" name="permission[]"/></label>
+								<span class="control-label">Add</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="ddd3" class="account_expense masters" id="sales_estimation_edit" name="permission[]"/></label>
+								<span class="control-label">Edit</span>
+								<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="ddd4" class="account_expense masters" id="sales_estimation_delete" name="permission[]"/></label>
+								<span class="control-label">Delete</span>
 							</div>	
 								</div>
 								</div></div></div> <br> 
@@ -1380,7 +1369,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
                              <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
-							 <input style=" text-align: center;" type="checkbox"  class="prize_updation" id="prize_updation"/>
+							 <input style=" text-align: center;" type="checkbox" value="h3" class="prize_updation" id="prize_updation" name="permission[]"/>
 							 <b>Price Updation</b></h4></div>
                              </div>
                              </div>
@@ -1414,7 +1403,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
                              <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
-							 <input style=" text-align: center;" type="checkbox"  class="customer_head" id="outstanding" />
+							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="outstanding" name="permission[]"/>
 							 <b>Outstanding</b></h4></div>
                              </div>
                              </div>
@@ -1458,7 +1447,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
                              <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
-							 <input style=" text-align: center;" type="checkbox"  class="customer_head" id="settings" />
+							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="settings" name="permission[]"/>
 							 <b>Settings</b></h4></div>
                              </div>
                              </div>
@@ -1469,21 +1458,8 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab60">		
 								
-                                        @foreach($permission as $value)
-                @if($value->label == "Selling Price Setup List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Selling Price Setup</label>
-                        <br>
-                @endif
-                    @if($value->class == "selling_price_setup_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" value="jjj1" class="receivables masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Selling Price setup</label><br>
 							</div>	
 								</div>
 							 </div>
@@ -1494,7 +1470,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
                              <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
-							 <input style=" text-align: center;" type="checkbox"  class="customer_head" id="pos" />
+							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="pos" name="permission[]"/>
 							 <b>POS</b></h4></div>
                              </div>
                              </div>
@@ -1505,21 +1481,8 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 									<div class="col-lg-3 mastersubheading2">
 										<div class="" id="tab61">		
 								
-                                        @foreach($permission as $value)
-                @if($value->label == "Pos List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Pos</label>
-                        <br>
-                @endif
-                    @if($value->class == "pos_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" value="kkk1" class="receivables masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">POS</label><br>
 							</div>	
 								</div>
 							 </div>								
@@ -1530,7 +1493,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 						<div class="container">
                              <div class="panel panel-default"  id="heading">
                              <div class="panel-heading maseterheading"><h4 style=" text-align: center;">
-							 <input style=" text-align: center;" type="checkbox"  class="customer_head" id="reports" />
+							 <input style=" text-align: center;" type="checkbox" value="h3" class="customer_head" id="reports" name="permission[]"/>
 							 <b>Reports</b></h4></div>
                              </div>
                              </div>	
@@ -1542,21 +1505,8 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab62">		
 								
-                                        @foreach($permission as $value)
-                @if($value->label == "Day Book List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">Day Book</label>
-                        <br>
-                @endif
-                    @if($value->class == "day_book_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
-					<span class="control-label">{{$value->name1}}</span>
-					<br>
-                    @endif
-                @endforeach
+								<input type="checkbox" value="lll1" class="bank masters"  id="zone" name="permission[]"/></label>
+								<label class="control-label">Day Book</label>
 							</div>	
 									</div>
 								</div>
