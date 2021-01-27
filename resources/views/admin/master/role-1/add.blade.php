@@ -55,7 +55,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
     <!-- card header end@ -->
     <div class="card-body">
     
-    <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('master/role/update/'.$role->id)}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('master/role/store')}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -65,9 +65,12 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-2 col-form-label">Role <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-              <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Role Name" name="name" value="{{old('name', $role->name)
-}}" required>
-
+                <select class="js-example-basic-multiple col-12 custom-select bank_id" name="role_id" required>
+                  <option value="">Choose Role</option>
+                 /* @foreach($roles as $value)
+                  <option value="{{ $value->id }}" {{ old('role_id') == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
+                  @endforeach */
+                </select>
                 <span class="mandatory"> {{ $errors->first('role_id')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Role
@@ -82,7 +85,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
           	<div class="container">
                              <div class="panel panel-default" id="heading">
                              <div class="panel-heading maseterheading"><h4 style=" text-align: center;"> 
-							 <input style=" text-align: center;" value="" type="checkbox"  class="masters_head" id="masters_head" name=""/> <b>Masters</b></h4>
+							 <input style=" text-align: center;" value="h1" type="checkbox"  class="masters_head" id="masters_head" name="permission[]"/> <b>Masters</b></h4>
 							 </div>
                              </div>
                              </div>
@@ -99,37 +102,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="row masterdivleft" id="location_div" style="display:none; width:100%;">
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab1">		
-                <!-- @foreach($permission as $value)
-                @if($value->label == "State List")
-                <input type="checkbox" name="" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}"/></label>
-								<label class="control-label">Select All</label>
-								<br>
-								<label class="control-label">State</label>
-								<br>
-                @endif
-                @if($value->class == "state_list")
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}"/></label>
-								<span class="control-label">{{$value->name}}</span>
-								<br>
-                @endif
-                @endforeach -->
-                @foreach($permission as $value)
-                @if($value->label == "State List")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
-                        <label class="control-label">Select All</label>
-                        <br>
-                        <label class="control-label">State</label>
-                        <br>
-                @endif
-                    @if($value->class == "state_list")
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"    value="{{$value->id}}">  
-					<span class="control-label">{{$value->name}}</span>
-					<br>
-                    @endif
-                @endforeach
-
-                <!-- <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
+								<input type="checkbox" name="checkAll1" id="checkAll1"/></label>
 								<label class="control-label">Select All</label>
 								<br>
 								<input type="checkbox" value="a1" class="state masters"  id="zone" name="permission[]"/></label>
@@ -142,7 +115,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<span class="control-label">Edit</span>
 								<br>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="a4" class="state masters" id="state_delete" name="permission[]"/></label>
-								<span class="control-label">Delete</span> -->
+								<span class="control-label">Delete</span>
 							</div>	
 									</div>
 									
@@ -1562,90 +1535,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
     <!-- card body end@ -->
   </div>
 </div>
-<script>
 
-
-$(".permission").click(function (e) {
-        var id = $(this).val();
-        if (id == "all_permission")
-        {
-            if ($(this).prop('checked') != true) {
-                $('.permission').prop('checked', false);
-            } else
-            {
-                $('.permission').prop('checked', true);
-            }
-        } else
-        {
-            var id_new = "all_" + $(this).val() + "_master";
-            var id_newest = $(this).val();
-            if ($(this).hasClass(id_new) == true)
-            {
-                if ($(this).prop('checked') != true) {
-                    $("." + id_newest).prop('checked', false);
-                } else
-                {
-                    $("." + id_newest).prop('checked', true);
-                }
-            } else
-            {
-                var classname = "." + $(this).attr("class").split(' ')[0];
-                var all_classname = ".all_" + $(this).attr("class").split(' ')[0]+"_master";
-                var counter = 0;
-                $(classname).each(function () {
-                    if ($(this).prop('checked') != true && $(all_classname).attr("class") != $(this).attr("class")) {
-                        counter++;
-                    }
-                });
-                if (counter > 0)
-                {
-                    $(all_classname).prop('checked', false);
-                } else
-                {
-                    $(all_classname).prop('checked', true);
-                }
-            }
-        }
-    });
-
-function checked_count()
-{
-  var checked_count=0;
-  $(".permission").each(function(){
-    if($(this). prop("checked") == true)
-    {
-      checked_count++;
-
-    }
-  });
-
-  return checked_count;
-
-}
-
-$(document).on("click",".submit",function(){
-  var checked_count_value=checked_count();
-  var error_count=0;
-  if($(".name").val() !="")
-  {
-    $(".name").removeClass("is-invalid");
-     $(".name").addClass("is-valid");
-  }else{
-    error_count++;  
-    $(".name").removeClass("is-valid");
-     $(".name").addClass("is-invalid");
-  }
-
-  if(checked_count_value == 0){
-    error_count++; 
-    alert("Please Choose Atleast One Permission");
-  }
-
-  if(error_count == 0){
-$("form").submit();
-  }
-});
-</script>
 <script type="text/javascript">
 $(document).ready(function(){
 $(function () {
@@ -3608,6 +3498,34 @@ $(document).ready(function(){
 
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 @endsection

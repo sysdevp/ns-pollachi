@@ -55,7 +55,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
     <!-- card header end@ -->
     <div class="card-body">
     
-    <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('master/role/update/'.$role->id)}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('master/role/store')}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -65,8 +65,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-2 col-form-label">Role <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-              <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Role Name" name="name" value="{{old('name', $role->name)
-}}" required>
+              <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Role Name" name="name" value="{{old('name')}}" required>
 
                 <span class="mandatory"> {{ $errors->first('role_id')  }} </span>
                 <div class="invalid-feedback">
@@ -99,20 +98,7 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
 								<div class="row masterdivleft" id="location_div" style="display:none; width:100%;">
 									<div class="col-lg-2 mastersubheading2">
 										<div class="" id="tab1">		
-                <!-- @foreach($permission as $value)
-                @if($value->label == "State List")
-                <input type="checkbox" name="" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}"/></label>
-								<label class="control-label">Select All</label>
-								<br>
-								<label class="control-label">State</label>
-								<br>
-                @endif
-                @if($value->class == "state_list")
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}"/></label>
-								<span class="control-label">{{$value->name}}</span>
-								<br>
-                @endif
-                @endforeach -->
+
                 @foreach($permission as $value)
                 @if($value->label == "State List")
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  value="{{$value->class}}">  
@@ -123,26 +109,13 @@ box-shadow: 0px 13px 15px -11px rgba(0,0,0,0.56);
                 @endif
                     @if($value->class == "state_list")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"    value="{{$value->id}}">  
+                    <input type="checkbox" name="permission[]" class="{{ $value->class }} permission"  value="{{$value->id}}">  
 					<span class="control-label">{{$value->name}}</span>
 					<br>
                     @endif
                 @endforeach
 
-                <!-- <input type="checkbox" name="checkAll1" id="checkAll1"/></label>
-								<label class="control-label">Select All</label>
-								<br>
-								<input type="checkbox" value="a1" class="state masters"  id="zone" name="permission[]"/></label>
-								<label class="control-label">State</label>
-								<br>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="a2" class="state masters " id="state_add" name="permission[]"/></label>
-								<span class="control-label">Add</span>
-								<br>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="a3" class="state masters" id="state_edit" name="permission[]"/></label>
-								<span class="control-label">Edit</span>
-								<br>
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" value="a4" class="state masters" id="state_delete" name="permission[]"/></label>
-								<span class="control-label">Delete</span> -->
+              
 							</div>	
 									</div>
 									
