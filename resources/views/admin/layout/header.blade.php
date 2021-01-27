@@ -280,6 +280,15 @@
 							
 													</ul>
 										</li>
+
+                    <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">BOM</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3" href="{{route('bom.index')}}">BOM</a></li>
+              
+                          </ul>
+                    </li>
 										
 										
 										
@@ -377,6 +386,18 @@
                     </ul> 
 					<ul class="acnav__list acnav__list--level2">	
 											<!--1st Add sub menu-->	
+
+                      <li class="has-children">
+                          <div class="acnav__label acnav__label--level2">Production Module</div>
+                          <ul class="acnav__list acnav__list--level3">
+                            
+                          <li><a class="acnav__link acnav__link--level3"  href="{{url('production')}}">Production</a></li>
+                        
+                                </ul>
+
+                      
+                    </li>
+
 											<li class="has-children">
                           <div class="acnav__label acnav__label--level2">Uncleared Cheques</div>
                           <ul class="acnav__list acnav__list--level3">
