@@ -543,7 +543,7 @@
 
                <div class="col-md-1">
                   <!-- <div class="form-group row"> -->
-                     <label for="validationCustom01" class="">W/B</label>
+                     <label for="validationCustom01" class="">Grade</label>
                      <!-- <div class="col-sm-8"> -->
                        <select class="form-control" name="black_or_white[]">
                           <option value="1">W</option>

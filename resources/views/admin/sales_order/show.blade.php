@@ -18,7 +18,7 @@
       </div>
     </div>
     <!-- card header end@ -->
-    <div class="card-body">
+    <div class="card-body" id="DivIdToPrint">
       <div class="row col-md-12">
 
             <div class="col-md-6">
@@ -238,9 +238,28 @@
             </div>
                        
     </div>
+    <input type='button' id='btn' value='Print' onclick='printDiv();'>
     <!-- card body end@ -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </div>
 </div>
+<script type="text/javascript">
+function printDiv() 
+{
+
+  var divToPrint=document.getElementById('DivIdToPrint');
+
+  var newWin=window.open('','Print-Window');
+
+  newWin.document.open();
+
+  newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+  newWin.document.close();
+
+  setTimeout(function(){newWin.close();},10);
+
+}
+</script>
 @endsection
