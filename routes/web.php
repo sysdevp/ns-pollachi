@@ -609,11 +609,11 @@ Route::get('purchase/get_items/{id}', 'PurchaseController@get_items');
 
 /*Price Updation Satrt Here*/
 
-Route::resource('price_updation', 'PriceUpdationController',['middleware' => ['auth']]);
+Route::resource('price_updation', 'PriceUpdationController',['middleware' => ['auth']])->middleware('permission:price_updation_edit|price_updation_create|price_updation_list');
 Route::get('price_updation/change_items/{id}', 'PriceUpdationController@change_items');
 Route::get('price_updation/brand_filter/{id}', 'PriceUpdationController@brand_filter');
 Route::get('price_updation/browse_item/{id}', 'PriceUpdationController@browse_item');
-Route::get('price_updation/delete/{id}', 'PriceUpdationController@destroy');
+Route::get('price_updation/delete/{id}', 'PriceUpdationController@destroy')->middleware('permission:price_updation_delete');
 
 /*Price Updation End Here*/
 
@@ -1052,32 +1052,32 @@ Route::get('rejection_out/expense_beta_details/{id}', 'RejectionOutController@ex
 
 /*Outstanding Report Start Here*/
 
-Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']]);
-Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']]);
+Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']])->middleware('permission:receivable_billwise');
+Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']])->middleware('permission:receivable_partywise');
 Route::get('single_ledger/{id}','ReceivablePartywiseController@show');
-Route::resource('payable_billwise','PayableBillwiseController',['middleware' => ['auth']]);
-Route::resource('payable_partywise','PayablePartywiseController',['middleware' => ['auth']]);
+Route::resource('payable_billwise','PayableBillwiseController',['middleware' => ['auth']])->middleware('permission:payable_billwise');
+Route::resource('payable_partywise','PayablePartywiseController',['middleware' => ['auth']])->middleware('permission:payable_partywise');
 Route::get('payable_single_ledger/{id}','PayablePartywiseController@show');
 
 /*Outstanding Report End Here*/
 
 /*Day Book Start Here*/
 
-Route::resource('daybook','DayBookController',['middleware' => ['auth']]);
+Route::resource('daybook','DayBookController',['middleware' => ['auth']])->middleware('permission:daybook');
 
 /*Day Book End Here*/
 
-Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']]);
+Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']])->middleware('permission:selling_price_setup');
 
 /*Individual Ledger Start Here*/
 
-Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']])->middleware('permission:individual_ledger');
 
 /*Individual Ledger End Here*/
 
 /*GST Report Start Here*/
 
-Route::resource('gst_report','GstReportController',['middleware' => ['auth']]);
+Route::resource('gst_report','GstReportController',['middleware' => ['auth']])->middleware('permission:gst_report');
 Route::group(['middleware' => 'auth'], function () {
      Route::any('date_wise/gst_report/', 'GstReportController@gst_report');
 });
@@ -1168,8 +1168,8 @@ Route::resource('receipt_income','ReceiptIncomeController',['middleware' => ['au
 
 /*Account Group Start Here*/
 
-Route::resource('account_group','AccountGroupController',['middleware' => ['auth']]);
-Route::get('account_group/delete/{id}', 'AccountGroupController@destroy');
+Route::resource('account_group','AccountGroupController',['middleware' => ['auth']])->middleware('permission:account_group_list|account_group_create|account_group_edit|account_group_delete');
+Route::get('account_group/delete/{id}', 'AccountGroupController@destroy')->middleware('permission:account_group_delete');
 
 /*Account Group End Here*/
 
@@ -1196,24 +1196,24 @@ Route::get('terms-and-condition/delete/{id}', 'TermsAndConditionController@destr
 
 /*Tax Account Group Start Here*/
 
-Route::resource('account_group_tax','AccountGroupTaxController',['middleware' => ['auth']]);
-Route::get('account_group_tax/delete/{id}', 'AccountGroupTaxController@destroy');
+Route::resource('account_group_tax','AccountGroupTaxController',['middleware' => ['auth']])->middleware('permission:account_group_tax_list|account_group_tax_edit|account_group_tax_create');
+Route::get('account_group_tax/delete/{id}', 'AccountGroupTaxController@destroy')->middleware('permission:account_group_tax_delete');
 
 /*Tax Account Group End Here*/
 
 /*Account Head Start Here*/
 
-Route::resource('account_head','AccountHeadController',['middleware' => ['auth']]);
-Route::get('account_head/delete/{id}', 'AccountHeadController@destroy');
+Route::resource('account_head','AccountHeadController',['middleware' => ['auth']])->middleware('permission:account_head_list|account_head_create|account_head_list_edit');
+Route::get('account_head/delete/{id}', 'AccountHeadController@destroy')->middleware('permission:account_head_delete');
 
 /*Account Head End Here*/
 
 /*Stock Report strat*/
 
-Route::resource('stock-report','StockReportController',['middleware' => ['auth']]);
-Route::resource('stock_summary','StockSummaryController',['middleware' => ['auth']]);
+Route::resource('stock-report','StockReportController',['middleware' => ['auth']])->middleware('permission:stock_report');
+Route::resource('stock_summary','StockSummaryController',['middleware' => ['auth']])->middleware('permission:stock_summary');
 Route::get('stock-summary/change_items/{id}', 'StockSummaryController@change_items');
-Route::resource('stock_ageing','StockAgeingController',['middleware' => ['auth']]);
+Route::resource('stock_ageing','StockAgeingController',['middleware' => ['auth']])->middleware('permission:stock_ageing');
 
 /*Stock Report end*/
 
@@ -1297,7 +1297,7 @@ Route::group(['prefix' => 'production', 'middleware' => ['auth']], function () {
 
 /*Individual Ledger Start Here*/
 
-Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']])->middleware('permission:individual_ledger');
 
 Route::post('ledger_report', 'IndividualLedgerController@report');
 
