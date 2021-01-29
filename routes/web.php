@@ -1353,7 +1353,8 @@ Route::post('received/branch_details/', 'ReceivedController@branch_details');
 Route::post('received/act_type_details/', 'ReceivedController@act_type_details');
 Route::post('received/store_pos/', 'ReceivedController@store_pos');
 
-    
+Route::any('print', 'PosController@print');
+  
 /*  Received end here */
 
 /* Paid starts here  */
