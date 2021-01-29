@@ -1052,8 +1052,8 @@ Route::get('rejection_out/expense_beta_details/{id}', 'RejectionOutController@ex
 
 /*Outstanding Report Start Here*/
 
-Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']])->middleware('permission:receivable_billwise');
-Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']])->middleware('permission:receivable_partywise');
+Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']])->middleware('permission:billwise_receivables');
+Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']])->middleware('permission:partywise_receivables');
 Route::get('single_ledger/{id}','ReceivablePartywiseController@show');
 Route::resource('payable_billwise','PayableBillwiseController',['middleware' => ['auth']])->middleware('permission:payable_billwise');
 Route::resource('payable_partywise','PayablePartywiseController',['middleware' => ['auth']])->middleware('permission:payable_partywise');
