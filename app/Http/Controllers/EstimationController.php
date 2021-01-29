@@ -972,20 +972,20 @@ $count=0;
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */      
                           
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
             foreach ($tax_view as $key => $value) 
@@ -998,7 +998,7 @@ $count=0;
 
             /* end dynamic tax value */                    
 
-            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+            $data[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => $cnt);    
 
         }          
          
@@ -1120,20 +1120,20 @@ $count=0;
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */      
                           
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
             foreach ($tax_view as $key => $value) 
@@ -1146,7 +1146,7 @@ $count=0;
 
             /* end dynamic tax value */                    
 
-            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+            $data[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => $cnt);    
 
         }
 

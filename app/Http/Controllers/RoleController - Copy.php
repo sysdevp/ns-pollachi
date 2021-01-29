@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+//use Spatie\Permission\Models\Role;
+use App\Models\Designation;
+use App\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
 use Illuminate\Support\Facades\Redirect;
@@ -24,25 +26,25 @@ class RoleController extends Controller
     {
        
         $permission = Permission::get();
-        $roles = Role::all();
+		$roles=Designation::all();
         return view('admin.master.role.add',compact('permission','roles'));
     }
 
     public function store(Request $request)
     {
        
-//print_r($request->input('permission'));exit;
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3|max:50|unique:roles,name,NULL,id,deleted_at,NULL',
-            'permission.*' => 'required',
-          ])->validate();
 
-
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
+                 $role_permission = new Role();
+                
+				$role_permission->role_id = isset($request->role_id) ? ($request->role_id) : 0;
+                $role_permission->permission = isset($request->permission) ? serialize($request->permission) : '';
+                $role_permission->created_by = isset($request->created_by) ? ($request->created_by) : 0;
+                $role_permission->active_status = isset($request->status) ? ($request->status) : 1;
+                if($role_permission->save()) {
 
 
         return Redirect::back()->with('success', 'Successfully created');
+				}
     }
 
     public function show($id)

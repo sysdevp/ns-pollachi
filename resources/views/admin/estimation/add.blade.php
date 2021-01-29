@@ -1975,7 +1975,7 @@ else
              {
               var tax_master_id = data[1].tax_master[new_val];
 
-              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+              var tax_master_input_val = $('#'+tax_master_id);
 
               if(tax_master_id == tax_master_input_val)
               {

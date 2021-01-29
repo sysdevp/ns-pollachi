@@ -609,11 +609,11 @@ Route::get('purchase/get_items/{id}', 'PurchaseController@get_items');
 
 /*Price Updation Satrt Here*/
 
-Route::resource('price_updation', 'PriceUpdationController',['middleware' => ['auth']])->middleware('permission:price_updation_edit|price_updation_create|price_updation_list');
+Route::resource('price_updation', 'PriceUpdationController',['middleware' => ['auth']]);
 Route::get('price_updation/change_items/{id}', 'PriceUpdationController@change_items');
 Route::get('price_updation/brand_filter/{id}', 'PriceUpdationController@brand_filter');
 Route::get('price_updation/browse_item/{id}', 'PriceUpdationController@browse_item');
-Route::get('price_updation/delete/{id}', 'PriceUpdationController@destroy')->middleware('permission:price_updation_delete');
+Route::get('price_updation/delete/{id}', 'PriceUpdationController@destroy');
 
 /*Price Updation End Here*/
 
@@ -646,9 +646,9 @@ Route::get('estimation/retrieve/{id}', 'EstimationController@retrieve');
 
 /* Purchase Order Start Here  */
 
-Route::resource('purchase_order', 'PurchaseOrderController',['middleware' => ['auth']])->middleware('permission:purchase_order_edit|purchase_order_create');
+Route::resource('purchase_order', 'PurchaseOrderController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('purchase_order/index/{id}', 'PurchaseOrderController@index')->middleware('permission:purchase_order_list');
+     Route::get('purchase_order/index/{id}', 'PurchaseOrderController@index');
 });
 
 Route::post('purchase_order/address_details/', 'PurchaseOrderController@address_details');
@@ -662,7 +662,7 @@ Route::get('purchase_order/same_items/{id}', 'PurchaseOrderController@same_items
 Route::get('purchase_order/item_details/{id}', 'PurchaseOrderController@item_details');
 Route::get('purchase_order/expense_details/{id}', 'PurchaseOrderController@expense_details');
 Route::post('purchase_order/last_purchase_rate/', 'PurchaseOrderController@last_purchase_rate');
-Route::get('purchase_order/delete/{id}', 'PurchaseOrderController@destroy')->middleware('permission:purchase_order_delete');
+Route::get('purchase_order/delete/{id}', 'PurchaseOrderController@destroy');
 Route::post('purchase_order/estimation_details/', 'PurchaseOrderController@estimation_details');
 
 Route::get('purchase_order/cancel/{id}', 'PurchaseOrderController@cancel');
@@ -681,21 +681,21 @@ Route::get('purchase_order/expense_beta_details/{id}', 'PurchaseOrderController@
 
 /* Purchase Gate Pass entry Start Here  */
 
-Route::resource('purchase_gatepass_entry', 'PurchaseGatepassEntryController',['middleware' => ['auth']])->middleware('permission:purchase_gate_pass_entry_edit|purchase_gate_pass_entry_create');
+Route::resource('purchase_gatepass_entry', 'PurchaseGatepassEntryController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('purchase_gatepass_entry/index/{id}', 'PurchaseGatepassEntryController@index')->middleware('permission:purchase_gate_pass_entry_list');
+     Route::get('purchase_gatepass_entry/index/{id}', 'PurchaseGatepassEntryController@index');
 });
 Route::post('purchase_gatepass_entry/address_details/', 'PurchaseGatepassEntryController@address_details');
-Route::get('purchase_gatepass_entry/delete/{id}', 'PurchaseGatepassEntryController@destroy')->middleware('permission:purchase_gate_pass_entry_delete');
+Route::get('purchase_gatepass_entry/delete/{id}', 'PurchaseGatepassEntryController@destroy');
 Route::post('purchase_gatepass_entry/po_details/', 'PurchaseGatepassEntryController@po_details');
 
 /* Purchase Gate Pass entry End Here  */
 
 /* Purchase entry Start Here  */
 
-Route::resource('purchase_entry', 'PurchaseEntryController',['middleware' => ['auth']])->middleware('permission:purchase_entry_create|purchase_entry_edit');
+Route::resource('purchase_entry', 'PurchaseEntryController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('purchase_entry/index/{id}', 'PurchaseEntryController@index')->middleware('permission:purchase_entry_list');
+     Route::get('purchase_entry/index/{id}', 'PurchaseEntryController@index');
 });
 Route::post('purchase_entry/address_details/', 'PurchaseEntryController@address_details');
 Route::get('purchase_entry/getdata/{id}', 'PurchaseEntryController@getdata');
@@ -731,9 +731,9 @@ Route::get('purchase_entry/expense_beta_details/{id}', 'PurchaseEntryController@
 
 /* Sales Estimation Start Here  */
 
-Route::resource('sales_estimation', 'SalesEstimationController',['middleware' => ['auth']])->middleware('permission:sales_estimation_edit|sales_estimation_create');
+Route::resource('sales_estimation', 'SalesEstimationController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('sales_estimation/index/{id}', 'SalesEstimationController@index')->middleware('permission:sales_estimation_list');
+     Route::get('sales_estimation/index/{id}', 'SalesEstimationController@index');
 });
 Route::post('sales_estimation/address_details/', 'SalesEstimationController@address_details');
 Route::get('sales_estimation/getdata/{id}', 'SalesEstimationController@getdata');
@@ -745,7 +745,7 @@ Route::get('sales_estimation/getdata_item/{id}', 'SalesEstimationController@getd
 Route::get('sales_estimation/same_items/{id}', 'SalesEstimationController@same_items');
 Route::get('sales_estimation/item_details/{id}', 'SalesEstimationController@item_details');
 Route::get('sales_estimation/expense_details/{id}', 'SalesEstimationController@expense_details');
-Route::post('sales_estimation/last_purchase_rate/', 'SalesEstimationController@last_purchase_rate')->middleware('permission:sales_estimation_delete');
+Route::post('sales_estimation/last_purchase_rate/', 'SalesEstimationController@last_purchase_rate');
 Route::get('sales_estimation/delete/{id}', 'SalesEstimationController@destroy');
 
 Route::get('sales_estimation/cancel/{id}', 'SalesEstimationController@cancel');
@@ -755,9 +755,9 @@ Route::get('sales_estimation/retrieve/{id}', 'SalesEstimationController@retrieve
 
 /* Sales Order Start Here  */
 
-Route::resource('sale_order', 'SalesOrderController',['middleware' => ['auth']])->middleware('permission:sales_order_create|sales_order_edit');
+Route::resource('sale_order', 'SalesOrderController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('sale_order/index/{id}', 'SalesOrderController@index')->middleware('permission:sales_order_list');
+     Route::get('sale_order/index/{id}', 'SalesOrderController@index');
 });
 Route::post('sale_order/address_details/', 'SalesOrderController@address_details');
 Route::get('sale_order/getdata/{id}', 'SalesOrderController@getdata');
@@ -770,7 +770,7 @@ Route::get('sale_order/same_items/{id}', 'SalesOrderController@same_items');
 Route::get('sale_order/item_details/{id}', 'SalesOrderController@item_details');
 Route::get('sale_order/expense_details/{id}', 'SalesOrderController@expense_details');
 Route::post('sale_order/last_purchase_rate/', 'SalesOrderController@last_purchase_rate');
-Route::get('sale_order/delete/{id}', 'SalesOrderController@destroy')->middleware('permission:sales_order_delete');
+Route::get('sale_order/delete/{id}', 'SalesOrderController@destroy');
 Route::post('sales_order/estimation_details/', 'SalesOrderController@se_details');
 
 Route::get('sale_order/cancel/{id}', 'SalesOrderController@cancel');
@@ -788,9 +788,9 @@ Route::get('sale_order/expense_beta_details/{id}', 'SalesOrderController@expense
 
 /* Sales entry Start Here  */
 
-Route::resource('sales_entry', 'SalesEntryController',['middleware' => ['auth']])->middleware('permission:sales_entry_create|sales_entry_edit');
+Route::resource('sales_entry', 'SalesEntryController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('sales_entry/index/{id}', 'SalesEntryController@index')->middleware('permission:sales_entry_list');
+     Route::get('sales_entry/index/{id}', 'SalesEntryController@index');
 });
 Route::post('sales_entry/address_details/', 'SalesEntryController@address_details');
 Route::get('sales_entry/getdata/{id}', 'SalesEntryController@getdata');
@@ -802,7 +802,7 @@ Route::get('sales_entry/same_items/{id}', 'SalesEntryController@same_items');
 Route::get('sales_entry/item_details/{id}', 'SalesEntryController@item_details');
 Route::get('sales_entry/expense_details/{id}', 'SalesEntryController@expense_details');
 Route::post('sales_entry/last_purchase_rate/', 'SalesEntryController@last_purchase_rate');
-Route::get('sales_entry/delete/{id}', 'SalesEntryController@destroy')->middleware('permission:sales_entry_delete');
+Route::get('sales_entry/delete/{id}', 'SalesEntryController@destroy');
 Route::get('sales_entry/delete_beta/{id}', 'SalesEntryController@delete_beta');
 Route::post('sales_entry/se_details/', 'SalesEntryController@se_details');
 Route::post('sales_entry/so_details/', 'SalesEntryController@so_details');
@@ -826,21 +826,21 @@ Route::post('sales_entry/getdata_offer/', 'SalesEntryController@getdata_offer');
 
 /* Sales Gate Pass entry Start Here  */
 
-Route::resource('sales_gatepass_entry', 'SalesGatepassEntryController',['middleware' => ['auth']])->middleware('permission:sales_gatepass_entry_create|sales_gatepass_entry_edit');
+Route::resource('sales_gatepass_entry', 'SalesGatepassEntryController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('sales_gatepass_entry/index/{id}', 'SalesGatepassEntryController@index')->middleware('permission:sales_gatepass_entry_list');
+     Route::get('sales_gatepass_entry/index/{id}', 'SalesGatepassEntryController@index');
 });
 Route::post('sales_gatepass_entry/address_details/', 'SalesGatepassEntryController@address_details');
-Route::get('sales_gatepass_entry/delete/{id}', 'SalesGatepassEntryController@destroy')->middleware('permission:sales_gatepass_entry_delete');
+Route::get('sales_gatepass_entry/delete/{id}', 'SalesGatepassEntryController@destroy');
 Route::post('sales_gatepass_entry/so_details/', 'SalesGatepassEntryController@so_details');
 
 /* Sales Gate Pass entry End Here  */
 
 /* Receipt Note Start Here  */
 
-Route::resource('receipt_note', 'ReceiptNoteController',['middleware' => ['auth']])->middleware('permission:receipt_note_create|receipt_note_edit');
+Route::resource('receipt_note', 'ReceiptNoteController',['middleware' => ['auth']]) ;
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('receipt_note/index/{id}', 'ReceiptNoteController@index')->middleware('permission:receipt_note_list');
+     Route::get('receipt_note/index/{id}', 'ReceiptNoteController@index');
 });
 Route::post('receipt_note/address_details/', 'ReceiptNoteController@address_details');
 Route::get('receipt_note/getdata/{id}', 'ReceiptNoteController@getdata');
@@ -853,7 +853,7 @@ Route::get('receipt_note/same_items/{id}', 'ReceiptNoteController@same_items');
 Route::get('receipt_note/item_details/{id}', 'ReceiptNoteController@item_details');
 Route::get('receipt_note/expense_details/{id}', 'ReceiptNoteController@expense_details');
 Route::post('receipt_note/last_purchase_rate/', 'ReceiptNoteController@last_purchase_rate');
-Route::get('receipt_note/delete/{id}', 'ReceiptNoteController@destroy')->middleware('permission:receipt_note_delete');
+Route::get('receipt_note/delete/{id}', 'ReceiptNoteController@destroy');
 Route::post('receipt_note/po_details/', 'ReceiptNoteController@po_details');
 Route::post('receipt_note/estimation_details/', 'ReceiptNoteController@estimation_details');
 Route::post('receipt_note/r_out_details/', 'ReceiptNoteController@r_out_details');
@@ -878,9 +878,9 @@ Route::get('receipt_note/expense_beta_details/{id}', 'ReceiptNoteController@expe
 
 Route::resource('debit_note', 'DebitNoteController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('debit_note/index/{id}', 'DebitNoteController@index')->middleware('permission:debit_note_edit|debit_note_create');
+     Route::get('debit_note/index/{id}', 'DebitNoteController@index');
 });
-Route::post('debit_note/address_details/', 'DebitNoteController@address_details')->middleware('permission:debit_note_list');
+Route::post('debit_note/address_details/', 'DebitNoteController@address_details');
 Route::get('debit_note/getdata/{id}', 'DebitNoteController@getdata');
 Route::get('debit_note/change_items/{id}', 'DebitNoteController@change_items');
 Route::post('debit_note/brand_filter/', 'DebitNoteController@brand_filter');
@@ -890,7 +890,7 @@ Route::get('debit_note/same_items/{id}', 'DebitNoteController@same_items');
 Route::get('debit_note/item_details/{id}', 'DebitNoteController@item_details');
 Route::get('debit_note/expense_details/{id}', 'DebitNoteController@expense_details');
 Route::post('debit_note/last_purchase_rate/', 'DebitNoteController@last_purchase_rate');
-Route::get('debit_note/delete/{id}', 'DebitNoteController@destroy')->middleware('permission:debit_note_delete');
+Route::get('debit_note/delete/{id}', 'DebitNoteController@destroy');
 Route::post('debit_note/p_details/', 'DebitNoteController@p_details');
 Route::post('debit_note/r_out_details/', 'DebitNoteController@r_out_details');
 
@@ -909,9 +909,9 @@ Route::get('debit_note/expense_beta_details/{id}', 'DebitNoteController@expense_
 
 /* Delivery Note Start Here  */
 
-Route::resource('delivery_note', 'DeliveryNoteController',['middleware' => ['auth']])->middleware('permission:delivery_note_create|delivery_note_edit');
+Route::resource('delivery_note', 'DeliveryNoteController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('delivery_note/index/{id}', 'DeliveryNoteController@index')->middleware('permission:delivery_note_list');
+     Route::get('delivery_note/index/{id}', 'DeliveryNoteController@index');
 });
 Route::post('delivery_note/address_details/', 'DeliveryNoteController@address_details');
 Route::get('delivery_note/getdata/{id}', 'DeliveryNoteController@getdata');
@@ -924,7 +924,7 @@ Route::get('delivery_note/same_items/{id}', 'DeliveryNoteController@same_items')
 Route::get('delivery_note/item_details/{id}', 'DeliveryNoteController@item_details');
 Route::get('delivery_note/expense_details/{id}', 'DeliveryNoteController@expense_details');
 Route::post('delivery_note/last_purchase_rate/', 'DeliveryNoteController@last_purchase_rate');
-Route::get('delivery_note/delete/{id}', 'DeliveryNoteController@destroy')->middleware('permission:delivery_note_delete');
+Route::get('delivery_note/delete/{id}', 'DeliveryNoteController@destroy');
 Route::post('delivery_note/se_details/', 'DeliveryNoteController@se_details');
 Route::post('delivery_note/so_details/', 'DeliveryNoteController@so_details');
 Route::post('delivery_note/rejection_in_details/', 'DeliveryNoteController@rejection_in_details');
@@ -946,9 +946,9 @@ Route::get('delivery_note/expense_beta_details/{id}', 'DeliveryNoteController@ex
 
 /* Credit Note Start Here  */
 
-Route::resource('credit_note', 'CreditNoteController',['middleware' => ['auth']])->middleware('permission:credit_note_create|credit_note_edit');
+Route::resource('credit_note', 'CreditNoteController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('credit_note/index/{id}', 'CreditNoteController@index')->middleware('permission:credit_note_list');
+     Route::get('credit_note/index/{id}', 'CreditNoteController@index');
 });
 Route::post('credit_note/address_details/', 'CreditNoteController@address_details');
 Route::get('credit_note/getdata/{id}', 'CreditNoteController@getdata');
@@ -960,7 +960,7 @@ Route::get('credit_note/same_items/{id}', 'CreditNoteController@same_items');
 Route::get('credit_note/item_details/{id}', 'CreditNoteController@item_details');
 Route::get('credit_note/expense_details/{id}', 'CreditNoteController@expense_details');
 Route::post('credit_note/last_purchase_rate/', 'CreditNoteController@last_purchase_rate');
-Route::get('credit_note/delete/{id}', 'CreditNoteController@destroy')->middleware('permission:credit_note_delete');
+Route::get('credit_note/delete/{id}', 'CreditNoteController@destroy');
 Route::post('credit_note/s_details/', 'CreditNoteController@s_details');
 Route::post('credit_note/rejection_in_details/', 'CreditNoteController@rejection_in_details');
 
@@ -979,9 +979,9 @@ Route::get('credit_note/retrieve_beta/{id}', 'CreditNoteController@retrieve_beta
 
 /* Rejection In Start Here  */
 
-Route::resource('rejection_in', 'RejectionInController',['middleware' => ['auth']])->middleware('permission:rejection_in_create|rejection_in_edit');
+Route::resource('rejection_in', 'RejectionInController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('rejection_in/index/{id}', 'RejectionInController@index')->middleware('permission:rejection_in_list');
+     Route::get('rejection_in/index/{id}', 'RejectionInController@index');
 });
 Route::post('rejection_in/address_details/', 'RejectionInController@address_details');
 Route::get('rejection_in/getdata/{id}', 'RejectionInController@getdata');
@@ -994,7 +994,7 @@ Route::get('rejection_in/same_items/{id}', 'RejectionInController@same_items');
 Route::get('rejection_in/item_details/{id}', 'RejectionInController@item_details');
 Route::get('rejection_in/expense_details/{id}', 'RejectionInController@expense_details');
 Route::post('rejection_in/last_purchase_rate/', 'RejectionInController@last_purchase_rate');
-Route::get('rejection_in/delete/{id}', 'RejectionInController@destroy')->middleware('permission:rejection_in_delete');
+Route::get('rejection_in/delete/{id}', 'RejectionInController@destroy');
 Route::post('rejection_in/s_details/', 'RejectionInController@s_details');
 Route::post('rejection_in/delivery_details/', 'RejectionInController@delivery_details');
 Route::post('rejection_in/check_qty/', 'RejectionInController@check_qty');
@@ -1014,9 +1014,9 @@ Route::get('rejection_in/expense_beta_details/{id}', 'RejectionInController@expe
 
 /* Rejection Out Start Here  */
 
-Route::resource('rejection_out', 'RejectionOutController',['middleware' => ['auth']])->middleware('permission:rejection_out_edit|rejection_out_create');
+Route::resource('rejection_out', 'RejectionOutController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('rejection_out/index/{id}', 'RejectionOutController@index')->middleware('permission:rejection_out_list');
+     Route::get('rejection_out/index/{id}', 'RejectionOutController@index');
 });
 Route::post('rejection_out/address_details/', 'RejectionOutController@address_details');
 Route::get('rejection_out/getdata/{id}', 'RejectionOutController@getdata');
@@ -1031,7 +1031,7 @@ Route::get('rejection_out/expense_details/{id}', 'RejectionOutController@expense
 Route::post('rejection_out/last_purchase_rate/', 'RejectionOutController@last_purchase_rate');
 Route::post('rejection_out/check_qty/', 'RejectionOutController@check_qty');
 Route::post('rejection_out/change_qty/', 'RejectionOutController@change_qty');
-Route::get('rejection_out/delete/{id}/{r_out}', 'RejectionOutController@destroy')->middleware('permission:rejection_out_delete');
+Route::get('rejection_out/delete/{id}/{r_out}', 'RejectionOutController@destroy');
 Route::post('rejection_out/p_details/', 'RejectionOutController@p_details');
 Route::post('rejection_out/Get_Location_Details/', 'RejectionOutController@Get_Location_Details');
 Route::post('rejection_out/receipt_details/', 'RejectionOutController@receipt_details');
@@ -1052,32 +1052,32 @@ Route::get('rejection_out/expense_beta_details/{id}', 'RejectionOutController@ex
 
 /*Outstanding Report Start Here*/
 
-Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']])->middleware('permission:billwise_receivables');
-Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']])->middleware('permission:partywise_receivables');
+Route::resource('receivable_billwise','ReceivableBillwiseController',['middleware' => ['auth']]);
+Route::resource('receivable_partywise','ReceivablePartywiseController',['middleware' => ['auth']]);
 Route::get('single_ledger/{id}','ReceivablePartywiseController@show');
-Route::resource('payable_billwise','PayableBillwiseController',['middleware' => ['auth']])->middleware('permission:payable_billwise');
-Route::resource('payable_partywise','PayablePartywiseController',['middleware' => ['auth']])->middleware('permission:payable_partywise');
+Route::resource('payable_billwise','PayableBillwiseController',['middleware' => ['auth']]);
+Route::resource('payable_partywise','PayablePartywiseController',['middleware' => ['auth']]);
 Route::get('payable_single_ledger/{id}','PayablePartywiseController@show');
 
 /*Outstanding Report End Here*/
 
 /*Day Book Start Here*/
 
-Route::resource('daybook','DayBookController',['middleware' => ['auth']])->middleware('permission:daybook');
+Route::resource('daybook','DayBookController',['middleware' => ['auth']]);
 
 /*Day Book End Here*/
 
-Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']])->middleware('permission:selling_price_setup');
+Route::resource('selling-price-setup','SellingPriceSetupController',['middleware' => ['auth']]);
 
 /*Individual Ledger Start Here*/
 
-Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']])->middleware('permission:individual_ledger');
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
 /*Individual Ledger End Here*/
 
 /*GST Report Start Here*/
 
-Route::resource('gst_report','GstReportController',['middleware' => ['auth']])->middleware('permission:gst_report');
+Route::resource('gst_report','GstReportController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
      Route::any('date_wise/gst_report/', 'GstReportController@gst_report');
 });
@@ -1110,14 +1110,14 @@ Route::post('pos/getdata_offer/', 'PosController@getdata_offer');
 
 /*Payment Request Start Here*/
 
-Route::resource('payment_request','PaymentRequestController',['middleware' => ['auth']])->middleware('permission:payment_request_list|payment_request_create|payment_request_edit|payment_request_delete');
+Route::resource('payment_request','PaymentRequestController',['middleware' => ['auth']]);
 //Route::resource('store', 'PaymentRequestController@store')->middleware('permission:payment_request');
 
 /*Payment Request End Here*/
 
 /*Payment Process Start Here*/
 
-Route::resource('payment_process','PaymentProcessController',['middleware' => ['auth']])->middleware('permission:payment_process_list|payment_process_create|payment_process_edit|payment_process_delete');
+Route::resource('payment_process','PaymentProcessController',['middleware' => ['auth']]);
 Route::post('payment_process/purchase_entry_det/', 'PaymentProcessController@purchase_entry_det');
 Route::post('payment_process/advance_entry_det/', 'PaymentProcessController@advance_entry_det');
 
@@ -1125,13 +1125,13 @@ Route::post('payment_process/advance_entry_det/', 'PaymentProcessController@adva
 
 /*Receipt Request Start Here*/
 
-Route::resource('receipt_request','ReceiptRequestController',['middleware' => ['auth']])->middleware('permission:receipt_request_list|receipt_request_create|receipt_request_edit|receipt_request_delete');
+Route::resource('receipt_request','ReceiptRequestController',['middleware' => ['auth']]);
 
 /*Receipt Request End Here*/
 
 /*Receipt Process Start Here*/
 
-Route::resource('receipt_process','ReceiptProcessController',['middleware' => ['auth']])->middleware('permission:receipt_process_list|receipt_process_create|receipt_process_edit|receipt_process_delete');
+Route::resource('receipt_process','ReceiptProcessController',['middleware' => ['auth']]);
 Route::post('receipt_process/sale_entry_det/', 'ReceiptProcessController@sale_entry_det');
 Route::post('receipt_process/advance_entry_det/', 'ReceiptProcessController@advance_entry_det');
 
@@ -1140,36 +1140,36 @@ Route::post('receipt_process/advance_entry_det/', 'ReceiptProcessController@adva
 
 /*Advance Settlement For Supplier Start Here*/
 
-Route::resource('advance_settlement_supplier','AdvanceSettlementSupplierController',['middleware' => ['auth']])->middleware('permission:advance_to_suppliers_list|advance_to_suppliers_create|advance_to_suppliers_edit|advance_to_suppliers_delete');
-Route::get('advance_settlement_supplier/delete/{id}', 'AdvanceSettlementSupplierController@destroy')->middleware('permission:advance_to_suppliers_delete');
+Route::resource('advance_settlement_supplier','AdvanceSettlementSupplierController',['middleware' => ['auth']]);
+Route::get('advance_settlement_supplier/delete/{id}', 'AdvanceSettlementSupplierController@destroy');
 
 
 /*Advance Settlement For Supplier End Here*/
 
 /*Advance Settlement For Supplier Start Here*/
 
-Route::resource('advance_settlement_customer','AdvanceSettlementCustomerController',['middleware' => ['auth']])->middleware('permission:advance_from_customers_list|advance_from_customers_create|advance_from_customers_edit|advance_from_customers_delete');
-Route::get('advance_settlement_customer/delete/{id}', 'AdvanceSettlementCustomerController@destroy')->middleware('permission:advance_from_customers_delete');
+Route::resource('advance_settlement_customer','AdvanceSettlementCustomerController',['middleware' => ['auth']]);
+Route::get('advance_settlement_customer/delete/{id}', 'AdvanceSettlementCustomerController@destroy');
 
 
 /*Advance Settlement For Supplier End Here*/
 
 /*Payment Of Expense Start Here*/
 
-Route::resource('payment_expense','PaymentExpenseController',['middleware' => ['auth']])->middleware('permission:payment_expenses_list|payment_expenses_create|payment_expenses_edit|payment_expenses_delete');
+Route::resource('payment_expense','PaymentExpenseController',['middleware' => ['auth']]);
 
 /*Payment Of Expense End Here*/
 
 /*Receipt Of Income Start Here*/
 
-Route::resource('receipt_income','ReceiptIncomeController',['middleware' => ['auth']])->middleware('permission:receipt_income_list|receipt_income_create|receipt_income_edit|receipt_income_delete');
+Route::resource('receipt_income','ReceiptIncomeController',['middleware' => ['auth']]);
 
 /*Receipt Of Income End Here*/
 
 /*Account Group Start Here*/
 
-Route::resource('account_group','AccountGroupController',['middleware' => ['auth']])->middleware('permission:account_group_list|account_group_create|account_group_edit|account_group_delete');
-Route::get('account_group/delete/{id}', 'AccountGroupController@destroy')->middleware('permission:account_group_delete');
+Route::resource('account_group','AccountGroupController',['middleware' => ['auth']]);
+Route::get('account_group/delete/{id}', 'AccountGroupController@destroy');
 
 /*Account Group End Here*/
 
@@ -1196,24 +1196,24 @@ Route::get('terms-and-condition/delete/{id}', 'TermsAndConditionController@destr
 
 /*Tax Account Group Start Here*/
 
-Route::resource('account_group_tax','AccountGroupTaxController',['middleware' => ['auth']])->middleware('permission:account_group_tax_list|account_group_tax_edit|account_group_tax_create');
-Route::get('account_group_tax/delete/{id}', 'AccountGroupTaxController@destroy')->middleware('permission:account_group_tax_delete');
+Route::resource('account_group_tax','AccountGroupTaxController',['middleware' => ['auth']]);
+Route::get('account_group_tax/delete/{id}', 'AccountGroupTaxController@destroy');
 
 /*Tax Account Group End Here*/
 
 /*Account Head Start Here*/
 
-Route::resource('account_head','AccountHeadController',['middleware' => ['auth']])->middleware('permission:account_head_list|account_head_create|account_head_list_edit');
-Route::get('account_head/delete/{id}', 'AccountHeadController@destroy')->middleware('permission:account_head_delete');
+Route::resource('account_head','AccountHeadController',['middleware' => ['auth']]);
+Route::get('account_head/delete/{id}', 'AccountHeadController@destroy');
 
 /*Account Head End Here*/
 
 /*Stock Report strat*/
 
-Route::resource('stock-report','StockReportController',['middleware' => ['auth']])->middleware('permission:stock_report');
-Route::resource('stock_summary','StockSummaryController',['middleware' => ['auth']])->middleware('permission:stock_summary');
+Route::resource('stock-report','StockReportController',['middleware' => ['auth']]);
+Route::resource('stock_summary','StockSummaryController',['middleware' => ['auth']]);
 Route::get('stock-summary/change_items/{id}', 'StockSummaryController@change_items');
-Route::resource('stock_ageing','StockAgeingController',['middleware' => ['auth']])->middleware('permission:stock_ageing');
+Route::resource('stock_ageing','StockAgeingController',['middleware' => ['auth']]);
 
 /*Stock Report end*/
 
@@ -1243,7 +1243,7 @@ Route::resource('taxdummy','Taxdummy',['middleware' => ['auth']]);
 
 
 
-Route::resource('expense','ExpenseController',['middleware' => ['auth']])->middleware('permission:account_expense_list|account_expense_create|account_expense_edit|account_expense_delete');
+Route::resource('expense','ExpenseController',['middleware' => ['auth']]);
 
 /* Received starts here  */
 
@@ -1297,7 +1297,7 @@ Route::group(['prefix' => 'production', 'middleware' => ['auth']], function () {
 
 /*Individual Ledger Start Here*/
 
-Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']])->middleware('permission:individual_ledger');
+Route::resource('individual_ledger','IndividualLedgerController',['middleware' => ['auth']]);
 
 Route::post('ledger_report', 'IndividualLedgerController@report');
 
