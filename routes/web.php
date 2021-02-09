@@ -554,8 +554,11 @@ Route::group(['prefix' => 'master/uom-factor-convertion-for-item', 'middleware' 
 
 /* User Master Start Here  */
 Route::group(['prefix' => 'master/user', 'middleware' => ['auth']], function () {
-    Route::any('/', 'UserController@index')->middleware('permission:user_list');
-    Route::any('create', 'UserController@create')->middleware('permission:user_create');
+    // Route::any('/', 'UserController@index')->middleware('permission:user_list');
+    // Route::any('create', 'UserController@create')->middleware('permission:user_create');
+
+    Route::any('/', 'UserController@index');
+    Route::any('create', 'UserController@create');
     Route::any('store', 'UserController@store')->middleware('permission:user_create');
     Route::any('show/{id}', 'UserController@show')->middleware('permission:user_list');
     Route::any('edit/{id}', 'UserController@edit')->middleware('permission:user_edit');
