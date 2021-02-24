@@ -1814,14 +1814,41 @@ input:checked ~ .tab-content {
                                 <div class="row" id="Receivables_div">
 								    <div class="col-lg-3 mastersubheading2">
                                         <div class="" id="tab58">
-                                           <!-- <input type="checkbox" name="checkAll58" id="checkAll58"/></label>
-                                              <label class="control-label">Select All</label>
-                                              <br> -->
+
+
                                               @foreach($permission as $value)
+
+                                              @if($value->label == "Billwise Receivables")
+                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission Receivables"  {{(Role::selectall_check($value->class,$role_id) >= 1) ? "checked" : "" }} value="{{$value->class}}">  
+                        <label class="control-label">Select All</label>
+                        <br>
+                      
+                @endif
+
                                 @if($value->class == "billwise_receivables")
 								<input type="checkbox"    name="permission[]" class="{{ $value->class }} permission check Receivables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Billwise Receivables</label><br>
                                 @endif
+                                <!-- @if($value->class == "partywise_receivables")
+								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check outstanding"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
+								<label class="control-label">Partywise Receivables</label>
+                                @endif -->
+                                @endforeach
+                                        </div>
+                                     </div>
+                                     <div class="col-lg-3 mastersubheading2">
+                                        <div class="" id="tab65">
+
+
+                                              @foreach($permission as $value)
+
+                                              @if($value->label == "Partywise Receivables")
+                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission Receivables"  {{(Role::selectall_check($value->class,$role_id) >= 1) ? "checked" : "" }} value="{{$value->class}}">  
+                        <label class="control-label">Select All</label>
+                        <br>
+                      
+                @endif
+
                                 @if($value->class == "partywise_receivables")
 								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check Receivables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Partywise Receivables</label>
@@ -1829,6 +1856,7 @@ input:checked ~ .tab-content {
                                 @endforeach
                                         </div>
                                      </div>
+
                                      </div>
                                 </div>    
         				    </div>
@@ -1845,15 +1873,34 @@ input:checked ~ .tab-content {
                         <div class="row" id="Payables_div">
                             <div class="col-lg-3 mastersubheading2">
                                 <div class="" id="tab59">
-                                   <!-- <input type="checkbox" name="checkAll59" id="checkAll59"/></label>
-                                      <label class="control-label">Select All</label>
-                                      <br> -->
+                                  
                                       @foreach($permission as $value)
-                                @if($value->class == "payable_billwise")
 
+@if($value->label == "Billwise Payables")
+<input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission Payables"  {{(Role::selectall_check($value->class,$role_id) >= 1) ? "checked" : "" }} value="{{$value->class}}">  
+<label class="control-label">Select All</label>
+<br>
+
+@endif
+                                @if($value->class == "payable_billwise")
 								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check Payables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
-								<label class="control-label">Billwise Payables</label><br>
+								<label class="control-label">Billwise Payables</label>
                                 @endif
+                                @endforeach
+                                </div>
+                             </div>
+
+                             <div class="col-lg-3 mastersubheading2">
+                                <div class="" id="tab66">
+                                  
+                                      @foreach($permission as $value)
+
+@if($value->label == "Partywise Payables")
+<input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission Payables"  {{(Role::selectall_check($value->class,$role_id) >= 1) ? "checked" : "" }} value="{{$value->class}}">  
+<label class="control-label">Select All</label>
+<br>
+
+@endif
                                 @if($value->class == "payable_partywise")
 								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check Payables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Partywise Payables</label>
@@ -1861,6 +1908,7 @@ input:checked ~ .tab-content {
                                 @endforeach
                                 </div>
                              </div>
+
                              </div> 
                         </div> 
                     </div>
@@ -1900,8 +1948,8 @@ input:checked ~ .tab-content {
                 <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission selling_price"  {{(Role::selectall_check($value->class,$role_id) >= 1) ? "checked" : "" }} value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
                         <br>
-                        <label class="control-label">Selling Price Setup</label>
-                        <br>
+                        <!-- <label class="control-label">Selling Price Setup</label>
+                        <br> -->
                 @endif
                     @if($value->class == "selling_price_setup")
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -2240,16 +2288,19 @@ input:checked ~ .tab-content {
         var id = $(this).val(); // id for collapse
         // alert(id);
              //var collapse = id;
-            if ($(".menu").is(':checked'))
+             var ischecked= $(this).is(':checked');
+
+//            if ($(".menu").is(':checked'))
+            if(!ischecked)
             {
 
             $("#"+id+" input[type=checkbox]").each(function () {
-                $(this).prop("checked", true);
+                $(this).prop("checked", false);
             });
         }
          else {
             $("#"+id+" input[type=checkbox]").each(function () {
-                $(this).prop("checked", false);
+                $(this).prop("checked", true);
             });
         }
         });

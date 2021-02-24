@@ -1732,8 +1732,69 @@ input:checked ~ .tab-content {
 	  
       </div>
 				
+      <div class="card-header masterbg margintop" id="heading" >
+                            
+                            <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsethree"><i class="fa fa-plus addbg"></i></button>	
+                        
+                                     <input style=" text-align: center;" type="checkbox" id="price_updation" class="menu" value="collapsethree" />
+                        <b>Price Updation</b>			
+                   </div>		
+              
+                        
+                    <div id="collapsethree" class="collapse" data-parent="#accordionExample">			
+                
+                    <div id="accordionExample3">
+                        
+                        <div class="subparent">
+                            
+                                 <div class="card-header locationbg">
+                                    <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseMarkupdown"><i class="fa fa-plus addbg"></i></button>
+                                    <input type="checkbox" name="checkAll1" id="Markupdown" class="price_updation submenu"/> Mark Up Mark Down
+                                </div>
+                            
+                            
+                            
+                                <div id="collapseMarkupdown" class="collapse" data-parent="#accordionExample3">
+                                    
+                                    <div class="locationdivbg">
+                                    
+                                        <div class="row" id="priceupdation_div">
+                                            
+                            <div class="col-lg-2 mastersubheading2">
+           <div class="" id="tab57">		
+           @foreach($permission as $value)
+                        @if($value->label == "Price Updation List")
+                        <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission Markupdown"  {{(Role::selectall_check($value->class,$role_id) >= 4) ? "checked" : "" }} value="{{$value->class}}">  
+                                <label class="control-label">Select All</label>
+                                <br>
+                                <!-- <label class="control-label">Estimation</label>
+                                <br> -->
+                        @endif
+                            @if($value->class == "price_updation_list")
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" name="permission[]" class="{{ $value->class }} permission check Markupdown"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}">  
+                            <span class="control-label">{{$value->name1}}</span>
+                            <br>
+                            @endif
+                        @endforeach
+           </div>
+        </div>
+                            
+                                        </div>
+                        
+                                </div>
+                                    
+                                </div>	
+                            
+                        </div>
+                        
+                  </div>
+              </div>
+                        
+
+
 				
-				<div class="card-header masterbg margintop" id="heading" >
+				<!-- <div class="card-header masterbg margintop" id="heading" >
                             
 					<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsethree"><i class="fa fa-plus addbg"></i></button>	
 				
@@ -1747,6 +1808,7 @@ input:checked ~ .tab-content {
 			<div id="accordionExample3">
 				
 				<div class="subparent">
+                
 					
 						 <div class="card-header locationbg">
 							<div class="locationdivbg">
@@ -1784,7 +1846,7 @@ input:checked ~ .tab-content {
 	  
       </div>
 				
-				
+				 -->
 				
 				 <div class="card-header masterbg margintop" id="heading">
                             
@@ -1803,7 +1865,7 @@ input:checked ~ .tab-content {
 					
 						 <div class="card-header locationbg">
 							<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseReceivables"><i class="fa fa-plus addbg"></i></button>
-							<input type="checkbox" name="checkAll" id="Receivables" class="outstanding submenu"/> Receivables
+							<input type="checkbox" name="checkAll" id="Receivables_head"/> Receivables
 						</div>		
                         
                        
@@ -1819,11 +1881,11 @@ input:checked ~ .tab-content {
                                               <br> -->
                                               @foreach($permission as $value)
                                 @if($value->class == "billwise_receivables")
-								<input type="checkbox"    name="permission[]" class="{{ $value->class }} permission check Receivables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
+								<input type="checkbox"    name="permission[]" class="{{ $value->class }} permission outstanding"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Billwise Receivables</label><br>
                                 @endif
                                 @if($value->class == "partywise_receivables")
-								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check Receivables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
+								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check outstanding"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Partywise Receivables</label>
                                 @endif
                                 @endforeach
@@ -1838,7 +1900,7 @@ input:checked ~ .tab-content {
                 <div class="subparent">
                     <div class="card-header locationbg">
                         <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsePayables"><i class="fa fa-plus addbg"></i></button>
-                        <input type="checkbox" name="checkAll" id="Payables" class="outstanding submenu"/> Payables
+                        <input type="checkbox" name="checkAll" id="Payables"/> Payables
                     </div>	
                     <div id="collapsePayables" class="collapse" data-parent="#accordionExample4">
                     <div class="locationdivbg">
@@ -1851,7 +1913,7 @@ input:checked ~ .tab-content {
                                       @foreach($permission as $value)
                                 @if($value->class == "payable_billwise")
 
-								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check Payables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
+								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission Payables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Billwise Payables</label><br>
                                 @endif
                                 @if($value->class == "payable_partywise")
@@ -1878,7 +1940,7 @@ input:checked ~ .tab-content {
                             
 					<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsefive"><i class="fa fa-plus addbg"></i></button>	
 				
-							 <input style=" text-align: center;" type="checkbox" class="menu" value="collapsefive" id="selling_price"/>
+							 <input style=" text-align: center;" type="checkbox" class="menu" value="collapsefive" id="settings"/>
 							 <b>Settings</b>				
         	   </div>
 				
@@ -1891,15 +1953,15 @@ input:checked ~ .tab-content {
 					
 						 <div class="card-header locationbg">
 							<div class="locationdivbg">
-							 <!-- <input type="checkbox" name="checkAll60" id="selling_price" class="settings submenu"/></label>
-								<label class="control-label"><b>Selling Price</b></label> -->
+							 <input type="checkbox" name="checkAll60" id="selling_price" class="settings submenu"/></label>
+								<label class="control-label"><b>Selling Price</b></label>
 								<div class="col-lg-3 mastersubheading2">
 																			<div class="" id="tab60">  
                                                                             @foreach($permission as $value)
                 @if($value->label == "Selling Price Setup")
-                <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission selling_price"  {{(Role::selectall_check($value->class,$role_id) >= 1) ? "checked" : "" }} value="{{$value->class}}">  
+                <!-- <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission"  {{(Role::selectall_check($value->class,$role_id) >= 4) ? "checked" : "" }} value="{{$value->class}}">  
                         <label class="control-label">Select All</label>
-                        <br>
+                        <br> -->
                         <label class="control-label">Selling Price Setup</label>
                         <br>
                 @endif
@@ -2241,7 +2303,8 @@ input:checked ~ .tab-content {
         // alert(id);
              //var collapse = id;
             if ($(".menu").is(':checked'))
-            {
+      //      if($(".menu").prop("checked") == true)
+          {
 
             $("#"+id+" input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
