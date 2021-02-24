@@ -151,7 +151,7 @@ input:checked ~ .tab-content {
     <!-- card header end@ -->
     <div class="card-body">
     
-    <form  method="post" class="form-horizontal needs-validation">
+    <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('master/role/update/'.$role->id)}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -162,7 +162,7 @@ input:checked ~ .tab-content {
               <label for="validationCustom01" class="col-sm-2 col-form-label">Role <span class="mandatory">*</span></label>
               <div class="col-sm-8">
               <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Role Name" name="name" value="{{old('name', $role->name)
-}}" required readonly>
+}}" required>
 
                 <span class="mandatory"> {{ $errors->first('role_id')  }} </span>
                 <div class="invalid-feedback">
@@ -1891,7 +1891,7 @@ input:checked ~ .tab-content {
 					
 						 <div class="card-header locationbg">
 							<div class="locationdivbg">
-							 <input type="checkbox" name="checkAll60" id="selling_price" class="settings submenu"/></label>
+							 <input type="checkbox" name="checkAll60" id="selling_price" class="submenu"/></label>
 								<label class="control-label"><b>Selling Price</b></label>
 								<div class="col-lg-3 mastersubheading2">
 																			<div class="" id="tab60">  
@@ -2180,6 +2180,7 @@ input:checked ~ .tab-content {
 		  
 	
         <div class="col-md-7 text-right">
+          <button class="btn btn-success submit" name="add" type="submit">Submit</button>
         </div>
       </form>
     </div>
@@ -2188,35 +2189,9 @@ input:checked ~ .tab-content {
   </div>
 </div>
 
+
 <script>
     $(document).ready(function(){
-
-        $(".all_classname:checked").each(function(){
-       
-       var permission = $(this).attr('class').split(' ')[3];
-       var checked = $("."+permission+":checked").length;
-       var unchecked = $("."+permission).length;
-       if(checked == unchecked)
-       {
-           $("#" + permission).prop('checked', true);
-
-
-       }
-    });
-    $(".submenu").each(function(){
-
-        var permission = $(this).attr('class').split(' ')[0];
-       var checked = $("."+permission+":checked").length;
-       var unchecked = $("."+permission).length;
-       if(checked == unchecked)
-       {
-           $("#" + permission).prop('checked', true);
-
-
-       }
-
-
-    });
 
         // Add minus icon for collapse element which is open by default
         $(".collapse.show").each(function(){
@@ -2230,8 +2205,7 @@ input:checked ~ .tab-content {
         	$(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
         });
 
-        $("input[type=checkbox]").prop("disabled", true);
-
+      
     });
 // Master Menu check fn
     $(".menu").click(function () {

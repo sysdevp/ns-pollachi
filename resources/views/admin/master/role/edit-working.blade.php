@@ -151,7 +151,7 @@ input:checked ~ .tab-content {
     <!-- card header end@ -->
     <div class="card-body">
     
-    <form  method="post" class="form-horizontal needs-validation">
+    <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('master/role/update/'.$role->id)}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
         <div class="form-row">
@@ -162,7 +162,7 @@ input:checked ~ .tab-content {
               <label for="validationCustom01" class="col-sm-2 col-form-label">Role <span class="mandatory">*</span></label>
               <div class="col-sm-8">
               <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Role Name" name="name" value="{{old('name', $role->name)
-}}" required readonly>
+}}" required>
 
                 <span class="mandatory"> {{ $errors->first('role_id')  }} </span>
                 <div class="invalid-feedback">
@@ -1784,9 +1784,77 @@ input:checked ~ .tab-content {
 	  
       </div>
 				
+      <div class="card-header masterbg margintop" id="heading">
+                            
+      <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsefour"><i class="fa fa-plus addbg"></i></button>	
+                        
+                                     
+                                     <input style=" text-align: center;" type="checkbox" class="menu" id="outstanding" value="collapsefour">
+                                     <b>Outstanding</b></h4>
+                   </div>
+                        
+               
+                   <div id="collapsefour" class="collapse" data-parent="#accordionExample4">			
+                
+                    <div id="accordionExample4">
+                        
+                        <div class="subparent">
+                            
+                                 <div class="card-header locationbg">
+                               
+                                     <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseReceivables"><i class="fa fa-plus addbg"></i></button>
+							<input type="checkbox" name="checkAll" id="Receivables" class="outstanding submenu"/> Receivables
+ </div>
+                            
+                            
+ <div id="collapseReceivables" class="collapse" data-parent="#accordionExample4">
+                                    
+                                    <div class="locationdivbg">
+                                        
+                        <div class="row" id="location_div">
+                            <div class="col-lg-2 mastersubheading2">
+                                <div class="" id="tab58">		
+                                @foreach($permission as $value)
+                        @if($value->label == "Billwise Receivables")
+                        <input type="checkbox" name="permission[]" class="all_{{ $value->class }}_master all_classname permission Receivables"   {{(Role::selectall_check($value->class,$role_id) >= 4) ? "checked" : "" }} value="{{$value->class}}">  
+                                <label class="control-label">Select All</label>
+                                <br>
+
+                        @endif
+                            @if($value->class == "billwise_receivables")
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" name="permission[]" class="{{ $value->class }} permission check Receivables"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}">  
+                            <span class="control-label">{{$value->name1}}</span>
+                            <br>
+                            @endif
+                        @endforeach                                                                                                                                   
+                            </div>	
+                        </div>
+                                     
+                        </div>
+                </div>
+                                    
+                                </div>	
+                            
+                        </div>
+                        
+                        
+                        
+                      
+                        
+                        
+                        
+                      
+        
+
+                        
+                  </div>
+                  
+              
+              
+              </div>
 				
-				
-				 <div class="card-header masterbg margintop" id="heading">
+				 <!-- <div class="card-header masterbg margintop" id="heading">
                             
                 <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsefour"><i class="fa fa-plus addbg"></i></button>	
             
@@ -1803,7 +1871,7 @@ input:checked ~ .tab-content {
 					
 						 <div class="card-header locationbg">
 							<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapseReceivables"><i class="fa fa-plus addbg"></i></button>
-							<input type="checkbox" name="checkAll" id="Receivables_head"/> Receivables
+							<input type="checkbox" name="checkAll" class="outstanding submenu" id="Receivables_head"/> Receivables
 						</div>		
                         
                        
@@ -1814,16 +1882,14 @@ input:checked ~ .tab-content {
                                 <div class="row" id="Receivables_div">
 								    <div class="col-lg-3 mastersubheading2">
                                         <div class="" id="tab58">
-                                           <!-- <input type="checkbox" name="checkAll58" id="checkAll58"/></label>
-                                              <label class="control-label">Select All</label>
-                                              <br> -->
+
                                               @foreach($permission as $value)
                                 @if($value->class == "billwise_receivables")
-								<input type="checkbox"    name="permission[]" class="{{ $value->class }} permission outstanding"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
+								<input type="checkbox"    name="permission[]" class="{{ $value->class }} permission Receivables_head"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Billwise Receivables</label><br>
                                 @endif
                                 @if($value->class == "partywise_receivables")
-								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check outstanding"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
+								<input type="checkbox"   name="permission[]" class="{{ $value->class }} permission check Receivables_head"  {{ in_array($value->id, $rolePermissions) ? "checked" : "" }} value="{{$value->id}}"/></label>
 								<label class="control-label">Partywise Receivables</label>
                                 @endif
                                 @endforeach
@@ -1845,9 +1911,7 @@ input:checked ~ .tab-content {
                         <div class="row" id="Payables_div">
                             <div class="col-lg-3 mastersubheading2">
                                 <div class="" id="tab59">
-                                   <!-- <input type="checkbox" name="checkAll59" id="checkAll59"/></label>
-                                      <label class="control-label">Select All</label>
-                                      <br> -->
+                                   
                                       @foreach($permission as $value)
                                 @if($value->class == "payable_billwise")
 
@@ -1870,7 +1934,7 @@ input:checked ~ .tab-content {
 				
 			
 				
-		  </div>
+		  </div> -->
 				
 				
 				
@@ -1891,7 +1955,7 @@ input:checked ~ .tab-content {
 					
 						 <div class="card-header locationbg">
 							<div class="locationdivbg">
-							 <input type="checkbox" name="checkAll60" id="selling_price" class="settings submenu"/></label>
+							 <input type="checkbox" name="checkAll60" id="selling_price" class="submenu"/></label>
 								<label class="control-label"><b>Selling Price</b></label>
 								<div class="col-lg-3 mastersubheading2">
 																			<div class="" id="tab60">  
@@ -2180,6 +2244,7 @@ input:checked ~ .tab-content {
 		  
 	
         <div class="col-md-7 text-right">
+          <button class="btn btn-success submit" name="add" type="submit">Submit</button>
         </div>
       </form>
     </div>
@@ -2188,35 +2253,34 @@ input:checked ~ .tab-content {
   </div>
 </div>
 
+
 <script>
     $(document).ready(function(){
 
-        $(".all_classname:checked").each(function(){
+              
+       $(".all_classname:checked").each(function(){
        
-       var permission = $(this).attr('class').split(' ')[3];
-       var checked = $("."+permission+":checked").length;
-       var unchecked = $("."+permission).length;
-       if(checked == unchecked)
-       {
-           $("#" + permission).prop('checked', true);
+        var permission = $(this).attr('class').split(' ')[3];
+        var checked = $("."+permission+":checked").length;
+        var unchecked = $("."+permission).length;
+        if(checked == unchecked)
+        {
+            $("#" + permission).prop('checked', true);
 
 
-       }
-    });
-    $(".submenu").each(function(){
-
-        var permission = $(this).attr('class').split(' ')[0];
-       var checked = $("."+permission+":checked").length;
-       var unchecked = $("."+permission).length;
-       if(checked == unchecked)
-       {
-           $("#" + permission).prop('checked', true);
+        }
+        $("#" + permission+":checked").each(function(){
+            var menu = $(this).attr('class').split(' ')[0];
+             $("#" + menu).prop('checked', true);
+        });
+        //alert(ssss);
+        // $("."+permission+":checked").each(function(){
 
 
-       }
-
+        // });
 
     });
+
 
         // Add minus icon for collapse element which is open by default
         $(".collapse.show").each(function(){
@@ -2230,8 +2294,7 @@ input:checked ~ .tab-content {
         	$(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
         });
 
-        $("input[type=checkbox]").prop("disabled", true);
-
+      
     });
 // Master Menu check fn
     $(".menu").click(function () {
@@ -2244,6 +2307,7 @@ input:checked ~ .tab-content {
 
             $("#"+id+" input[type=checkbox]").each(function () {
                 $(this).prop("checked", true);
+                // alert('ss');
             });
         }
          else {
