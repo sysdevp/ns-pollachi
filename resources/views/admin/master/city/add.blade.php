@@ -1,5 +1,10 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Models\City;
+$test = City::validation('state_ids');
+//echo $test;exit;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -27,9 +32,9 @@
           
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">State <?php echo City::mandotory('state_ids') ;?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 form-control custom-select state_id" name="state_id" required>
+                <select class="js-example-basic-multiple col-12 form-control custom-select state_id" name="state_id" <?php echo City::validation('state_ids') ;?>>
                   <option value="">Choose State</option>
                   @foreach($state as $value)
                   @if (old('state_id') == $value->id)

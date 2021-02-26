@@ -35,8 +35,13 @@ class StateController extends Controller
         return view('admin.master.state.add');
     }
 
-    public function store(StateRequest $request)
+    public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'state_id' => 'required',
+            'district_id' => 'required',
+            'name' => 'required|unique:cities,name,NULL,id,deleted_at,NULL,state_id,' . $request->state_id . ',district_id,' . $request->district_id
+        ])->validate();
 
             $state = new State;
             $state->name       = Input::get('name');
@@ -64,9 +69,14 @@ class StateController extends Controller
         return view('admin.master.state.edit', compact('state'));
     }
 
-    public function update(StateRequest $request, State $state, $id)
+    public function update(Request $request, State $state, $id)
     {
         $state = State::find($id);
+        $validator = Validator::make($request->all(), [
+            'state_id' => 'required',
+            'district_id' => 'required',
+            'name' => 'required|unique:cities,name,NULL,id,deleted_at,NULL,state_id,' . $request->state_id . ',district_id,' . $request->district_id
+        ])->validate();
         // $validator = Validator::make($request->all(), [
         //     'name' => 'required|unique:states,name,' . $id . ',id,deleted_at,NULL',
         //     'code' => 'required|unique:states,code,' . $id . ',id,deleted_at,NULL',

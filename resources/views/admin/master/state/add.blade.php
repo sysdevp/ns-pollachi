@@ -1,5 +1,9 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
+<?php //echo Mandatoryfields::mandatory('state_name');exit;?>
 <main class="page-content">
 
 	<div class="container-fuild">
@@ -28,9 +32,10 @@
         <div class="form-row">
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">State Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">State Name <?php echo Mandatoryfields::mandatory('state_name');?>
+</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="State Name" name="name" value="{{old('name')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="State Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('state_name');?>>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid State Name
@@ -40,9 +45,10 @@
           </div>
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">State Code <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">State Code <?php echo Mandatoryfields::mandatory('state_code');?>
+</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control code only_allow_digit" placeholder="State Code" name="code" value="{{old('code')}}"  required>
+                <input type="text" class="form-control code only_allow_digit" placeholder="State Code" name="code" value="{{old('code')}}"  <?php echo Mandatoryfields::validation('state_code');?>>
                 <span class="mandatory"> {{ $errors->first('code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid State Code
@@ -52,9 +58,13 @@
           </div>
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('state_remark');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark">
+                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark" <?php echo Mandatoryfields::validation('state_remark');?>>
+                <span class="mandatory"> {{ $errors->first('code')  }} </span>
+                <div class="invalid-feedback">
+                  Enter valid State Code
+                </div>
               </div>
             </div>
           </div>

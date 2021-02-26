@@ -17,4 +17,13 @@ class City extends Model
     public function district(){
         return $this->belongsTo('App\Models\District', 'district_id', 'id');
     }
+    public static function validation($name)
+    {
+        return 'required';
+    }
+    public static function mandotory($name)
+    {
+        return '<span class="mandatory">*</span>';
+    }
+    
 }

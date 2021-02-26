@@ -45,10 +45,9 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'state_id' => 'required',
-            'district_id' => 'required',
-            'name' => 'required|unique:cities,name,NULL,id,deleted_at,NULL,state_id,' . $request->state_id . ',district_id,' . $request->district_id
-        ])->validate();
+            'name' => 'required|unique:states,name,'.$this->id.',id,deleted_at,NULL',
+            'code' => 'required|unique:states,code,'.$this->id.',id,deleted_at,NULL'
+             ])->validate();
 
 
 

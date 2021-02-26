@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <div class="form-row">
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">District Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">District Name <?php echo Mandatoryfields::mandatory('district_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="District Name" name="name" value="{{old('name')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="District Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('district_name');?>>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid District Name
@@ -39,9 +42,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">State <?php echo Mandatoryfields::mandatory('district_state_id');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" <?php echo Mandatoryfields::validation('district_state_id');?>>
                   <option value="">Choose States</option>
                   @foreach($state as $value)
                   <option value="{{ $value->id }}" {{ old('state_id') == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
@@ -61,9 +64,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('district_remark');?> </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark">
+                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark" <?php echo Mandatoryfields::validation('district_remark');?>>
               </div>
             </div>
           </div>
