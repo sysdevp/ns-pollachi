@@ -12,11 +12,12 @@ class Mandatoryfields extends Model
         $where_check = Mandatoryfields::where('check',$name)->first();
         if($where_check!="")
 
-        if($where_check->defaultfields == 1)
+        if($where_check->defaultfields == 1 && $where_check->mandatory == 1)
         {
-            return 'required disabled';
+           // return 'required disabled';
+            return 'required';
         }
-        else if($where_check->mandatory == 1)
+        else if($where_check->defaultfields == 0 && $where_check->mandatory == 1)
         {
             return 'required';
         }

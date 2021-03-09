@@ -188,14 +188,16 @@ input:checked ~ .tab-content {
 							<div class="locationdivbg">
 								
 				<div class="row" id="location_div">
+
+        <!-- State -->
                     <div class="col-lg-2 mastersubheading2">
                         <div class="" id="tab1">		
 
                         <label class="control-label">State</label>
                         <br>
-                        <input type="checkbox"  c >  
+                        <!-- <input type="checkbox"  c >  
                         <label class="control-label">Select All</label>
-                        <br>
+                        <br> -->
                         <input type="checkbox"  name="permission[]" class="state_list" value="state_name" <?php echo Mandatoryfields::checkbox('state_name'); ?>>  
                         <span class="control-label">State Name</span>
                         <br>                                                                                    
@@ -207,23 +209,101 @@ input:checked ~ .tab-content {
                     </div>	
                 </div>
 									
-									
+									<!-- District -->
 				<div class="col-lg-2 mastersubheading2">
                     <div class="" id="tab2">
                         <label class="control-label">District</label>
                         <br>                       
-                        <input type="checkbox" name="permission[]" class="district_list permission" value="district_name" <?php echo Mandatoryfields::checkbox('district_name'); ?>>   
+                        <input type="checkbox" name="permission[]" class="district_list" value="district_name" <?php echo Mandatoryfields::checkbox('district_name'); ?>>   
                         <span class="control-label">District Name</span>
                         <br>                    
-                        <input type="checkbox" name="permission[]" class="district_list permission" value="district_state_id" <?php echo Mandatoryfields::checkbox('district_state_id'); ?>>  
+                        <input type="checkbox" name="permission[]" class="district_list" value="district_state_id" <?php echo Mandatoryfields::checkbox('district_state_id'); ?>>  
                         <span class="control-label">State Name</span>
                         <br>                    
-                        <input type="checkbox" name="permission[]" class="district_list permission" value="district_remark" <?php echo Mandatoryfields::checkbox('district_remark'); ?>>  
+                        <input type="checkbox" name="permission[]" class="district_list" value="district_remark" <?php echo Mandatoryfields::checkbox('district_remark'); ?>>  
                         <span class="control-label">Remarks</span>
                     </div>	
                 </div>
-           							
+           							<!--City  -->
            
+                         <div class="col-lg-2 mastersubheading2">
+                    <div class="" id="tab3">
+                        <label class="control-label">City</label>
+                        <br>                       
+                        <input type="checkbox" name="permission[]" class="city_list" value="city_state_id" <?php echo Mandatoryfields::checkbox('city_state_id'); ?>>  
+                        <span class="control-label">State</span>
+                        <br>                       
+                        <input type="checkbox" name="permission[]" class="city_list" value="city_district_id" <?php echo Mandatoryfields::checkbox('city_district_id'); ?>>  
+                        <span class="control-label">District</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="city_list" value="city_name" <?php echo Mandatoryfields::checkbox('city_name'); ?>>   
+                        <span class="control-label">City Name</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="city_list" value="city_remark" <?php echo Mandatoryfields::checkbox('city_remark'); ?>>  
+                        <span class="control-label">Remarks</span>
+                    </div>	
+                </div>   
+            <!--Location type  -->
+
+            <div class="col-lg-2 mastersubheading2">
+                    <div class="" id="tab4">
+                        <label class="control-label">Location Type</label>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="locationtype_name" value="locationtype_name" <?php echo Mandatoryfields::checkbox('locationtype_name'); ?>>   
+                        <span class="control-label">Location Type</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="locationtype_remark" value="locationtype_remark" <?php echo Mandatoryfields::checkbox('locationtype_remark'); ?>>  
+                        <span class="control-label">Remarks</span>
+                    </div>	
+                </div>   
+
+            <!--Address Type  -->
+            <div class="col-lg-2 mastersubheading2">
+                    <div class="" id="tab5">
+                        <label class="control-label">Address Type</label>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_name" value="addresstype_name" <?php echo Mandatoryfields::checkbox('addresstype_name'); ?>>   
+                        <span class="control-label">Address Type</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">Remarks</span>
+                    </div>	
+                </div>  
+            <!-- Ho Details -->
+            <!-- <div class="col-lg-2 mastersubheading2">
+                    <div class="" id="tab6">
+                        <label class="control-label">Ho Details</label>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="location_name" value="addresstype_name" <?php echo Mandatoryfields::checkbox('addresstype_name'); ?>>   
+                        <span class="control-label">Location Name</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">Address Line1</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">Address Line2</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">Land Mark</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">State</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">District</span>
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">City</span>
+
+                        <br>                    
+                        <input type="checkbox" name="permission[]" class="addresstype_remark" value="addresstype_remark" <?php echo Mandatoryfields::checkbox('addresstype_remark'); ?>>  
+                        <span class="control-label">Postal Code</span>
+
+                    </div>	
+                </div>   -->
+
+
+                <!-- div end -->
 								
 				</div>
         </div>
@@ -295,18 +375,7 @@ input:checked ~ .tab-content {
 				</div>
 	
 				
-				
 		
-             
-          
-
-		  </div>
-		  
-      
-	  
-      </div>
-				
-				
 			<div class="card-header masterbg margintop" id="heading" >
                             
 					<button type="button" class="btn btn-link" data-toggle="collapse" data-target="#collapsetwo"><i class="fa fa-plus addbg"></i></button>	
@@ -462,6 +531,17 @@ input:checked ~ .tab-content {
 					
 				</div>
 				
+		
+             
+          
+
+		  </div>
+		  
+      
+	  
+      </div>
+				
+		
 		  </div>
 		  
       

@@ -1,7 +1,16 @@
 
 $(document).ready(function() {
-  
-    // Setup - add a text input to each footer cell
+   $(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
+    $(this).closest(".select2-container").siblings('select:enabled').select2('open');
+  });
+//   var ss = $("#add").attr("tabindex");
+//   alert(ss);
+  //   if(ss==6)
+//   {
+//     $(this).attr("tabindex");
+
+//   }
+  // Setup - add a text input to each footer cell
     $('#master thead tr,#receivable_bill thead tr,#receivable_party thead tr,#payable_bill thead tr,#payable_party thead tr,#day_book thead tr,#ageing_report thead tr,#b2b thead tr,#b2c thead tr,#registered thead tr,#unregistered thead tr,#out_b2b thead tr,#stock_summary thead tr').clone(true).appendTo( '#master thead','#receivable_bill thead','#receivable_party thead','#stock_summary thead','#payable_bill thead','#payable_party thead','#day_book thead','#ageing_report thead','#b2b thead','#registered thead','#unregistered thead','#out_b2b thead');
     $('#master thead tr:eq(1) th,#receivable_bill thead tr:eq(1) th,#receivable_party thead tr:eq(1) th,#payable_bill thead tr:eq(1) th,#payable_party thead tr:eq(1) th,#day_book thead tr:eq(1) th,#ageing_report thead tr:eq(1) th,#b2b thead tr:eq(1) th,#b2c thead tr:eq(1) th,#registered thead tr:eq(1) th,#unregistered thead tr:eq(1) th,#out_b2b thead tr:eq(1) th,#stock_summary thead tr:eq(1) th').each( function (i) {
         var title = $(this).text();

@@ -35,7 +35,7 @@ use App\Mandatoryfields;
               <label for="validationCustom01" class="col-sm-4 col-form-label">State Name <?php echo Mandatoryfields::mandatory('state_name');?>
 </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="State Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('state_name');?>>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="State Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('state_name');?> autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid State Name

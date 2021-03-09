@@ -50,7 +50,7 @@ use App\Mandatoryfields;
                 </select>
                 <span class="mandatory"> {{ $errors->first('state_id')  }} </span>
                 <div class="invalid-feedback">
-                  Enter valid State 
+                  Select valid State 
                 </div>
               </div>
               <a href="{{ url('master/state/create')}}" target="_blank">
@@ -64,6 +64,9 @@ use App\Mandatoryfields;
               <label for="validationCustom01" class="col-sm-4 col-form-label">Remark<?php echo Mandatoryfields::mandatory('district_remark');?> </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control remark" name="remark" value="{{ $district->remark }}{{old('remark')}}" placeholder="Remark" <?php echo Mandatoryfields::validation('district_remark');?>>
+                <div class="invalid-feedback">
+                  Enter Remark 
+                </div>
               </div>
             </div>
           </div>
