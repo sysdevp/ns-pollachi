@@ -28,9 +28,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank <?php echo Mandatoryfields::mandatory('companybank_bankid ');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 custom-select bank_id" name="bank_id" required>
+                <select class="js-example-basic-multiple col-12 custom-select bank_id" name="bank_id" <?php echo Mandatoryfields::validation('companybank_bankid');?> tabindex="1" autofocus>
                   <option value="{{$company_bank->bank_id}}">{{$company_bank->bank->name}}</option>
                   @foreach($bank as $value)
                   <option value="{{ $value->id }}" {{ old('bank_id') == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
@@ -49,9 +49,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Branch Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Branch Name <?php echo Mandatoryfields::mandatory('companybank_bankbranchid ');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 custom-select bank_branch_id" name="bank_branch_id" required>
+                <select class="js-example-basic-multiple col-12 custom-select bank_branch_id" name="bank_branch_id" <?php echo Mandatoryfields::validation('companybank_bankbranchid');?> tabindex="2">
                   <option value="{{ $company_bank->bank_branch_id }}">{{$company_bank->bank_branch->branch}}</option>
                   @foreach($branch as $value)
                   <option value="{{ $value->id }}" {{ old('bank_id') == $value->id ? 'selected' : '' }} >{{ $value->branch }}</option>
@@ -70,9 +70,9 @@
           
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Account Type <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Account Type <?php echo Mandatoryfields::mandatory('companybank_accounttypeid ');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 custom-select account_type_id" name="account_type_id" required>
+                <select class="js-example-basic-multiple col-12 custom-select account_type_id" name="account_type_id" <?php echo Mandatoryfields::validation('companybank_accounttypeid');?> tabindex="3">
                   <option value="{{ $company_bank->account_type_id }}">{{$company_bank->account_types->name}}</option>
                   @foreach($account_type as $value)
                   <option value="{{ $value->id }}" {{ old('bank_id') == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
@@ -91,9 +91,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Account Holder Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Account Holder Name <?php echo Mandatoryfields::mandatory('companybank_holdername ');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  only_allow_alp_numeric  holder_name" placeholder="Account Holder Name" name="holder_name" value="{{ $company_bank->holder_name }}" required>
+                <input type="text" class="form-control  only_allow_alp_numeric  holder_name" placeholder="Account Holder Name" name="holder_name" value="{{ $company_bank->holder_name }}" <?php echo Mandatoryfields::validation('companybank_holdername');?> tabindex="4">
                 <span class="mandatory"> {{ $errors->first('holder_name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Account Holder Name 
@@ -104,9 +104,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Account No <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Account No <?php echo Mandatoryfields::mandatory('companybank_accountno ');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  only_allow_alp_numeric  account_no" placeholder="Account No" name="account_no" value="{{ $company_bank->account_no }}" required>
+                <input type="text" class="form-control  only_allow_alp_numeric  account_no" placeholder="Account No" name="account_no" value="{{ $company_bank->account_no }}" <?php echo Mandatoryfields::validation('companybank_accountno');?> tabindex="5">
                 <span class="mandatory"> {{ $errors->first('account_no')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Account No
@@ -117,7 +117,7 @@
           
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="6">Submit</button>
         </div>
       </form>
     </div>

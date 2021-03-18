@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,10 +29,10 @@
 
           <div class="col-md-12 row mb-3">
             <div class="col-md-2">
-              <font>Name:</font>
+              <font>Name: <?php echo Mandatoryfields::mandatory('pricelevel_level');?></font>
             </div>
             <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="Level Name" id="level" name="level" value="">
+              <input type="text" class="form-control" placeholder="Level Name" id="level" name="level" value="" <?php echo Mandatoryfields::validation('pricelevel_level');?> autofocus>
 
             </div>
             
@@ -53,10 +56,10 @@
 
           <div class="col-md-12 row mb-3">
             <div class="col-md-2">
-              <font>Value:</font>
+              <font>Value:<?php echo Mandatoryfields::mandatory('pricelevel_value');?></font>
             </div>
             <div class="col-md-3">
-              <input type="text" class="form-control" placeholder="Value" id="value" name="value" value="">
+              <input type="text" class="form-control" placeholder="Value" id="value" name="value" value="" <?php echo Mandatoryfields::validation('pricelevel_value');?>>
             </div>
   
           </div> 

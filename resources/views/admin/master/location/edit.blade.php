@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
       <div class="form-row">
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Location Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Location Name <?php echo Mandatoryfields::mandatory('companylocation_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Location Name" name="name" value="{{old('name',$location->name)}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Location Name" name="name" value="{{old('name',$location->name)}}" <?php echo Mandatoryfields::validation('companylocation_name');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Location Name
@@ -39,9 +42,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Location Type <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Location Type <?php echo Mandatoryfields::mandatory('companylocation_locationtypeid');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select location_type_id" name="location_type_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select location_type_id" name="location_type_id" <?php echo Mandatoryfields::validation('companylocation_locationtypeid');?> tabindex="2">
                   <option value="">Choose Location Type</option>
                   @foreach($location_type as $value)
                   <option value="{{ $value->id }}" {{ old('location_type_id',$location->location_type_id) == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
@@ -61,9 +64,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <?php echo Mandatoryfields::mandatory('companylocation_addressline1');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_1" placeholder="Address Line 1" name="address_line_1" value="{{old('address_line_1',$location->address_line_1)}}" required>
+                <input type="text" class="form-control address_line_1" placeholder="Address Line 1" name="address_line_1" value="{{old('address_line_1',$location->address_line_1)}}" <?php echo Mandatoryfields::validation('companylocation_addressline1');?> tabindex="3">
                 <span class="mandatory"> {{ $errors->first('address_line_1')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -74,9 +77,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 2 </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 2 <?php echo Mandatoryfields::mandatory('companylocation_addressline2');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_2" placeholder="Address Line 2" name="address_line_2" value="{{old('address_line_2',$location->address_line_2)}}">
+                <input type="text" class="form-control address_line_2" placeholder="Address Line 2" name="address_line_2" value="{{old('address_line_2',$location->address_line_2)}}" <?php echo Mandatoryfields::validation('companylocation_addressline2');?> tabindex="4">
                 <span class="mandatory"> {{ $errors->first('address_line_2')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -87,9 +90,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="land_mark" class="col-sm-4 col-form-label">Land Mark </label>
+              <label for="land_mark" class="col-sm-4 col-form-label">Land Mark <?php echo Mandatoryfields::mandatory('companylocation_landmark');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control land_mark" placeholder="Land Mark" name="land_mark" value="{{old('land_mark',$location->land_mark)}}">
+                <input type="text" class="form-control land_mark" placeholder="Land Mark" name="land_mark" value="{{old('land_mark',$location->land_mark)}}" <?php echo Mandatoryfields::validation('companylocation_landmark');?> tabindex="5">
                 <span class="mandatory"> {{ $errors->first('land_mark')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Land Mark
@@ -101,9 +104,9 @@
           
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">State <?php echo Mandatoryfields::mandatory('companylocation_stateid');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" <?php echo Mandatoryfields::validation('companylocation_stateid');?> tabindex="6">
                   <option value="">Choose State</option>
                   @foreach($state as $value)
                   <option value="{{ $value->id }}" {{ old('state_id',$location->state_id) == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
@@ -123,9 +126,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">District </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">District <?php echo Mandatoryfields::mandatory('companylocation_districtid');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select district_id" name="district_id">
+                <select class="js-example-basic-multiple form-control col-12 custom-select district_id" name="district_id" <?php echo Mandatoryfields::validation('companylocation_districtid');?> tabindex="7">
                   <option value="">Choose District</option>
                 </select>
                 <span class="mandatory"> {{ $errors->first('district_id')  }} </span>
@@ -144,9 +147,9 @@
           
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">City </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">City <?php echo Mandatoryfields::mandatory('companylocation_cityid');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select city_id" name="city_id" >
+                <select class="js-example-basic-multiple form-control col-12 custom-select city_id" name="city_id" <?php echo Mandatoryfields::validation('companylocation_cityid');?> tabindex="8">
                   <option value="">Choose City</option>
                 </select>
                 <span class="mandatory"> {{ $errors->first('city_id')  }} </span>
@@ -164,9 +167,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
+              <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <?php echo Mandatoryfields::mandatory('companylocation_postalcode');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_digit postal_code" placeholder="Postal Code" name="postal_code" value="{{old('postal_code',$location->postal_code)}}" required>
+                <input type="text" class="form-control only_allow_digit postal_code" placeholder="Postal Code" name="postal_code" value="{{old('postal_code',$location->postal_code)}}" <?php echo Mandatoryfields::validation('companylocation_postalcode');?> tabindex="9">
                 <span class="mandatory"> {{ $errors->first('postal_code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Postal Code
@@ -177,7 +180,7 @@
 
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" type="submit">Submit</button>
+          <button class="btn btn-success" type="submit" tabindex="10">Submit</button>
         </div>
       </form>
     </div>

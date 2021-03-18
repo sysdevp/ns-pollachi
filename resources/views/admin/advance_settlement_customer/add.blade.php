@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <div class="form-row">
           <div class="col-md-6">
                   <div class="form-group row">
-                    <label for="validationCustom01" class="col-sm-4 col-form-label">Customer Name :</label>
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Customer Name <?php echo Mandatoryfields::mandatory('advancefromcustomer_customerid');?>:</label>
                      <div class="col-sm-6">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id"  name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id"  name="customer_id" id="customer_id" <?php echo Mandatoryfields::validation('advancefromcustomer_customerid');?> autofocus>
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -47,15 +50,15 @@
 
                           <div class="row col-md-12 expense">
                             <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Receipt Voucher No</label><br>
+                    <label style="font-family: Times new roman;">Receipt Voucher No<?php echo Mandatoryfields::mandatory('advancefromcustomer_voucher_no');?></label><br>
                   <div class="form-group row">
-                     <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="">
+                     <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="" <?php echo Mandatoryfields::validation('advancefromcustomer_voucher_no');?>>
                      
                   </div>
                </div>
                       <div class="col-md-3">
-                        <label style="font-family: Times new roman;">Date</label>
-                      <input type="date" class="form-control date" id="date"  placeholder="" name="receipt_date" step="any" value="">
+                        <label style="font-family: Times new roman;">Date<?php echo Mandatoryfields::mandatory('advancefromcustomer_date');?></label>
+                      <input type="date" class="form-control date" id="date"  placeholder="" name="receipt_date" step="any" value="" <?php echo Mandatoryfields::validation('advancefromcustomer_date');?>>
 
                       <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
 
@@ -71,9 +74,9 @@
         <div class="form-row">
         <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Total Advance Amount : </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Total Advance Amount <?php echo Mandatoryfields::mandatory('advancefromcustomer_advanceamount');?>: </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control request_no" placeholder="Total Advance Amount" name="advance_amount" value="">
+                <input type="text" class="form-control request_no" placeholder="Total Advance Amount" name="advance_amount" value="" <?php echo Mandatoryfields::validation('advancefromcustomer_advanceamount');?>>
               </div>
             </div>
           </div>
@@ -117,9 +120,9 @@
         <div class="form-row">
         <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label"> Remarks : </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> Remarks <?php echo Mandatoryfields::mandatory('advancefromcustomer_remark');?>: </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" placeholder="Remarks" name="remark" value="">
+                <input type="text" class="form-control remark" placeholder="Remarks" name="remark" value="" <?php echo Mandatoryfields::validation('advancefromcustomer_remark');?>>
               </div>
             </div>
           </div>

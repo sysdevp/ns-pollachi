@@ -8,6 +8,8 @@ use App\Models\AddressType;
 use App\Models\Agent;
 use App\Models\ProofDetails;
 use App\Models\State;
+use App\Models\District;
+use App\Models\City;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -27,7 +29,9 @@ class AgentController extends Controller
         
         $address_type=AddressType::all();
         $state=State::all();
-        return view('admin.master.agent.add',compact('address_type','state'));
+        $city=City::all();
+        $district=District::all();
+        return view('admin.master.agent.add',compact('address_type','state','city','district'));
     }
 
     

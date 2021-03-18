@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 
@@ -27,9 +30,9 @@
         <div class="form-row">
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Branch Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Branch Name <?php echo Mandatoryfields::mandatory('bankbranch_branch ');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp branch caps" placeholder="Branch Name" name="branch" value="{{old('branch')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp branch caps" placeholder="Branch Name" name="branch" value="{{old('branch')}}" <?php echo Mandatoryfields::validation('bankbranch_branch');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('branch')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Branch Name
@@ -39,9 +42,9 @@
           </div>
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank <?php echo Mandatoryfields::mandatory('bankbranch_bankid ');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 custom-select bank_id" name="bank_id" required>
+                <select class="js-example-basic-multiple col-12 custom-select bank_id" name="bank_id" <?php echo Mandatoryfields::validation('bankbranch_bankid');?> tabindex="2">
                   <option value="">Choose Bank</option>
                   @foreach($bank as $value)
                   <option value="{{ $value->id }}" {{ old('bank_id') == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
@@ -60,9 +63,9 @@
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Ifsc Code <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Ifsc Code <?php echo Mandatoryfields::mandatory('bankbranch_ifsc ');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  only_allow_alp_numeric  ifsc" placeholder="IFSC Code" name="ifsc" value="{{old('ifsc')}}" required>
+                <input type="text" class="form-control  only_allow_alp_numeric  ifsc" placeholder="IFSC Code" name="ifsc" value="{{old('ifsc')}}" <?php echo Mandatoryfields::validation('bankbranch_ifsc');?> tabindex="3">
                 <span class="mandatory"> {{ $errors->first('ifsc')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Ifsc Code
@@ -73,7 +76,7 @@
           
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="4">Submit</button>
         </div>
       </form>
     </div>

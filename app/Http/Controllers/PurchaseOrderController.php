@@ -20,6 +20,7 @@ use App\Models\Tax;
 use App\Models\AccountHead;
 use App\Models\Location;
 use Carbon\Carbon;
+use App\Models\VoucherNumbering;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseOrderBeta;
 use App\Models\PurchaseOrderBetaItem;
@@ -28,6 +29,7 @@ use App\Models\PurchaseOrderExpense;
 use App\Models\PurchaseOrderBetaExpense;
 use App\Models\PurchaseOrderTax;
 use App\Models\PurchaseOrderBetaTax;
+use App\Models\PurchaseVoucherType;
 use Illuminate\Support\Facades\Redirect;
 
 class PurchaseOrderController extends Controller
@@ -188,26 +190,53 @@ class PurchaseOrderController extends Controller
         $tax = Tax::all();
         $account_head = AccountHead::all();
         $location = Location::all();
-        
+        $voucher_type = PurchaseVoucherType::where('name','Purchase Order')->get();
 
-        $voucher_num=Purchase_Order::orderBy('po_no','DESC')
-                           ->select('po_no')
+        $voucher_num=VoucherNumbering::where('id',2)
                            ->first();
 
-         if ($voucher_num == null) 
+                          // echo "<pre>"; print_r($voucher_num); exit();
+
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=Purchase_Order::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
          {
-             $voucher_no=1;
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
               
          }                  
-         else
+         else if($voucher_num->starting_no != null && $vouchers == null)
          {
-             $current_voucher_num=$voucher_num->po_no;
-             $voucher_no=$current_voucher_num+1;
+            $next_no=$starting_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
         
-         
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
          }
 
-        return view('admin.purchaseorder.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','tax','account_head','location'));
+        return view('admin.purchaseorder.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','tax','account_head','location','voucher_type'));
         
     }
 
@@ -222,32 +251,68 @@ class PurchaseOrderController extends Controller
 
         if($request->has('check'))
         {
-            $po_no=PurchaseOrderBeta::orderBy('po_no','DESC')
-                           ->select('po_no')
-                           ->first();
+            // $po_no=PurchaseOrderBeta::orderBy('po_no','DESC')
+            //                ->select('po_no')
+            //                ->first();
+            $vouchers=PurchaseOrderBeta::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         else
         {
-            $po_no=Purchase_Order::orderBy('po_no','DESC')
-                           ->select('po_no')
-                           ->first();
+            // $po_no=Purchase_Order::orderBy('po_no','DESC')
+            //                ->select('po_no')
+            //                ->first();
+            $vouchers=Purchase_Order::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         
 
         $tax = Tax::all();                   
 
-         if ($po_no == null) 
-         {
-             $voucher_no=1;
+        $voucher_type = $request->voucher_type;
 
-                             
-         }                  
-         else
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=Purchase_Order::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
          {
-             $current_voucher_num=$po_no->po_no;
-             $voucher_no=$current_voucher_num+1;
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
         
          }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+            
+        PurchaseVoucherType::where('id',$voucher_type)
+                            ->update(['updated_no' => $current_voucher_num]);
+
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
 
@@ -261,6 +326,7 @@ class PurchaseOrderController extends Controller
          }
          
 
+         $purchaseorder->voucher_no = $current_voucher_num;
          $purchaseorder->po_no = $voucher_no;
          $purchaseorder->po_date = $voucher_date;
          $purchaseorder->estimation_no = $request->estimation_no;
@@ -1018,6 +1084,7 @@ class PurchaseOrderController extends Controller
         }
          
 
+         $purchaseorder->voucher_no = $request->voucher_number;
          $purchaseorder->po_no = $voucher_no;
          $purchaseorder->po_date = $voucher_date;
          $purchaseorder->estimation_no = $request->estimation_no;
@@ -1286,6 +1353,52 @@ class PurchaseOrderController extends Controller
         return Redirect::back()->with('success', 'Deleted Successfully');
     }
 
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=Purchase_Order::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
+    }
+
 
     public function address_details(Request $request)
     {
@@ -1364,6 +1477,7 @@ $count=0;
     public function getdata(Request $request,$id)
     {
         $id=$request->id;
+        $checkbox=$request->checkbox;
         $items=Item::where('id',$id)->first();
 
         $data[]=Item::join('uoms','uoms.id','=','items.uom_id')

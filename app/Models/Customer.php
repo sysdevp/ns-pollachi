@@ -10,4 +10,9 @@ class Customer extends Model
     {
     	return $this->belongsTo(PriceLevel::class, 'price_level','id');
     }
+
+    public function sales_man()
+    {
+    	return $this->belongsTo(SalesMan::class, 'salesman','id');
+    }
 }

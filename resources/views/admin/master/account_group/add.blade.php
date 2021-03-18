@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,18 +29,18 @@
         <div class="form-row">
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Name<span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Name<?php echo Mandatoryfields::mandatory('accountgroup_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name caps" placeholder="Name" required="" name="name" value="">
+                <input type="text" class="form-control name caps" placeholder="Name" name="name" value="" <?php echo Mandatoryfields::validation('accountgroup_name');?> autofocus>
               </div>
             </div>
           </div>
 
         <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Under <span class="mandatory">*</span> </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Under <?php echo Mandatoryfields::mandatory('accountgroup_under');?> </label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple col-12 form-control custom-select under"  name="under" id="under" required="">
+                <select class="js-example-basic-multiple col-12 form-control custom-select under"  name="under" id="under" <?php echo Mandatoryfields::validation('accountgroup_under');?>>
                   <option value="">Choose Any</option>
                   <option value="Primary">Primary</option>
                   <option value="Cash">Cash</option>

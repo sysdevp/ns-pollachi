@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -66,14 +69,15 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                   <div class="">
                                     <input type="hidden" readonly="" id="voucher_no" name="voucher_no" value="{{ $estimation->estimation_no }}">
                                     <font size="2">{{ $estimation->estimation_no }}</font>
+                                    <input type="hidden" id="voucher_number" name="voucher_number" value="{{ $estimation->voucher_no }}">
                                   </div>
                                 
                                  
                                 </div>
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
-                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $estimation->estimation_date }}">
+                                  <label style="font-family: Times new roman;">Voucher Date<?php echo Mandatoryfields::mandatory('estimation_voucherdate');?></label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $estimation->estimation_date }}" <?php echo Mandatoryfields::validation('estimation_voucherdate');?> autofocus>
                                  
                                 </div>
                                 <!-- <div class="col-md-3">
@@ -90,10 +94,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
 
                 <div class="col-md-4">
-                  <label style="font-family: Times new roman;">Party Name</label><br>
+                  <label style="font-family: Times new roman;">Party Name<?php echo Mandatoryfields::mandatory('estimation_supplierid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id" <?php echo Mandatoryfields::validation('estimation_supplierid');?>>
                         @if(isset($estimation->supplier->name) && !empty($estimation->supplier->name))
                            <option value="{{ $estimation->supplier->id }}">{{ $estimation->supplier->name }}</option>
                            @else
@@ -128,10 +132,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 <div class="row col-md-12">
 
                     <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Agent Name</label><br>
+                    <label style="font-family: Times new roman;">Agent Name<?php echo Mandatoryfields::mandatory('estimation_agentid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" <?php echo Mandatoryfields::validation('estimation_agentid');?>>
                            @if(isset($estimation->agent->name) && !empty($estimation->agent->name))
                            <option value="{{ $estimation->agent->id }}">{{ $estimation->agent->name }}</option>
                            @else
@@ -549,8 +553,8 @@ table, th, td {
                       <input type="number" readonly="" class="form-control total_discount" id="total_discount" name="total_discount" pattern="[0-9]{0,100}" title="Numbers Only" value="{{ $item_discount_sum }}">
                       </div>
                       <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Overall Discount</label>
-                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="{{ $estimation->overall_discount }}">
+                        <label style="font-family: Times new roman;">Overall Discount<?php echo Mandatoryfields::mandatory('estimation_overall_discount');?></label>
+                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="{{ $estimation->overall_discount }}" <?php echo Mandatoryfields::validation('estimation_overall_discount');?>>
                       </div>
                     </div>
 

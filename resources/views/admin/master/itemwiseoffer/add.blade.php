@@ -2,6 +2,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.css" type="text/css" />
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -29,9 +32,9 @@
        
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Offer Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Offer Name <?php echo Mandatoryfields::mandatory('itemwiseoffer_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control offer_name only_allow_alp_num_dot_com_amp caps" placeholder="Offer Name" name="offer_name" value="{{old('offer_name')}}" required>
+                <input type="text" class="form-control offer_name only_allow_alp_num_dot_com_amp caps" placeholder="Offer Name" name="offer_name" value="{{old('offer_name')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_name');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('offer_name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gift Voucher Name
@@ -42,9 +45,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Offer Code <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Offer Code <?php echo Mandatoryfields::mandatory('itemwiseoffer_code');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_alp_num_dot_com_amp code" placeholder="Offer Code" name="code" value="{{old('code')}}" required>
+                <input type="text" class="form-control only_allow_alp_num_dot_com_amp code" placeholder="Offer Code" name="code" value="{{old('code')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_code');?> tabindex="2">
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gift Voucher Prefix Code
@@ -57,9 +60,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Valid From Date <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Valid From Date <?php echo Mandatoryfields::mandatory('itemwiseoffer_validfrom');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control from_date" placeholder="dd-mm-yyyy" name="valid_from" value="{{old('valid_from')}}" required>
+                <input type="text" class="form-control from_date" placeholder="dd-mm-yyyy" name="valid_from" value="{{old('valid_from')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_validfrom');?> tabindex="3">
                 <span class="mandatory"> {{ $errors->first('valid_from')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid From Date
@@ -70,9 +73,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Valid To Date <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Valid To Date <?php echo Mandatoryfields::mandatory('itemwiseoffer_validto');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control to_date" placeholder="dd-mm-yyyy" name="valid_to" value="{{old('valid_to')}}" required>
+                <input type="text" class="form-control to_date" placeholder="dd-mm-yyyy" name="valid_to" value="{{old('valid_to')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_validto');?> tabindex="4">
                 <span class="mandatory"> {{ $errors->first('valid_to')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid To Date
@@ -93,9 +96,9 @@
 		  
 		   <div class="col-md-6">
             <div class="form-group row">
-			<label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <span class="mandatory">*</span></label>
+			<label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <?php echo Mandatoryfields::mandatory('itemwiseoffer_buyitemid');?></label>
               <div class="col-sm-8">
-             <select class="js-example-basic-multiple form-control custom-select buy_item_id" placeholder="Choose District" name="buy_item_id" required>
+             <select class="js-example-basic-multiple form-control custom-select buy_item_id" placeholder="Choose District" name="buy_item_id" <?php echo Mandatoryfields::validation('itemwiseoffer_buyitemid');?> tabindex="5">
                   <option value="">Choose Item</option>
                   @foreach($items as $value)
                   @if (old('buy_item_id') == $value->id)
@@ -115,9 +118,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Quantity<span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Quantity<?php echo Mandatoryfields::mandatory('itemwiseoffer_buyitemquantity');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="buy_item_quantity" value="{{old('buy_item_quantity')}}" required>
+                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="buy_item_quantity" value="{{old('buy_item_quantity')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_buyitemquantity');?> tabindex="6">
                 <span class="mandatory"> {{ $errors->first('value')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gift Voucher Quantity
@@ -138,9 +141,9 @@
 		  
 		  <div class="col-md-6">
             <div class="form-group row">
-			<label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <span class="mandatory">*</span></label>
+			<label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <?php echo Mandatoryfields::mandatory('itemwiseoffer_getitemid');?></label>
               <div class="col-sm-8">
-             <select class="js-example-basic-multiple form-control custom-select get_item_id" placeholder="Choose District" name="get_item_id" required>
+             <select class="js-example-basic-multiple form-control custom-select get_item_id" placeholder="Choose District" name="get_item_id" <?php echo Mandatoryfields::validation('itemwiseoffer_getitemid');?> tabindex="7">
                   <option value="">Choose Item</option>
                   @foreach($items as $value)
                   @if (old('get_item_id') == $value->id)
@@ -160,9 +163,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Quantity<span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Quantity<?php echo Mandatoryfields::mandatory('itemwiseoffer_getitemquantity');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="get_item_quantity" value="{{old('get_item_quantity')}}" required>
+                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="get_item_quantity" value="{{old('itemwiseoffer_getitemquantity')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_getitemid');?> tabindex="8">
                 <span class="mandatory"> {{ $errors->first('value')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gift Voucher Quantity
@@ -173,9 +176,9 @@
 
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('itemwiseoffer_remark');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  remark" placeholder="Remark" name="remark" value="{{old('remark')}}">
+                <input type="text" class="form-control  remark" placeholder="Remark" name="remark" value="{{old('remark')}}" <?php echo Mandatoryfields::validation('itemwiseoffer_remark');?> tabindex="9">
                 <span class="mandatory"> {{ $errors->first('remark')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Bank Code
@@ -186,7 +189,7 @@
           
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="10">Submit</button>
         </div>
       </form>
     </div>

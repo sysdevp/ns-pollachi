@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -58,22 +61,41 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 <form  method="post" class="form-horizontal" action="{{ route('sales_estimation.store') }}" id="dataInput" enctype="multipart/form-data">
       {{csrf_field()}}
 
+
+                      <div class="row col-md-12">
+
+                          <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Voucher Type<?php echo Mandatoryfields::mandatory('salesestimation_vouchertype');?></label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-8">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select voucher_type" onchange="voucher_types()" name="voucher_type" id="voucher_type" <?php echo Mandatoryfields::validation('salesestimation_vouchertype');?> autofocus>
+                           <option value="">Choose Voucher Type</option>
+                           @foreach($voucher_type as $voucher_types)
+                           <option value="{{ $voucher_types->id }}">{{ $voucher_types->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                     
+                  </div>
+               </div>
+               </div>
       
-                       <div class="row col-md-10">
+                       <div class="row col-md-12">
 
                                 <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
                                   <div class="">
-                                    <!-- <input type="text" readonly="" class="form-control proof_file  required_for_proof_valid" id="voucher_no" placeholder="Auto Generate Voucher No" name="voucher_no" value=""> -->
-                                    <font size="2">{{ $voucher_no }}</font>
+
+                                    <font size="2" class="vouchers"></font>
+                                    <input type="hidden" class="form-control voucher_no  required_for_proof_valid" value="">
                                   </div>
                                 
                                  
                                 </div>
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
-                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                                  <label style="font-family: Times new roman;">Voucher Date<?php echo Mandatoryfields::mandatory('salesestimation_voucherdate');?></label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" <?php echo Mandatoryfields::validation('salesestimation_voucherdate');?>>
                                  
                                 </div>
                                 <!-- <div class="col-md-3">
@@ -90,10 +112,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
 
                 <div class="col-md-4">
-                  <label style="font-family: Times new roman;">Customer Name</label><br>
+                  <label style="font-family: Times new roman;">Customer Name<?php echo Mandatoryfields::mandatory('salesestimation_customerid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id" <?php echo Mandatoryfields::validation('salesestimation_customerid');?>>
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $customers)
                            <option value="{{ $customers->id }}">{{ $customers->name }}</option>
@@ -124,10 +146,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 <div class="row col-md-12">
 
                     <div class="col-md-3">
-                  <label style="font-family: Times new roman;">Sales Men Name</label><br>
+                  <label style="font-family: Times new roman;">Sales Men Name<?php echo Mandatoryfields::mandatory('salesestimation_salesmenid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id" <?php echo Mandatoryfields::validation('salesestimation_salesmenid');?>>
                            <option value="">Choose Sales Men Name</option>
                            @foreach($sales_man as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -141,10 +163,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                </div>
 
                     <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Agent Name</label><br>
+                    <label style="font-family: Times new roman;">Agent Name<?php echo Mandatoryfields::mandatory('salesestimation_agentid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" <?php echo Mandatoryfields::validation('salesestimation_agentid');?>>
                            <option value="">Choose Agent Name</option>
                            @foreach($agent as $agents)
                            <option value="{{ $agents->id }}">{{ $agents->name }}</option>
@@ -568,8 +590,8 @@ table, th, td {
                       <input type="number" readonly="" class="form-control total_discount" id="total_discount" name="total_discount" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
                       </div>
                       <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Overall Discount</label>
-                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
+                        <label style="font-family: Times new roman;">Overall Discount<?php echo Mandatoryfields::mandatory('salesestimation_overall_discount');?></label>
+                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0" <?php echo Mandatoryfields::validation('salesestimation_overall_discount');?>>
                       </div>
                     </div>
 
@@ -688,6 +710,97 @@ table, th, td {
       </form>
                        
         <script type="text/javascript">
+
+          function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('sales_estimation/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
           var i=1;
           var discount_total = 0;
 

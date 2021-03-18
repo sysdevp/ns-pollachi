@@ -19,6 +19,7 @@ use App\Models\Tax;
 use App\Models\Location;
 use App\Models\AccountHead;
 use Carbon\Carbon;
+use App\Models\VoucherNumbering;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseOrderExpense;
@@ -56,6 +57,7 @@ use App\Models\DebitNoteExpense;
 use App\Models\DebitNoteBetaExpense;
 use App\Models\DebitNoteTax;
 use App\Models\DebitNoteBetaTax;
+use App\Models\PurchaseVoucherType;
 
 class RejectionOutController extends Controller
 {
@@ -218,7 +220,7 @@ class RejectionOutController extends Controller
         $tax = Tax::all();
         $account_head = AccountHead::all();
         $location = Location::all();
-        
+        $voucher_type = PurchaseVoucherType::where('name','Rejection Out')->get();
 
         // $voucher_num=RejectionOut::orderBy('r_out_no','DESC')
         //                    ->select('r_out_no')
@@ -238,26 +240,70 @@ class RejectionOutController extends Controller
          
          // }
 
-        $voucher_num=RejectionOut::orderBy('created_at','DESC')->select('id')->first();
-        $append = "RO";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
+        // $voucher_num=RejectionOut::orderBy('created_at','DESC')->select('id')->first();
+        // $append = "RO";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=$append.'1';
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
+        //      $voucher_no = $append.$next_no;
         
          
-         }
+        //  }
         // $voucher_no = str_random(6);
 
-        return view('admin.rejection_out.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','receipt_note','estimation','purchase_entry','tax','account_head','location'));
+        $voucher_num=VoucherNumbering::where('id',5)
+                           ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=RejectionOut::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
+         {
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->starting_no != null && $vouchers == null)
+         {
+            $next_no=$starting_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+
+        return view('admin.rejection_out.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','receipt_note','estimation','purchase_entry','tax','account_head','location','voucher_type'));
     }
 
     /**
@@ -283,30 +329,81 @@ class RejectionOutController extends Controller
         //  }
         if($request->has('check'))
         {
-            $voucher_num=RejectionOutBeta::orderBy('created_at','DESC')->select('id')->first();
+            // $voucher_num=RejectionOutBeta::orderBy('created_at','DESC')->select('id')->first();
+            $vouchers=RejectionOutBeta::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         else
         {
-            $voucher_num=RejectionOut::orderBy('created_at','DESC')->select('id')->first();
+            // $voucher_num=RejectionOut::orderBy('created_at','DESC')->select('id')->first();
+            $vouchers=RejectionOut::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         
         $tax = Tax::all();
-        $append = "RO";
-        if ($voucher_num == null) 
-         {
-             $voucher_val=$append.'1';
 
-                             
+        $voucher_type = $request->voucher_type;
+
+
+        $voucher_num=PurchaseVoucherType::where('id',$voucher_type)
+                                        ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $updated_no = $voucher_num->updated_no;   
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=RejectionOut::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $voucher_num != null) 
+         {
+             $current_voucher_num=1;
+             $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
          }                  
+         else if($voucher_num->updated_no != null && $voucher_num == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
          else
          {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
 
-             $voucher_val = $append.$next_no;
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+          PurchaseVoucherType::where('id',$voucher_type)
+                             ->update(['updated_no' => $current_voucher_num]);
+
+        // $append = "RO";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_val=$append.'1';
+
+                             
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
+
+        //      $voucher_val = $append.$next_no;
         
          
-         }
+        //  }
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
          // echo $request->rn_no;exit;
@@ -503,7 +600,7 @@ class RejectionOutController extends Controller
         }
 
          
-
+        $rejection_out->voucher_no = $current_voucher_num;
          $rejection_out->r_out_no = $voucher_val;
          $rejection_out->r_out_date = $voucher_date;
          $rejection_out->p_no = $request->p_no;
@@ -1242,6 +1339,53 @@ class RejectionOutController extends Controller
          }   
         
         return Redirect::back()->with('success', 'Deleted Successfully');
+    }
+
+
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=RejectionOut::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
     }
 
 

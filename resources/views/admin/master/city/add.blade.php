@@ -35,7 +35,7 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <?php echo Mandatoryfields::mandatory('city_state_id');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 form-control custom-select state_id" id="test" name="state_id" tabindex="1"  <?php echo Mandatoryfields::validation('city_state_id');?>>
+                <select class="js-example-basic-multiple col-12 form-control custom-select state_id" name="state_id"  <?php echo Mandatoryfields::validation('city_state_id');?> tabindex="1" autofocus>
                   <option value="">Choose State</option>
                   @foreach($state as $value)
                   @if (old('state_id') == $value->id)
@@ -59,9 +59,9 @@ use App\Mandatoryfields;
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label"> District <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> District <?php echo Mandatoryfields::mandatory('city_district_id');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select district_id" placeholder="Choose District" name="district_id" tabindex="2" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select district_id" placeholder="Choose District" name="district_id" <?php echo Mandatoryfields::validation('city_district_id');?> tabindex="2"> 
                   <option value="">Choose District</option>
                   @foreach($district as $value)
                   @if (old('district_id') == $value->id)
@@ -87,7 +87,7 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">City Name <?php echo Mandatoryfields::mandatory('city_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="City Name" name="name" value="{{old('name')}}" tabindex="3" <?php echo Mandatoryfields::validation('city_name');?>>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="City Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('city_name');?> tabindex="3">
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid City Name
@@ -98,15 +98,15 @@ use App\Mandatoryfields;
 
           <div class="col-md-8">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('city_remark');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" name="remark" tabindex="4" value="{{old('remark')}}" placeholder="Remark">
+                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark" tabindex="4" <?php echo Mandatoryfields::validation('city_remark');?>>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" id="add" type="submit" tabindex="5">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="5">Submit</button>
         </div>
       </form>
     </div>
@@ -157,12 +157,6 @@ function get_state_based_district(state_id,district_id)
 }
 
 $(document).ready(function(){
-    //  $("#test").focus();
-  //   $(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
-  //   $(this).closest(".select2-container").siblings('select:enabled').select2('open');
-  // });
-  // $("#formId input:text, #formId textarea").first().focus();
-
   var state_id="{{ old('state_id') }}";
   var district_id="{{ old('district_id') }}"; 
  if(state_id != ""){

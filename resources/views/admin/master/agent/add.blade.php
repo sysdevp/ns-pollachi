@@ -39,13 +39,13 @@
               <div class="col-sm-8">
             <div class="input-group">
             <div class="input-group-prepend">
-              <select class="form-control required_for_valid salutation" name="salutation" error-data="Enter valid Salutation" >
+              <select class="form-control  salutation" name="salutation" error-data="Enter valid Salutation" autofocus>
                   <option value="Mr" {{ old('salutation') == 'Mr' ? 'selected' : '' }}>Mr</option>
                   <option value="Mrs" {{ old('salutation') == 'Mrs' ? 'selected' : '' }} >Mrs</option>
               </select>
               <span class="mandatory"> {{ $errors->first('salutation')  }} </span>
             </div>
-            <input type="text" class="form-control required_for_valid name caps" name="name" error-data="Agent Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value={{old('name')}}>
+            <input type="text" class="form-control  name caps" name="name" error-data="Agent Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value={{old('name')}}>
             
             <div class="invalid-feedback">
               Enter valid Agent Name
@@ -62,7 +62,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Agent Code <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control code only_allow_alp_num_dot_com_amp required_for_valid" error-data="Enter valid Agent Code" placeholder="Agent Code" name="code" value="{{old('code')}}" >
+                <input type="text" class="form-control code only_allow_alp_num_dot_com_amp " error-data="Enter valid Agent Code" placeholder="Agent Code" name="code" value="{{old('code')}}" >
                 <span class="mandatory"> {{ $errors->first('code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Agent Code
@@ -75,7 +75,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Phone No <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_digit phone_no required_for_valid" input-type="phone_no" pattern="[1-9]{1}[0-9]{9}" error-data="Enter valid Phone No" placeholder="Phone No" name="phone_no" value="{{old('phone_no')}}" >
+                <input type="text" class="form-control only_allow_digit phone_no " input-type="phone_no" pattern="[1-9]{1}[0-9]{9}" error-data="Enter valid Phone No" placeholder="Phone No" name="phone_no" value="{{old('phone_no')}}" >
                 <span class="mandatory"> {{ $errors->first('phone_no')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Phone No
@@ -101,7 +101,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">DOB<span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control dob required_for_valid" error-data="Enter valid DOB" placeholder="dd-mm-yyyy" name="dob" value="{{old('dob')}}" >
+                <input type="text" class="form-control dob " error-data="Enter valid DOB" placeholder="dd-mm-yyyy" name="dob" value="{{old('dob')}}" >
                 <span class="mandatory"> {{ $errors->first('dob')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid DOB
@@ -121,7 +121,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Father's Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control father_name required_for_valid caps" error-data="Enter valid Father's Name" placeholder="Father's Name" name="father_name" value="{{old('father_name')}}">
+                <input type="text" class="form-control father_name  caps" error-data="Enter valid Father's Name" placeholder="Father's Name" name="father_name" value="{{old('father_name')}}">
                 <span class="mandatory"> {{ $errors->first('father_name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Father's Name
@@ -134,7 +134,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Blood Group <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control blood_group required_for_valid" error-data="Enter valid Blood Group" placeholder="Blood Group" name="blood_group" value="{{old('blood_group')}}" >
+                <input type="text" class="form-control blood_group " error-data="Enter valid Blood Group" placeholder="Blood Group" name="blood_group" value="{{old('blood_group')}}" >
                 <span class="mandatory"> {{ $errors->first('blood_group')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Blood Group
@@ -147,7 +147,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Material Status <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-              <select class="js-example-basic-multiple col-12 form-control material_status select custom-select required_for_valid" 
+              <select class="js-example-basic-multiple col-12 form-control material_status select custom-select " 
               error-data="Enter valid Material Status" data-placeholder="Choose Material " name="material_status" >
               <option value=""></option>
                  <option value="Married"  {{ old('material_status') == 'Married' ? 'selected' : '' }}>Married</option>
@@ -216,7 +216,7 @@
               <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Type <span class="mandatory">*</span></label>
                 <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id required_for_valid required_for_address_valid" error-data="Enter valid Address Type" name="address_type_id[]">
+                <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id  " error-data="Enter valid Address Type" name="address_type_id[]">
                     <option value="">Choose Address Type</option>
                     @foreach($address_type as $value)
                     <option value="{{ $value->id }}" {{ old('address_type_id.'.$key) == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
@@ -236,7 +236,7 @@
               <div class="form-group row">
                 <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
                 <div class="col-sm-8">
-                <input type="text" class="form-control address_line_1 required_for_valid required_for_address_valid" error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="{{ old('address_line_1.'.$key) }}" >
+                <input type="text" class="form-control address_line_1  " error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="{{ old('address_line_1.'.$key) }}" >
                   <span class="mandatory"> {{ $errors->first('address_line_1.'.$key)  }} </span>
                   <div class="invalid-feedback">
                   Enter valid Address
@@ -277,7 +277,7 @@
               <div class="form-group row">
                 <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
                 <div class="col-sm-6">
-                  <select class="js-example-basic-multiple col-12 form-control custom-select state_id required_for_valid required_for_address_valid" error-data="Enter valid State" name="state_id[]" >
+                  <select class="js-example-basic-multiple col-12 form-control custom-select state_id  " error-data="Enter valid State" name="state_id[]" >
                     <option value="">Choose State</option>
                     @foreach($state as $value)
                     <option value="{{ $value->id }}" {{ old('state_id.'.$key) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
@@ -312,10 +312,11 @@
             </div>
              <div class="col-md-6">
               <div class="form-group row">
-                <label for="validationCustom01" class="col-sm-4 col-form-label">City </label>
+                <label for="validationCustom01" class="col-sm-4 col-form-label">City</label>
                 <div class="col-sm-6">
                   <select class="js-example-basic-multiple col-12 form-control custom-select city_id" name="city_id[]" >
                     <option value="">Choose City</option>
+					
                   </select>
                   <span class="mandatory"> {{ $errors->first('city_id.'.$key)  }} </span>
                  <div class="invalid-feedback">
@@ -331,7 +332,7 @@
               <div class="form-group row">
                 <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
                 <div class="col-sm-8">
-                <input type="text" class="form-control postal_code only_allow_digit required_for_valid required_for_address_valid" error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="{{ old('postal_code.'.$key) }}" >
+                <input type="text" class="form-control postal_code only_allow_digit  " error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="{{ old('postal_code.'.$key) }}" >
                   <span class="mandatory"> {{ $errors->first('postal_code.'.$key)  }} </span>
                   <div class="invalid-feedback">
                     Enter valid Postal Code
@@ -369,7 +370,7 @@
                       <td>
                         <div class="form-group row">
                           <div class="col-sm-12">
-                          <input type="text" class="form-control proof_name required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_name[]" value="{{ old('proof_name.0') }}" >
+                          <input type="text" class="form-control proof_name " error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_name[]" value="{{ old('proof_name.0') }}" >
                             <span class="mandatory"> {{ $errors->first('proof_name.0')  }} </span>
                             <div class="invalid-feedback">
                               Enter valid Proof Name
@@ -380,7 +381,7 @@
                    <td>
                             <div class="form-group row">
                               <div class="col-sm-12">
-                              <input type="text" class="form-control proof_number only_allow_alp_num_dot_com_amp required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Number" name="proof_number[]" value="{{ old('proof_number.0') }}" >
+                              <input type="text" class="form-control proof_number only_allow_alp_num_dot_com_amp " error-data="Enter valid Postal Code" placeholder="Proof Number" name="proof_number[]" value="{{ old('proof_number.0') }}" >
                                 <span class="mandatory"> {{ $errors->first('proof_number.0')  }} </span>
                                 <div class="invalid-feedback">
                                   Enter valid Proof Number
@@ -392,7 +393,7 @@
                           <td>
                               <div class="form-group row">
                                 <div class="col-sm-12">
-                                <input type="file" class="form-control proof_file  required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_file[]" value="{{ old('proof_file.0') }}" >
+                                <input type="file" class="form-control proof_file  " error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_file[]" value="{{ old('proof_file.0') }}" >
                                   <span class="mandatory"> {{ $errors->first('proof_file.0')  }} </span>
                                   <div class="invalid-feedback">
                                     Enter valid Proof file
@@ -422,7 +423,7 @@
                 <td>
                   <div class="form-group row">
                     <div class="col-sm-12">
-                    <input type="text" class="form-control proof_name required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_name[]" value="{{ old('proof_name.'.$key) }}" >
+                    <input type="text" class="form-control proof_name " error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_name[]" value="{{ old('proof_name.'.$key) }}" >
                        <span class="mandatory"> {{ $errors->first('proof_name.'.$key)  }} </span>
                       <div class="invalid-feedback">
                         Enter valid Proof Name
@@ -433,7 +434,7 @@
              <td>
                       <div class="form-group row">
                         <div class="col-sm-12">
-                        <input type="text" class="form-control proof_number   required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Number" name="proof_number[]" value="{{ old('proof_number.'.$key) }}" >
+                        <input type="text" class="form-control proof_number   " error-data="Enter valid Postal Code" placeholder="Proof Number" name="proof_number[]" value="{{ old('proof_number.'.$key) }}" >
                           <span class="mandatory"> {{ $errors->first('proof_number.'.$key)  }} </span>
                           <div class="invalid-feedback">
                             Enter valid Proof Number
@@ -445,7 +446,7 @@
                     <td>
                         <div class="form-group row">
                           <div class="col-sm-12">
-                          <input type="file" class="form-control proof_file only_allow_digit  required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_file[]" value="{{ old('proof_file.'.$key) }}" >
+                          <input type="file" class="form-control proof_file only_allow_digit  " error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_file[]" value="{{ old('proof_file.'.$key) }}" >
                             <span class="mandatory"> {{ $errors->first('proof_file.'.$key)  }} </span>
                             <div class="invalid-feedback">
                               Enter valid Proof file
@@ -553,7 +554,7 @@ if($(".remove_address").length >1){
                       <td>\
                         <div class="form-group row">\
                           <div class="col-sm-12">\
-                          <input type="text" class="form-control proof_name  required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_name[]" value="" >\
+                          <input type="text" class="form-control proof_name  " error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_name[]" value="" >\
                            <div class="invalid-feedback">\
                               Enter valid Proof Name\
                             </div>\
@@ -563,7 +564,7 @@ if($(".remove_address").length >1){
                        <td>\
                             <div class="form-group row">\
                               <div class="col-sm-12">\
-                              <input type="text" class="form-control proof_number only_allow_digit required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Number" name="proof_number[]" value="" >\
+                              <input type="text" class="form-control proof_number only_allow_digit " error-data="Enter valid Postal Code" placeholder="Proof Number" name="proof_number[]" value="" >\
                                <div class="invalid-feedback">\
                                   Enter valid Proof Number\
                                 </div>\
@@ -573,7 +574,7 @@ if($(".remove_address").length >1){
                             <td>\
                               <div class="form-group row">\
                                 <div class="col-sm-12">\
-                                <input type="file" class="form-control proof_file   required_for_proof_valid" error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_file[]" value="" >\
+                                <input type="file" class="form-control proof_file   " error-data="Enter valid Postal Code" placeholder="Proof Name" name="proof_file[]" value="" >\
                                   <div class="invalid-feedback">\
                                     Enter valid Proof file\
                                   </div>\
@@ -712,24 +713,25 @@ function validation(){
 
 
    $(document).on("click",".submit",function(){
-    var error_count=validation();
-    var address_error_count=address_details_validation();
-    var proof_details_count=proof_details_validation();
-    var common_error_count=parseInt(error_count)+parseInt(address_error_count)+parseInt(proof_details_count);
-    if(common_error_count == 0){
-      if($(".required_for_address_valid").length >0){
+    $("form").submit();
+    // var error_count=validation();
+    // var address_error_count=address_details_validation();
+    // var proof_details_count=proof_details_validation();
+    // var common_error_count=parseInt(error_count)+parseInt(address_error_count)+parseInt(proof_details_count);
+    // if(common_error_count == 0){
+    //   if($(".required_for_address_valid").length >0){
       
-    }else{
-      common_error_count++;
-      alert("Please Add Atleast One Address ");
+    // }else{
+    //   common_error_count++;
+    //   alert("Please Add Atleast One Address ");
      
-    }
-    if(common_error_count == 0){
+    // }
+    // if(common_error_count == 0){
 
-      $("form").submit();
-    }
+    //   $("form").submit();
+    // }
 
-    }
+    // }
 
    });
 
@@ -755,6 +757,7 @@ function validation(){
        });
        return error_count;
   }
+  var count = 1;
 
   function add_address(id="",text=""){
     var address_details_validation_count=address_details_validation();
@@ -777,7 +780,7 @@ function validation(){
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Type <span class="mandatory">*</span></label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id required_for_valid required_for_address_valid" error-data="Enter valid Address Type" name="address_type_id[]">\
+                <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id  " error-data="Enter valid Address Type" name="address_type_id[]">\
                   <option value="">Choose Address Type</option>\
                   @foreach($address_type as $value)\
                   <option value="{{ $value->id }}" >{{ $value->name }}</option>\
@@ -796,7 +799,7 @@ function validation(){
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>\
               <div class="col-sm-8">\
-                <input type="text" class="form-control address_line_1 required_for_valid required_for_address_valid" error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="" >\
+                <input type="text" class="form-control address_line_1  " error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="" >\
                <div class="invalid-feedback">\
                 Enter valid Address\
                 </div>\
@@ -829,7 +832,7 @@ function validation(){
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select state_id required_for_valid required_for_address_valid" error-data="Enter valid State" name="state_id[]" >\
+                <select class="js-example-basic-multiple col-12 form-control custom-select state_name state_id'+count+'" error-data="Enter valid State" id="'+count+'" name="state_id[]" >\
                   <option value="">Choose State</option>\
                   @foreach($state as $value)\
                   <option value="{{ $value->id }}" >{{ $value->name }}</option>\
@@ -848,8 +851,11 @@ function validation(){
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">District </label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select district_id" name="district_id[]">\
+                <select class="js-example-basic-multiple col-12 form-control custom-select district_name district_id'+count+'" name="district_id[]" id="'+count+'">\
                   <option value="">Choose District</option>\
+				  @foreach($district as $value)\
+                    <option value="{{ $value->id }}">{{ $value->name }}</option>\
+                    @endforeach\
                  </select>\
                  <div class="invalid-feedback">\
                   Enter valid District\
@@ -862,10 +868,13 @@ function validation(){
           </div>\
            <div class="col-md-6">\
             <div class="form-group row">\
-              <label for="validationCustom01" class="col-sm-4 col-form-label">City </label>\
-              <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select city_id" name="city_id[]" >\
+              <label for="validationCustom01" class="col-sm-4 col-form-label">City 456</label>\
+              <div class="col-sm-6 cities">\
+                <select class="js-example-basic-multiple col-12 form-control custom-select city_name city_id'+count+'" name="city_id[]" id="'+count+'">\
                   <option value="">Choose City</option>\
+				  @foreach($city as $value)\
+                    <option value="{{ $value->id }}">{{ $value->name }}</option>\
+                    @endforeach\
                 </select>\
                <div class="invalid-feedback">\
                   Enter valid City\
@@ -880,7 +889,7 @@ function validation(){
             <div class="form-group row">\
               <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>\
               <div class="col-sm-8">\
-                <input type="text" class="form-control postal_code required_for_valid required_for_address_valid only_allow_digit" error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="" >\
+                <input type="text" class="form-control postal_code   only_allow_digit" error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="" >\
               <div class="invalid-feedback">\
                   Enter valid Postal Code\
                 </div>\
@@ -889,7 +898,7 @@ function validation(){
           </div>\
           </div><hr>';
 
-
+          count++;
           $(".common_address_div").append(address);
     $(".address_label").each(function(key,index){
 $(this).html("Address Details - " + (key+1));
@@ -915,12 +924,52 @@ $(this).html("Address Details - " + (key+1));
       });
   }
 
+  $(document).on('change','.city_name',function(){
+
+     var city_id = $(this).val();
+     var test = $(this).closest('select').attr('id');
+    $.ajax({
+              type: "post",
+              url: "{{ url('agent/select_city_based_districts')}}",
+              data: {city_id: city_id},
+              success: function (res)
+              {
+
+                var state_id = res.state_id;
+                var district_id = res.district_id;
+               // $('.state_id'+test).val("Tamil Nadu");
+                  $(".state_id"+test+" option[value="+state_id+"]").attr('selected', 'selected');
+                  $(".district_id"+test+" option[value="+district_id+"]").attr('selected', 'selected');
+                 
+               }
+          });
+  });
+
+  $(document).on('change','.district_name',function(){
+     var district_id = $(this).val();
+     var test = $(this).closest('select').attr('id');
+    $.ajax({
+              type: "post",
+              url: "{{ url('agent/select_district_based_districts')}}",
+              data: {district_id: district_id},
+              success: function (res)
+              {
+                var state_id = res.state_id;
+               // $('.state_id'+test).val("Tamil Nadu");
+                  $(".state_id"+test+" option[value="+state_id+"]").attr('selected', 'selected');
+               }
+          });
+  });
+  
+  
+   
+
 
 function state_based_district(){
   
   
 
-$(".state_id").each(function(key,index){
+$(".state_name").each(function(key,index){
   
     var $tr=$(this).closest(".address_div");
     $tr.find(".city_id").html("<option value=''>Choose City</option>");
@@ -933,7 +982,7 @@ $(".state_id").each(function(key,index){
               success: function (res)
               {
                  result = JSON.parse(res);
-               $tr.find(".district_id").html(result.option);
+               $tr.find(".district_name").html(result.option);
                }
           });
 });
@@ -942,7 +991,7 @@ $(".state_id").each(function(key,index){
 
 
 function district_based_city(){
-$(".district_id").each(function(key,index){
+$(".district_name").each(function(key,index){
     var $tr=$(this).closest(".address_div");
     var district_id=$tr.find(".old_district_id").val();
   var city_id=$tr.find(".old_city_id").val();
@@ -953,7 +1002,7 @@ $(".district_id").each(function(key,index){
               success: function (res)
               {
                 result = JSON.parse(res);
-                $tr.find(".city_id").html(result.option);
+                $tr.find(".city_name").html(result.option);
               }
           });
 });
@@ -969,7 +1018,7 @@ $(document).ready(function(){
 
 
 
-  $(document).on("change",".state_id",function(){
+  $(document).on("change",".state_name",function(){
    var $tr=$(this).closest(".address_div");
    var state_id=$(this).val();
    $tr.find(".city_id").html("<option value=''>Choose City</option>");
@@ -981,7 +1030,7 @@ $(document).ready(function(){
               {
                 result = JSON.parse(res);
               //  alert($tr.find(".state_id").attr("class"));
-                $tr.find(".district_id").html(result.option);
+                $tr.find(".district_name").html(result.option);
                 
               }
           });
@@ -989,7 +1038,7 @@ $(document).ready(function(){
 
 
 
-  $(document).on("change",".district_id",function(){
+  $(document).on("change",".district_name",function(){
      var $tr=$(this).closest(".address_div");
     var district_id=$(this).val();
     $.ajax({
@@ -999,7 +1048,7 @@ $(document).ready(function(){
               success: function (res)
               {
                 result = JSON.parse(res);
-                $tr.find(".city_id").html(result.option);
+                $tr.find(".city_name").html(result.option);
               }
           });
 

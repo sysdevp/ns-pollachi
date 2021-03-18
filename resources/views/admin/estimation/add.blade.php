@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -61,27 +64,43 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
       
                        <div class="row col-md-10">
 
+                        <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Voucher Type<?php echo Mandatoryfields::mandatory('estimation_vouchertype');?></label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-8">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select voucher_type" onchange="voucher_types()" name="voucher_type" id="voucher_type" <?php echo Mandatoryfields::validation('estimation_vouchertype');?> autofocus>
+                           <option value="">Choose Voucher Type</option>
+                           @foreach($voucher_type as $voucher_types)
+                           <option value="{{ $voucher_types->id }}">{{ $voucher_types->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                     
+                  </div>
+               </div>
+
+
                                 <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
                                   <div class="">
-                                    <font size="2">{{ $voucher_no }}</font>
-                                    <input type="hidden" name="voucher_no" class="voucher_no" value="{{ $voucher_no }}">
+                                    <font size="2" class="vouchers"></font>
+                                    <input type="hidden" name="voucher_no" class="voucher_no" value="">
                                   </div>
                                 
                                  
                                 </div>
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
-                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                                  <label style="font-family: Times new roman;">Voucher Date<?php echo Mandatoryfields::mandatory('estimation_voucherdate');?></label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" <?php echo Mandatoryfields::validation('estimation_voucherdate');?>>
                                  
                                 </div>
 
                 <div class="col-md-4">
-                  <label style="font-family: Times new roman;">Party Name</label><br>
+                  <label style="font-family: Times new roman;">Party Name<?php echo Mandatoryfields::mandatory('estimation_supplierid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id" <?php echo Mandatoryfields::validation('estimation_supplierid');?>>
                            <option value="">Choose Supplier Name</option>
                            @foreach($supplier as $suppliers)
                            <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -93,25 +112,27 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                      <button type="button"  class="px-2 btn btn-success mx-2 refresh_supplier_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
                   </div>
                </div>
-                                <div class="col-md-4">
-                                  <label style="font-family: Times new roman;">Party Address</label><br>
-                                  <input type="hidden" name="address_line_1" id="address_line_1">
-                                 
-                                  <div class="address">
-                                    
-                                  </div>
                                 
-                                 
-                                </div>
                                 </div>
 
                                 <div class="row col-md-12">
 
+                    <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Party Address</label><br>
+                          <input type="hidden" name="address_line_1" id="address_line_1">
+                                 
+                            <div class="address">
+                                    
+                              </div>
+                                
+                                 
+                    </div>                                  
+
                     <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Agent Name</label><br>
+                    <label style="font-family: Times new roman;">Agent Name<?php echo Mandatoryfields::mandatory('estimation_agentid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" <?php echo Mandatoryfields::validation('estimation_agentid');?>>
                            <option value="">Choose Agent Name</option>
                            @foreach($agent as $agents)
                            <option value="{{ $agents->id }}">{{ $agents->name }}</option>
@@ -482,7 +503,7 @@ table, th, td {
                   </tfoot>
 
                 </table>
-                
+
                        </div>
                        <div class="row col-md-12">
 
@@ -491,8 +512,8 @@ table, th, td {
                       <input type="number" readonly="" class="form-control total_discount" id="total_discount" name="total_discount" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
                       </div>
                       <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Overall Discount</label>
-                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
+                        <label style="font-family: Times new roman;">Overall Discount<?php echo Mandatoryfields::mandatory('estimation_overall_discount');?></label>
+                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0" <?php echo Mandatoryfields::validation('estimation_overall_discount');?>>
                       </div>
                     </div>
 
@@ -592,8 +613,99 @@ table, th, td {
                        
         <script type="text/javascript">
 
-          var i=1;
-          var discount_total = 0;
+function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('estimation/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
+
+var i=1;
+var discount_total = 0;
 
 function calculate_total_net_price(){
   var total_net_price=0;

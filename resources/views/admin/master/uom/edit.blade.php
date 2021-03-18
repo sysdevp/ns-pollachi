@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <div class="form-row">
             <div class="col-md-7">
                 <div class="form-group row">
-                  <label for="validationCustom01" class="col-sm-4 col-form-label">Name<span class="mandatory">*</span></label>
+                  <label for="validationCustom01" class="col-sm-4 col-form-label">Name<?php echo Mandatoryfields::mandatory('uom_name');?></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Name" name="name" value="{{old('name',$uom->name)}}" required>
+                    <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Name" name="name" value="{{old('name',$uom->name)}}" <?php echo Mandatoryfields::validation('uom_name');?> autofocus>
                     <span class="mandatory"> {{ $errors->first('name')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Name
@@ -39,9 +42,9 @@
     
               <div class="col-md-7">
                   <div class="form-group row">
-                    <label for="validationCustom01" class="col-sm-4 col-form-label"> Description <span class="mandatory">*</span></label>
+                    <label for="validationCustom01" class="col-sm-4 col-form-label"> Description <?php echo Mandatoryfields::mandatory('uom_description');?></label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control description only_allow_alp_num_dot_com_amp" placeholder="Description" name="description" value="{{old('description',$uom->description)}}" required>
+                      <input type="text" class="form-control description only_allow_alp_num_dot_com_amp" placeholder="Description" name="description" value="{{old('description',$uom->description)}}" <?php echo Mandatoryfields::validation('uom_description');?>>
                       <span class="mandatory"> {{ $errors->first('description')  }} </span>
                       <div class="invalid-feedback">
                         Enter valid Description
@@ -52,9 +55,9 @@
     
                 <div class="col-md-7">
                     <div class="form-group row">
-                      <label for="validationCustom01" class="col-sm-4 col-form-label"> Remark </label>
+                      <label for="validationCustom01" class="col-sm-4 col-form-label"> Remark <?php echo Mandatoryfields::mandatory('uom_remark');?></label>
                       <div class="col-sm-8">
-                        <input type="text" class="form-control remark only_allow_alp_num_dot_com_amp" placeholder="Remark" name="remark" value="{{old('remark',$uom->remark)}}">
+                        <input type="text" class="form-control remark only_allow_alp_num_dot_com_amp" placeholder="Remark" name="remark" value="{{old('remark',$uom->remark)}}" <?php echo Mandatoryfields::validation('uom_remark');?>>
                         <span class="mandatory"> {{ $errors->first('remark')  }} </span>
                         <div class="invalid-feedback">
                           Enter valid Remark

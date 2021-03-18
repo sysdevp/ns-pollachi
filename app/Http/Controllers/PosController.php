@@ -47,7 +47,6 @@ use App\Models\ItemwiseOffer;
 
 use App\Models\PosBlackItem;
 use App\Models\PosExpense;
-use App\Ho_details;
 // use APP\Models\Giftvoucher;
 class PosController extends Controller
 {
@@ -293,16 +292,8 @@ class PosController extends Controller
                $tax_details->save();
 
             }
-             if($request->save=="1")
-             {   
-                //echo $voucher_no;exit; 
-                $pos            = Pos::where('so_no',$voucher_no)->first();
-                $pos_item       = PosItem::where('so_no',$voucher_no)->get();
-                $pos_payment    = PosItem::where('so_no',$voucher_no)->get();
-                $address        = Ho_details::latest()->first();    
 
-                return view('admin.pos.print',compact('pos','pos_item','pos_payment','address','voucher_no'));
-            }  
+
         return Redirect::back()->with('success', 'Saved Successfully');
     }
 
@@ -1624,10 +1615,7 @@ $result=[];
 
         return $value;                          
     }
-    public function print()
-    {
-        return view('admin.pos.print');
-    }
+
     public function cancel($id)
     {
         $estimation = Estimation::where('estimation_no',$id)->first();

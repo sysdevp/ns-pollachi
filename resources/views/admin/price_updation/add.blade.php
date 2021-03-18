@@ -28,7 +28,7 @@
                   <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">With Effect From :</label>
                      <div class="col-sm-6">
-                      <input type="date" name="effective_from" class="form-control" value="{{$date}}">
+                      <input type="date" name="effective_from" class="form-control" value="{{$date}}" autofocus>
                      </div>
                   </div>
                </div>

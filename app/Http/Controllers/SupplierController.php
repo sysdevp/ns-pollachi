@@ -9,11 +9,13 @@ use App\Models\AddressType;
 use App\Models\Bank;
 use App\Models\BankDetails;
 use App\Models\CustomerSupplier;
+use App\Models\AccountGroup;
 use App\Models\State;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 
 class SupplierController extends Controller
 {
@@ -39,9 +41,10 @@ class SupplierController extends Controller
         $state = State::all();
         $bank = Bank::all();
         $account_type = AccountType::all();
+		$accountgroup = AccountGroup::all();
         $exist_supplier_dets = CustomerSupplier::where('type', 'Supplier')->get();
 
-        return view('admin.master.supplier.add', compact('exist_supplier_dets', 'address_type', 'state', 'bank', 'account_type'));
+        return view('admin.master.supplier.add', compact('exist_supplier_dets', 'address_type', 'state', 'bank', 'account_type','accountgroup'));
     }
 
     /**
@@ -61,8 +64,8 @@ class SupplierController extends Controller
             $supplier_id = $customer_supplier_dets->id;
         } else {
             $supplier_id = $request->exist_supplier_name;
-        }
-        $supplier = new Supplier();
+        }       
+		$supplier = new Supplier();
         $supplier->company_name = $request->company_name;
         $supplier->name = $request->name;
         $supplier->supplier_type = $request->supplier_type;
@@ -70,6 +73,7 @@ class SupplierController extends Controller
         $supplier->salutation = $request->salutation;
         $supplier->phone_no = $request->phone_no;
         $supplier->whatsapp_no = $request->whatsapp_no;
+        $supplier->account_group_id = Input::get('account_group');
         $supplier->email = $request->email;
         $supplier->gst_no = $request->gst_no;
         $supplier->opening_balance = $request->opening_balance;

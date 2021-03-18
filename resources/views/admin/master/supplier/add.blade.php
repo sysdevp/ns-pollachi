@@ -36,7 +36,7 @@
               <div class="form-group row">
                 <label for="validationCustom01" class="col-sm-4 col-form-label">Company Name<span class="mandatory">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp company_name required_for_valid caps"  error-data="Enter valid Company Name" placeholder="Company Name" name="company_name" value="{{old('company_name')}}" >
+                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp company_name required_for_valid caps"  error-data="Enter valid Company Name" placeholder="Company Name" name="company_name" value="{{old('company_name')}}" autofocus>
                   <span class="mandatory"> {{ $errors->first('company_name')  }} </span>
                   <div class="invalid-feedback">
                     Enter valid Company Name
@@ -232,6 +232,24 @@
             </div>
           </div>
 
+         <div class="col-md-6">
+              <div class="form-group row">
+                <label for="validationCustom01" class="col-sm-4 col-form-label">Account Group </label>
+                <div class="col-sm-8">
+                  <select class="js-example-basic-multiple col-12 form-control custom-select account_group" name="account_group">
+                    <option value="">Choose Account Group</option>
+					 @foreach($accountgroup as $value)
+                  <option value="{{ $value->id }}">{{ $value->name }}</option>
+                  @endforeach
+                  </select>
+                  
+                  <div class="invalid-feedback">
+                    Enter valid Account Group
+                  </div>
+                </div>
+               
+              </div>
+            </div>
 
         
 </div>

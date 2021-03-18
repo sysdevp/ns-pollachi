@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <div class="form-row">
             <div class="col-md-7">
                 <div class="form-group row">
-                  <label for="validationCustom01" class="col-sm-4 col-form-label">Area Name <span class="mandatory">*</span></label>
+                  <label for="validationCustom01" class="col-sm-4 col-form-label">Area Name <?php echo Mandatoryfields::mandatory('area_name');?></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Area Name" name="name" value="{{old('name',$area->name)}}" required>
+                    <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Area Name" name="name" value="{{old('name',$area->name)}}" <?php echo Mandatoryfields::validation('area_name');?> autofocus>
                     <span class="mandatory"> {{ $errors->first('name')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Area Name
@@ -38,9 +41,9 @@
               </div>
               <div class="col-md-7">
                 <div class="form-group row">
-                  <label for="validationCustom01" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
+                  <label for="validationCustom01" class="col-sm-4 col-form-label">Postal Code <?php echo Mandatoryfields::mandatory('area_code');?></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control code only_allow_digit" placeholder="Postal Code" name="code" value="{{old('code',$area->code)}}"  required>
+                    <input type="text" class="form-control code only_allow_digit" placeholder="Postal Code" name="code" value="{{old('code',$area->code)}}"  <?php echo Mandatoryfields::validation('area_code');?>>
                     <span class="mandatory"> {{ $errors->first('code')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Postal Code
@@ -50,9 +53,9 @@
               </div>
               <div class="col-md-7">
                 <div class="form-group row">
-                  <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+                  <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('area_remark');?></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control remark" name="remark" value="{{old('remark',$area->remark)}}" placeholder="Remark">
+                    <input type="text" class="form-control remark" name="remark" value="{{old('remark',$area->remark)}}" placeholder="Remark" <?php echo Mandatoryfields::validation('area_remark');?>>
                   </div>
                 </div>
               </div>

@@ -45,9 +45,10 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:states,name,'.$this->id.',id,deleted_at,NULL',
-            'code' => 'required|unique:states,code,'.$this->id.',id,deleted_at,NULL'
-             ])->validate();
+            'state_id' => 'required',
+            'district_id' => 'required',
+            'name' => 'required|unique:cities,name,NULL,id,deleted_at,NULL,state_id,' . $request->state_id . ',district_id,' . $request->district_id
+        ])->validate();
 
 
 
@@ -139,5 +140,12 @@ class CityController extends Controller
         }
     }
 
-    
+    public function get_city_based_districts(Request $request)
+    {
+         $city = City::where('id',$request->city_id)->get();
+         $state_id      = $city[0]->state_id;
+         $district_id      = $city[0]->district_id;
+         $data = array('state_id' => $state_id,'district_id' => $district_id);
+         return $data;
+    }
 }

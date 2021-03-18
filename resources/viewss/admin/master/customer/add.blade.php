@@ -257,6 +257,24 @@
               </div>
             </div>
           </div>
+		  
+		  <div class="col-md-6">
+              <div class="form-group row">
+                <label for="validationCustom01" class="col-sm-4 col-form-label">Account Group </label>
+                <div class="col-sm-6">
+                  <select class="js-example-basic-multiple col-12 form-control custom-select district_id" name="district_id[]">
+                    <option value="">Choose Account Group</option>
+                  </select>
+                  <span class="mandatory"> {{ $errors->first('district_id.'.$key)  }} </span>
+                  <div class="invalid-feedback">
+                    Enter valid Account Group
+                  </div>
+                </div>
+                <a href="{{ url('master/district/create')}}" target="_blank">
+                  <button type="button" class="px-2 btn btn-success ml-2 " title="Add District"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
+                <button type="button" class="px-2 btn btn-success mx-2 refresh_district_id" title="Refresh"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+              </div>
+            </div>
         </div>
 
         <div class="form-row">

@@ -11,8 +11,10 @@ use App\Models\Bank;
 use App\Models\BankDetails;
 use App\Models\Customer;
 use App\Models\CustomerSupplier;
+use App\Models\AccountGroup;
 use App\Models\State;
 use App\Models\PriceLevel;
+use App\Models\SalesMan;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Redirect;
@@ -34,12 +36,14 @@ class CustomerController extends Controller
         $bank = Bank::all();
         $price_level = PriceLevel::all();
         $account_type = AccountType::all();
+        $salesman = SalesMan::all();
+        $accountgroup = AccountGroup::all();
         $exist_customer_dets = CustomerSupplier::where('type', 'Customer')->get();
-        return view('admin.master.customer.add', compact('address_type', 'state', 'bank', 'account_type', 'exist_customer_dets','price_level'));
+        return view('admin.master.customer.add', compact('address_type', 'state', 'bank', 'account_type', 'exist_customer_dets','price_level','salesman','accountgroup'));
     }
 
 
-    public function store(CustomerRequest $request)
+    public function store(Request $request)
     {
         $customer_id = "";
         if ($request->customer_type == 0) {
@@ -51,8 +55,8 @@ class CustomerController extends Controller
         } else {
             $customer_id = $request->exist_customer_name;
         }
-
-        $customer = new Customer();
+				        
+				$customer = new Customer();
         $customer->company_name = $request->company_name;
         $customer->name = $request->name;
         $customer->customer_type = $request->customer_type;
@@ -60,6 +64,7 @@ class CustomerController extends Controller
         $customer->salutation = $request->salutation;
         $customer->phone_no = $request->phone_no;
         $customer->whatsapp_no = $request->whatsapp_no;
+        $customer->account_group_id = $request->account_group;
         $customer->email = $request->email;
         $customer->pan_card = $request->pan_card;
         $customer->gst_no = $request->gst_no;
@@ -68,6 +73,7 @@ class CustomerController extends Controller
         $customer->opening_balance = $request->opening_balance;
         $customer->remark = $request->remark;
         $customer->price_level = $request->price_level;
+        $customer->salesman = $request->salesman;
         $customer->customer_mode = $request->customer_mode;
         $customer->created_by = 0;
         $customer->updated_by = 0;
@@ -76,6 +82,7 @@ class CustomerController extends Controller
         if ($customer->save()) {
 
             $batch_insert_array = array();
+            if($request->has('address_line_1')){
             foreach ($request->address_type_id as $key => $value) {
                 $data_to_store = array(
                     'address_table' => "Cus",
@@ -95,6 +102,7 @@ class CustomerController extends Controller
                     'updated_at' => $now,
                 );
                 $batch_insert_array[] = $data_to_store;
+            }
             }
             $batch_insert_for_bank_details = [];
             if ($request->has('bank_id')) {
@@ -150,14 +158,16 @@ class CustomerController extends Controller
         $account_type = AccountType::all();
         $customer = Customer::find($id);
         $price_level = PriceLevel::all();
+        $salesman = SalesMan::all();
+        // echo '<pre>';print_r($customer); exit();
         $exist_customer_dets = CustomerSupplier::where('type', 'Customer')->get();
         $customer_bank_details = BankDetails::where('bank_ref_id', $id)->where('ref_table', 'Cus')->get();
         $customer_address_details = AddressDetails::where('address_ref_id', $id)->where('address_table', 'Cus')->get();
-        return view('admin.master.customer.edit', compact('exist_customer_dets', 'customer', 'customer_bank_details', 'customer_address_details', 'address_type', 'state', 'bank', 'account_type','price_level'));
+        return view('admin.master.customer.edit', compact('exist_customer_dets', 'customer', 'customer_bank_details', 'customer_address_details', 'address_type', 'state', 'bank', 'account_type','price_level','salesman'));
     }
 
 
-    public function update(CustomerRequest $request, Customer $customer, $id)
+    public function update(Request $request, Customer $customer, $id)
     {
         $customer = Customer::find($id);
         $customer_id = "";
@@ -195,6 +205,7 @@ class CustomerController extends Controller
         $customer->opening_balance = $request->opening_balance;
         $customer->remark = $request->remark;
         $customer->price_level = $request->price_level;
+        $customer->salesman = $request->salesman;
         $customer->updated_by = 0;
         $now = Carbon::now()->toDateTimeString();
 

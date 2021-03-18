@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <div class="form-row">
           <div class="col-md-6">
                   <div class="form-group row">
-                    <label for="validationCustom01" class="col-sm-4 col-form-label">Location :</label>
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Location <?php echo Mandatoryfields::mandatory('accountexpense_location_id');?>:</label>
                      <div class="col-sm-6">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select location_id"  name="location_id" id="location_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select location_id"  name="location_id" id="location_id" <?php echo Mandatoryfields::validation('accountexpense_location_id');?> autofocus>
                            <option value="">Choose location Name</option>
                            @foreach($location as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -41,9 +44,9 @@
 
                <div class="col-md-6">
                   <div class="form-group row">
-                        <label for="validationCustom01" class="col-sm-4 col-form-label">Date</label>
+                        <label for="validationCustom01" class="col-sm-4 col-form-label">Date<?php echo Mandatoryfields::mandatory('accountexpense_date');?></label>
                         <div class="col-sm-6">
-                      <input type="date" class="form-control date" id="date"  placeholder="" name="receipt_date" step="any" value="">
+                      <input type="date" class="form-control date" id="date"  placeholder="" name="receipt_date" step="any" value="" <?php echo Mandatoryfields::validation('accountexpense_date');?>>
                       </div>
             </div>
           </div>
@@ -53,9 +56,9 @@
          <div class="form-row">
           <div class="col-md-6">
                   <div class="form-group row">
-                    <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher No :</label>
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher No <?php echo Mandatoryfields::mandatory('accountexpense_voucher_no');?>:</label>
                      <div class="col-sm-6">
-                      <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="">
+                      <input type="text" class="form-control voucher_no" id="voucher_no"  placeholder="Payment Voucher No" name="voucher_no" step="any"  value="" <?php echo Mandatoryfields::validation('accountexpense_voucher_no');?>>
                      </div>
                      
                   </div>
@@ -63,9 +66,9 @@
 
                <div class="col-md-6">
                   <div class="form-group row">
-                        <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks</label>
+                        <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks<?php echo Mandatoryfields::mandatory('accountexpense_remark');?></label>
                         <div class="col-sm-6">
-                      <input type="text" class="form-control date" id="remarks"  placeholder="" name="remarks" step="any" value="">
+                      <input type="text" class="form-control date" id="remarks"  placeholder="" name="remarks" step="any" value="" <?php echo Mandatoryfields::validation('accountexpense_remark');?>>
                       </div>
             </div>
           </div>
@@ -88,10 +91,10 @@
 
                           <div class="row col-md-12 expense">
                             <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Head Name</label><br>
+                    <label style="font-family: Times new roman;">Head Name<?php echo Mandatoryfields::mandatory('accountexpense_debit_expense_type');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-12">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="debit_expense_type[]" id="expense_type" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="debit_expense_type[]" id="expense_type" <?php echo Mandatoryfields::validation('accountexpense_debit_expense_type');?>>
                          <option value="">Choose Head Name</option>
                          @foreach($account_head as $expense_types)
                         <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
@@ -102,16 +105,16 @@
                </div>
                         
                       <div class="col-md-3">
-                        <label style="font-family: Times new roman;">Amount</label>
-                      <input type="number" class="form-control expense_amount" id="expense_amount"  placeholder="Expense Amount" name="debit_expense_amount[]" step="any" title="Numbers Only" value="">
+                        <label style="font-family: Times new roman;">Amount<?php echo Mandatoryfields::mandatory('accountexpense_debit_expense_amount');?></label>
+                      <input type="number" class="form-control expense_amount" id="expense_amount"  placeholder="Expense Amount" name="debit_expense_amount[]" step="any" title="Numbers Only" value="" <?php echo Mandatoryfields::validation('accountexpense_debit_expense_amount');?>>
 
                       <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
 
                       </div>
 
                       <div class="col-md-3">
-                        <label style="font-family: Times new roman;">Remarks</label>
-                      <input type="text" class="form-control remark_debit" id="remark_debit" name="debit_remark[]" step="any" value="">
+                        <label style="font-family: Times new roman;">Remarks<?php echo Mandatoryfields::mandatory('accountexpense_debit_remark');?></label>
+                      <input type="text" class="form-control remark_debit" id="remark_debit" name="debit_remark[]" step="any" value="" <?php echo Mandatoryfields::validation('accountexpense_debit_remark');?>>
 
                       <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
 
@@ -148,10 +151,10 @@
 
                           <div class="row col-md-12 expense_credit">
                             <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Head Name</label><br>
+                    <label style="font-family: Times new roman;">Head Name<?php echo Mandatoryfields::mandatory('accountexpense_expense_type_credit');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-12">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type_credit[]" id="expense_type" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select expense_type" name="expense_type_credit[]" id="expense_type" <?php echo Mandatoryfields::validation('accountexpense_expense_type_credit');?>>
                          <option value="">Choose Head Name</option>
                          @foreach($account_head as $expense_types)
                         <option value="{{ $expense_types->id}}">{{ $expense_types->name}}</option>
@@ -162,16 +165,16 @@
                </div>
                         
                       <div class="col-md-3">
-                        <label style="font-family: Times new roman;">Amount</label>
-                      <input type="number" class="form-control expense_amount" id="expense_amount"  placeholder="Expense Amount" name="expense_amoun_credit[]" step="any" title="Numbers Only" value="">
+                        <label style="font-family: Times new roman;">Amount<?php echo Mandatoryfields::mandatory('accountexpense_expense_amoun_credit');?></label>
+                      <input type="number" class="form-control expense_amount" id="expense_amount"  placeholder="Expense Amount" name="expense_amoun_credit[]" step="any" title="Numbers Only" value="" <?php echo Mandatoryfields::validation('accountexpense_expense_amoun_credit');?>>
 
                       <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
 
                       </div>
 
                       <div class="col-md-3">
-                        <label style="font-family: Times new roman;">Remarks</label>
-                      <input type="text" class="form-control remark_debit" id="remark_debit" name="remark_debit_credit[]" step="any" value="">
+                        <label style="font-family: Times new roman;">Remarks<?php echo Mandatoryfields::mandatory('accountexpense_remark_debit_credit');?></label>
+                      <input type="text" class="form-control remark_debit" id="remark_debit" name="remark_debit_credit[]" step="any" value="" <?php echo Mandatoryfields::validation('accountexpense_remark_debit_credit');?>>
 
                       <input type="hidden" name="expense_total" id="expense_total" value="0" class="expense_total">
 

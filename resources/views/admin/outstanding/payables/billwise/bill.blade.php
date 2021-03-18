@@ -150,7 +150,7 @@ table, th, td {
           <div class="col-md-12 form-row mb-3">
             <div class="col-md-2">
               <label>From</label>
-            <input type="date" class="form-control from" name="from" id="from">
+            <input type="date" class="form-control from" name="from" id="from" autofocus="">
             </div>
 
             <div class="col-md-2">

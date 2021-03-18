@@ -20,6 +20,8 @@ use App\Models\Tax;
 use App\Models\AccountHead;
 use App\Models\TermsAndCondition;
 use Carbon\Carbon;
+use App\Models\VoucherNumbering;
+use App\Models\PurchaseVoucherType;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -128,28 +130,55 @@ $supplier = Supplier::all();
         $tax = Tax::all();
         $account_head = AccountHead::all();
         $terms = TermsAndCondition::where('name','Estimation')->get();
+        $voucher_type = PurchaseVoucherType::where('name','Estimation')->get();
 
         // echo '<pre>'; print_r($terms); exit();
         
 
-        $voucher_num=Estimation::orderBy('estimation_no','DESC')
-                           ->select('estimation_no')
+
+        $voucher_num=VoucherNumbering::where('id',1)
                            ->first();
 
-         if ($voucher_num == null) 
-         {
-             $voucher_no=1;
+                          // echo "<pre>"; print_r($voucher_num); exit();
 
-                             
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=Estimation::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
+         {
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
          }                  
-         else
+         else if($voucher_num->starting_no != null && $vouchers == null)
          {
-             $current_voucher_num=$voucher_num->estimation_no;
-             $voucher_no=$current_voucher_num+1;
-        
-         
-         }
+            $next_no=$starting_no+1;
 
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }  
         // $voucher_num=Estimation::orderBy('created_at','DESC')->select('id')->first();
         // $append = "E";
         // if ($voucher_num == null) 
@@ -172,7 +201,7 @@ $supplier = Supplier::all();
 
         //                    exit;
 
-        return view('admin.estimation.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','tax','account_head','terms'));
+        return view('admin.estimation.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','tax','account_head','terms','voucher_type'));
     }
 
     /**
@@ -194,24 +223,58 @@ $supplier = Supplier::all();
 
         $tax = Tax::all();  
 
+        $voucher_type = $request->voucher_type;
 
 
-         if ($estimation_no == null) 
+        $voucher_num=PurchaseVoucherType::where('id',$voucher_type)
+                                        ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $updated_no = $voucher_num->updated_no;   
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=Estimation::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $voucher_num != null) 
          {
-             $voucher_no=1;
-
-                             
+             $current_voucher_num=1;
+             $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
          }                  
-         else
+         else if($voucher_num->updated_no != null && $voucher_num == null)
          {
-             $current_voucher_num=$estimation_no->estimation_no;
-             $voucher_no=$current_voucher_num+1;
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
         
          }
+         else
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
          $voucher_date = $request->voucher_date;
 
-         $estimation = new Estimation();
+         PurchaseVoucherType::where('id',$voucher_type)
+                            ->update(['updated_no' => $current_voucher_num]);
 
+         $estimation = new Estimation();
+         $estimation->voucher_no = $current_voucher_num;
          $estimation->estimation_no = $voucher_no;
          $estimation->estimation_date = $request->voucher_date;
          $estimation->supplier_id = $request->supplier_id;
@@ -629,6 +692,7 @@ $supplier = Supplier::all();
 
          $estimation = new Estimation();
 
+         $estimation->voucher_no = $request->voucher_number;
          $estimation->estimation_no = $request->voucher_no;
          $estimation->estimation_date = $request->voucher_date;
          $estimation->supplier_id = $request->supplier_id;
@@ -851,6 +915,52 @@ $supplier = Supplier::all();
         return $expense_amount;
     }
 
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=Estimation::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
+    }
+
     public function address_details(Request $request)
     {
        $supplier_id = $request->supplier_id;
@@ -972,20 +1082,20 @@ $count=0;
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',@$tax_date->valid_from)
-                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */      
                           
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('valid_from',$tax_date->valid_from)
                                 ->get();
 
             foreach ($tax_view as $key => $value) 
@@ -998,7 +1108,7 @@ $count=0;
 
             /* end dynamic tax value */                    
 
-            $data[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => $cnt);    
+            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
 
         }          
          
@@ -1120,20 +1230,20 @@ $count=0;
             $tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
                                         ->first('valid_from');
 
             $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',@$tax_date->valid_from)
-                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
+                                ->where('valid_from',$tax_date->valid_from)
+                                ->where('tax_master_id','!=',$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */      
                           
             $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('valid_from',$tax_date->valid_from)
                                 ->get();
 
             foreach ($tax_view as $key => $value) 
@@ -1146,7 +1256,7 @@ $count=0;
 
             /* end dynamic tax value */                    
 
-            $data[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => $cnt);    
+            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
 
         }
 

@@ -9,7 +9,7 @@ use App\Models\ReceiptRequest;
 use App\Models\SaleEntry;
 use App\Models\AdvanceSettlementCustomer;
 use App\Models\ReceiptProcessAdjustments;
-
+use App\Models\ReceiptVoucherType;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -36,7 +36,8 @@ class ReceiptProcessController extends Controller
         $customer = Customer::all();
         $receipt_req = ReceiptRequest::all();
         $sale_entry = SaleEntry::all();
-        return view('admin.receipt_process.add',compact('customer','date','receipt_req','sale_entry'));
+        $type = ReceiptVoucherType::where('name','Receipt Process')->get();
+        return view('admin.receipt_process.add',compact('customer','date','receipt_req','sale_entry','type'));
     }
 
     /**
@@ -89,6 +90,53 @@ class ReceiptProcessController extends Controller
         $receipt_process_adjustments->save();
         }
          if($receipt_process) {
+
+            $voucher_type = $request->voucher_type;
+
+        $voucher_num = ReceiptVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=ReceiptProcess::orderBy('created_at','DESC')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         } 
+
+            ReceiptVoucherType::where('id',$request->voucher_type)
+                        ->update(['updated_no' => $current_voucher_num]);
+
             return Redirect::back()->with('success', 'Successfully created');
         } else {
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
@@ -138,6 +186,52 @@ class ReceiptProcessController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = ReceiptVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=ReceiptProcess::orderBy('created_at','DESC')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
     }
 
      public function advance_entry_det(Request $request)

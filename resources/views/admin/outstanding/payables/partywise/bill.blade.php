@@ -88,7 +88,7 @@ table, th, td {
                   <label style="font-family: Times new roman;">Party Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id" autofocus="">
                            <option value="">Choose Party Name</option>
                            @foreach($supplier as $suppliers)
                            <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>

@@ -33,7 +33,7 @@ Route::get('/emptydash', function () {
     return view('admin.master.empty');
 });
 
-
+Route::get('barcode', 'BarcodeController@barcode');
 Route::get('send-mail', function () {
    
     $details = [
@@ -57,6 +57,9 @@ Route::any('update-password/{id}', 'UserController@update_password');
 Route::any('common-master-details/get-state-master-details', 'CommonMasterDetailController@get_state_master_details');
 Route::any('common-master-details/get-district-master-details', 'CommonMasterDetailController@get_district_master_details');
 Route::any('common-master-details/get-city-master-details', 'CommonMasterDetailController@get_city_master_details');
+
+
+
 Route::any('common-master-details/get-location-type-master-details', 'CommonMasterDetailController@get_location_type_master_details');
 Route::any('common-master-details/get-bank-branch-master-details', 'CommonMasterDetailController@get_bank_branch_master_details');
 Route::any('common-master-details/get-bank-master-details', 'CommonMasterDetailController@get_bank_master_details');
@@ -155,13 +158,13 @@ Route::group(['prefix' => 'master/location-type', 'middleware' => ['auth']], fun
 
 /* Location Master Group Start Here  */
 Route::group(['prefix' => 'master/location', 'middleware' => ['auth']], function () {
-    Route::any('/', 'LocationController@index')->middleware('permission:location_list');
-    Route::any('create', 'LocationController@create')->middleware('permission:location_create');
-    Route::any('store', 'LocationController@store')->middleware('permission:location_create');
-    Route::any('show/{id}', 'LocationController@show')->middleware('permission:location_list');
-    Route::any('edit/{id}', 'LocationController@edit')->middleware('permission:location_edit');
-    Route::any('update/{id}', 'LocationController@update')->middleware('permission:location_edit');
-    Route::any('delete/{id}', 'LocationController@destroy')->middleware('permission:location_delete');
+    Route::any('/', 'LocationController@index');
+    Route::any('create', 'LocationController@create');
+    Route::any('store', 'LocationController@store');
+    Route::any('show/{id}', 'LocationController@show');
+    Route::any('edit/{id}', 'LocationController@edit');
+    Route::any('update/{id}', 'LocationController@update');
+    Route::any('delete/{id}', 'LocationController@destroy');
 });
 /* Location Master  End Here  */
 
@@ -355,6 +358,9 @@ Route::group(['prefix' => 'master/agent', 'middleware' => ['auth']], function ()
     Route::any('delete-agent-proof-details', 'AgentController@delete_agent_proof_details')->middleware('permission:agent_delete');
 });
 Route::post('master/agent/checkname/', 'AgentController@checkname');
+Route::post('agent/select_city_based_districts', 'CityController@get_city_based_districts');
+Route::post('agent/select_district_based_districts', 'DistrictController@get_district_based_state');
+
 /* Agent Master End Here  */
 /* Customer Master  Start Here  */
 Route::group(['prefix' => 'master/customer', 'middleware' => ['auth']], function () {
@@ -437,13 +443,13 @@ Route::group(['prefix' => 'master/category-one', 'middleware' => ['auth']], func
 
 /* Category Master  Start Here  */
 Route::group(['prefix' => 'master/category', 'middleware' => ['auth']], function () {
-    Route::any('/', 'CategoryController@index')->middleware('permission:category_1_master_list');
-    Route::any('create', 'CategoryController@create')->middleware('permission:category_1_master_create');
-    Route::any('store', 'CategoryController@store')->middleware('permission:category_1_master_create');
-    Route::any('show/{id}', 'CategoryController@show')->middleware('permission:category_1_master_list');
-    Route::any('edit/{id}', 'CategoryController@edit')->middleware('permission:category_1_master_edit');
-    Route::any('update/{id}', 'CategoryController@update')->middleware('permission:category_1_master_edit');
-    Route::any('delete/{id}', 'CategoryController@destroy')->middleware('permission:category_1_master_delete');
+    Route::any('/', 'CategoryController@index');
+    Route::any('create', 'CategoryController@create');
+    Route::any('store', 'CategoryController@store');
+    Route::any('show/{id}', 'CategoryController@show');
+    Route::any('edit/{id}', 'CategoryController@edit');
+    Route::any('update/{id}', 'CategoryController@update');
+    Route::any('delete/{id}', 'CategoryController@destroy');
 });
 /* Category Master End Here  */
 
@@ -554,11 +560,8 @@ Route::group(['prefix' => 'master/uom-factor-convertion-for-item', 'middleware' 
 
 /* User Master Start Here  */
 Route::group(['prefix' => 'master/user', 'middleware' => ['auth']], function () {
-    // Route::any('/', 'UserController@index')->middleware('permission:user_list');
-    // Route::any('create', 'UserController@create')->middleware('permission:user_create');
-
-    Route::any('/', 'UserController@index');
-    Route::any('create', 'UserController@create');
+    Route::any('/', 'UserController@index')->middleware('permission:user_list');
+    Route::any('create', 'UserController@create')->middleware('permission:user_create');
     Route::any('store', 'UserController@store')->middleware('permission:user_create');
     Route::any('show/{id}', 'UserController@show')->middleware('permission:user_list');
     Route::any('edit/{id}', 'UserController@edit')->middleware('permission:user_edit');
@@ -642,6 +645,7 @@ Route::post('estimation/print/', 'EstimationController@print_details');
 
 Route::get('estimation/cancel/{id}', 'EstimationController@cancel');
 Route::get('estimation/retrieve/{id}', 'EstimationController@retrieve');
+Route::post('estimation/voucher_type/', 'EstimationController@voucher_type');
 
 // Route::post('estimation/print/', 'EstimationPrintController@create_page_print');
 
@@ -649,9 +653,42 @@ Route::get('estimation/retrieve/{id}', 'EstimationController@retrieve');
 
 /* Purchase Order Start Here  */
 
-Route::resource('purchase_order', 'PurchaseOrderController',['middleware' => ['auth']])->middleware('permission:purchase_order_edit|purchase_order_create');
+// Route::resource('purchase_order', 'PurchaseOrderController',['middleware' => ['auth']])->middleware('permission:purchase_order_edit|purchase_order_create');
+// Route::group(['middleware' => 'auth'], function () {
+//      Route::get('purchase_order/index/{id}', 'PurchaseOrderController@index')->middleware('permission:purchase_order_list');
+// });
+
+// Route::post('purchase_order/address_details/', 'PurchaseOrderController@address_details');
+// Route::get('purchase_order/getdata/{id}', 'PurchaseOrderController@getdata');
+// Route::get('purchase_order/remove_data/{id}', 'PurchaseOrderController@remove_data');
+// Route::get('purchase_order/change_items/{id}', 'PurchaseOrderController@change_items');
+// Route::post('purchase_order/brand_filter/', 'PurchaseOrderController@brand_filter');
+// Route::get('purchase_order/browse_item/{id}', 'PurchaseOrderController@browse_item');
+// Route::get('purchase_order/getdata_item/{id}', 'PurchaseOrderController@getdata_item');
+// Route::get('purchase_order/same_items/{id}', 'PurchaseOrderController@same_items');
+// Route::get('purchase_order/item_details/{id}', 'PurchaseOrderController@item_details');
+// Route::get('purchase_order/expense_details/{id}', 'PurchaseOrderController@expense_details');
+// Route::post('purchase_order/last_purchase_rate/', 'PurchaseOrderController@last_purchase_rate');
+// Route::get('purchase_order/delete/{id}', 'PurchaseOrderController@destroy')->middleware('permission:purchase_order_delete');
+// Route::post('purchase_order/estimation_details/', 'PurchaseOrderController@estimation_details');
+
+// Route::get('purchase_order/cancel/{id}', 'PurchaseOrderController@cancel');
+// Route::get('purchase_order/retrieve/{id}', 'PurchaseOrderController@retrieve');
+
+// Route::post('purchase_order/beta_data/', 'PurchaseOrderController@beta_data');
+
+// Route::get('purchase_order/show_beta/{id}', 'PurchaseOrderController@show_beta');
+// Route::get('purchase_order/edit_beta/{id}', 'PurchaseOrderController@edit_beta');
+// Route::get('purchase_order/delete_beta/{id}', 'PurchaseOrderController@delete_beta');
+// Route::get('purchase_order/cancel_beta/{id}', 'PurchaseOrderController@cancel_beta');
+// Route::get('purchase_order/retrieve_beta/{id}', 'PurchaseOrderController@retrieve_beta');
+// Route::get('purchase_order/item_beta_details/{id}', 'PurchaseOrderController@item_beta_details');
+// Route::get('purchase_order/expense_beta_details/{id}', 'PurchaseOrderController@expense_beta_details');
+
+    
+Route::resource('purchase_order', 'PurchaseOrderController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('purchase_order/index/{id}', 'PurchaseOrderController@index')->middleware('permission:purchase_order_list');
+     Route::get('purchase_order/index/{id}', 'PurchaseOrderController@index');
 });
 
 Route::post('purchase_order/address_details/', 'PurchaseOrderController@address_details');
@@ -665,7 +702,7 @@ Route::get('purchase_order/same_items/{id}', 'PurchaseOrderController@same_items
 Route::get('purchase_order/item_details/{id}', 'PurchaseOrderController@item_details');
 Route::get('purchase_order/expense_details/{id}', 'PurchaseOrderController@expense_details');
 Route::post('purchase_order/last_purchase_rate/', 'PurchaseOrderController@last_purchase_rate');
-Route::get('purchase_order/delete/{id}', 'PurchaseOrderController@destroy')->middleware('permission:purchase_order_delete');
+Route::get('purchase_order/delete/{id}', 'PurchaseOrderController@destroy');
 Route::post('purchase_order/estimation_details/', 'PurchaseOrderController@estimation_details');
 
 Route::get('purchase_order/cancel/{id}', 'PurchaseOrderController@cancel');
@@ -680,6 +717,11 @@ Route::get('purchase_order/cancel_beta/{id}', 'PurchaseOrderController@cancel_be
 Route::get('purchase_order/retrieve_beta/{id}', 'PurchaseOrderController@retrieve_beta');
 Route::get('purchase_order/item_beta_details/{id}', 'PurchaseOrderController@item_beta_details');
 Route::get('purchase_order/expense_beta_details/{id}', 'PurchaseOrderController@expense_beta_details');
+
+Route::post('purchase_order/voucher_type/', 'PurchaseOrderController@voucher_type');
+
+
+
 /* Purchase Order End Here  */
 
 /* Purchase Gate Pass entry Start Here  */
@@ -718,6 +760,7 @@ Route::post('purchase_entry/receipt_details/', 'PurchaseEntryController@receipt_
 
 Route::get('purchase_entry/cancel/{id}', 'PurchaseEntryController@cancel');
 Route::get('purchase_entry/retrieve/{id}', 'PurchaseEntryController@retrieve');
+Route::get('purchase_entry/print_batchcode/{id}', 'PurchaseEntryController@print_batchcode');
 
 Route::post('purchase_entry/po_alpha_beta/', 'PurchaseEntryController@po_alpha_beta');
 
@@ -728,6 +771,8 @@ Route::get('purchase_entry/cancel_beta/{id}', 'PurchaseEntryController@cancel_be
 Route::get('purchase_entry/retrieve_beta/{id}', 'PurchaseEntryController@retrieve_beta');
 Route::get('purchase_entry/item_beta_details/{id}', 'PurchaseEntryController@item_beta_details');
 Route::get('purchase_entry/expense_beta_details/{id}', 'PurchaseEntryController@expense_beta_details');
+
+Route::post('purchase_entry/voucher_type/', 'PurchaseEntryController@voucher_type');
 
 
 /* Purchase entry End Here  */
@@ -753,6 +798,8 @@ Route::get('sales_estimation/delete/{id}', 'SalesEstimationController@destroy');
 
 Route::get('sales_estimation/cancel/{id}', 'SalesEstimationController@cancel');
 Route::get('sales_estimation/retrieve/{id}', 'SalesEstimationController@retrieve');
+
+Route::post('sales_estimation/voucher_type/', 'SalesEstimationController@voucher_type');
 
 /* Sales Estimation End Here  */
 
@@ -786,6 +833,8 @@ Route::get('sale_order/cancel_beta/{id}', 'SalesOrderController@cancel_beta');
 Route::get('sale_order/retrieve_beta/{id}', 'SalesOrderController@retrieve_beta');
 Route::get('sale_order/item_beta_details/{id}', 'SalesOrderController@item_beta_details');
 Route::get('sale_order/expense_beta_details/{id}', 'SalesOrderController@expense_beta_details');
+
+Route::post('sale_order/voucher_type/', 'SalesOrderController@voucher_type');
 
 /* Sales Order End Here  */
 
@@ -823,6 +872,8 @@ Route::get('sales_entry/item_beta_details/{id}', 'SalesEntryController@item_beta
 Route::get('sales_entry/expense_beta_details/{id}', 'SalesEntryController@expense_beta_details');
 
 Route::post('sales_entry/getdata_offer/', 'SalesEntryController@getdata_offer');
+
+Route::post('sales_entry/voucher_type/', 'SalesEntryController@voucher_type');
 
 
 /* Sales entry End Here  */
@@ -873,7 +924,7 @@ Route::get('receipt_note/cancel_beta/{id}', 'ReceiptNoteController@cancel_beta')
 Route::get('receipt_note/retrieve_beta/{id}', 'ReceiptNoteController@retrieve_beta');
 Route::get('receipt_note/item_beta_details/{id}', 'ReceiptNoteController@item_beta_details');
 Route::get('receipt_note/expense_beta_details/{id}', 'ReceiptNoteController@expense_beta_details');
-
+Route::post('receipt_note/voucher_type/', 'ReceiptNoteController@voucher_type');
 
 /* Receipt Note End Here  */
 
@@ -906,6 +957,8 @@ Route::get('debit_note/cancel_beta/{id}', 'DebitNoteController@cancel_beta');
 Route::get('debit_note/retrieve_beta/{id}', 'DebitNoteController@retrieve_beta');
 Route::get('debit_note/item_beta_details/{id}', 'DebitNoteController@item_beta_details');
 Route::get('debit_note/expense_beta_details/{id}', 'DebitNoteController@expense_beta_details');
+
+Route::post('debit_note/voucher_type/', 'DebitNoteController@voucher_type');
 
 
 /* Debit Note End Here  */
@@ -945,6 +998,8 @@ Route::get('delivery_note/retrieve_beta/{id}', 'DeliveryNoteController@retrieve_
 Route::get('delivery_note/item_beta_details/{id}', 'DeliveryNoteController@item_beta_details');
 Route::get('delivery_note/expense_beta_details/{id}', 'DeliveryNoteController@expense_beta_details');
 
+Route::post('delivery_note/voucher_type/', 'DeliveryNoteController@voucher_type');
+
 /* Delivery Note End Here  */
 
 /* Credit Note Start Here  */
@@ -976,6 +1031,8 @@ Route::post('credit_note/po_alpha_beta/', 'CreditNoteController@po_alpha_beta');
 Route::get('credit_note/delete_beta/{id}', 'CreditNoteController@delete_beta');
 Route::get('credit_note/cancel_beta/{id}', 'CreditNoteController@cancel_beta');
 Route::get('credit_note/retrieve_beta/{id}', 'CreditNoteController@retrieve_beta');
+
+Route::post('credit_note/voucher_type/', 'CreditNoteController@voucher_type');
 
 /* Credit Note End Here  */
 
@@ -1012,6 +1069,7 @@ Route::get('rejection_in/retrieve_beta/{id}', 'RejectionInController@retrieve_be
 Route::get('rejection_in/item_beta_details/{id}', 'RejectionInController@item_beta_details');
 Route::get('rejection_in/expense_beta_details/{id}', 'RejectionInController@expense_beta_details');
 
+Route::post('rejection_in/voucher_type/', 'RejectionInController@voucher_type');
 /* Rejection In End Here  */
 
 
@@ -1049,6 +1107,8 @@ Route::get('rejection_out/cancel_beta/{id}', 'RejectionOutController@cancel_beta
 Route::get('rejection_out/retrieve_beta/{id}', 'RejectionOutController@retrieve_beta');
 Route::get('rejection_out/item_beta_details/{id}', 'RejectionOutController@item_beta_details');
 Route::get('rejection_out/expense_beta_details/{id}', 'RejectionOutController@expense_beta_details');
+
+Route::post('rejection_out/voucher_type/', 'RejectionOutController@voucher_type');
 
 
 /* Rejection Out End Here  */
@@ -1114,6 +1174,9 @@ Route::post('pos/getdata_offer/', 'PosController@getdata_offer');
 /*Payment Request Start Here*/
 
 Route::resource('payment_request','PaymentRequestController',['middleware' => ['auth']])->middleware('permission:payment_request_list|payment_request_create|payment_request_edit|payment_request_delete');
+
+Route::post('payment_request/voucher_type/', 'PaymentRequestController@voucher_type');
+
 //Route::resource('store', 'PaymentRequestController@store')->middleware('permission:payment_request');
 
 /*Payment Request End Here*/
@@ -1124,11 +1187,15 @@ Route::resource('payment_process','PaymentProcessController',['middleware' => ['
 Route::post('payment_process/purchase_entry_det/', 'PaymentProcessController@purchase_entry_det');
 Route::post('payment_process/advance_entry_det/', 'PaymentProcessController@advance_entry_det');
 
+Route::post('payment_process/voucher_type/', 'PaymentProcessController@voucher_type');
+
 /*Payment Process End Here*/
 
 /*Receipt Request Start Here*/
 
 Route::resource('receipt_request','ReceiptRequestController',['middleware' => ['auth']])->middleware('permission:receipt_request_list|receipt_request_create|receipt_request_edit|receipt_request_delete');
+
+Route::post('receipt_request/voucher_type/', 'ReceiptRequestController@voucher_type');
 
 /*Receipt Request End Here*/
 
@@ -1137,6 +1204,8 @@ Route::resource('receipt_request','ReceiptRequestController',['middleware' => ['
 Route::resource('receipt_process','ReceiptProcessController',['middleware' => ['auth']])->middleware('permission:receipt_process_list|receipt_process_create|receipt_process_edit|receipt_process_delete');
 Route::post('receipt_process/sale_entry_det/', 'ReceiptProcessController@sale_entry_det');
 Route::post('receipt_process/advance_entry_det/', 'ReceiptProcessController@advance_entry_det');
+
+Route::post('receipt_process/voucher_type/', 'ReceiptProcessController@voucher_type');
 
 
 /*Receipt Process End Here*/
@@ -1336,6 +1405,12 @@ Route::any('mailsetting-setup/show/{id}', 'MailSettingController@show');
 Route::any('mailsetting-setup/edit/{id}', 'MailSettingController@edit');
 Route::any('mailsetting-setup/send_email/{id}', 'MailSettingController@send_email');
 
+/*Voucher Numbering Start Here*/
+
+Route::resource('voucher-numbering','VoucherNumberingController',['middleware' => ['auth']]);
+
+/*Voucher Numbering End Here*/
+
 // Route::group(['prefix' => 'mailsetting-setup', 'middleware' => ['auth']], function () {
 //     Route::any('/mailsetting-setup', 'MailSettingController@index')->middleware('permission:bank_branch_list');
 //     Route::any('create', 'MailSettingController@create')->middleware('permission:bank_branch_create');
@@ -1356,9 +1431,36 @@ Route::post('received/branch_details/', 'ReceivedController@branch_details');
 Route::post('received/act_type_details/', 'ReceivedController@act_type_details');
 Route::post('received/store_pos/', 'ReceivedController@store_pos');
 
-Route::any('print', 'PosController@print');
-  
+    
 /*  Received end here */
+
+/* Purchase Voucher Types Starts here  */
+
+Route::resource('purchase-voucher-type','PurchaseVoucherTypeController',['middleware' => ['auth']]);
+Route::get('purchase-voucher-type/delete/{id}', 'PurchaseVoucherTypeController@destroy');
+
+/*  Purchase Voucher Types end here */
+
+/* Sales Voucher Types Starts here  */
+
+Route::resource('sales-voucher-type','SalesVoucherTypeController',['middleware' => ['auth']]);
+Route::get('sales-voucher-type/delete/{id}', 'SalesVoucherTypeController@destroy');
+
+/*  Sales Voucher Types end here */
+
+/* Payment Voucher Types Starts here  */
+
+Route::resource('payment-voucher-type','PaymentVoucherTypeController',['middleware' => ['auth']]);
+Route::get('payment-voucher-type/delete/{id}', 'PaymentVoucherTypeController@destroy');
+
+/*  Payment Voucher Types end here */
+
+/* Receipt Voucher Types Starts here  */
+
+Route::resource('receipt-voucher-type','ReceiptVoucherTypeController',['middleware' => ['auth']]);
+Route::get('receipt-voucher-type/delete/{id}', 'ReceiptVoucherTypeController@destroy');
+
+/*  Receipt Voucher Types end here */
 
 /* Paid starts here  */
 

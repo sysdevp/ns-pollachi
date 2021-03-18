@@ -87,4 +87,12 @@ class DistrictController extends Controller
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
     }
+
+    public function get_district_based_state(Request $request)
+    {
+         $city = District::where('id',$request->district_id)->get();
+         $state_id      = $city[0]->state_id;
+         $data = array('state_id' => $state_id);
+         return $data;
+    }
 }

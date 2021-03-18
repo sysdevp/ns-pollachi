@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -61,10 +64,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
 <div class="col-md-12 row mb-3">
       <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Item Name</label><br>
+                    <label style="font-family: Times new roman;">Item Name<?php echo Mandatoryfields::mandatory('bom_itemname');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select itemname" name="itemname" id="itemname" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select itemname" name="itemname" id="itemname" <?php echo Mandatoryfields::validation('bom_itemname');?> autofocus>
                            <option value="{{ $bom->product_item_id }}">{{$bom->items->name}}</option>
                            @foreach($item as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -88,8 +91,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
       <div class="row col-md-12">
 
         <div class="col-md-2">
-          <label style="font-family: Times new roman;">Item Code</label>
-          <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
+          <label style="font-family: Times new roman;">Item Code<?php echo Mandatoryfields::mandatory('bom_itemcode');?></label>
+          <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()" <?php echo Mandatoryfields::validation('bom_itemcode');?>>
 
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
                
@@ -211,8 +214,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
 
                     <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Quantity</label>
-                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
+                        <label style="font-family: Times new roman;">Quantity<?php echo Mandatoryfields::mandatory('bom_quantity');?></label>
+                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="" <?php echo Mandatoryfields::validation('bom_quantity');?>>
                       </div>
 
                       <div class="col-md-2">

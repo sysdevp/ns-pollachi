@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -27,8 +30,8 @@
 
         <div class="form-row col-md-12 tax_details mb-3">
           <div class="col-md-4">
-            <label for="validationCustom01" class="col-sm-4 col-form-label">Account Group</label><br>
-            <select class="js-example-basic-multiple col-12 form-control custom-select group caps"  name="group" id="group" required="">
+            <label for="validationCustom01" class="col-sm-4 col-form-label">Account Group<?php echo Mandatoryfields::mandatory('accountgrouptax_group');?></label><br>
+            <select class="js-example-basic-multiple col-12 form-control custom-select group caps"  name="group" id="group" <?php echo Mandatoryfields::validation('accountgrouptax_group');?> autofocus>
                   <option value="{{@$account_group_tax->under_data->id}}">{{@$account_group_tax->under_data->name}}</option>
                   @foreach($account_group as $value)
                   <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -40,8 +43,8 @@
 
         <div class="form-row col-md-12 tax_details mb-3">
           <div class="col-md-4">
-            <label for="validationCustom01" class="col-sm-4 col-form-label">Tax Name</label><br>
-            <select class="js-example-basic-multiple col-12 form-control custom-select type"  name="tax_name" id="tax_name" required="">
+            <label for="validationCustom01" class="col-sm-4 col-form-label">Tax Name<?php echo Mandatoryfields::mandatory('accountgrouptax_taxname');?></label><br>
+            <select class="js-example-basic-multiple col-12 form-control custom-select type"  name="tax_name" id="tax_name" <?php echo Mandatoryfields::validation('accountgrouptax_taxname');?>>
                   <option value="{{@$account_group_tax->taxes->id}}">{{@$account_group_tax->taxes->name}}</option>
                   @foreach($tax as $value)
                   <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -49,12 +52,12 @@
             </select>
           </div>
           <div class="col-md-4">
-            <label for="validationCustom01" class="col-sm-4 col-form-label">Tax%</label><br>
-            <input type="text" class="form-control tax_rate" placeholder="Rate Of Tax" name="tax_rate" value="{{@$account_group_tax->tax_value}}" required="">
+            <label for="validationCustom01" class="col-sm-4 col-form-label">Tax%<?php echo Mandatoryfields::mandatory('accountgrouptax_taxrate');?></label><br>
+            <input type="text" class="form-control tax_rate" placeholder="Rate Of Tax" name="tax_rate" value="{{@$account_group_tax->tax_value}}" <?php echo Mandatoryfields::validation('accountgrouptax_taxrate');?>>
           </div>
           <div class="col-md-4">
-            <label for="validationCustom01" class="col-sm-4 col-form-label">Type</label><br>
-          <select class="js-example-basic-multiple col-12 form-control custom-select type"  name="type" id="type" required="">
+            <label for="validationCustom01" class="col-sm-4 col-form-label">Type<?php echo Mandatoryfields::mandatory('accountgrouptax_type');?></label><br>
+          <select class="js-example-basic-multiple col-12 form-control custom-select type"  name="type" id="type" <?php echo Mandatoryfields::validation('accountgrouptax_type');?>>
             @if($account_group_tax->type == 1)
             <option value="1">Credit</option>
             @else

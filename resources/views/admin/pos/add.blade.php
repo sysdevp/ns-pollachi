@@ -77,7 +77,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                   <div class="col-md-2">
                     <label style="font-family: Times new roman;">Voucher Date</label><br>
-                  <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                  <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" autofocus="">
                    
                   </div>
 
@@ -2931,8 +2931,7 @@ else
              {
               var tax_master_id = data[1].tax_master[new_val];
 
-              var tax_master_input_val = $('#'+tax_master_id);
-            //  var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
 
               if(tax_master_id == tax_master_input_val)
               {

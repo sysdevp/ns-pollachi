@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Supplier;
 use App\Models\ExpenseType;
 use App\Models\Tax;
+use App\Models\ReceiptVoucherType;
 
 class ReceiptIncomeController extends Controller
 {
@@ -30,7 +31,8 @@ class ReceiptIncomeController extends Controller
         $supplier = Supplier::all();
         $income = ExpenseType::all();
         $tax = Tax::all();
-        return view('admin.receipt_income.add',compact('date','supplier','income','tax'));
+        $type = ReceiptVoucherType::where('name','Receipt Of Income')->get();
+        return view('admin.receipt_income.add',compact('date','supplier','income','tax','type'));
     }
 
     /**
