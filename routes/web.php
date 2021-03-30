@@ -283,8 +283,8 @@ Route::group(['prefix' => 'master/department', 'middleware' => ['auth']], functi
 /* Denomination Master  Start Here  */
 Route::group(['prefix' => 'master/designation', 'middleware' => ['auth']], function () {
     Route::any('/', 'DesignationController@index')->middleware('permission:desigination_list');
-    Route::any('create', 'DesignationController@create')->middleware('permission:desigination_create');
-    Route::any('store', 'DesignationController@store')->middleware('permission:desigination_create');
+    Route::any('create', 'DesignationController@create');
+    Route::any('store', 'DesignationController@store');
     Route::any('show/{id}', 'DesignationController@show')->middleware('permission:desigination_list');
     Route::any('edit/{id}', 'DesignationController@edit')->middleware('permission:desigination_edit');
     Route::any('update/{id}', 'DesignationController@update')->middleware('permission:desigination_edit');

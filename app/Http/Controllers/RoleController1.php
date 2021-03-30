@@ -45,13 +45,27 @@ class RoleController extends Controller
         return Redirect::back()->with('success', 'Successfully created');
     }
 
+    // public function show($id)
+    // {
+    //     $role = Role::find($id);
+    //     $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+    //         ->where("role_has_permissions.role_id",$id)
+    //         ->get();
+    //     return view('admin.master.role.show',compact('role','rolePermissions'));
+    // }
     public function show($id)
     {
+        // $role = Role::find($id);
+        // $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+        //     ->where("role_has_permissions.role_id",$id)
+        //     ->get();
+
         $role = Role::find($id);
-        $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
-            ->where("role_has_permissions.role_id",$id)
-            ->get();
-        return view('admin.master.role.show',compact('role','rolePermissions'));
+        $permission = Permission::get();
+        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
+            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
+            ->all();
+        return view('admin.master.role.show',compact('role','permission','rolePermissions'));
     }
 
     public function edit($id)
