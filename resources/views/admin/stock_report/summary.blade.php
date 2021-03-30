@@ -161,7 +161,7 @@ table, th, td {
             </div>
           </div> -->
 
-          <div class="col-md-12 form-row mb-3">
+          <!-- <div class="col-md-12 form-row mb-3">
             <div class="col-md-2">
               <label>From</label>
             <input type="date" class="form-control from" name="from" id="from">
@@ -193,73 +193,53 @@ table, th, td {
               </div>
 
             
-          </div>
+          </div> -->
           
           <table class="table table-striped table-bordered table-responsive" id="stock_summary">
                   <thead>
                     <tr>
-                    <th rowspan="2"> S.no </th>
-                    <th rowspan="2"> Name Of Item </th>
-                    <th rowspan="2"> Group</th>
-                    <th rowspan="2"> Category</th>
-                    <th align="center" rowspan="2" id="op_stock"> Opening Stock</th>
-                    <th align="center" rowspan="2" id="cls_stock"> Closing Stock</th>
-                    <th align="center" colspan="3" id="p_e"> Purchase Estimation</th>
-                    <th align="center" colspan="3" id="p_o"> Purchase Order</th>
-                    <th align="center" colspan="3" id="r_note"> Receipt Note</th>
-                    <th align="center" colspan="3" id="p_enrty"> Purchase Entry</th>
-                    <th align="center" colspan="3" id="r_out"> Rejection Out</th>
-                    <th align="center" colspan="3" id="d_n"> Debit Note</th>
-                    <th align="center" colspan="3" id="s_e"> Sales Estimation</th>
-                    <th align="center" colspan="3" id="s_o"> Sales Order</th>
-                    <th align="center" colspan="3" id="d_note"> Delivery Note</th>
-                    <th align="center" colspan="3" id="s_entry"> Sales Entry</th>
-                    <th align="center" colspan="3" id="r_in"> Rejection In</th>
-                    <th align="center" colspan="3" id="c_note"> Credit Note</th>
-                    </tr>
-                    <tr>
-                      <!-- <th id="op_stock1">Qty</th>
-                      <th id="op_stock2">Rate</th>
-                      <th id="op_stock3">Amount</th>
-                      <th id="cls_stock1">Qty</th>
-                      <th id="cls_stock2">Rate</th>
-                      <th id="cls_stock3">Amount</th> -->
-                      <td id="p_e1">Qty</td>
-                      <td id="p_e1">Rate</td>
-                      <td id="p_e3">Amount</td>
-                      <td id="p_o1">Qty</td>
-                      <td id="p_o2">Rate</td>
-                      <td id="p_o3">Amount</td>
-                      <td id="r_note1">Qty</td>
-                      <td id="r_note2">Rate</td>
-                      <td id="r_note3"> Amount</td>
-                      <td id="p_enrty1">Qty</td>
-                      <td id="p_enrty2">Rate</td>
-                      <td id="p_enrty3">Amount</td>
-                      <td id="r_out1">Qty</td>
-                      <td id="r_out2">Rate</td>
-                      <td id="r_out3">Amount</td>
-                      <td id="d_n1">Qty</td>
-                      <td id="d_n2">Rate</td>
-                      <td id="d_n3">Amount</td>
-                      <td id="s_e1">Qty</td>
-                      <td id="s_e2">Rate</td>
-                      <td id="s_e3">Amount</td>
-                      <td id="s_o1">Qty</td>
-                      <td id="s_o2">Rate</td>
-                      <td id="s_o3">Amount</td>
-                      <td id="d_note1">Qty</td>
-                      <td id="d_note2">Rate</td>
-                      <td id="d_note3">Amount</td>
-                      <td id="s_entry1">Qty</td>
-                      <td id="s_entry2">Rate</td>
-                      <td id="s_entry3">Amount</td>
-                      <td id="r_in1">Qty</td>
-                      <td id="r_in2">Rate</td>
-                      <td id="r_in3">Amount</td>
-                      <td id="c_note1">Qty</td>
-                      <td id="c_note2">Rate</td>
-                      <td id="c_note3">Amount</td> 
+                    <th> S.no </th>
+                    <th> Name Of Item </th>
+                    <th> Group</th>
+                    <th> Category</th>
+                    <th> Opening Stock</th>
+                    <th> Closing Stock</th>
+                      <th>Purchase Estimation Qty</th>
+                      <th>Purchase Estimation Rate</th>
+                      <th >Purchase Estimation Amount</th>
+                      <th >Purchase Order Qty</th>
+                      <th > Purchase Order Rate</th>
+                      <th >Purchase Order Amount</th>
+                      <th >Receipt Note Qty</th>
+                      <th >Receipt Note Rate</th>
+                      <th > Receipt Note Amount</th>
+                      <th >Purchase Entry Qty</th>
+                      <th > Purchase Entry Rate</th>
+                      <th >Purchase Entry Amount</th>
+                      <th >Rejection Out Qty</th>
+                      <th >Rejection Out Rate</th>
+                      <th >Rejection Out Amount</th>
+                      <th >Debit Note Qty</th>
+                      <th >Debit Note Rate</th>
+                      <th >Debit Note Amount</th>
+                      <th>Sales Estimation Qty</th>
+                      <th >Sales Estimation Rate</th>
+                      <th >Sales Estimation Amount</th>
+                      <th >Sales Order Qty</th>
+                      <th >Sales Order Rate</th>
+                      <th >Sales Order Amount</th>
+                      <th >Delivery Note Qty</th>
+                      <th >Delivery Note Rate</th>
+                      <th >Delivery Note Amount</th>
+                      <th >Sales Entry Qty</th>
+                      <th >Sales Entry Rate</th>
+                      <th >Sales Entry Amount</th>
+                      <th>Rejection In Qty</th>
+                      <th >Rejection In Rate</th>
+                      <th >Rejection In Amount</th>
+                      <th >Credit Note Qty</th>
+                      <th >Credit Note Rate</th>
+                      <th >Credit Note Amount</th> 
                     </tr>
                   </thead>
                   <tbody>
@@ -271,58 +251,43 @@ table, th, td {
                       <td>{{ $array_details[$i]['category'] }}</td>
                       <td>{{ $array_details[$i]['opening_stock'] }}</td>
                       <td>{{ $array_details[$i]['closing_stock'] }}</td>
-
                       <td>{{ $array_details[$i]['purchase_estimation_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['purchase_estimation_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['purchase_order_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['purchase_order_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['receipt_note_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['receipt_note_amount'] }}</td>
-
-
                       <td>{{ $array_details[$i]['purchase_entry_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['purchase_entry_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['rejection_out_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['rejection_out_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['debit_note_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['debit_note_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['sale_estimation_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['sale_estimation_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['sale_order_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['sale_order_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['delivery_note_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['delivery_note_amount'] }}</td>
-                      
                       <td>{{ $array_details[$i]['sale_entry_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['sale_entry_amount'] }}</td>
-
                       <td>{{ $array_details[$i]['rejection_in_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['rejection_in_amount'] }}</td>
-                      
-
                       <td>{{ $array_details[$i]['credit_note_quantity'] }}</td>
                       <td>{{ $array_details[$i]['purchase_item_mrp'] }}</td>
                       <td>{{ $array_details[$i]['credit_note_amount'] }}</td>
                      
-                      <td> </td>
                       </tr>
                     @endfor
                   </tbody>

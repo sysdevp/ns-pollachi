@@ -51,6 +51,7 @@ use App\Models\RejectionOutTax;
 use App\Models\RejectionOutBetaTax;
 use App\Models\PurchaseVoucherType;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\UploadDocument;
 
 
 class ReceiptNoteController extends Controller
@@ -419,6 +420,26 @@ class ReceiptNoteController extends Controller
             
         }
 
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
         if($request->has('check'))
         {
           $receipt_note = new ReceiptNoteBeta();
@@ -659,6 +680,7 @@ class ReceiptNoteController extends Controller
         $receipt_note_items = ReceiptNoteItem::where('rn_no',$id)->get();
         $receipt_note_expense = ReceiptNoteExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteTax::where('rn_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
 
         //echo "<pre>"; print_r($receipt_note_items);exit;
@@ -765,7 +787,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.show',compact('receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.receipt_note.show',compact('receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
     public function show_beta($id)
@@ -910,7 +932,8 @@ class ReceiptNoteController extends Controller
                                 ->get();
         $receipt_note_expense = ReceiptNoteExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteTax::where('rn_no',$id)->get();
-
+        $upload = UploadDocument::where('voucher_no',$id)->get();
+        
         $estimation_no = $receipt_note->estimation_no;
         $estimation_date = $receipt_note->estimation_date;
         $no_items = count($receipt_note_items);
@@ -1044,7 +1067,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value'));
+        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value','upload'));
     }
 
     public function edit_beta($id)
@@ -1068,6 +1091,7 @@ class ReceiptNoteController extends Controller
                                 ->get();
         $receipt_note_expense = ReceiptNoteBetaExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteBetaTax::where('rn_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $estimation_no = $receipt_note->estimation_no;
         $estimation_date = $receipt_note->estimation_date;
@@ -1202,7 +1226,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value'));
+        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value','upload'));
 
     }
 
@@ -1229,6 +1253,9 @@ class ReceiptNoteController extends Controller
 
           $receipt_note_expense_data = ReceiptNoteBetaExpense::where('rn_no',$id);
           $receipt_note_expense_data->delete();
+
+          $receipt_note_upload_data = UploadDocument::where('voucher_no',$id);
+          $receipt_note_upload_data->delete(); 
         }
         else
         {
@@ -1243,6 +1270,9 @@ class ReceiptNoteController extends Controller
 
           $receipt_note_expense_data = ReceiptNoteExpense::where('rn_no',$id);
           $receipt_note_expense_data->delete();
+
+          $receipt_note_upload_data = UploadDocument::where('voucher_no',$id);
+          $receipt_note_upload_data->delete();
         }
         
 
@@ -1250,6 +1280,42 @@ class ReceiptNoteController extends Controller
         $voucher_no = $request->voucher_no;
 
         $tax = Tax::all();
+
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
 
         if($request->r_out_no != '')

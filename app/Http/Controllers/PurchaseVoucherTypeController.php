@@ -116,4 +116,58 @@ class PurchaseVoucherTypeController extends Controller
         return Redirect::back()->with('success','Deleted Successfully');
 
     }
+
+    public function import()
+    {
+       return view('admin.master.purchase-voucher-type.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+           // exit();
+
+        $file = storage_path('file/'.$profile_name);
+
+        $customerArr = $this->csvToArray($file);
+
+        for ($i = 0; $i < count($customerArr); $i ++)
+        {
+            PurchaseVoucherType::firstOrCreate($customerArr[$i]);
+        }
+
+        return Redirect::back()->with('success', 'Uploaded');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
 }

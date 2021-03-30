@@ -212,6 +212,31 @@
               @endforeach
             </div>
 
+            <div class="row col-md-12">
+
+              <table class="table table-bordered table-responsive" style="width: 100%; height: 100%;">
+          <thead>
+            <th> S.no </th>
+            <th> Name Of Document </th>
+            <th> Uploaded Document</th>
+            
+          </thead>
+              <tbody>
+               @foreach($upload as $key => $value)
+                <tr>
+                  <td>{{ $key+1 }}</td>
+                <td>@if(isset($value->document_name) && !empty($value->document_name))
+                {{ $value->document_name }}
+              @endif</td>
+              <td><a href="{{ asset('/storage/documents/'.$value->document) }}" download><img src="{{ asset('/storage/documents/'.$value->document) }}" height="30px" width="30px" /></a></td>
+                    </tr>
+                  
+            @endforeach
+          </tbody>
+
+        </table>
+
+            </div>
 
             <div class="row col-md-12">
 

@@ -312,11 +312,10 @@
             </div>
              <div class="col-md-6">
               <div class="form-group row">
-                <label for="validationCustom01" class="col-sm-4 col-form-label">City</label>
+                <label for="validationCustom01" class="col-sm-4 col-form-label">City </label>
                 <div class="col-sm-6">
                   <select class="js-example-basic-multiple col-12 form-control custom-select city_id" name="city_id[]" >
                     <option value="">Choose City</option>
-					
                   </select>
                   <span class="mandatory"> {{ $errors->first('city_id.'.$key)  }} </span>
                  <div class="invalid-feedback">
@@ -757,7 +756,6 @@ function validation(){
        });
        return error_count;
   }
-  var count = 1;
 
   function add_address(id="",text=""){
     var address_details_validation_count=address_details_validation();
@@ -832,7 +830,7 @@ function validation(){
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select state_name state_id'+count+'" error-data="Enter valid State" id="'+count+'" name="state_id[]" >\
+                <select class="js-example-basic-multiple col-12 form-control custom-select state_id  " error-data="Enter valid State" name="state_id[]" >\
                   <option value="">Choose State</option>\
                   @foreach($state as $value)\
                   <option value="{{ $value->id }}" >{{ $value->name }}</option>\
@@ -851,11 +849,8 @@ function validation(){
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">District </label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select district_name district_id'+count+'" name="district_id[]" id="'+count+'">\
+                <select class="js-example-basic-multiple col-12 form-control custom-select district_id" name="district_id[]">\
                   <option value="">Choose District</option>\
-				  @foreach($district as $value)\
-                    <option value="{{ $value->id }}">{{ $value->name }}</option>\
-                    @endforeach\
                  </select>\
                  <div class="invalid-feedback">\
                   Enter valid District\
@@ -868,13 +863,10 @@ function validation(){
           </div>\
            <div class="col-md-6">\
             <div class="form-group row">\
-              <label for="validationCustom01" class="col-sm-4 col-form-label">City 456</label>\
-              <div class="col-sm-6 cities">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select city_name city_id'+count+'" name="city_id[]" id="'+count+'">\
+              <label for="validationCustom01" class="col-sm-4 col-form-label">City </label>\
+              <div class="col-sm-6">\
+                <select class="js-example-basic-multiple col-12 form-control custom-select city_id" name="city_id[]" >\
                   <option value="">Choose City</option>\
-				  @foreach($city as $value)\
-                    <option value="{{ $value->id }}">{{ $value->name }}</option>\
-                    @endforeach\
                 </select>\
                <div class="invalid-feedback">\
                   Enter valid City\
@@ -898,7 +890,7 @@ function validation(){
           </div>\
           </div><hr>';
 
-          count++;
+
           $(".common_address_div").append(address);
     $(".address_label").each(function(key,index){
 $(this).html("Address Details - " + (key+1));
@@ -924,52 +916,12 @@ $(this).html("Address Details - " + (key+1));
       });
   }
 
-  $(document).on('change','.city_name',function(){
-
-     var city_id = $(this).val();
-     var test = $(this).closest('select').attr('id');
-    $.ajax({
-              type: "post",
-              url: "{{ url('agent/select_city_based_districts')}}",
-              data: {city_id: city_id},
-              success: function (res)
-              {
-
-                var state_id = res.state_id;
-                var district_id = res.district_id;
-               // $('.state_id'+test).val("Tamil Nadu");
-                  $(".state_id"+test+" option[value="+state_id+"]").attr('selected', 'selected');
-                  $(".district_id"+test+" option[value="+district_id+"]").attr('selected', 'selected');
-                 
-               }
-          });
-  });
-
-  $(document).on('change','.district_name',function(){
-     var district_id = $(this).val();
-     var test = $(this).closest('select').attr('id');
-    $.ajax({
-              type: "post",
-              url: "{{ url('agent/select_district_based_districts')}}",
-              data: {district_id: district_id},
-              success: function (res)
-              {
-                var state_id = res.state_id;
-               // $('.state_id'+test).val("Tamil Nadu");
-                  $(".state_id"+test+" option[value="+state_id+"]").attr('selected', 'selected');
-               }
-          });
-  });
-  
-  
-   
-
 
 function state_based_district(){
   
   
 
-$(".state_name").each(function(key,index){
+$(".state_id").each(function(key,index){
   
     var $tr=$(this).closest(".address_div");
     $tr.find(".city_id").html("<option value=''>Choose City</option>");
@@ -982,7 +934,7 @@ $(".state_name").each(function(key,index){
               success: function (res)
               {
                  result = JSON.parse(res);
-               $tr.find(".district_name").html(result.option);
+               $tr.find(".district_id").html(result.option);
                }
           });
 });
@@ -991,7 +943,7 @@ $(".state_name").each(function(key,index){
 
 
 function district_based_city(){
-$(".district_name").each(function(key,index){
+$(".district_id").each(function(key,index){
     var $tr=$(this).closest(".address_div");
     var district_id=$tr.find(".old_district_id").val();
   var city_id=$tr.find(".old_city_id").val();
@@ -1002,7 +954,7 @@ $(".district_name").each(function(key,index){
               success: function (res)
               {
                 result = JSON.parse(res);
-                $tr.find(".city_name").html(result.option);
+                $tr.find(".city_id").html(result.option);
               }
           });
 });
@@ -1018,7 +970,7 @@ $(document).ready(function(){
 
 
 
-  $(document).on("change",".state_name",function(){
+  $(document).on("change",".state_id",function(){
    var $tr=$(this).closest(".address_div");
    var state_id=$(this).val();
    $tr.find(".city_id").html("<option value=''>Choose City</option>");
@@ -1030,7 +982,7 @@ $(document).ready(function(){
               {
                 result = JSON.parse(res);
               //  alert($tr.find(".state_id").attr("class"));
-                $tr.find(".district_name").html(result.option);
+                $tr.find(".district_id").html(result.option);
                 
               }
           });
@@ -1038,7 +990,7 @@ $(document).ready(function(){
 
 
 
-  $(document).on("change",".district_name",function(){
+  $(document).on("change",".district_id",function(){
      var $tr=$(this).closest(".address_div");
     var district_id=$(this).val();
     $.ajax({
@@ -1048,7 +1000,7 @@ $(document).ready(function(){
               success: function (res)
               {
                 result = JSON.parse(res);
-                $tr.find(".city_name").html(result.option);
+                $tr.find(".city_id").html(result.option);
               }
           });
 

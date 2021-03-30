@@ -31,6 +31,7 @@ use App\Models\PurchaseOrderTax;
 use App\Models\PurchaseOrderBetaTax;
 use App\Models\PurchaseVoucherType;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\UploadDocument;
 
 class PurchaseOrderController extends Controller
 {
@@ -316,6 +317,28 @@ class PurchaseOrderController extends Controller
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
 
+
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
+
          if($request->has('check'))
          {
             $purchaseorder = new PurchaseOrderBeta();
@@ -538,6 +561,7 @@ class PurchaseOrderController extends Controller
         $purchaseorder_items = PurchaseOrderItem::where('po_no',$id)->get();
         $purchaseorder_expense = PurchaseOrderExpense::where('po_no',$id)->get();
         $tax = PurchaseOrderTax::where('po_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($purchaseorder_items);
         $expense_row_count = count($purchaseorder_expense);
@@ -643,7 +667,7 @@ class PurchaseOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.purchaseorder.show',compact('purchaseorder','purchaseorder_items','purchaseorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.purchaseorder.show',compact('purchaseorder','purchaseorder_items','purchaseorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
 
     }
 
@@ -787,6 +811,7 @@ class PurchaseOrderController extends Controller
                                 ->get();
         $purchaseorder_expense = PurchaseOrderExpense::where('po_no',$id)->get();
         $tax = PurchaseOrderTax::where('po_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         // echo "<pre>"; print_r($purchaseorder_items); exit();
 
@@ -894,7 +919,7 @@ class PurchaseOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.purchaseorder.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','purchaseorder','purchaseorder_items','purchaseorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value'));
+        return view('admin.purchaseorder.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','purchaseorder','purchaseorder_items','purchaseorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value','upload'));
     }
 
     public function edit_beta($id)
@@ -919,6 +944,7 @@ class PurchaseOrderController extends Controller
                                 ->get();
         $purchaseorder_expense = PurchaseOrderBetaExpense::where('po_no',$id)->get();
         $tax = PurchaseOrderBetaTax::where('po_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         // echo "<pre>"; print_r($purchaseorder_items); exit();
 
@@ -1026,7 +1052,7 @@ class PurchaseOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.purchaseorder.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','purchaseorder','purchaseorder_items','purchaseorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value'));
+        return view('admin.purchaseorder.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','purchaseorder','purchaseorder_items','purchaseorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value','upload'));
        
     }
 
@@ -1052,6 +1078,9 @@ class PurchaseOrderController extends Controller
 
             $purchaseorder_expense_data = PurchaseOrderBetaExpense::where('po_no',$id);
             $purchaseorder_expense_data->delete();
+
+            $purchaseorder_upload_data = UploadDocument::where('voucher_no',$id);
+            $purchaseorder_upload_data->delete();
         }
         else
         {
@@ -1066,11 +1095,50 @@ class PurchaseOrderController extends Controller
 
             $purchaseorder_expense_data = PurchaseOrderExpense::where('po_no',$id);
             $purchaseorder_expense_data->delete();
+
+            $purchaseorder_upload_data = UploadDocument::where('voucher_no',$id);
+            $purchaseorder_upload_data->delete();
         }
         
 
         $voucher_date = $request->voucher_date;
         $voucher_no = $request->voucher_no;
+
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
         $tax = Tax::all();
 

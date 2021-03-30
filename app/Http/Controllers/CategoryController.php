@@ -127,4 +127,96 @@ class CategoryController extends Controller
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
     }
+
+    public function import()
+    {
+       return view('admin.master.category.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $name=$filesop[1];   echo "</br>";
+                    $parent_name=$filesop[2];   echo "</br>";
+                    $hsn=$filesop[3];   echo "</br>";
+                    $gst_no=$filesop[4];   echo "</br>";
+                    $remark=$filesop[5];   echo "</br>";
+
+                    $parent_name = str_replace(' ', '', $parent_name);
+                    $categories=Category::whereRaw("REPLACE(`name`, ' ' ,'') = '".$parent_name."'")->first();
+
+                    $parent_id = @$categories->id;
+                    
+                    $name = str_replace(' ', '', $name);
+                    $name_duplicate=Category::whereRaw("REPLACE(`name`, ' ' ,'') = '".$name."'")->count();
+
+                    if($name_duplicate == 0 && $categories != '')
+                    {
+                        $category = new Category();
+                        $category->name       = $name;
+                        $category->parent_id  = $parent_id;
+                        $category->hsn        = $hsn;
+                        $category->gst_no     = $gst_no;
+                        $category->remark     = $remark;
+                        $category->created_by = 0;
+                        $category->updated_by = 0;
+
+                        $category->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Categories Imported successfully');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
 }

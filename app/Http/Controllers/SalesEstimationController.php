@@ -32,6 +32,8 @@ use App\Models\SalesVoucherType;
 use App\Models\SellingPriceSetup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\UploadDocument;
+
 
 class SalesEstimationController extends Controller
 {
@@ -267,6 +269,26 @@ class SalesEstimationController extends Controller
 
          $voucher_date = $request->voucher_date;
 
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
          $sale_estimation = new SaleEstimation();
 
          $sale_estimation->voucher_no = $current_voucher_num;
@@ -429,6 +451,7 @@ class SalesEstimationController extends Controller
         $sale_estimation_item = SaleEstimationItem::where('sale_estimation_no',$id)->get();
         $sale_estimation_expense = SaleEstimationExpense::where('sale_estimation_no',$id)->get();
         $tax = SaleEstimationTax::where('sale_estimation_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $tax_names = Tax::all();
 
@@ -533,7 +556,7 @@ class SalesEstimationController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_estimation.show',compact('sale_estimation','sale_estimation_item','sale_estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','tax_names'));
+        return view('admin.sales_estimation.show',compact('sale_estimation','sale_estimation_item','sale_estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','tax_names','upload'));
     }
 
     /**
@@ -558,6 +581,7 @@ class SalesEstimationController extends Controller
         $sale_estimation_item = SaleEstimationItem::where('sale_estimation_no',$id)->get();
         $sale_estimation_expense = SaleEstimationExpense::where('sale_estimation_no',$id)->get();
         $tax = SaleEstimationTax::where('sale_estimation_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($sale_estimation_item);
         $expense_row_count = count($sale_estimation_expense);
@@ -660,7 +684,7 @@ class SalesEstimationController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_estimation.edit',compact('categories','supplier','agent','brand','customer','expense_type','item','sale_estimation','sale_estimation_item','sale_estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head'));
+        return view('admin.sales_estimation.edit',compact('categories','supplier','agent','brand','customer','expense_type','item','sale_estimation','sale_estimation_item','sale_estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','upload'));
     }
 
     /**
@@ -684,8 +708,46 @@ class SalesEstimationController extends Controller
         $sale_estimation_expense_data = SaleEstimationExpense::where('sale_estimation_no',$id);
         $sale_estimation_expense_data->delete();
 
+        $sale_estimation_upload_data = UploadDocument::where('voucher_no',$id);
+        $sale_estimation_upload_data->delete();
+
         $voucher_date = $request->voucher_date;
         $tax = Tax::all();
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/ 
 
          $sale_estimation = new SaleEstimation();
 

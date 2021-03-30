@@ -12,6 +12,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/designation/import-data')}}"><i class="fa fa-plus"></i> Bulk Import</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/designation/create')}}">Add Role</a></button></li>
           </ul>
         </div>

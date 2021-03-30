@@ -29,9 +29,7 @@ class AgentController extends Controller
         
         $address_type=AddressType::all();
         $state=State::all();
-        $city=City::all();
-        $district=District::all();
-        return view('admin.master.agent.add',compact('address_type','state','city','district'));
+        return view('admin.master.agent.add',compact('address_type','state'));
     }
 
     
@@ -342,6 +340,121 @@ class AgentController extends Controller
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
         
+    }
+
+    public function import()
+    {
+       return view('admin.master.agent.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+           // exit();
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+        if(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+        { 
+
+                    $salutation=$filesop[1];   echo "</br>";
+                    $name=$filesop[2];   echo "</br>";
+                    $code=$filesop[3];   echo "</br>";
+                    $phone_no=$filesop[4];   echo "</br>";
+                    $email=$filesop[5];   echo "</br>";
+                    $dob=$filesop[6];   echo "</br>";
+                    $father_name=$filesop[7];   echo "</br>";
+                    $blood_group=$filesop[8];   echo "</br>";
+                    $material_status=$filesop[9];   echo "</br>";
+
+                    $insert  = TRUE;
+                   
+        }
+        if($insert == 1)
+        {
+            while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                    $salutation=$filesop[1];   echo "</br>";
+                    $name=$filesop[2];   echo "</br>";
+                    $code=$filesop[3];   echo "</br>";
+                    $phone_no=$filesop[4];   echo "</br>";
+                    $email=$filesop[5];   echo "</br>";
+                    $dob=$filesop[6];   echo "</br>";
+                    $father_name=$filesop[7];   echo "</br>";
+                    $blood_group=$filesop[8];   echo "</br>";
+                    $material_status=$filesop[9];   echo "</br>";
+
+                    $agent =new Agent();
+
+                    $agent->name       = $name;
+                    $agent->code      =  $code;
+                    $agent->phone_no      =  $phone_no;
+                    $agent->email      =  $email;
+                    $agent->dob      =  $dob;
+                    $agent->father_name      =  $father_name;
+                    $agent->blood_group      =  $blood_group;
+                    $agent->material_status      =  $material_status;
+
+                    if($agent->save())
+                    {
+                        $address_line_1=$filesop[10];   echo "</br>";
+                        $address_line_2=$filesop[11];   echo "</br>";
+                        $land_mark=$filesop[12];   echo "</br>";
+                        $state_name=$filesop[13];   echo "</br>";
+                        $district_name=$filesop[14];   echo "</br>";
+                        $city_name=$filesop[15];   echo "</br>";
+                        $postal_code=$filesop[16];   echo "</br>";
+                        $proof_name=$filesop[17];   echo "</br>";
+                        $proof_number=$filesop[18];   echo "</br>";
+
+                        $state = State::where('name',$state_name)->first();
+                        $state_id = @$state->id;
+
+                        $district = District::where('name',$district_name)->first();
+                        $district_id = @$district->id;
+
+                        $city = City::where('name',$city_name)->first();
+                        $city_id = @$city->id;
+
+                        $agent_address =new AddressDetails();
+
+                        $agent_address->address_table='Agent';
+                        $agent_address->address_ref_id=$agent->id;
+                        $agent_address->address_line_1=$address_line_1;
+                        $agent_address->address_line_2=$address_line_2;
+                        $agent_address->land_mark=$land_mark;
+                        $agent_address->state_id=$state_id;
+                        $agent_address->district_id=$district_id;
+                        $agent_address->city_id=$city_id;
+                        $agent_address->postal_code=$postal_code;
+
+                        $agent_address->save();
+
+                        $agent_proof =new ProofDetails();
+
+                        $agent_proof->proof_table='Agent';
+                        $agent_proof->proof_ref_id=$agent->id;
+                        $agent_proof->name=$proof_name;
+                        $agent_proof->number=$proof_number;
+
+                        $agent_proof->save();
+
+
+                    }
+
+            }
+            // exit();
+        }
+
+        return Redirect::back()->with('success', 'Uploaded');    
     }
 
     public function delete_agent_address_details(Request $request){

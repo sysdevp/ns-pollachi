@@ -12,6 +12,8 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/item/import-data')}}"><i class="fa fa-plus"></i> Bulk Import</a></button></li>
+            <li><button type="button" class="btn btn-success multiples">Add Multiple Item</button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/item/create')}}">Add Item</a></button></li>
           </ul>
         </div>
@@ -93,7 +95,44 @@
       </table>
 
     </div>
+    <div class="cat" id="cat" style="display: none;" title="Choose Item Type">
+        
+          <form  method="post" class="form-horizontal needs-validation submit_form" autocomplete="off" novalidate action="{{url('master/item/multiple-item')}}" enctype="multipart/form-data">
+            {{csrf_field()}}
+            <div class="row col-md-12 mb-3">
+            <select class="form-control" name="item_types">
+              <option value="1">Direct</option>
+              <option value="2">Bulk</option>
+              <option value="3">Repack</option>
+              <option value="4">Parent</option>
+            </select>
+          </div>
+          <center>
+          <div class="col-md-12">
+            <input type="submit" class="btn btn-success" name="" value="Submit">
+          </div>
+          </center>
+          </form>
+        
+      </div>
     <!-- card body end@ -->
   </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet"/>
+<script src="jquery.ui.position.js"></script>
+
+
+<style type="text/css">
+  .ui-dialog.ui-widget-content { background: #a3d072; }
+</style>
+<script type="text/javascript">
+  $(document).on('click','.multiples',function(){
+
+    $('#cat').show();
+    $('#cat').dialog().prev(".ui-dialog-titlebar").css("background","#28a745").prev(".ui-dialog.ui-widget-content");
+
+  });
+</script>
 @endsection

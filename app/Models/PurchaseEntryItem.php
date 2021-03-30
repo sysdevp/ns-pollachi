@@ -14,4 +14,9 @@ class PurchaseEntryItem extends Model
     {
         return $this->belongsTo(Uom::class, 'uom_id', 'id');
     }
+
+    public function purchase_entries()
+    {
+        return $this->belongsTo(PurchaseEntry::class, 'p_no', 'p_no');
+    }
 }

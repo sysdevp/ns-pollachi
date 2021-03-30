@@ -870,6 +870,65 @@ table, th, td {
 
                        </div>
 
+                       @if(count($upload) == 0)
+
+                       <div class="row col-md-12 append_upload">
+
+                          <div class="row col-md-12 upload">
+                            <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-12">
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">
+                     </div>
+                  </div>
+               </div>
+                      
+                      <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Upload Document</label>
+                      <input type="file" class="form-control" name="document[]">
+
+                      </div>
+                      <div class="col-md-2">
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">
+                    </div>
+                       </div>
+                  </div>
+
+                  @else
+
+                       <div class="row col-md-12 append_upload">
+                        <input type="hidden" class="form-control" placeholder="Name Of Document" name="doc_count" value="<?php echo count($upload); ?>" id="doc_count">
+
+                        @foreach($upload as $key => $value)
+
+                          <div class="row col-md-12 upload">
+                            <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-12">
+                      <input type="text" class="form-control" name="doc_name[]" value="{{ $value->document_name }}">
+                     </div>
+                  </div>
+               </div>
+                      
+                      <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Upload Document</label><br>
+                      <input type="hidden" class="form-control" name="documents[]" value="{{ $value->document }}">
+                      <a href="{{ asset('/storage/documents/'.$value->document) }}" download><img src="{{ asset('/storage/documents/'.$value->document) }}" height="30px" width="30px" /></a>
+
+                      </div>
+                      <div class="col-md-2">
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_exist_document" value="-" name="" id="remove_exist_document">
+                    </div>
+                       </div>
+
+                       @endforeach
+                  </div>
+                  @endif
+
 
                        <div class="row col-md-12">
         <div class="col-md-6">
@@ -2156,6 +2215,66 @@ $(document).on("click",".remove_expense",function(){
   overall_discounts();
   individual_expense();
   roundoff_cal();
+
+  });
+
+function upload_add()
+{
+  var upload_details='<div class="row col-md-12 upload">\
+                            <div class="col-md-3">\
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>\
+                  <div class="form-group row">\
+                     <div class="col-sm-12">\
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">\
+                     </div>\
+                  </div>\
+               </div>\
+                      \
+                      <div class="col-md-4">\
+                        <label style="font-family: Times new roman;">Upload Document</label>\
+                      <input type="file" class="form-control" name="document[]">\
+\
+                      </div>\
+                      <div class="col-md-2">\
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>\
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">\
+                    </div>\
+                       </div>';
+
+  $('.append_upload').append(upload_details);
+  $("select").select2();
+
+}
+
+$(document).on("click",".remove_upload",function(){
+
+  if($(".remove_upload").length > 1){
+
+    $(this).closest('.upload').remove();
+  }
+  else{
+    alert("Atleast One row present");
+
+  }
+
+  });
+
+$(document).on("click",".remove_exist_document",function(){
+
+
+
+  // if($(".remove_upload").length > 1){
+
+    $(this).closest('.upload').remove();
+    var doc_count = $('#doc_count').val();
+    $('#doc_count').val(--doc_count);
+    // alert(doc_count);
+    
+  // }
+  // else{
+  //   alert("Atleast One row present");
+
+  // }
 
   });
 

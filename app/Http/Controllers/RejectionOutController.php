@@ -58,6 +58,7 @@ use App\Models\DebitNoteBetaExpense;
 use App\Models\DebitNoteTax;
 use App\Models\DebitNoteBetaTax;
 use App\Models\PurchaseVoucherType;
+use App\Models\UploadDocument;
 
 class RejectionOutController extends Controller
 {
@@ -588,7 +589,25 @@ class RejectionOutController extends Controller
          
 
          
+         /*Document Upload*/
 
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
         
         if($request->has('check'))
         {
@@ -830,7 +849,7 @@ class RejectionOutController extends Controller
         $rejection_out = RejectionOut::where('r_out_no',$id)->first();
         $rejection_out_items = RejectionOutItem::where('r_out_no',$id)->get();
         $rejection_out_expense = RejectionOutExpense::where('r_out_no',$id)->get();
-
+        $upload = UploadDocument::where('voucher_no',$id)->get();
         //echo "<pre>"; print_r($rejection_out_items);exit;
 
         $item_row_count = count($rejection_out_items);
@@ -934,7 +953,7 @@ class RejectionOutController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.rejection_out.show',compact('rejection_out','rejection_out_items','rejection_out_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst'));
+        return view('admin.rejection_out.show',compact('rejection_out','rejection_out_items','rejection_out_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','upload'));
     }
 
     /**

@@ -62,6 +62,7 @@ use App\Models\RejectionInBetaItem;
 use App\Models\RejectionInExpense;
 use App\Models\RejectionInBetaExpense;
 use App\Models\SalesVoucherType;
+use App\Models\UploadDocument;
 
 class DeliveryNoteController extends Controller
 {
@@ -411,7 +412,27 @@ class DeliveryNoteController extends Controller
          {
 
          }
-        
+
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+            
 
          if($request->has('check'))
          {
@@ -689,6 +710,7 @@ class DeliveryNoteController extends Controller
         $delivery_note_items = DeliveryNoteItem::where('d_no',$id)->get();
         $delivery_note_expense = DeliveryNoteExpense::where('d_no',$id)->get();
         $tax = DeliveryNoteTax::where('d_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         //echo "<pre>"; print_r($purchase_entry_items);exit;
 
@@ -794,7 +816,7 @@ class DeliveryNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.delivery_note.show',compact('delivery_note','delivery_note_items','delivery_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.delivery_note.show',compact('delivery_note','delivery_note_items','delivery_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
     public function show_beta($id)
@@ -941,6 +963,7 @@ class DeliveryNoteController extends Controller
                                                 ->get();
         $delivery_note_expense = DeliveryNoteExpense::where('d_no',$id)->get();
         $tax = DeliveryNoteTax::where('d_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($delivery_note_items);
         $expense_row_count = count($delivery_note_expense);
@@ -1044,7 +1067,7 @@ class DeliveryNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.delivery_note.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','rejection_in','estimation','saleorder','sale_orders','delivery_note','delivery_note_items','delivery_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.delivery_note.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','rejection_in','estimation','saleorder','sale_orders','delivery_note','delivery_note_items','delivery_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','upload'));
     }
 
     public function edit_beta($id)
@@ -1071,6 +1094,7 @@ class DeliveryNoteController extends Controller
                                                 ->get();
         $delivery_note_expense = DeliveryNoteBetaExpense::where('d_no',$id)->get();
         $tax = DeliveryNoteBetaTax::where('d_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($delivery_note_items);
         $expense_row_count = count($delivery_note_expense);
@@ -1174,7 +1198,7 @@ class DeliveryNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.delivery_note.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','rejection_in','estimation','saleorder','sale_orders','delivery_note','delivery_note_items','delivery_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.delivery_note.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','rejection_in','estimation','saleorder','sale_orders','delivery_note','delivery_note_items','delivery_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','upload'));
     }
 
     /**
@@ -1199,6 +1223,9 @@ class DeliveryNoteController extends Controller
 
             $delivery_note_expense_data = DeliveryNoteBetaExpense::where('d_no',$id);
             $delivery_note_expense_data->delete();
+
+            $delivery_note_upload_data = UploadDocument::where('voucher_no',$id);
+            $delivery_note_upload_data->delete();
         }
         else
         {
@@ -1213,6 +1240,9 @@ class DeliveryNoteController extends Controller
 
             $delivery_note_expense_data = DeliveryNoteExpense::where('d_no',$id);
             $delivery_note_expense_data->delete();
+
+            $delivery_note_upload_data = UploadDocument::where('voucher_no',$id);
+            $delivery_note_upload_data->delete();
         }
         
 
@@ -1220,6 +1250,41 @@ class DeliveryNoteController extends Controller
         $voucher_no = $request->voucher_no;
         
         $tax = Tax::all();
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/ 
 
         if($request->r_in_no != '')
         {

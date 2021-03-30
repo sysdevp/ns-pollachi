@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Bank extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['id','name','code','active_status','created_by','updated_by'];
 }

@@ -636,6 +636,29 @@ table, th, td {
 
                        </div>
 
+                       <div class="row col-md-12 append_upload">
+
+                          <div class="row col-md-12 upload">
+                            <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-12">
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">
+                     </div>
+                  </div>
+               </div>
+                      
+                      <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Upload Document</label>
+                      <input type="file" class="form-control" name="document[]">
+
+                      </div>
+                      <div class="col-md-2">
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">
+                    </div>
+                       </div>
+                  </div>
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
                             
@@ -1573,6 +1596,47 @@ $(document).on("click",".remove_expense",function(){
   overall_discounts();
   individual_expense();
   roundoff_cal();
+
+  });
+
+function upload_add()
+{
+  var upload_details='<div class="row col-md-12 upload">\
+                            <div class="col-md-3">\
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>\
+                  <div class="form-group row">\
+                     <div class="col-sm-12">\
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">\
+                     </div>\
+                  </div>\
+               </div>\
+                      \
+                      <div class="col-md-4">\
+                        <label style="font-family: Times new roman;">Upload Document</label>\
+                      <input type="file" class="form-control" name="document[]">\
+\
+                      </div>\
+                      <div class="col-md-2">\
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>\
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">\
+                    </div>\
+                       </div>';
+
+  $('.append_upload').append(upload_details);
+  $("select").select2();
+
+}
+
+$(document).on("click",".remove_upload",function(){
+
+  if($(".remove_upload").length > 1){
+
+    $(this).closest('.upload').remove();
+  }
+  else{
+    alert("Atleast One row present");
+
+  }
 
   });
 

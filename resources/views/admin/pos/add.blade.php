@@ -85,7 +85,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                   <label style="font-family: Times new roman;">Customer Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_data()" name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_data($(this).val())" name="customer_id" id="customer_id">
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $customers)
                            <option value="{{ $customers->id }}">{{ $customers->name }}({{$customers->phone_no}})</option>
@@ -124,6 +124,42 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                   
                   
                </div>
+
+               <div class="cat" id="cust_details" style="display: none;" title="Customer Details">
+                        <div class="row col-md-8">
+
+          <table class="table-responsive" style="width: 860px;">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+           <th>Phone No </th>
+           <th>Email </th>
+           <th>Pan Card </th>
+           <th>Gst </th>
+           <th>Opening Balance </th>
+           <th>Price Level </th>
+           <th>Value </th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td><font id="cust_name"></font></td>
+              <td><font id="cust_mobile"></font></td>
+              <td><font id="cust_mail"></font></td>
+              <td><font id="cust_pan"></font></td>
+              <td><font id="cust_gst_no"></font></td>
+              <td><font id="cust_op_balance"></font></td>
+              <td><font id="cust_level"></font></td>
+              <td><font id="cust_value"></font></td>
+            </tr>
+         
+        </tbody>
+      </table>
+                          
+                        </div>
+    
+                            
+                      </div>
                   <!-- <div class="col-md-2">
                     <label style="font-family: Times new roman;">Sale Estimation No</label><br>
                   <select class="js-example-basic-multiple col-12 form-control custom-select estimation_no" onchange="estimation_details()" name="estimation_no" id="estimation_no">
@@ -370,7 +406,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     </div>
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">MRP</label>
-                      <input type="number" class="form-control mrp required_for_proof_valid" placeholder="MRP" id="mrp" name="mrp" value="">
+                      <input type="number" class="form-control mrp required_for_proof_valid" placeholder="MRP" id="mrp" name="mrp" value="" readonly="">
                        
                       </div>
 
@@ -391,7 +427,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       <div class="row col-md-12">
                         <div class="col-md-2">
                         <label style="font-family: Times new roman;">Tax Rate%</label>
-                      <input type="number" class="form-control tax_rate  required_for_proof_valid"  placeholder="Tax Rate%" oninput="gst_calc()" name="tax_rate" value="" id="tax_rate">
+                      <input type="number" class="form-control tax_rate  required_for_proof_valid"  placeholder="Tax Rate%" oninput="gst_calc()" name="tax_rate" value="" id="tax_rate" readonly="">
                       </div>
                       <input type="hidden" class="form-control gst  required_for_proof_valid" readonly="" placeholder="Tax Rate" name="gst" value="" id="gst">
 
@@ -402,10 +438,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <div class="col-sm-12">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <select class="form-control uom_exclusive" name="uom_exclusive" onchange="uom_details_exclusive()">
+                                <select class="form-control uom_exclusive" name="uom_exclusive" onchange="uom_details_exclusive()" readonly="">
                                 </select>
                               </div>
-                              <input type="number" class="form-control exclusive_rate" id="exclusive" placeholder="Exclusive Tax" oninput="calc_exclusive()" name="exclusive" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" aria-label="Text input with dropdown button" value="">
+                              <input type="number" class="form-control exclusive_rate" id="exclusive" placeholder="Exclusive Tax" oninput="calc_exclusive()" name="exclusive" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" aria-label="Text input with dropdown button" value="" readonly="">
 
                             </div>
                             
@@ -421,10 +457,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <div class="col-sm-12">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <select class="form-control  uom_inclusive" name="uom_inclusive" onchange="uom_details_inclusive()">
+                                <select class="form-control  uom_inclusive" name="uom_inclusive" onchange="uom_details_inclusive()" readonly="">
                                 </select>
                               </div>
-                              <input type="number" class="form-control inclusive_rate" id="inclusive" placeholder="Inclusive Tax" oninput="calc_inclusive()" name="inclusive" pattern="[0-9][0-9 . 0-9]{0,100}" aria-label="Text input with dropdown button" title="Numbers Only" value="">
+                              <input type="number" class="form-control inclusive_rate" id="inclusive" placeholder="Inclusive Tax" oninput="calc_inclusive()" name="inclusive" pattern="[0-9][0-9 . 0-9]{0,100}" aria-label="Text input with dropdown button" title="Numbers Only" value="" readonly="">
 
                             </div>
                             
@@ -435,7 +471,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                       <div class="col-md-2">
                         <label style="font-family: Times new roman;">Discount %</label>
-                      <input type="number" class="form-control discount_percentage" oninput="discount_calc1()" id="discount_percentage"  placeholder="Discount %" name="discount_percentage" pattern="[0-9]{0,100}" title="Numbers Only" value="">
+                      <input type="number" class="form-control discount_percentage" oninput="discount_calc1()" id="discount_percentage"  placeholder="Discount %" name="discount_percentage" pattern="[0-9]{0,100}" title="Numbers Only" value="" readonly="">
                       </div>
 
                       <input type="hidden" class="form-control amount  required_for_proof_valid" placeholder="Amount" id="amount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="amount" value="" >
@@ -443,13 +479,13 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       
                       <div class="col-md-2">
                           <label style="font-family: Times new roman;">Discount Rs</label>
-                        <input type="number" class="form-control discount_rs  required_for_proof_valid" placeholder="Discount Rs" id="discount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" oninput="discount_calc()" name="discount" value="" >
+                        <input type="number" class="form-control discount_rs  required_for_proof_valid" placeholder="Discount Rs" id="discount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" oninput="discount_calc()" name="discount" value="" readonly="">
                         </div>
 
-                        <div class="col-md-2">
+                       <!--  <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
                         <input type="number" class="form-control batch_no required_for_proof_valid" placeholder="Batch No" id="batch_no" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="batch_no" value="" >
-                        </div>
+                        </div> -->
 
                         <input type="hidden" name="discounts" id="discounts" value="0">
                         <input type="hidden" name="disc_total" id="disc_total" value="0">
@@ -457,7 +493,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
 
                     </div>
-                    <div class="col-md-12 row" id="b_w">
+                    <!-- <div class="col-md-12 row" id="b_w">
                         <div class="col-md-2">
                           <label style="font-family: Times new roman;">Quantity OR Rating</label>
                         <select class="form-control" id="b_or_w">
@@ -465,7 +501,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <option value="0">B</option>
                        </select>
                         </div>
-                      </div>
+                      </div> -->
 
 
                       <!-- itemwise offer hidden values -->
@@ -841,8 +877,29 @@ table, th, td {
         <script type="text/javascript">
     $('#customer_id').removeAttr('required');
 
-function customer_data()
+function customer_data(id)
 {
+    $.ajax({
+           type: "POST",
+            url: "{{ url('pos/cust_datas/') }}",
+            data: {id : id},
+           success: function(data) {
+            $('#cust_name').text(data.name);
+            $('#cust_mobile').text(data.phone_no);
+            $('#cust_mail').text(data.email);
+            $('#cust_pan').text(data.pan_card);
+            $('#cust_gst_no').text(data.gst_no);
+            $('#cust_op_balance').text(data.opening_balance);
+            $('#cust_level').text(data.level);
+            $('#cust_value').text(data.value);
+             
+           }
+           
+        });
+
+  $('#cust_details').show();
+  $('#cust_details').dialog({width:900},{height:250}).prev(".ui-dialog-titlebar").css("background","#28a745").prev(".ui-dialog.ui-widget-content");
+
   var customer_id= $('#customer_id').val();
   if(customer_id!="")
   {

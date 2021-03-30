@@ -71,7 +71,7 @@ class DashboardController extends Controller
         $new_array['item_code'] = $data->code;
         $new_array['mrp'] = $data->mrp;
         $uom = Uom::find($data->uom_id);
-        $new_array['uom'] = $uom->name;
+        $new_array['uom'] = @$uom->name;
         $new_array['pos'] = $pos;
 
 

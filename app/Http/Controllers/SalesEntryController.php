@@ -77,6 +77,7 @@ use App\Models\ReceiptProcessAdjustments;
 use App\Models\ReceiptProcess;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\SalesVoucherType;
+use App\Models\UploadDocument;
 
 class SalesEntryController extends Controller
 {
@@ -448,6 +449,26 @@ class SalesEntryController extends Controller
             $delivery_tag = 0;
          }
 
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
          if($request->has('check'))
          {
             $sale_entry = new SaleEntryBeta();
@@ -776,6 +797,7 @@ class SalesEntryController extends Controller
         $sale_entry_items = SaleEntryItem::where('s_no',$id)->get();
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         //echo "<pre>"; print_r($purchase_entry_items);exit;
 
@@ -901,7 +923,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.show',compact('sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.sales_entry.show',compact('sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
 
@@ -1070,6 +1092,7 @@ class SalesEntryController extends Controller
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
         $receipt_process = ReceiptProcess::where('s_no',$id)->first();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($sale_entry_items);
         $expense_row_count = count($sale_entry_expense);
@@ -1197,7 +1220,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process','upload'));
     }
 
     public function edit_beta($id)
@@ -1225,6 +1248,7 @@ class SalesEntryController extends Controller
         $sale_entry_expense = SaleEntryBetaExpense::where('s_no',$id)->get();
         $tax = SaleEntryBetaTax::where('s_no',$id)->get();
         $receipt_process = ReceiptProcess::where('s_no',$id)->first();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($sale_entry_items);
         $expense_row_count = count($sale_entry_expense);
@@ -1348,7 +1372,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process','upload'));
     }
 
     /**
@@ -1377,6 +1401,9 @@ class SalesEntryController extends Controller
             $sale_entry_receipt_data = ReceiptProcess::where('voucher_no',$id);
             $sale_entry_receipt_data->delete();
 
+            $sale_entry_upload_data = UploadDocument::where('voucher_no',$id);
+            $sale_entry_upload_data->delete();
+
         }
         else
         {
@@ -1394,11 +1421,49 @@ class SalesEntryController extends Controller
 
             $sale_entry_receipt_data = ReceiptProcess::where('voucher_no',$id);
             $sale_entry_receipt_data->delete();
+
+            $sale_entry_upload_data = UploadDocument::where('voucher_no',$id);
+            $sale_entry_upload_data->delete();
         }
         
 
         $voucher_date = $request->voucher_date;
         $voucher_no = $request->voucher_no;
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
         if($request->d_no)
          {

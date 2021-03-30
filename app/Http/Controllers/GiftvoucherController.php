@@ -155,6 +155,110 @@ class GiftvoucherController extends Controller
         }
     }
 
+    public function import()
+    {
+       return view('admin.master.gift_voucher.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $name=$filesop[1];   echo "</br>";
+                    $code=$filesop[2];   echo "</br>";
+                    $value=$filesop[3];   echo "</br>";
+                    $quantity=$filesop[4];   echo "</br>";
+                    $remark=$filesop[5];   echo "</br>";
+                    $valid_from=$filesop[6];   echo "</br>";
+                    $valid_to=$filesop[7];   echo "</br>";
+                    
+                    $name = str_replace(' ', '', $name);
+                    $name_duplicate=Giftvoucher::whereRaw("REPLACE(`name`, ' ' ,'') = '".$name."'")->count();
+
+                    if($name_duplicate == 0)
+                    {
+                        $count = $quantity;;
+                        $generatedGiftVoucherCode = array();
+                        $prefix = $code;
+                        $fromDate = date('d',strtotime($valid_from));
+                        $toDate = date('d',strtotime($valid_to));
+
+                        for ($i=1; $i <= $count; $i++) {
+                          $generatedGiftVoucherCode[] = "NSP" . trim($prefix) . $fromDate . $this->generateGiftVouchers(6) . $toDate;
+                        }
+
+                        $out = array_values($generatedGiftVoucherCode);
+                        $myJSON = json_encode($out);
+
+                        $giftvoucher = new Giftvoucher();
+                        $giftvoucher->name = $name;
+                        $giftvoucher->code = $myJSON;
+                        $giftvoucher->value = $value;
+                        $giftvoucher->qty = $quantity;
+                        $giftvoucher->valid_from = date('Y-m-d',strtotime($valid_from));
+                        $giftvoucher->valid_to = date('Y-m-d',strtotime($valid_to));
+                        $giftvoucher->remark =  $remark;
+                        $giftvoucher->created_by = 0;
+                        $giftvoucher->updated_by = 0;
+
+                        $giftvoucher->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Gift Vouchers Imported successfully');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
     /* Generate random Gift Vouchers */
     public function generateGiftVouchers($length = 20) {
         $allowedCharacters = '23456789abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ';

@@ -29,11 +29,15 @@ Route::get('/view', function () {
     return view('Masters.Sample.View');
 });
 
+Route::get('/barcode_js', function () {
+    return view('barcode');
+});
+
 Route::get('/emptydash', function () {
     return view('admin.master.empty');
 });
 
-Route::get('barcode', 'BarcodeController@barcode');
+
 Route::get('send-mail', function () {
    
     $details = [
@@ -773,7 +777,7 @@ Route::get('purchase_entry/item_beta_details/{id}', 'PurchaseEntryController@ite
 Route::get('purchase_entry/expense_beta_details/{id}', 'PurchaseEntryController@expense_beta_details');
 
 Route::post('purchase_entry/voucher_type/', 'PurchaseEntryController@voucher_type');
-
+Route::post('   /', 'PurchaseEntryController@print_items');
 
 /* Purchase entry End Here  */
 

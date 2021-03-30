@@ -44,6 +44,7 @@ use App\Models\SaleOrderBetaItem;
 use App\Models\SaleOrderExpense;
 use App\Models\SaleOrderBetaExpense;
 use App\Models\SalesVoucherType;
+use App\Models\UploadDocument;
 
 class SalesOrderController extends Controller
 {
@@ -358,6 +359,26 @@ class SalesOrderController extends Controller
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
 
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
          if($request->has('check'))
          {
             $saleorder = new SaleOrderBeta();
@@ -593,6 +614,7 @@ class SalesOrderController extends Controller
         $saleorder_items = SaleOrderItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderExpense::where('so_no',$id)->get();
         $tax = SaleOrderTax::where('so_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($saleorder_items);
         $expense_row_count = count($saleorder_expense);
@@ -696,7 +718,7 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.show',compact('saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.sales_order.show',compact('saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
     public function show_beta($id)
@@ -837,6 +859,7 @@ class SalesOrderController extends Controller
         $saleorder_items = SaleOrderItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderExpense::where('so_no',$id)->get();
         $tax = SaleOrderTax::where('so_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($saleorder_items);
         $expense_row_count = count($saleorder_expense);
@@ -940,7 +963,7 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','upload'));
     }
 
     public function edit_beta($id)
@@ -963,6 +986,7 @@ class SalesOrderController extends Controller
         $saleorder_items = SaleOrderBetaItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderBetaExpense::where('so_no',$id)->get();
         $tax = SaleOrderBetaTax::where('so_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($saleorder_items);
         $expense_row_count = count($saleorder_expense);
@@ -1066,7 +1090,7 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','upload'));
 
     }
 
@@ -1092,6 +1116,9 @@ class SalesOrderController extends Controller
 
             $saleorder_expense_data = SaleOrderBetaExpense::where('so_no',$id);
             $saleorder_expense_data->delete();
+
+            $saleorder_upload_data = UploadDocument::where('voucher_no',$id);
+            $saleorder_upload_data->delete();
         }
         else
         {
@@ -1106,6 +1133,9 @@ class SalesOrderController extends Controller
 
             $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
             $saleorder_expense_data->delete();
+
+            $saleorder_upload_data = UploadDocument::where('voucher_no',$id);
+            $saleorder_upload_data->delete();
         }
         
 
@@ -1113,6 +1143,41 @@ class SalesOrderController extends Controller
         $voucher_no = $request->voucher_no;
 
         $tax = Tax::all();
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/ 
 
         if($request->beta_checking_value == 1)
         {

@@ -1654,4 +1654,15 @@ $result=[];
         }
     }
 
+    public function cust_datas(Request $request)
+    {
+
+         $customer = Customer::leftjoin('price_levels','customers.price_level','=','price_levels.id')
+                            ->where('customers.id',$request->id)
+                            ->select('*')
+                            ->first();
+
+        return $customer;
+    }
+
 }

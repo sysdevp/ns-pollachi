@@ -16,6 +16,7 @@
         <div class="col-8 mr-auto">
           @can('state_create')
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/state/import-data')}}"><i class="fa fa-plus"></i>  Bulk Import</a></button></li>
             <li><button type="button" class="btn"><a href="{{url('master/state/create')}}"><i class="fa fa-plus"></i>  Add State</a></button></li>
           </ul>
           @endcan

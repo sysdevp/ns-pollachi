@@ -9,13 +9,13 @@ use App\Models\AddressType;
 use App\Models\Bank;
 use App\Models\BankDetails;
 use App\Models\CustomerSupplier;
-use App\Models\AccountGroup;
 use App\Models\State;
+use App\Models\District;
+use App\Models\City;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Input;
 
 class SupplierController extends Controller
 {
@@ -41,10 +41,9 @@ class SupplierController extends Controller
         $state = State::all();
         $bank = Bank::all();
         $account_type = AccountType::all();
-		$accountgroup = AccountGroup::all();
         $exist_supplier_dets = CustomerSupplier::where('type', 'Supplier')->get();
 
-        return view('admin.master.supplier.add', compact('exist_supplier_dets', 'address_type', 'state', 'bank', 'account_type','accountgroup'));
+        return view('admin.master.supplier.add', compact('exist_supplier_dets', 'address_type', 'state', 'bank', 'account_type'));
     }
 
     /**
@@ -64,8 +63,8 @@ class SupplierController extends Controller
             $supplier_id = $customer_supplier_dets->id;
         } else {
             $supplier_id = $request->exist_supplier_name;
-        }       
-		$supplier = new Supplier();
+        }
+        $supplier = new Supplier();
         $supplier->company_name = $request->company_name;
         $supplier->name = $request->name;
         $supplier->supplier_type = $request->supplier_type;
@@ -73,7 +72,6 @@ class SupplierController extends Controller
         $supplier->salutation = $request->salutation;
         $supplier->phone_no = $request->phone_no;
         $supplier->whatsapp_no = $request->whatsapp_no;
-        $supplier->account_group_id = Input::get('account_group');
         $supplier->email = $request->email;
         $supplier->gst_no = $request->gst_no;
         $supplier->opening_balance = $request->opening_balance;
@@ -346,6 +344,149 @@ class SupplierController extends Controller
         } else {
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
+    }
+
+    public function import()
+    {
+       return view('admin.master.supplier.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+           // exit();
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+        if(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+        { 
+                    $salutation=$filesop[1];   echo "</br>";
+                    $company_name=$filesop[2];   echo "</br>";
+                    $name=$filesop[3];   echo "</br>";
+                    $code=$filesop[4];   echo "</br>";
+                    $phone_no=$filesop[5];   echo "</br>";
+                    $whatsapp_no=$filesop[6];   echo "</br>";
+                    $email=$filesop[7];   echo "</br>";
+                    $gst_no=$filesop[8];   echo "</br>";
+                    $opening_balance=$filesop[9];   echo "</br>";
+                    $remark=$filesop[10];   echo "</br>";
+                    // $supplier_mode=$filesop[14];   echo "</br>";
+                    // $status=$filesop[15];   echo "</br>";
+
+                    $insert  = TRUE;
+                   
+        }
+        if($insert == 1)
+        {
+            while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                    $salutation=$filesop[1];   echo "</br>";
+                    $company_name=$filesop[2];   echo "</br>";
+                    $name=$filesop[3];   echo "</br>";
+                    $code=$filesop[4];   echo "</br>";
+                    $phone_no=$filesop[5];   echo "</br>";
+                    $whatsapp_no=$filesop[6];   echo "</br>";
+                    $email=$filesop[7];   echo "</br>";
+                    $gst_no=$filesop[8];   echo "</br>";
+                    $opening_balance=$filesop[9];   echo "</br>";
+                    $remark=$filesop[10];   echo "</br>";
+                    // $supplier_mode=$filesop[14];   echo "</br>";
+                    // $status=$filesop[15];   echo "</br>";
+
+                    $supplier =new Supplier();
+
+                    $supplier->company_name       = $company_name;
+                    $supplier->name       = $name;
+                    $supplier->code      =  $code;
+                    $supplier->phone_no      =  $phone_no;
+                    $supplier->email      =  $email;
+                    $supplier->whatsapp_no      =  $whatsapp_no;
+                    $supplier->gst_no      =  $gst_no;
+                    $supplier->opening_balance      =  $opening_balance;
+                    $supplier->remark      =  $remark;
+                    // $supplier->save();
+
+                    if($supplier->save())
+                    {
+                        $address_line_1=$filesop[11];   echo "</br>";
+                        $address_line_2=$filesop[12];   echo "</br>";
+                        $land_mark=$filesop[13];   echo "</br>";
+                        $state_name=$filesop[14];   echo "</br>";
+                        $district_name=$filesop[15];   echo "</br>";
+                        $city_name=$filesop[16];   echo "</br>";
+                        $postal_code=$filesop[17];   echo "</br>";
+
+                        $bank_name=$filesop[18];   echo "</br>";
+                        $branch_name=$filesop[19];   echo "</br>";
+                        $ifsc=$filesop[20];   echo "</br>";
+                        $account_type=$filesop[21];   echo "</br>";
+                        $account_holder_name=$filesop[22];   echo "</br>";
+                        $account_no=$filesop[23];   echo "</br>";
+
+                        $state = State::where('name',$state_name)->first();
+                        $state_id = @$state->id;
+
+                        $district = District::where('name',$district_name)->first();
+                        $district_id = @$district->id;
+
+                        $city = City::where('name',$city_name)->first();
+                        $city_id = @$city->id;
+
+                        $bank_name = str_replace(' ', '', $bank_name);
+                        $banks=Bank::whereRaw("REPLACE(`name`, ' ' ,'') = '".$bank_name."'")->first();
+
+                        $branch_name = str_replace(' ', '', $branch_name);
+                        $branches=Bankbranch::whereRaw("REPLACE(`name`, ' ' ,'') = '".$branch_name."'")->first();
+
+                        $account_type = str_replace(' ', '', $account_type);
+                        $accounttypes=AccountType::whereRaw("REPLACE(`name`, ' ' ,'') = '".$account_type."'")->first();
+
+                        $bank_id = @$banks->id;
+                        $branch_id = @$branches->id;
+                        $account_type_id = @$accounttypes->id;
+
+                        $supplier_address =new AddressDetails();
+
+                        $supplier_address->address_table='Supplier';
+                        $supplier_address->address_ref_id=$supplier->id;
+                        $supplier_address->address_line_1=$address_line_1;
+                        $supplier_address->address_line_2=$address_line_2;
+                        $supplier_address->land_mark=$land_mark;
+                        $supplier_address->state_id=$state_id;
+                        $supplier_address->district_id=$district_id;
+                        $supplier_address->city_id=$city_id;
+                        $supplier_address->postal_code=$postal_code;
+
+                        $supplier_address->save();
+
+                        $bank_details =new BankDetails();
+
+                        $bank_details->ref_table='Supplier';
+                        $bank_details->bank_ref_id=$supplier->id;
+                        $bank_details->bank_id=$bank_id;
+                        $bank_details->branch_id=$branch_id;
+                        $bank_details->account_type_id=$account_type_id;
+                        $bank_details->ifsc=$ifsc;
+                        $bank_details->account_holder_name=$account_holder_name;
+                        $bank_details->account_no=$account_no;
+                        
+                        $bank_details->save();
+
+                    }
+
+            }
+            // exit();
+        }
+
+        return Redirect::back()->with('success', 'Uploaded');    
     }
 
     public function checkname(Request $request)

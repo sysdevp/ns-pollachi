@@ -1,16 +1,10 @@
 
 $(document).ready(function() {
+  //for Select 2 tap opening
    $(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
-    $(this).closest(".select2-container").siblings('select:enabled').select2('open');
-  });
-//   var ss = $("#add").attr("tabindex");
-//   alert(ss);
-  //   if(ss==6)
-//   {
-//     $(this).attr("tabindex");
-
-//   }
-  // Setup - add a text input to each footer cell
+        $(this).closest(".select2-container").siblings('select:enabled').select2('open');
+      });
+    // Setup - add a text input to each footer cell
     $('#master thead tr,#receivable_bill thead tr,#receivable_party thead tr,#payable_bill thead tr,#payable_party thead tr,#day_book thead tr,#ageing_report thead tr,#b2b thead tr,#b2c thead tr,#registered thead tr,#unregistered thead tr,#out_b2b thead tr,#stock_summary thead tr').clone(true).appendTo( '#master thead','#receivable_bill thead','#receivable_party thead','#stock_summary thead','#payable_bill thead','#payable_party thead','#day_book thead','#ageing_report thead','#b2b thead','#registered thead','#unregistered thead','#out_b2b thead');
     $('#master thead tr:eq(1) th,#receivable_bill thead tr:eq(1) th,#receivable_party thead tr:eq(1) th,#payable_bill thead tr:eq(1) th,#payable_party thead tr:eq(1) th,#day_book thead tr:eq(1) th,#ageing_report thead tr:eq(1) th,#b2b thead tr:eq(1) th,#b2c thead tr:eq(1) th,#registered thead tr:eq(1) th,#unregistered thead tr:eq(1) th,#out_b2b thead tr:eq(1) th,#stock_summary thead tr:eq(1) th').each( function (i) {
         var title = $(this).text();
@@ -38,32 +32,32 @@ $(document).ready(function() {
         buttons: [
           {
               extend: 'copyHtml5',
-			   text: '<i class="fa fa-files-o"></i>',		
-				titleAttr: 'Copy',			   
+         text: '<i class="fa fa-files-o"></i>',   
+        titleAttr: 'Copy',         
               exportOptions: {
                   columns: [ 0, ':visible' ]
               }
           },
           {
               extend: 'excelHtml5',
-			   text: '<i class="fa fa-file-excel-o"></i>',
-			   titleAttr: 'Excel',
+         text: '<i class="fa fa-file-excel-o"></i>',
+         titleAttr: 'Excel',
               exportOptions: {
                 columns: [ 0, ':visible' ]
               }
           },
           {
               extend: 'pdfHtml5',
-			   text: '<i class="fa fa-file-pdf-o"></i>',
-			   titleAttr: 'PDF',
+         text: '<i class="fa fa-file-pdf-o"></i>',
+         titleAttr: 'PDF',
               exportOptions: {
                 columns: [ 0, ':visible' ]
               }
           },
           {
               extend: 'print',
-			   text: '<i class="fa fa-print"></i>',
-			    titleAttr: 'Print',
+         text: '<i class="fa fa-print"></i>',
+          titleAttr: 'Print',
               exportOptions: {
                 columns: [ 0, ':visible' ]
               }
@@ -97,6 +91,71 @@ $(document).ready(function() {
         orderCellsTop: true,
         fixedHeader: true,
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        dom: 'lBfrtip',
+        "scrollX": true,
+        "scrollY":300,
+        buttons: [
+          {
+              extend: 'copyHtml5',
+         text: '<i class="fa fa-files-o"></i>',   
+        titleAttr: 'Copy',         
+              exportOptions: {
+                  columns: [ 0, ':visible' ]
+              }
+          },
+          {
+              extend: 'excelHtml5',
+         text: '<i class="fa fa-file-excel-o"></i>',
+         titleAttr: 'Excel',
+              exportOptions: {
+                  columns: ':visible'
+              }
+          },
+          {
+              extend: 'pdfHtml5',
+         text: '<i class="fa fa-file-pdf-o"></i>',
+         titleAttr: 'PDF',
+              exportOptions: {
+                  columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+              }
+          },
+          {
+              extend: 'print',
+         text: '<i class="fa fa-print"></i>',
+          titleAttr: 'Print',
+              exportOptions: {
+                  columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+              }
+          },
+         {
+                    extend: 'colvis',
+                    text: '<i class="fa fa-columns"></i>',
+                    titleAttr: 'Columns',                   
+                },
+      ]
+    } );
+
+    $('#voucher thead tr').clone(true).appendTo( '#voucher thead');
+    $('#voucher thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+
+    
+
+    var table = $('#voucher').DataTable( {
+        orderCellsTop: true,
+        fixedHeader: true,
+        lengthMenu: [[12, 25, 50, -1], [12, 25, 50, "All"]],
         dom: 'lBfrtip',
         "scrollX": true,
         "scrollY":300,

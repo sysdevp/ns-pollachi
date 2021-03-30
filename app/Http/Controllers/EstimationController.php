@@ -22,6 +22,7 @@ use App\Models\TermsAndCondition;
 use Carbon\Carbon;
 use App\Models\VoucherNumbering;
 use App\Models\PurchaseVoucherType;
+use App\Models\UploadDocument;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -273,6 +274,29 @@ $supplier = Supplier::all();
          PurchaseVoucherType::where('id',$voucher_type)
                             ->update(['updated_no' => $current_voucher_num]);
 
+        $name="";
+             
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/                 
+                                   
+
          $estimation = new Estimation();
          $estimation->voucher_no = $current_voucher_num;
          $estimation->estimation_no = $voucher_no;
@@ -430,6 +454,7 @@ $supplier = Supplier::all();
         $estimation_item = Estimation_Item::where('estimation_no',$id)->get();
         $estimation_expense = Estimation_Expense::where('estimation_no',$id)->get();
         $tax = EstimationTax::where('estimation_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($estimation_item);
         $expense_row_count = count($estimation_expense);
@@ -535,7 +560,7 @@ $supplier = Supplier::all();
        // $pdf = PDF::loadView('admin.estimation.show_pdf',compact('estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
        // return $pdf->download('tester.pdf');
 
-  return view('admin.estimation.show',compact('estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+  return view('admin.estimation.show',compact('estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
 
         //return view('admin.estimation.show');
     }
@@ -559,6 +584,7 @@ $supplier = Supplier::all();
         $estimation_item = Estimation_Item::where('estimation_no',$id)->get();
         $estimation_expense = Estimation_Expense::where('estimation_no',$id)->get();
         $tax = EstimationTax::where('estimation_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($estimation_item);
         $expense_row_count = count($estimation_expense);
@@ -661,7 +687,7 @@ $supplier = Supplier::all();
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.estimation.edit',compact('categories','supplier','agent','brand','expense_type','item','estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head'));
+        return view('admin.estimation.edit',compact('categories','supplier','agent','brand','expense_type','item','estimation','estimation_item','estimation_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','upload'));
     }
 
     /**
@@ -686,9 +712,47 @@ $supplier = Supplier::all();
         $estimation_tax_data = EstimationTax::where('estimation_no',$id);
         $estimation_tax_data->delete();
 
+        $estimation_upload_data = UploadDocument::where('voucher_no',$id);
+        $estimation_upload_data->delete();
+
         $tax = Tax::all(); 
 
         $voucher_date = $request->voucher_date;
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/ 
 
          $estimation = new Estimation();
 

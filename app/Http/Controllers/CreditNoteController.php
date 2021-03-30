@@ -51,6 +51,7 @@ use App\Models\RejectionInBetaExpense;
 use App\Models\RejectionInTax;
 use App\Models\RejectionInBetaTax;
 use App\Models\SalesVoucherType;
+use App\Models\UploadDocument;
 
 class CreditNoteController extends Controller
 {
@@ -384,6 +385,26 @@ class CreditNoteController extends Controller
         
         }
     }
+
+    /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
         if($request->has('check'))
         {
