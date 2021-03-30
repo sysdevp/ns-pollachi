@@ -29,6 +29,10 @@ Route::get('/view', function () {
     return view('Masters.Sample.View');
 });
 
+Route::get('/barcode_js', function () {
+    return view('barcode');
+});
+
 Route::get('/emptydash', function () {
     return view('admin.master.empty');
 });
@@ -57,6 +61,9 @@ Route::any('update-password/{id}', 'UserController@update_password');
 Route::any('common-master-details/get-state-master-details', 'CommonMasterDetailController@get_state_master_details');
 Route::any('common-master-details/get-district-master-details', 'CommonMasterDetailController@get_district_master_details');
 Route::any('common-master-details/get-city-master-details', 'CommonMasterDetailController@get_city_master_details');
+
+
+
 Route::any('common-master-details/get-location-type-master-details', 'CommonMasterDetailController@get_location_type_master_details');
 Route::any('common-master-details/get-bank-branch-master-details', 'CommonMasterDetailController@get_bank_branch_master_details');
 Route::any('common-master-details/get-bank-master-details', 'CommonMasterDetailController@get_bank_master_details');
@@ -102,11 +109,7 @@ Route::group(['prefix' => 'master/state', 'middleware' => ['auth']], function ()
     Route::any('edit/{id}', 'StateController@edit')->middleware('permission:state_edit');
     Route::any('update/{id}', 'StateController@update')->middleware('permission:state_edit');
     Route::any('delete/{id}', 'StateController@destroy')->middleware('permission:state_delete');
-    Route::any('import-data', 'StateController@import')->middleware('permission:state_list');
-    Route::any('store-import-data', 'StateController@importCsv')->middleware('permission:state_list');
-    // Route::any('example-file', 'StateController@examplefile')->middleware('permission:state_create');
 });
-
 /* State Master Group End Here  */
 
 /* District Master Group Start Here  */
@@ -118,8 +121,6 @@ Route::group(['prefix' => 'master/district', 'middleware' => ['auth']], function
     Route::any('edit/{id}', 'DistrictController@edit')->middleware('permission:district_edit');
     Route::any('update/{id}', 'DistrictController@update')->middleware('permission:district_edit');
     Route::any('delete/{id}', 'DistrictController@destroy')->middleware('permission:district_delete');
-    Route::any('import-data', 'DistrictController@import')->middleware('permission:district_list');
-    Route::any('store-import-data', 'DistrictController@importCsv')->middleware('permission:district_list');
 });
 /* District Master Group End Here  */
 
@@ -132,8 +133,6 @@ Route::group(['prefix' => 'master/city', 'middleware' => ['auth']], function () 
     Route::any('edit/{id}', 'CityController@edit')->middleware('permission:city_edit');
     Route::any('update/{id}', 'CityController@update')->middleware('permission:city_edit');
     Route::any('delete/{id}', 'CityController@destroy')->middleware('permission:city_delete');
-    Route::any('import-data', 'CityController@import')->middleware('permission:city_list');
-    Route::any('store-import-data', 'CityController@importCsv')->middleware('permission:city_list');
 });
 /* City Master Group End Here  */
 
@@ -146,9 +145,6 @@ Route::group(['prefix' => 'master/brand', 'middleware' => ['auth']], function ()
     Route::any('edit/{id}', 'BrandController@edit')->middleware('permission:brand_edit');
     Route::any('update/{id}', 'BrandController@update')->middleware('permission:brand_edit');
     Route::any('delete/{id}', 'BrandController@destroy')->middleware('permission:brand_delete');
-
-    Route::any('import-data', 'BrandController@import')->middleware('permission:brand_list');
-    Route::any('store-import-data', 'BrandController@importCsv')->middleware('permission:brand_create');
 });
 /* City Master Group End Here  */
 
@@ -161,9 +157,6 @@ Route::group(['prefix' => 'master/location-type', 'middleware' => ['auth']], fun
     Route::any('edit/{id}', 'LocationTypeController@edit')->middleware('permission:location_type_edit');
     Route::any('update/{id}', 'LocationTypeController@update')->middleware('permission:location_type_edit');
     Route::any('delete/{id}', 'LocationTypeController@destroy')->middleware('permission:location_type_delete');
-
-    Route::any('import-data', 'LocationTypeController@import')->middleware('permission:location_type_list');
-    Route::any('store-import-data', 'LocationTypeController@importCsv')->middleware('permission:location_type_list');
 });
 /* Location Type Master  End Here  */
 
@@ -176,9 +169,6 @@ Route::group(['prefix' => 'master/location', 'middleware' => ['auth']], function
     Route::any('edit/{id}', 'LocationController@edit');
     Route::any('update/{id}', 'LocationController@update');
     Route::any('delete/{id}', 'LocationController@destroy');
-
-    Route::any('import-data', 'LocationController@import');
-    Route::any('store-import-data', 'LocationController@importCsv');
 });
 /* Location Master  End Here  */
 
@@ -192,9 +182,6 @@ Route::group(['prefix' => 'master/bank', 'middleware' => ['auth']], function () 
     Route::any('edit/{id}', 'BankController@edit')->middleware('permission:bank_edit');
     Route::any('update/{id}', 'BankController@update')->middleware('permission:bank_edit');
     Route::any('delete/{id}', 'BankController@destroy')->middleware('permission:bank_list');
-
-    Route::any('import-data', 'BankController@import')->middleware('permission:bank_list');
-    Route::any('store-import-data', 'BankController@importCsv')->middleware('permission:bank_create');
 });
 /* Bank Master  End Here  */
 
@@ -207,9 +194,6 @@ Route::group(['prefix' => 'master/bank-branch', 'middleware' => ['auth']], funct
     Route::any('edit/{id}', 'BankbranchController@edit')->middleware('permission:bank_branch_edit');
     Route::any('update/{id}', 'BankbranchController@update')->middleware('permission:bank_branch_edit');
     Route::any('delete/{id}', 'BankbranchController@destroy')->middleware('permission:bank_branch_delete');
-
-    Route::any('import-data', 'BankbranchController@import')->middleware('permission:bank_branch_list');
-    Route::any('store-import-data', 'BankbranchController@importCsv')->middleware('permission:bank_branch_create');
 });
 /* Bank-Branch Master  End Here  */
 
@@ -222,9 +206,6 @@ Route::group(['prefix' => 'master/accounts-type', 'middleware' => ['auth']], fun
     Route::any('edit/{id}', 'AccountTypeController@edit')->middleware('permission:accounts_type_edit');
     Route::any('update/{id}', 'AccountTypeController@update')->middleware('permission:accounts_type_edit');
     Route::any('delete/{id}', 'AccountTypeController@destroy')->middleware('permission:accounts_type_delete');
-
-    Route::any('import-data', 'AccountTypeController@import')->middleware('permission:accounts_type_list');
-    Route::any('store-import-data', 'AccountTypeController@importCsv')->middleware('permission:accounts_type_create');
 });
 /* Accounts Type Master  End Here  */
 
@@ -237,9 +218,6 @@ Route::group(['prefix' => 'master/denomination', 'middleware' => ['auth']], func
     Route::any('edit/{id}', 'DenominationController@edit')->middleware('permission:denomination_edit');
     Route::any('update/{id}', 'DenominationController@update')->middleware('permission:denomination_edit');
     Route::any('delete/{id}', 'DenominationController@destroy')->middleware('permission:denomination_delete');
-
-    Route::any('import-data', 'DenominationController@import')->middleware('permission:denomination_list');
-    Route::any('store-import-data', 'DenominationController@importCsv')->middleware('permission:denomination_create');
 });
 /* Denomination Master  End Here  */
 
@@ -250,18 +228,12 @@ Route::resource('company-bank', 'CompanyBankController',['middleware' => ['auth'
 Route::get('company-bank/delete/{id}', 'CompanyBankController@destroy');
 Route::post('company-bank/branch_details/', 'CompanyBankController@branch_details');
 
-Route::get('master/company-bank/import-data', 'CompanyBankController@import');
-Route::post('master/company-bank/store-import-data', 'CompanyBankController@importCsv');
-
 /*Company Bank Master Ends Here*/
 
 /*Price Level Settings Master Starts Here*/
 
 Route::resource('price-level', 'PriceLevelController',['middleware' => ['auth']]);
 Route::get('price-level/delete/{id}', 'PriceLevelController@destroy');
-
-Route::get('master/price-level/import-data', 'PriceLevelController@import');
-Route::post('master/price-level/store-import-data', 'PriceLevelController@importCsv');
 
 /*Price Level Settings Master Ends Here*/
 
@@ -274,9 +246,6 @@ Route::group(['prefix' => 'master/department', 'middleware' => ['auth']], functi
     Route::any('edit/{id}', 'DepartmentController@edit')->middleware('permission:department_edit');
     Route::any('update/{id}', 'DepartmentController@update')->middleware('permission:department_edit');
     Route::any('delete/{id}', 'DepartmentController@destroy')->middleware('permission:department_delete');
-
-    Route::any('import-data', 'DepartmentController@import')->middleware('permission:department_list');
-    Route::any('store-import-data', 'DepartmentController@importCsv')->middleware('permission:department_create');
 });
 /* Department Master  End Here  */
 
@@ -289,9 +258,6 @@ Route::group(['prefix' => 'master/designation', 'middleware' => ['auth']], funct
     Route::any('edit/{id}', 'DesignationController@edit')->middleware('permission:desigination_edit');
     Route::any('update/{id}', 'DesignationController@update')->middleware('permission:desigination_edit');
     Route::any('delete/{id}', 'DesignationController@destroy')->middleware('permission:desigination_delete');
-
-    Route::any('import-data', 'DesignationController@import')->middleware('permission:desigination_list');
-    Route::any('store-import-data', 'DesignationController@importCsv')->middleware('permission:desigination_create');
 });
 /* Denomination Master  End Here  */
 
@@ -304,9 +270,6 @@ Route::group(['prefix' => 'master/address-type', 'middleware' => ['auth']], func
     Route::any('edit/{id}', 'AddressTypeController@edit')->middleware('permission:address_type_edit');
     Route::any('update/{id}', 'AddressTypeController@update')->middleware('permission:address_type_edit');
     Route::any('delete/{id}', 'AddressTypeController@destroy')->middleware('permission:address_type_delete');
-
-    Route::any('import-data', 'AddressTypeController@import')->middleware('permission:address_type_list');
-    Route::any('store-import-data', 'AddressTypeController@importCsv')->middleware('permission:address_type_create');
 });
 /* Denomination Master  End Here  */
 
@@ -321,9 +284,6 @@ Route::group(['prefix' => 'master/employee', 'middleware' => ['auth']], function
     Route::any('delete/{id}', 'EmployeeController@destroy')->middleware('permission:employee_delete');
     Route::any('delete-employee-address-details', 'EmployeeController@delete_employee_address_details')->middleware('permission:employee_delete');
     Route::any('delete-employee-proof-details', 'EmployeeController@delete_employee_proof_details')->middleware('permission:employee_delete');
-
-    Route::any('import-data', 'EmployeeController@import')->middleware('permission:employee_list');
-    Route::any('store-import-data', 'EmployeeController@importCsv')->middleware('permission:employee_create');
 });
 /* Employee Master  End Here  */
 
@@ -361,9 +321,6 @@ Route::group(['prefix' => 'master/offers', 'middleware' => ['auth']], function (
     Route::any('update/{id}', 'OffersController@update')->middleware('permission:gift_voucher_matser_edit');
     Route::any('delete/{id}', 'OffersController@destroy')->middleware('permission:gift_voucher_matser_update');
     Route::get('getItem', 'OffersController@getItem');
-
-    Route::any('import-data', 'OffersController@import');
-    Route::any('store-import-data', 'OffersController@importCsv');
 });
 /* Offers Master End Here  */
 
@@ -377,9 +334,6 @@ Route::group(['prefix' => 'master/gift-voucher', 'middleware' => ['auth']], func
     Route::any('update/{id}', 'GiftvoucherController@update')->middleware('permission:gift_voucher_matser_edit');
     Route::any('delete/{id}', 'GiftvoucherController@destroy')->middleware('permission:gift_voucher_matser_update');
     Route::get('print/{id}', 'GiftvoucherController@print');
-
-    Route::any('import-data', 'GiftvoucherController@import');
-    Route::any('store-import-data', 'GiftvoucherController@importCsv');
 });
 /* Gift Voucher Master End Here  */
 
@@ -406,12 +360,11 @@ Route::group(['prefix' => 'master/agent', 'middleware' => ['auth']], function ()
     Route::any('delete/{id}', 'AgentController@destroy')->middleware('permission:agent_delete');
     Route::any('delete-agent-address-details', 'AgentController@delete_agent_address_details')->middleware('permission:agent_delete');
     Route::any('delete-agent-proof-details', 'AgentController@delete_agent_proof_details')->middleware('permission:agent_delete');
-
-    Route::any('import-data', 'AgentController@import');
-    Route::any('store-import-data', 'AgentController@importCsv');
-
 });
 Route::post('master/agent/checkname/', 'AgentController@checkname');
+Route::post('agent/select_city_based_districts', 'CityController@get_city_based_districts');
+Route::post('agent/select_district_based_districts', 'DistrictController@get_district_based_state');
+
 /* Agent Master End Here  */
 /* Customer Master  Start Here  */
 Route::group(['prefix' => 'master/customer', 'middleware' => ['auth']], function () {
@@ -424,9 +377,6 @@ Route::group(['prefix' => 'master/customer', 'middleware' => ['auth']], function
     Route::any('delete/{id}', 'CustomerController@destroy')->middleware('permission:customer_edit');
     Route::any('delete-customer-address-details', 'CustomerController@delete_customer_address_details')->middleware('permission:customer_edit');
     Route::any('delete-customer-bank-details', 'CustomerController@delete_customer_bank_details')->middleware('permission:customer_edit');
-
-    Route::any('import-data', 'CustomerController@import');
-    Route::any('store-import-data', 'CustomerController@importCsv');
 
 });
 Route::post('master/customer/checkname/', 'CustomerController@checkname');
@@ -443,9 +393,6 @@ Route::group(['prefix' => 'master/supplier', 'middleware' => ['auth']], function
     Route::any('delete/{id}', 'SupplierController@destroy')->middleware('permission:supplier_delete');
     Route::any('delete-supplier-address-details', 'SupplierController@delete_supplier_address_details')->middleware('permission:supplier_delete');
     Route::any('delete-supplier-bank-details', 'SupplierController@delete_supplier_bank_details')->middleware('permission:supplier_delete');
-
-    Route::any('import-data', 'SupplierController@import');
-    Route::any('store-import-data', 'SupplierController@importCsv');
 });
 Route::post('master/supplier/checkname/', 'SupplierController@checkname');
 /* Supplier Master End Here  */
@@ -471,9 +418,6 @@ Route::group(['prefix' => 'master/uom', 'middleware' => ['auth']], function () {
     Route::any('edit/{id}', 'UomController@edit')->middleware('permission:uom_edit');
     Route::any('update/{id}', 'UomController@update')->middleware('permission:uom_edit');
     Route::any('delete/{id}', 'UomController@destroy')->middleware('permission:uom_delete');
-
-    Route::any('import-data', 'UomController@import')->middleware('permission:uom_list');
-    Route::any('store-import-data', 'UomController@importCsv')->middleware('permission:uom_create');
 });
 /* Language Master End Here  */
 
@@ -501,30 +445,15 @@ Route::group(['prefix' => 'master/category-one', 'middleware' => ['auth']], func
 });
 /* Category One Master End Here  */
 
-// /* Category Master  Start Here  */
-// Route::group(['prefix' => 'master/category', 'middleware' => ['auth']], function () {
-//     Route::any('/', 'CategoryController@index')->middleware('permission:category_name_master_list');
-//     Route::any('create', 'CategoryController@create');
-//     Route::any('store', 'CategoryController@store');
-//     Route::any('show/{id}', 'CategoryController@show');
-//     Route::any('edit/{id}', 'CategoryController@edit');
-//     Route::any('update/{id}', 'CategoryController@update');
-//     Route::any('delete/{id}', 'CategoryController@destroy');
-// });
-// /* Category Master End Here  */
-
 /* Category Master  Start Here  */
 Route::group(['prefix' => 'master/category', 'middleware' => ['auth']], function () {
-    Route::any('/', 'CategoryController@index')->middleware('permission:category_name_master_list');
-    Route::any('create', 'CategoryController@create')->middleware('permission:category_name_master_create');
-    Route::any('store', 'CategoryController@store')->middleware('permission:category_name_master_create');
-    Route::any('show/{id}', 'CategoryController@show')->middleware('permission:category_name_master_list');
-    Route::any('edit/{id}', 'CategoryController@edit')->middleware('permission:category_name_master_edit');
-    Route::any('update/{id}', 'CategoryController@update')->middleware('permission:category_name_master_edit');
-    Route::any('delete/{id}', 'CategoryController@destroy')->middleware('permission:category_name_master_delete');
-
-    Route::any('import-data', 'CategoryController@import')->middleware('permission:category_name_master_list');
-    Route::any('store-import-data', 'CategoryController@importCsv')->middleware('permission:category_name_master_create');
+    Route::any('/', 'CategoryController@index');
+    Route::any('create', 'CategoryController@create');
+    Route::any('store', 'CategoryController@store');
+    Route::any('show/{id}', 'CategoryController@show');
+    Route::any('edit/{id}', 'CategoryController@edit');
+    Route::any('update/{id}', 'CategoryController@update');
+    Route::any('delete/{id}', 'CategoryController@destroy');
 });
 /* Category Master End Here  */
 
@@ -561,9 +490,6 @@ Route::group(['prefix' => 'master/area', 'middleware' => ['auth']], function () 
     Route::any('edit/{id}', 'AreaController@edit')->middleware('permission:area_edit');
     Route::any('update/{id}', 'AreaController@update')->middleware('permission:area_edit');
     Route::any('delete/{id}', 'AreaController@destroy')->middleware('permission:area_delete');
-
-    Route::any('import-data', 'AreaController@import')->middleware('permission:area_list');
-    Route::any('store-import-data', 'AreaController@importCsv')->middleware('permission:area_create');
 });
 /* Area Master End Here  */
 
@@ -593,15 +519,6 @@ Route::group(['prefix' => 'master/item', 'middleware' => ['auth']], function () 
     Route::any('store-uom-factor-convertion-for-item', 'ItemController@store_uom_factor_convertion_for_item')->middleware('permission:uom_factor_convertion_for_item_list');
     Route::any('delete-uom-factor-convertion-for-item', 'ItemController@delete_uom_factor_convertion_for_item')->middleware('permission:uom_factor_convertion_for_item_delete');
     Route::any('remove-item-barcode-details', 'ItemController@remove_item_barcode_details');
-
-    Route::any('import-data', 'ItemController@import');
-    Route::any('store-import-data', 'ItemController@importCsv');
-
-    Route::any('multiple-item', 'ItemController@multiple_item');
-    Route::any('direct-item-store', 'ItemController@direct_items');
-    Route::any('bulk-item-store', 'ItemController@bulk_items');
-    Route::any('repack-item-store', 'ItemController@repack_items');
-    Route::any('parent-item-store', 'ItemController@parent_items');
     
 });
 /* Item Master End Here  */
@@ -610,8 +527,6 @@ Route::group(['prefix' => 'master/item', 'middleware' => ['auth']], function () 
 
 Route::resource('tax', 'TaxController',['middleware' => ['auth']]);
 Route::any('tax/delete/{id}', 'TaxController@destroy');
-Route::any('master/tax/import-data', 'TaxController@import');
-Route::any('master/tax/store-import-data', 'TaxController@importCsv');
 
 /*Tax Master End Here*/
 
@@ -656,9 +571,6 @@ Route::group(['prefix' => 'master/user', 'middleware' => ['auth']], function () 
     Route::any('edit/{id}', 'UserController@edit')->middleware('permission:user_edit');
     Route::any('update/{id}', 'UserController@update')->middleware('permission:user_edit');
     Route::any('delete/{id}', 'UserController@destroy')->middleware('permission:user_delete');
-
-    Route::any('import-data', 'UserController@import')->middleware('permission:state_list');
-    Route::any('store-import-data', 'UserController@importCsv')->middleware('permission:state_list');
 });
 /* User Master End Here  */
 
@@ -865,7 +777,7 @@ Route::get('purchase_entry/item_beta_details/{id}', 'PurchaseEntryController@ite
 Route::get('purchase_entry/expense_beta_details/{id}', 'PurchaseEntryController@expense_beta_details');
 
 Route::post('purchase_entry/voucher_type/', 'PurchaseEntryController@voucher_type');
-Route::post('purchase_entry/print_items/', 'PurchaseEntryController@print_items');
+Route::post('   /', 'PurchaseEntryController@print_items');
 
 /* Purchase entry End Here  */
 
@@ -1230,12 +1142,6 @@ Route::resource('individual_ledger','IndividualLedgerController',['middleware' =
 
 /*Individual Ledger End Here*/
 
-/*Last Purchase Cost Report Ledger Start Here*/
-
-Route::resource('purchase_cost','LastPurchaseCostReportController',['middleware' => ['auth']])->middleware('permission:individual_ledger');
-
-/*Last Purchase Cost Report End Here*/
-
 /*GST Report Start Here*/
 
 Route::resource('gst_report','GstReportController',['middleware' => ['auth']])->middleware('permission:gst_report');
@@ -1249,8 +1155,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::resource('sales_man','SalesManController',['middleware' => ['auth']]);
 Route::get('sales_man/delete/{id}', 'SalesManController@destroy');
-Route::any('master/sales_man/import-data', 'SalesManController@import');
-Route::any('master/sales_man/store-import-data', 'SalesManController@importCsv');
 
 /*Day Book End Here*/
 
@@ -1268,9 +1172,6 @@ Route::get('pos/browse_item/{id}', 'PosController@browse_item');
 
 Route::get('pos/getdata/{id}', 'PosController@getdata');
 Route::post('pos/getdata_offer/', 'PosController@getdata_offer');
-Route::get('pos/getdata_item/{id}', 'PosController@getdata_item');
-Route::post('pos/cust_datas/', 'PosController@cust_datas');
-
 
 /*POS End Here*/
 
@@ -1346,9 +1247,6 @@ Route::resource('receipt_income','ReceiptIncomeController',['middleware' => ['au
 Route::resource('account_group','AccountGroupController',['middleware' => ['auth']])->middleware('permission:account_group_list|account_group_create|account_group_edit|account_group_delete');
 Route::get('account_group/delete/{id}', 'AccountGroupController@destroy')->middleware('permission:account_group_delete');
 
-Route::any('master/account_group/import-data', 'AccountGroupController@import')->middleware('permission:account_group_list');
-    Route::any('master/account_group/store-import-data', 'AccountGroupController@importCsv')->middleware('permission:account_group_create');
-
 /*Account Group End Here*/
 
 /*BOM Start Here*/
@@ -1377,18 +1275,12 @@ Route::get('terms-and-condition/delete/{id}', 'TermsAndConditionController@destr
 Route::resource('account_group_tax','AccountGroupTaxController',['middleware' => ['auth']])->middleware('permission:account_group_tax_list|account_group_tax_edit|account_group_tax_create');
 Route::get('account_group_tax/delete/{id}', 'AccountGroupTaxController@destroy')->middleware('permission:account_group_tax_delete');
 
-Route::any('master/account_group_tax/import-data', 'AccountGroupTaxController@import')->middleware('permission:account_group_tax_list');
-    Route::any('master/account_group_tax/store-import-data', 'AccountGroupTaxController@importCsv')->middleware('permission:account_group_tax_create');
-
 /*Tax Account Group End Here*/
 
 /*Account Head Start Here*/
 
 Route::resource('account_head','AccountHeadController',['middleware' => ['auth']])->middleware('permission:account_head_list|account_head_create|account_head_list_edit');
 Route::get('account_head/delete/{id}', 'AccountHeadController@destroy')->middleware('permission:account_head_delete');
-
-Route::any('master/account_head/import-data', 'AccountHeadController@import')->middleware('permission:account_head_list');
-    Route::any('master/account_head/store-import-data', 'AccountHeadController@importCsv')->middleware('permission:account_head_create');
 
 /*Account Head End Here*/
 
@@ -1402,32 +1294,15 @@ Route::resource('stock_ageing','StockAgeingController',['middleware' => ['auth']
 /*Stock Report end*/
 
 
-// /* Head Office Details Master Group Start Here  */
-// Route::group(['prefix' => 'master/ho_details', 'middleware' => ['auth']], function () {
-//     Route::any('/', 'Ho_detailsController@index');
-//     Route::any('create', 'Ho_detailsController@create');
-//     Route::any('store', 'Ho_detailsController@store');
-//     Route::any('show/{id}', 'Ho_detailsController@show');
-//     Route::any('edit/{id}', 'Ho_detailsController@edit');
-//     Route::any('update/{id}', 'Ho_detailsController@update');
-//     Route::any('delete/{id}', 'Ho_detailsController@destroy');
-//     Route::any('import-data', 'Ho_detailsController@import');
-//     Route::any('store-import-data', 'Ho_detailsController@importCsv');
-// });
-// /* Head Office Details Master  End Here  */
-
 /* Head Office Details Master Group Start Here  */
 Route::group(['prefix' => 'master/ho_details', 'middleware' => ['auth']], function () {
-    Route::any('/', 'Ho_detailsController@index')->middleware('permission:head_office_detail_list');
-    Route::any('create', 'Ho_detailsController@create')->middleware('permission:head_office_detail_list_create');
-    Route::any('store', 'Ho_detailsController@store')->middleware('permission:head_office_detail_list_create');
-    Route::any('show/{id}', 'Ho_detailsController@show')->middleware('permission:head_office_detail_list_list');
-    Route::any('edit/{id}', 'Ho_detailsController@edit')->middleware('permission:head_office_detail_list_edit');
-    Route::any('update/{id}', 'Ho_detailsController@update')->middleware('permission:head_office_detail_list_edit');
-    Route::any('delete/{id}', 'Ho_detailsController@destroy')->middleware('permission:head_office_detail_list_delete');
-
-    Route::any('import-data', 'Ho_detailsController@import')->middleware('permission:head_office_detail_list');
-    Route::any('store-import-data', 'Ho_detailsController@importCsv')->middleware('permission:head_office_detail_list_create');
+    Route::any('/', 'Ho_detailsController@index')->middleware('permission:location_list');
+    Route::any('create', 'Ho_detailsController@create')->middleware('permission:location_create');
+    Route::any('store', 'Ho_detailsController@store')->middleware('permission:location_create');
+    Route::any('show/{id}', 'Ho_detailsController@show')->middleware('permission:location_list');
+    Route::any('edit/{id}', 'Ho_detailsController@edit')->middleware('permission:location_edit');
+    Route::any('update/{id}', 'Ho_detailsController@update')->middleware('permission:location_edit');
+    Route::any('delete/{id}', 'Ho_detailsController@destroy')->middleware('permission:location_delete');
 });
 /* Head Office Details Master  End Here  */
 
@@ -1470,9 +1345,6 @@ Route::group(['prefix' => 'master/itemwiseoffer', 'middleware' => ['auth']], fun
     Route::any('edit/{id}', 'ItemwiseOfferController@edit');
     Route::any('update/{id}', 'ItemwiseOfferController@update');
     Route::any('delete/{id}', 'ItemwiseOfferController@destroy');
-
-    Route::any('import-data', 'ItemwiseOfferController@import');
-    Route::any('store-import-data', 'ItemwiseOfferController@importCsv');
 });
 
 
@@ -1485,9 +1357,6 @@ Route::group(['prefix' => 'master/item_wastage', 'middleware' => ['auth']], func
     Route::any('edit/{id}', 'ItemWastageController@edit');
     Route::any('update/{id}', 'ItemWastageController@update');
     Route::any('delete/{id}', 'ItemWastageController@destroy');
-
-    Route::any('import-data', 'ItemWastageController@import');
-    Route::any('store-import-data', 'ItemWastageController@importCsv');
 });
 
 
@@ -1574,18 +1443,12 @@ Route::post('received/store_pos/', 'ReceivedController@store_pos');
 Route::resource('purchase-voucher-type','PurchaseVoucherTypeController',['middleware' => ['auth']]);
 Route::get('purchase-voucher-type/delete/{id}', 'PurchaseVoucherTypeController@destroy');
 
-Route::any('master/purchase-voucher-type/import-data', 'PurchaseVoucherTypeController@import');
-    Route::any('master/purchase-voucher-type/store-import-data', 'PurchaseVoucherTypeController@importCsv');
-
 /*  Purchase Voucher Types end here */
 
 /* Sales Voucher Types Starts here  */
 
 Route::resource('sales-voucher-type','SalesVoucherTypeController',['middleware' => ['auth']]);
 Route::get('sales-voucher-type/delete/{id}', 'SalesVoucherTypeController@destroy');
-
-Route::any('master/sales-voucher-type/import-data', 'SalesVoucherTypeController@import');
-    Route::any('master/sales-voucher-type/store-import-data', 'SalesVoucherTypeController@importCsv');
 
 /*  Sales Voucher Types end here */
 
@@ -1594,18 +1457,12 @@ Route::any('master/sales-voucher-type/import-data', 'SalesVoucherTypeController@
 Route::resource('payment-voucher-type','PaymentVoucherTypeController',['middleware' => ['auth']]);
 Route::get('payment-voucher-type/delete/{id}', 'PaymentVoucherTypeController@destroy');
 
-Route::any('master/payment-voucher-type/import-data', 'PaymentVoucherTypeController@import');
-    Route::any('master/payment-voucher-type/store-import-data', 'PaymentVoucherTypeController@importCsv');
-
 /*  Payment Voucher Types end here */
 
 /* Receipt Voucher Types Starts here  */
 
 Route::resource('receipt-voucher-type','ReceiptVoucherTypeController',['middleware' => ['auth']]);
 Route::get('receipt-voucher-type/delete/{id}', 'ReceiptVoucherTypeController@destroy');
-
-Route::any('master/receipt-voucher-type/import-data', 'ReceiptVoucherTypeController@import');
-    Route::any('master/receipt-voucher-type/store-import-data', 'ReceiptVoucherTypeController@importCsv');
 
 /*  Receipt Voucher Types end here */
 
@@ -1622,16 +1479,3 @@ Route::get('/validation', function () {
     return view('uservalidation');
 });
 Route::post('mandatoryfields/store','MandatoryFieldsController@store');
-
-/* Barcode Generator starts here  */
-
-Route::resource('barcode','BarcodeController',['middleware' => ['auth']]);
-
-/* Barcode Generator End here  */
-
-/* upload logo starts here */
-
-Route::resource('upload-logo', 'UploadLogoController',['middleware' => ['auth']]);
-
-/* upload logo end Here */
-

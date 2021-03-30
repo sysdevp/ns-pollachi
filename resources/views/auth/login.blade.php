@@ -4,7 +4,7 @@
   overflow: hidden;
   width: 100%;
   height: 100vh;
-  background: url(https://designsupply-web.com/samplecontent/vender/codepen/20181014.png) no-repeat center center/cover;
+  /* background: url(https://designsupply-web.com/samplecontent/vender/codepen/20181014.png) no-repeat center center/cover; */
 }
 video {
   min-width: 100%;
