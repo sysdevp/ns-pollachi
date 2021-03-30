@@ -1,5 +1,7 @@
 @extends('admin.layout.app')
-
+<?php
+echo "hello";
+?>
 
 
 @section('content')
