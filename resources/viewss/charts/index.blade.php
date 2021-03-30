@@ -1,7 +1,8 @@
 @extends('admin.layout.app')
 
-
-
+<?php
+$testing = 0;
+?>
 @section('content')
 <main class="page-content">
 <div class="container">
