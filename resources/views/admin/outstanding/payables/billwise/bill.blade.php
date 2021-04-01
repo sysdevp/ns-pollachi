@@ -227,18 +227,18 @@ table, th, td {
                    @foreach($purchaseentry_datas as $key=> $value)
                     <tr>
                       <td>{{ $key+1 }}</td>
-                      <td>{{ $value->p_no }}</td>
-                      <td>{{ $value->p_date }}</td>
-                      <td>{{ $value->supplier->name }}</td>
-                      <td>{{ $value->total_net_value }}</td>
-                      <td>{{ $value->paid_amount }}</td>
-                      <td>{{ $value->pending_amount }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->supplier->name }}</td>
-                      <td>{{ $value->supplier->phone_no }}</td>
-                      <td>{{ $value->supplier->email }}</td>
+                      <td>{{ @$value->p_no }}</td>
+                      <td>{{ @$value->p_date }}</td>
+                      <td>{{ @$value->supplier->name }}</td>
+                      <td>{{ @$value->total_net_value }}</td>
+                      <td>{{ @$value->paid_amount }}</td>
+                      <td>{{ @$value->pending_amount }}</td>
+                      <td>{{ @$value->no_of_days }}</td>
+                      <td>{{ @$value->no_of_days }}</td>
+                      <td>{{ @$value->no_of_days }}</td>
+                      <td>{{ @$value->supplier->name }}</td>
+                      <td>{{ @$value->supplier->phone_no }}</td>
+                      <td>{{ @$value->supplier->email }}</td>
                      
             </tr>
          @endforeach

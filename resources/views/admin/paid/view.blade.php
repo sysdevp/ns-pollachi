@@ -157,7 +157,7 @@ use App\Mandatoryfields;
                       </div>
 
 
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover Paid ChequesFromPurchaseEntry">
         <thead>
           <tr>
             <th>S.No</th>

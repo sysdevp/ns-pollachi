@@ -1,3 +1,12 @@
+<?php
+use App\Ho_details;
+$ho =  Ho_details::all();
+$ho_details = Ho_details::get()->first();
+
+?>
+<script>
+  var ho_details = '<?php echo $ho_details->name.','.$ho_details->gst_number.','.$ho_details->address_line_1.','.$ho_details->address_line_2;?>';
+  </script>
 <!doctype html>
 <html lang="en">
   <head>

@@ -19,7 +19,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered" style="width:100%">
+      <table id="master" class="table table-striped table-bordered Productions" style="width:100%">
         <thead>
           <tr>
             <th>S.No</th>

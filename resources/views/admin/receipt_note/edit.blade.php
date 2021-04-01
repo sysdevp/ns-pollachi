@@ -312,17 +312,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         
                         <div class="form-row">
                             <div class="col-md-12">
-                              <table class="item_code_table" style="width: 100%;">
+                              <table class="item_code_table" id="myTable" style="width: 100%;">
                                   <thead>
+
                                   <th style="font-family: Times New Roman;">Select One</th>
-                                  <th style="font-family: Times New Roman;">Item Code</th>
-                                  <th style="font-family: Times New Roman;">Item Name</th>
-                                  <th style="font-family: Times New Roman;">MRP</th>
-                                  <th style="font-family: Times New Roman;">UOM</th>
-                                  <th style="font-family: Times New Roman;">Brand</th>
-                                  <th style="font-family: Times New Roman;">Category</th>
+                                  <th style="font-family: Times New Roman;">Item Code<input type="text" class="form-control" id="item_table_code" onkeyup="myFunction()" placeholder="Search Item Code" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Item Name<input type="text" id="item_table_name" class="form-control" onkeyup="myFunction1()" placeholder="Search Item Name" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">MRP<input type="text" id="item_table_mrp" class="form-control" onkeyup="myFunction2()" placeholder="Search MRP" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">UOM<input type="text" id="item_table_uom" class="form-control" onkeyup="myFunction3()" placeholder="Search UOM" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Brand<input type="text" id="item_table_brand" class="form-control" onkeyup="myFunction4()" placeholder="Search Brand" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Category<input type="text" id="item_table_category" class="form-control" onkeyup="myFunction5()" placeholder="Search Category" title="Type in a name" style="height: 20px;"></th>
                                   <!-- <th style="font-family: Times New Roman;">PTC Code</th> -->
-                                  <th style="font-family: Times New Roman;">Barcode</th>
+                                  <th style="font-family: Times New Roman;">Barcode<input type="text" id="item_table_barcode" class="form-control" onkeyup="myFunction6()" placeholder="Search Barcode" title="Type in a name" style="height: 20px;"></th>
                                   
                                 </thead>
                                 <tbody class="append_item">
@@ -882,6 +883,133 @@ table, th, td {
         <script type="text/javascript">
           var i=1;
           var discount_total = 0;
+
+          function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_code");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction1() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_name");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction2() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_mrp");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[3];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction3() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_uom");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[4];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction4() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_brand");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[5];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction5() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_category");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[6];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction6() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_barcode");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[7];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 
 function calculate_total_net_price(){
   var total_net_price=0;

@@ -22,7 +22,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover Uom">
         <thead>
           <tr>
             <th>S.No</th>

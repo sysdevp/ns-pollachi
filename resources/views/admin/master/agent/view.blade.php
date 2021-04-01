@@ -20,7 +20,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered display nowrap" style="width:100%;">
+      <table id="master" class="table table-striped table-bordered Agent display nowrap" style="width:100%;">
         <thead>
           <tr>
             <th>S.No</th>

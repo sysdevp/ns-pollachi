@@ -296,7 +296,7 @@ use App\Mandatoryfields;
                       <!-- end -->
 
 
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover ReceivedChequesFromSaleEntry">
         <thead>
           <tr>
             <th>S.No</th>
@@ -336,7 +336,7 @@ use App\Mandatoryfields;
       </table>
 
       <label>Received Cheques from pos</label>
-      <table id="purchaseorder" class="table table-bordered table-hover">
+      <table id="purchaseorder" class="table table-bordered table-hover ReceivedChequesFromPOS">
         <thead>
           <tr>
             <th>S.No</th>
