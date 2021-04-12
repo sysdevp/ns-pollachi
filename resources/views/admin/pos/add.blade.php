@@ -1,5 +1,61 @@
 @extends('admin.layout.app1')
 @section('content')
+<link href="{{asset('assets/keyboards/docs/css/jquery-ui.min.css')}}" rel="stylesheet">
+
+<!-- <script src="{{asset('assets/keyboards/docs/js/jquery-latest-slim.min.js')}}"></script> -->
+<!-- <script src="{{asset('assets/keyboards/docs/js/jquery-migrate-3.1.0.min.js')}}"></script>
+<script src="{{asset('assets/keyboards/docs/js/jquery-ui-custom.min.js')}}"></script> -->
+
+<!-- keyboard widget css & script (required) -->
+<link href="{{asset('assets/keyboards/css/keyboard.css')}}" rel="stylesheet">
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.js')}}"></script>
+
+<!-- keyboard extensions (optional) -->
+<!-- <script src="{{asset('assets/keyboards/js/jquery.mousewheel.js')}}"></script>
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.extension-typing.js')}}"></script>
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.extension-autocomplete.js')}}"></script>
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.extension-caret.js')}}"></script> -->
+
+<!-- demo only -->
+<!-- <link rel="stylesheet" href="{{asset('assets/keyboards/docs/css/bootstrap.min.css')}}"> -->
+<link rel="stylesheet" href="{{asset('assets/keyboards/docs/css/font-awesome.min.css')}}">
+<!-- <link href="{{asset('assets/keyboards/docs/css/demo.css')}}" rel="stylesheet"> -->
+<!-- <link href="{{asset('assets/keyboards/docs/css/tipsy.css')}}" rel="stylesheet"> -->
+<!-- <link href="{{asset('assets/keyboards/docs/css/prettify.css')}}" rel="stylesheet"> -->
+<!-- <script src="{{asset('assets/keyboards/docs/js/bootstrap.min.js')}}"></script> -->
+<!-- working -->
+<link rel="stylesheet" href="{{asset('assets/keyboard/css/keyboard.css')}}" media="screen" />
+    <!-- scripts -->
+<style>
+            .page-container {
+                text-align: center;
+                margin: 150px 0px 0px 0px;
+            }
+            .input-container {
+                position: relative;
+                max-width: 400px;
+                margin: auto;
+                background: linear-gradient(to bottom right, #3F51B5 , #7E57C2);
+                -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                padding: 50px;
+            }
+            .input-container > input {
+                padding: 10px;
+                outline: none !important;
+                box-shadow: none !important;
+                text-align: center;
+            }
+
+            span.tap {
+                font-size: 22px;
+            }
+
+        </style>
+<link rel="stylesheet" href="{{asset('assets/keyboard/css/easy-numpad')}}.css">
+
+<!-- keyboard -->
 <main class="page-content">
 <style type="text/css">
   tbody#team-list {
@@ -58,12 +114,12 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
     width: 100% !important;
   }
 </style>
-
+<link rel="stylesheet" href="assets/jquery.virtualKeyboard.css">
 
 <form  method="post" class="form-horizontal" action="{{ route('pos.store') }}" id="dataInput" enctype="multipart/form-data">
       {{csrf_field()}}
 <input type="hidden" id="hold_trans_id" name="hold_trans_id" value=""/>
-      
+
          <div class="row col-md-12">
 
                   <div class="col-md-2">
@@ -243,6 +299,14 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                          </div>
               </div>
 
+              <div class="row col-md-12">
+                    <div class="col-md-12">
+              <label style="font-family: Times new roman;">Item Code 123</label>
+              <input type="text" class="virtualKeyboard form-control" placeholder="input with virtual keyboard..." style="width: 250px;">
+   
+            </div>
+            </div>
+
       <div class="row col-md-12">
         <!-- <div class="col-md-2">
           <label style="font-family: Times new roman;">Item Bill S.No</label>
@@ -253,6 +317,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
         <div class="col-md-2">
           <label style="font-family: Times new roman;">Item Code</label>
           <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
+          <button type="button"  id="keyboard" > <i class="fa fa-keyboard-o"  aria-hidden="true"></i> </button>
 
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
                
@@ -419,8 +484,13 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <div class="col-md-2">
                         <label style="font-family: Times new roman;">Quantity</label>
                       <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" oninput="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
-                      </div>
-                      </div>
+                      <!-- <input type="text" class="easy-put" readonly="true"/> -->
+
+                      <button type="button" class="numkeyboard" value="quantity"> <i class="fa fa-keyboard-o"  aria-hidden="true"></i> </button>
+                   
+                    </div>
+  
+                  </div>
                       
 
 
@@ -3659,16 +3729,38 @@ item_codes(uom_exclusive);
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet"/>
 <script src="jquery.ui.position.js"></script>
 
+<script src="{{asset('assets/keyboard/js/easy-numpad.js')}}"></script>
 
 <style type="text/css">
   .ui-dialog.ui-widget-content { background: #a3d072; }
 </style>
+<script src="{{asset('assets/keyboards/docs/js/demo.js')}}"></script>
 
         
+<script type="text/javascript" src="{{asset('assets/keyboard/js/jquery.keyboard.js')}}"></script>
+<script language="javascript" type="text/javascript">
+        $(function() {
 
+            $("#keyboardInput").attachKeyboard(
+                {
+                   // iconLocation: 'img/keyboard_key.png',
+                    topOffset : -42,
+                    leftOffset : 20
+                }
+            );
+
+        });
+    </script>
     </div>
     <!-- card body end@ -->
   </div>
 </div>
+<!-- <script src="{{asset('assets/keyboards/docs/js/jquery.tipsy.min.js')}}"></script>
+<script src="{{asset('assets/keyboards/docs/js/prettify.js')}}"></script>  -->
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="assets/jquery.virtualKeyboard.js"></script>
+    <script>
+        $('.virtualKeyboard').vkb();
+    </script>
 @endsection
 

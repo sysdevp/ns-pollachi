@@ -12,84 +12,13 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            @if($check_id != 1)
-            <input type="checkbox" name="alpha_beta" class="alpha_beta" value="1">
-            <li><button type="button" class="btn btn-success"><a href="{{ route('sales_entry.create') }}">Sales Entry</a></button></li>
-            @else
-            @endif
+
           </ul>
         </div>
       </div>
     </div>
 
-    @if($check_id == 1)
-
-    <div class="card-body">
-    <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('sales-entry-report')}}" enctype="multipart/form-data">
-      {{csrf_field()}}
-      <div class="col-md-12 row mb-3">
-
-      <div class="col-md-12 form-row mb-3">
-            <div class="col-md-2">
-              <label>From</label>
-            
-            <input type="date" class="form-control from" name="from" id="from" value="@if(isset($from)){{$from}}@endif" required>
-            </div>
-
-            <div class="col-md-2">
-              <label>To</label>
-            <input type="date" class="form-control to" name="to" id="to" value="@if(isset($to)){{$to}}@endif" required>
-            </div>
-
-           
-            <div class="col-md-3">
-              <label>Customer</label>
-              <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" name="customer_id" id="customer_id">
-              <option value="">Choose Customer Name</option>
-                           @foreach($customer as $data)
-                           <option value="{{ $data->id }}"@if(isset($cond['customer_id'])){{($suppliers->id==$cond['customer_id']) ? 'selected' : '' }}@endif>{{ $data->name }}</option>
-                           @endforeach
-                            </select>
-
-          </div>
-          
-          <div class="col-md-2">
-              <label>Sales Man</label>
-              <select class="js-example-basic-multiple col-12 form-control custom-select salesman_id" name="salesman_id" id="salesman_id">
-                           <option value="">Choose Salesman</option>
-                           @foreach($sales_man as $data)
-                           <option value="{{ $data->id }}"@if(isset($cond['salesman_id'])){{($data->id==$cond['salesman_id']) ? 'selected' : '' }}@endif >{{ $data->name}}</option>
-                           @endforeach
-                            </select>
-
-          </div>
-          <div class="col-md-2">
-              <label>Location</label>
-              <select class="js-example-basic-multiple col-12 form-control custom-select location" name="location" id="location">
-                           <option value="">Choose Location</option>
-                           @foreach($location as $data)
-                           <option value="{{ $data->id }}"@if(isset($cond['location'])){{($data->id==$cond['location']) ? 'selected' : '' }}@endif >{{ $data->name}}</option>
-                           @endforeach
-                            </select>
-
-          </div>
-
-
-          </div>
-
-           <div class="col-md-2">
-            <label> </label>
-            <input type="submit" class="btn btn-success" name="add" value="Submit">
-            
-          </div>
-
-        <br>
-
-    </form>
-
-    </div>
-
-    @endif
+    
     <!-- card header end@ -->
     <div class="card-body">
       <table id="master" class="table table-bordered table-hover">

@@ -932,9 +932,9 @@ Route::post('sale_order/voucher_type/', 'SalesOrderController@voucher_type');
 
 /* Sales entry Start Here  */
 
-Route::resource('sales_entry', 'SalesEntryController',['middleware' => ['auth']])->middleware('permission:sales_entry_create|sales_entry_edit');
+Route::resource('sales_entry', 'SalesEntryController',['middleware' => ['auth']]);
 Route::group(['middleware' => 'auth'], function () {
-     Route::get('sales_entry/index/{id}', 'SalesEntryController@index')->middleware('permission:sales_entry_list');
+     Route::get('sales_entry/index/{id}', 'SalesEntryController@index');
 });
 Route::post('sales_entry/address_details/', 'SalesEntryController@address_details');
 Route::get('sales_entry/getdata/{id}', 'SalesEntryController@getdata');
@@ -1634,4 +1634,7 @@ Route::resource('barcode','BarcodeController',['middleware' => ['auth']]);
 Route::resource('upload-logo', 'UploadLogoController',['middleware' => ['auth']]);
 
 /* upload logo end Here */
+
+Route::resource('salesman_report','SalesmanReportController');
+Route::post('salesman_report_search','SalesmanReportController@report');
 

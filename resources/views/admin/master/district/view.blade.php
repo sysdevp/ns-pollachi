@@ -20,14 +20,14 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover district">
         <thead>
           <tr>
             <th>S.No</th>
             <th>State Name</th>
             <th>District Name</th>
             <th>Remarks</th>
-            <th>Action </th>
+            <th >Action </th>
           </tr>
         </thead>
         <tbody>
