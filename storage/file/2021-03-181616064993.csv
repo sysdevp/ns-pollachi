@@ -1,0 +1,4 @@
+"id","name","type","prefix","suffix","starting_no","updated_no","no_digits","created_at","updated_at"
+"2","Credit Note","Test","JUST","FINAL","10",NULL,"6","2021-02-16 18:07:48","2021-02-16 18:07:48"
+"3","Sales Estimation","Sale Est","SALE","EST","120","00121","5","2021-02-19 10:17:55","2021-02-19 10:56:22"
+"4","Credit Note","Credit Type 1","CR","NOTE","90","90","4","2021-02-19 10:58:58","2021-02-19 14:45:31"

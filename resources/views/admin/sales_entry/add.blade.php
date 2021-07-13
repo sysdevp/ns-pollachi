@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -58,28 +61,51 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 <form  method="post" class="form-horizontal" action="{{ route('sales_entry.store') }}" id="dataInput" enctype="multipart/form-data">
       {{csrf_field()}}
 
-                      <div class="row col-md-12">
+                    <div class="row col-md-12">
 
-                        <div class="col-md-1">
+                          <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Voucher Type<?php echo Mandatoryfields::mandatory('saleentry_vouchertype');?></label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-8">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select voucher_type" onchange="voucher_types()" name="voucher_type" id="voucher_type" <?php echo Mandatoryfields::validation('saleentry_vouchertype');?> autofocus>
+                           <option value="">Choose Voucher Type</option>
+                           @foreach($voucher_type as $voucher_types)
+                           <option value="{{ $voucher_types->id }}">{{ $voucher_types->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                     
+                  </div>
+               </div>
+
+               <div class="col-md-3">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
                                   <div class="">
-                                    <font size="2" id="voucher_no">{{ $voucher_no }}</font>
+                                    <font size="2" id="voucher_no" class="vouchers"></font>
+
+                                    <input type="hidden" class="form-control voucher_no  required_for_proof_valid" value="">
                                   </div>
                                 
                                  
                                 </div>
 
+               </div>
+
+                      <div class="row col-md-12">
+
+                        
+
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
-                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                                  <label style="font-family: Times new roman;">Voucher Date<?php echo Mandatoryfields::mandatory('saleentry_voucherdate');?></label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" <?php echo Mandatoryfields::validation('saleentry_voucherdate');?>> 
                                  
                                 </div>
 
                                 <div class="col-md-3">
-                  <label style="font-family: Times new roman;">Customer Name</label><br>
+                  <label style="font-family: Times new roman;">Customer Name<?php echo Mandatoryfields::mandatory('saleentry_customerid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id" required="">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id" <?php echo Mandatoryfields::validation('saleentry_customerid');?>>
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $customers)
                            <option value="{{ $customers->id }}">{{ $customers->name }}</option>
@@ -101,10 +127,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div>
 
                                 <div class="col-md-3">
-                  <label style="font-family: Times new roman;">Sales Men Name</label><br>
+                  <label style="font-family: Times new roman;">Sales Men Name<?php echo Mandatoryfields::mandatory('saleentry_salesmenid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id" <?php echo Mandatoryfields::validation('saleentry_salesmenid');?>>
                            <option value="">Choose Sales Men Name</option>
                            @foreach($sales_man as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -256,9 +282,9 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                               <div class="row col-md-12 mb-3">
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Company Location</label><br>
+                                  <label style="font-family: Times new roman;">Company Location<?php echo Mandatoryfields::mandatory('saleentry_location');?></label><br>
                                 <select class="js-example-basic-multiple form-control location" 
-                                data-placeholder="Choose Location" id="location" name="location" required="">
+                                data-placeholder="Choose Location" id="location" name="location" <?php echo Mandatoryfields::validation('saleentry_location');?>>
                                 <option value="">Choose Location</option>
                                   @foreach($location as $key => $value)
                                   <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -266,7 +292,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                  </select>
                                 </div>
 
-                                <input type="checkbox" name="check" class="po_alpha_beta" value="1">
+                                <input type="checkbox" name="check" id="check" class="po_alpha_beta" value="1">
                                 
                               </div>
                               
@@ -331,17 +357,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         
                         <div class="form-row">
                             <div class="col-md-12">
-                              <table class="item_code_table" style="width: 100%;">
+                              <table class="item_code_table" id="myTable" style="width: 100%;">
                                   <thead>
+
                                   <th style="font-family: Times New Roman;">Select One</th>
-                                  <th style="font-family: Times New Roman;">Item Code</th>
-                                  <th style="font-family: Times New Roman;">Item Name</th>
-                                  <th style="font-family: Times New Roman;">MRP</th>
-                                  <th style="font-family: Times New Roman;">UOM</th>
-                                  <th style="font-family: Times New Roman;">Brand</th>
-                                  <th style="font-family: Times New Roman;">Category</th>
+                                  <th style="font-family: Times New Roman;">Item Code<input type="text" class="form-control" id="item_table_code" onkeyup="myFunction()" placeholder="Search Item Code" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Item Name<input type="text" id="item_table_name" class="form-control" onkeyup="myFunction1()" placeholder="Search Item Name" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">MRP<input type="text" id="item_table_mrp" class="form-control" onkeyup="myFunction2()" placeholder="Search MRP" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">UOM<input type="text" id="item_table_uom" class="form-control" onkeyup="myFunction3()" placeholder="Search UOM" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Brand<input type="text" id="item_table_brand" class="form-control" onkeyup="myFunction4()" placeholder="Search Brand" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Category<input type="text" id="item_table_category" class="form-control" onkeyup="myFunction5()" placeholder="Search Category" title="Type in a name" style="height: 20px;"></th>
                                   <!-- <th style="font-family: Times New Roman;">PTC Code</th> -->
-                                  <th style="font-family: Times New Roman;">Barcode</th>
+                                  <th style="font-family: Times New Roman;">Barcode<input type="text" id="item_table_barcode" class="form-control" onkeyup="myFunction6()" placeholder="Search Barcode" title="Type in a name" style="height: 20px;"></th>
                                   
                                 </thead>
                                 <tbody class="append_item">
@@ -661,8 +688,8 @@ table, th, td {
                       <input type="number" readonly="" class="form-control total_discount" id="total_discount" name="total_discount" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
                       </div>
                       <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Overall Discount</label>
-                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
+                        <label style="font-family: Times new roman;">Overall Discount<?php echo Mandatoryfields::mandatory('saleentry_overall_discount');?></label>
+                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0" <?php echo Mandatoryfields::validation('saleentry_overall_discount');?>>
                       </div>
                     </div>
 
@@ -742,6 +769,30 @@ table, th, td {
                           
 
                        </div>
+
+                       <div class="row col-md-12 append_upload">
+
+                          <div class="row col-md-12 upload">
+                            <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-12">
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">
+                     </div>
+                  </div>
+               </div>
+                      
+                      <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Upload Document</label>
+                      <input type="file" class="form-control" name="document[]">
+
+                      </div>
+                      <div class="col-md-2">
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">
+                    </div>
+                       </div>
+                  </div>
  <div class="col-md-8">
                        <div class="form-group row">
                        <div class="col-md-4">
@@ -756,7 +807,7 @@ table, th, td {
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control amount" name="bill_amount" value="0">
+                <input type="text" required="" class="form-control amount" name="bill_amount" value="0">
               </div>
             </div>
           </div>
@@ -764,7 +815,7 @@ table, th, td {
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
+                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)" required="" name="mode" id="mode">
                            <option value="">Choose Mode</option>
                            <option value="1">Cash</option>
                            <option value="2">NEFT</option>
@@ -844,8 +895,226 @@ table, th, td {
       </form>
                        
         <script type="text/javascript">
+
+          function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('sales_entry/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
           var i=1;
           var discount_total = 0;
+
+           function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_code");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction1() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_name");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction2() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_mrp");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[3];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction3() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_uom");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[4];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction4() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_brand");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[5];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction5() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_category");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[6];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction6() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_barcode");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[7];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 
 $(document).on('click','.po_alpha_beta',function(){
   $( "#discount_div" ).load(window.location.href + " #discount_div" );
@@ -2016,6 +2285,47 @@ $(document).on("click",".remove_expense",function(){
 
   });
 
+function upload_add()
+{
+  var upload_details='<div class="row col-md-12 upload">\
+                            <div class="col-md-3">\
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>\
+                  <div class="form-group row">\
+                     <div class="col-sm-12">\
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">\
+                     </div>\
+                  </div>\
+               </div>\
+                      \
+                      <div class="col-md-4">\
+                        <label style="font-family: Times new roman;">Upload Document</label>\
+                      <input type="file" class="form-control" name="document[]">\
+\
+                      </div>\
+                      <div class="col-md-2">\
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>\
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">\
+                    </div>\
+                       </div>';
+
+  $('.append_upload').append(upload_details);
+  $("select").select2();
+
+}
+
+$(document).on("click",".remove_upload",function(){
+
+  if($(".remove_upload").length > 1){
+
+    $(this).closest('.upload').remove();
+  }
+  else{
+    alert("Atleast One row present");
+
+  }
+
+  });
+
 function item_details_sno(){
   $(".item_s_no").each(function(key,index){
       $(this).html((key+1));
@@ -2098,7 +2408,7 @@ function calc_exclusive()
   var rate_inclusive = $('#inclusive').val();
   var tax_rate = $('.tax_rate').val();
   var mrp = $('.mrp').val();
-
+  var checkbox = $('#check').prop('checked');
 
 
   if (quantity == '') 
@@ -2109,26 +2419,9 @@ function calc_exclusive()
     $('#quantity').focus();
   }
 
-  // else if(mrp == '')
-  // {
-  //   alert('Please Select Any Item');
-  //   $('#exclusive').val('');
-  //   $('#inclusive').val('');
-  // }
-  // else if(parseFloat(rate_inclusive)>parseFloat(mrp))
-  // {
-  //   alert('Rate Exceeds The MRP!!');
-  //   $('#exclusive').val('');
-  //   $('#inclusive').val('');
-  // }
   
-  else
+  else if (checkbox == false)
   {
-    // if(quantity == 0)
-    // {
-    //   quantity =1;
-    //   $('#quantity').val(1);
-    // }
   
       var total = parseInt(quantity)*parseFloat(rate_exclusive);
     
@@ -2179,6 +2472,58 @@ function calc_exclusive()
     }
 
    } 
+   else
+   {
+  
+      var total = parseInt(quantity)*parseFloat(rate_exclusive);
+    
+    $('#amount').val(total.toFixed(2));
+
+    if(tax_rate == '')
+    {
+      $('#net_price').val(total.toFixed(2));
+    }
+    else
+    {
+
+      var rate = parseFloat(tax_rate)/100;
+      var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+      var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+      $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+      if($('#inclusive').val()>parseFloat(mrp))
+      {
+        if(mrp == 0 || mrp == '')
+        {
+          var net_val = parseFloat(total)*parseFloat(rate);
+      //alert(net_val);
+          $('.gst').val(0);
+
+          var total_net_val = parseFloat(total)+parseFloat(net_val);
+          $('#net_price').val(total.toFixed(2));
+        }
+        else
+        {
+          alert('Rate Exceeds The MRP!!');
+        $('#exclusive').val('');
+        $('#inclusive').val('');
+        }
+        
+      }
+      else
+      {
+        //alert(rate);
+      var net_val = parseFloat(total)*parseFloat(rate);
+      //alert(net_val);
+      $('.gst').val(0);
+
+      var total_net_val = parseFloat(total)+parseFloat(net_val);
+      $('#net_price').val(total.toFixed(2));
+      }
+      
+
+    }
+
+   } 
   
 }
 
@@ -2190,6 +2535,7 @@ function calc_inclusive()
   var rate_inclusive = $('#inclusive').val();
   var mrp = $('.mrp').val();
   var tax_rate = $('.tax_rate').val();
+  var checkbox = $('#check').prop('checked');
   
 
   if (quantity == '') 
@@ -2199,27 +2545,8 @@ function calc_inclusive()
     $('#inclusive').val('');
     $('#quantity').focus();
   }
-  // else if(mrp == '')
-  // {
-  //   alert('Please Select Any Item');
-  //   $('#exclusive').val('');
-  //   $('#inclusive').val('');
-  // }
   
-  // else if(parseFloat(rate_inclusive)>parseFloat(mrp))
-  // {
-  //   if(mrp == 0 || mrp == '')
-  //       {
-
-  //       }
-  //       else
-  //       {
-  //         alert('Rate Exceeds The MRP!!');
-  //       $('#exclusive').val('');
-  //       $('#inclusive').val('');
-  //       }
-  // }
-    else
+    else if (checkbox == false)
     {
     if(tax_rate == '')
     {
@@ -2260,6 +2587,47 @@ function calc_inclusive()
     }
 
   }
+  else
+  {
+    if(tax_rate == '')
+    {
+      $('#net_price').val(total.toFixed(2));
+    }
+    else
+    {
+      // if(quantity == 0)
+      // {
+      //   quantity =1;
+      //   $('#quantity').val(1);
+      // }
+
+      var rate=parseFloat(tax_rate)/100+1;
+      var actual_tax = parseFloat(tax_rate)/100;
+      var gst_rate = parseFloat(rate_inclusive)/parseFloat(rate);
+      var total = parseInt(quantity)*parseFloat(gst_rate.toFixed(2));
+      $('#amount').val(total.toFixed(2));
+      $('#exclusive').val(gst_rate.toFixed(2));
+      if(parseFloat(rate_inclusive)>parseFloat(mrp))
+      {
+        if(mrp == 0 || mrp == '')
+            {
+
+            }
+            else
+            {
+              alert('Rate Exceeds The MRP!!');
+            $('#exclusive').val('');
+            $('#inclusive').val('');
+            }
+      }
+      var net_val = parseFloat(total)*parseFloat(actual_tax);
+      $('.gst').val(0);
+      var total_net_val = parseFloat(total)+parseFloat(net_val);
+      $('#net_price').val(total.toFixed(2));
+
+    }
+
+  }  
     
   
 }
@@ -2300,6 +2668,7 @@ function discount_calc()
   var exclusive = $("#exclusive").val();
   var inclusive = $("#inclusive").val();
   var tax_rate = $("#tax_rate").val();
+  var checkbox = $('#check').prop('checked');
  
   if(amount == '' || quantity == '' || exclusive == '' && inclusive == '')
   {
@@ -2319,14 +2688,9 @@ function discount_calc()
     
   }
 
-  else
+  else if (checkbox == false)
   {
 
-  // var rate_exclusive_disc_val = parseFloat(exclusive) - parseFloat(discount);
-  // var rate_inclusive_disc_val = parseFloat(inclusive) - parseFloat(discount);
-
-  // $('#rate_exclusive_disc_val').val(rate_exclusive_disc_val.toFixed(2));
-  // $('#rate_inclusive_disc_val').val(rate_inclusive_disc_val.toFixed(2));
   var disc_amount_exclusive = parseFloat(discount)*100/parseFloat(exclusive);
 
    $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
@@ -2344,6 +2708,26 @@ function discount_calc()
   $('#net_price').val(total_net_val.toFixed(2));
 
   }
+  else
+  {
+
+  var disc_amount_exclusive = parseFloat(discount)*100/parseFloat(exclusive);
+
+   $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
+
+  qty();
+  var amount = $(".amount").val();
+  var discounts = parseInt(quantity)*parseFloat(discount);
+  $('#discounts').val(discounts.toFixed(2));
+  var rate=parseFloat(tax_rate)/100;
+  var net_val = parseFloat(amount)*parseFloat(rate);
+  $('.gst').val(0);
+
+  var total_net_val = parseFloat(amount)+parseFloat(net_val);
+  total_net_val = parseFloat(total_net_val)-parseFloat(discounts);
+  $('#net_price').val(amount.toFixed(2));
+
+  }  
   
 }
 
@@ -2356,6 +2740,7 @@ function discount_calc1()
   var exclusive = $("#exclusive").val();
   var inclusive = $("#inclusive").val();
   var tax_rate = $("#tax_rate").val();
+  var checkbox = $('#check').prop('checked');
  
   if(amount == '' || quantity == '' || exclusive == '' && inclusive == '')
   {
@@ -2373,7 +2758,7 @@ function discount_calc1()
 
   }
   
-  else
+  else if (checkbox == false)
   {
 
   var disc_rate = parseFloat(discount_percentage)/100;
@@ -2397,7 +2782,30 @@ function discount_calc1()
   $('#net_price').val(total_net_val.toFixed(2));
 
   }
+  else
+  {
+
+  var disc_rate = parseFloat(discount_percentage)/100;
+  var disc_val_exclusive = parseFloat(exclusive)*parseFloat(disc_rate);
+  var disc_val_inclusive = parseFloat(inclusive)*parseFloat(disc_rate);
   
+  var disc_amount_exclusive = parseFloat(exclusive)-parseFloat(disc_val_exclusive);
+  var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
+
+  $(".discount_rs").val(disc_val_exclusive.toFixed(2));
+  qty();
+  var amount = $(".amount").val();
+  var discounts = parseInt(quantity)*parseFloat(disc_val_exclusive.toFixed(2));
+  $('#discounts').val(discounts.toFixed(2));
+  var rate=parseFloat(tax_rate)/100;
+  var net_val = parseFloat(amount)*parseFloat(rate);
+  $('.gst').val(0);
+
+  var total_net_val = parseFloat(amount)+parseFloat(net_val);
+  total_net_val = parseFloat(total_net_val)-parseFloat(discounts);
+  $('#net_price').val(amount.toFixed(2));
+
+  }  
   
   
 }
@@ -2414,7 +2822,7 @@ function total_discounts()
 
 function item_codes(item_code,append_value)
 {
-
+ var checkbox = $('#check').prop('checked');
  var customer_id = $('#customer_id').val();
 
 if(append_value == 1)
@@ -2465,7 +2873,9 @@ if(append_value == 1)
               $('#itemwiseoffer').val(0);
              }
 
-             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             if (checkbox == false) 
+             {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
               var tax_master_id = data[1].tax_master[new_val];
 
@@ -2483,6 +2893,28 @@ if(append_value == 1)
               }
 
              }
+             }
+             else
+            {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(0);
+              }
+              else
+              {
+
+              }
+
+             }
+            }
 
               var first_data='<option value="'+id+'">'+uom_name+'</option>';
               $('.uom_exclusive').append(first_data);
@@ -2659,7 +3091,9 @@ else if(append_value == 2)
               $('#itemwiseoffer').val(0);
              }
 
-             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             if (checkbox == false) 
+             {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
               var tax_master_id = data[1].tax_master[new_val];
 
@@ -2677,6 +3111,28 @@ else if(append_value == 2)
               }
 
              }
+             }
+             else
+            {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(0);
+              }
+              else
+              {
+
+              }
+
+             }
+            }
 
               var first_data='<option value="'+id+'">'+uom_name+'</option>';
               $('.uom_exclusive').append(first_data);
@@ -2850,7 +3306,9 @@ else
              }
              
 
-             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             if (checkbox == false) 
+             {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
               var tax_master_id = data[1].tax_master[new_val];
 
@@ -2868,6 +3326,28 @@ else
               }
 
              }
+             }
+             else
+            {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(0);
+              }
+              else
+              {
+
+              }
+
+             }
+            }
               
               var first_data='<option value="'+id+'">'+uom_name+'</option>';
               //console.log(first_data);
@@ -3334,11 +3814,7 @@ function se_details()
 {
 
   var se_no=$('.sale_estimation_no').val();
-  $('.so_no').val('');
-  $('.d_no').val('');
-  $('.so_date').val('');
-  $('.d_date').val('');
-  $('select').select2();
+  
 
   $.ajax({
            type: "POST",
@@ -3347,6 +3823,12 @@ function se_details()
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
+
+            $('.so_no').val('');
+            $('.d_no').val('');
+            $('.so_date').val('');
+            $('.d_date').val('');
+            $('select').select2();
             var result=JSON.parse(data);
             if(result.status>0){
 $('.append_proof_details').append(result.data);
@@ -3421,11 +3903,7 @@ function so_details()
     var alpha_beta = 0;
   }  
   var so_no=$('.so_no').val();
-  $('.d_no').val('');
-  $('.sale_estimation_no').val('');
-  $('.d_date').val('');
-  $('.sale_estimation_date').val('');
-  $('select').select2();
+  
 
 
   $.ajax({
@@ -3435,6 +3913,12 @@ function so_details()
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
+
+            $('.d_no').val('');
+            $('.sale_estimation_no').val('');
+            $('.d_date').val('');
+            $('.sale_estimation_date').val('');
+            $('select').select2();
             var result=JSON.parse(data);
             if(result.status>0){
 $('.append_proof_details').append(result.data);
@@ -3516,11 +4000,7 @@ function delivery_details()
     var alpha_beta = 0;
   }
   var d_no=$('.d_no').val();
-  $('.so_no').val('');
-  $('.sale_estimation_no').val('');
-  $('.so_date').val('');
-  $('.sale_estimation_date').val('');
-  $('select').select2();
+  
 
   $.ajax({
            type: "POST",
@@ -3529,6 +4009,12 @@ function delivery_details()
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
+
+            $('.so_no').val('');
+            $('.sale_estimation_no').val('');
+            $('.so_date').val('');
+            $('.sale_estimation_date').val('');
+            $('select').select2();
             var result=JSON.parse(data);
             if(result.status>0){
 $('.append_proof_details').append(result.data);

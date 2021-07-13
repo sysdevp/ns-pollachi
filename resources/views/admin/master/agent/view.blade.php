@@ -12,6 +12,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/agent/import-data')}}"><i class="fa fa-plus"></i> Bulk Import</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/agent/create')}}">Add Agent</a></button></li>
           </ul>
         </div>
@@ -19,7 +20,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered display nowrap" style="width:100%;">
+      <table id="master" class="table table-striped table-bordered Agent display nowrap" style="width:100%;">
         <thead>
           <tr>
             <th>S.No</th>

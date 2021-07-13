@@ -1,0 +1,5 @@
+id,name,code,value,qty,remark,valid_from,valid_to,active_status,created_by,updated_by,created_at,updated_at,deleted_at
+59,Dece,"[""NSPdece229BrMTqy30"", ""NSPdece229nntYWA30"", ""NSPdece229pQ4lTK30"", ""NSPdece2298bEsaa30"", ""NSPdece229qRBBP930"", ""NSPdece2296qeQdQ30"", ""NSPdece229zzG4tn30"", ""NSPdece229jkbWQu30"", ""NSPdece229navAka30"", ""NSPdece229JQTCsQ30"", ""NSPdece229YyEDvP30"", ""NSPdece229Zj4FkL30""]",56,12,"Lorem Ipsum is simply dummy text of the printing and typesetting
+industry. Lorem Ipsum has been the industrys standard dummy text
+ever since the 1500s, when an unknown printer took a galley",2020-12-29,2020-12-30,1,0,0,29-12-2020 9:55,29-12-2020 9:55,NULL
+60,Feb,"[""NSPDEMO98629nf8xNP30"", ""NSPDEMO98629ZGGPEd30""]",1234,2,"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley",2020-12-30,2020-12-31,1,0,0,29-12-2020 13:21,30-12-2020 6:41,NULL

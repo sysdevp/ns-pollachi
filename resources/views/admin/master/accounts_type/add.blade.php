@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <div class="form-row">
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Accounts Type Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Accounts Type Name <?php echo Mandatoryfields::mandatory('accountstype_name ');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Accounts Type Name" name="name" value="{{old('name')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Accounts Type Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('accountstype_name');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Accounts Type Name
@@ -38,12 +41,12 @@
           </div>
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks <?php echo Mandatoryfields::mandatory('accountstype_remark ');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" placeholder="Remarks" name="remark" value="{{old('remark')}}" >
+                <input type="text" class="form-control remark" placeholder="Remarks" name="remark" value="{{old('remark')}}" <?php echo Mandatoryfields::validation('accountstype_remark');?> tabindex="2">
                 <span class="mandatory"> {{ $errors->first('remark')  }} </span>
                 <div class="invalid-feedback">
-                  Enter valid Bank Code
+                  Enter valid Remark
                 </div>
               </div>
             </div>
@@ -51,7 +54,7 @@
           
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="3">Submit</button>
         </div>
       </form>
     </div>

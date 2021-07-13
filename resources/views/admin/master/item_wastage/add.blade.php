@@ -2,6 +2,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.css" type="text/css" />
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -29,9 +32,9 @@
        
          <div class="col-md-6">
             <div class="form-group row">
-			<label for="validationCustom01" class="col-sm-4 col-form-label">Location <span class="mandatory">*</span></label>
+			<label for="validationCustom01" class="col-sm-4 col-form-label">Location <?php echo Mandatoryfields::mandatory('itemwastage_locationid');?></label>
               <div class="col-sm-8">
-             <select class="js-example-basic-multiple form-control custom-select location" placeholder="" name="location_id" required>
+             <select class="js-example-basic-multiple form-control custom-select location" placeholder="" name="location_id" <?php echo Mandatoryfields::validation('itemwastage_locationid');?> autofocus>
                   <option value="">Choose location</option>
                   @foreach($locations as $value)
                   @if (old('location_id') == $value->id)
@@ -52,9 +55,9 @@
          
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Date <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Date <?php echo Mandatoryfields::mandatory('itemwastage_entrydate');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control to_date" placeholder="dd-mm-yyyy" name="entry_date" value="{{old('valid_to')}}" required>
+                <input type="text" class="form-control to_date" placeholder="dd-mm-yyyy" name="entry_date" value="{{old('valid_to')}}" <?php echo Mandatoryfields::validation('itemwastage_entrydate');?>>
                 <span class="mandatory"> {{ $errors->first('valid_to')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid To Date
@@ -66,9 +69,9 @@
 		  
 		   <div class="col-md-6">
             <div class="form-group row">
-			<label for="validationCustom01" class="col-sm-4 col-form-label">Wastage Item Name <span class="mandatory">*</span></label>
+			<label for="validationCustom01" class="col-sm-4 col-form-label">Wastage Item Name <?php echo Mandatoryfields::mandatory('itemwastage_itemid');?></label>
               <div class="col-sm-8">
-             <select class="js-example-basic-multiple form-control custom-select wastage_item_id" placeholder="Choose District" name="item_id" required>
+             <select class="js-example-basic-multiple form-control custom-select wastage_item_id" placeholder="Choose District" name="item_id" <?php echo Mandatoryfields::validation('itemwastage_itemid');?>>
                   <option value="">Choose Item</option>
                   @foreach($items as $value)
                   @if (old('wastage_item_id') == $value->id)
@@ -88,9 +91,9 @@
 
           <div class="col-md-4">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-6 col-form-label">Quantity<span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-6 col-form-label">Quantity<?php echo Mandatoryfields::mandatory('itemwastage_quantity');?></label>
               <div class="col-sm-6">
-                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="quantity" value="{{old('buy_item_quantity')}}" required>
+                <input type="text" class="form-control only_allow_digit value" placeholder="Quantity" name="quantity" value="{{old('buy_item_quantity')}}" <?php echo Mandatoryfields::validation('itemwastage_quantity');?>>
                 <span class="mandatory"> {{ $errors->first('value')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gift Voucher Quantity
@@ -100,7 +103,7 @@
 			  </div>
 			  
 			   <div class="col-sm-2">
-             <select class="js-example-basic-multiple form-control custom-select wastage_item_id" placeholder="Choose District" name="uom_id" required>
+             <select class="js-example-basic-multiple form-control custom-select wastage_item_id" placeholder="Choose District" name="uom_id" <?php echo Mandatoryfields::validation('itemwastage_uomid');?>>
                   <option value="">Choose UOM</option>
                   @foreach($uoms as $value)
                   @if (old('uom_id') == $value->id)
@@ -120,9 +123,9 @@
 		  
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('itemwastage_remark');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  remark" placeholder="Remark" name="remark" value="{{old('remark')}}">
+                <input type="text" class="form-control  remark" placeholder="Remark" name="remark" value="{{old('remark')}}" <?php echo Mandatoryfields::validation('itemwastage_remark');?>>
                 <span class="mandatory"> {{ $errors->first('remark')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Bank Code

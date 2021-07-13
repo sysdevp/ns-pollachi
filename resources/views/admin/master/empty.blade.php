@@ -1,4 +1,4 @@
-@extends('admin.layout.app')
+@extends('admin.layout.app2')
 
 
 
@@ -519,7 +519,7 @@
                 <div class="card-box bg-darkorange">
                     <div class="inner">
                         <h3> {{$supplier_cnt}} </h3>
-                        <p> Toatl Suppliers </p>
+                        <p> Total Suppliers </p>
                     </div>
                     <div class="icon">
 						<i class="fa fa-info-circle" aria-hidden="true"></i>

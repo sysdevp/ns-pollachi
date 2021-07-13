@@ -7,6 +7,7 @@ use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class DistrictController extends Controller
 {
@@ -87,4 +88,116 @@ class DistrictController extends Controller
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
     }
+
+    public function import()
+    {
+
+       return view('admin.master.district.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $name=$filesop[1];   echo "</br>";
+                    $state_name=$filesop[2];   echo "</br>";
+                    $remark=$filesop[3];   echo "</br>";
+
+                    $state_name = str_replace(' ', '', $state_name);
+                    $states=State::whereRaw("REPLACE(`name`, ' ' ,'') = '".$state_name."'")->first();
+
+                    $state_id = @$states->id;
+                    
+                    $name = str_replace(' ', '', $name);
+                    
+                    $name_duplicate = District::where('name',$name)->count();
+
+                    if($name_duplicate == 0 && $states != '')
+                    {
+                        $district =new District();
+
+                        $district->name = $name;
+                        $district->state_id = $state_id;
+                        $district->country_id = 1;
+                        $district->remark = $remark;
+
+                        $district->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Districts Imported successfully');    
+    }
+
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            $count = 0;
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                    // echo $count;
+                    $count++;
+                    $data[] = array_combine($header, $row);
+                    $state_id = $data[$count]['state_id'];
+                    $state = State::where('name',$state_id)->first();
+                    if($state == '')
+                    {
+
+                    }
+                    else
+                    {
+                        $state_name = $state->id;
+                    
+                        $data[$count]['state_id'] = $state_name;
+                    }
+                    
+                    
+                    
+            }
+            // exit();
+            // echo "<pre>"; print_r($data); exit();
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
 }

@@ -100,6 +100,13 @@
 
                       <div class="col-md-6">
                           <div class="form-group row">
+                            <label for="validationCustom01" class="col-sm-4 col-form-label">Sales Man :</label>
+                            <label for="validationCustom01" class="col-sm-4 col-form-label">{{ $customer->sales_man->name }} </label>
+                          </div>
+                        </div>
+
+                      <div class="col-md-6">
+                          <div class="form-group row">
                             <label for="validationCustom01" class="col-sm-4 col-form-label">Remark :</label>
                             <label for="validationCustom01" class="col-sm-4 col-form-label">{{ $customer->remark }} </label>
                           </div>

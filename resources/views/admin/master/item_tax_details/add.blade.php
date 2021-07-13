@@ -30,7 +30,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Brand </label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple col-12 form-control custom-select search_brand_id" name="search_brand_id">
+                <select class="js-example-basic-multiple col-12 form-control custom-select search_brand_id" name="search_brand_id" autofocus>
                   <option value="">Choose Brand</option>
                   <option value="0">Not Applicable</option>
                   @foreach ($brand as $value)

@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,18 +29,18 @@
         <div class="form-row">
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Tax Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Tax Name <?php echo Mandatoryfields::mandatory('tax_taxname');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name caps" placeholder="Tax Name" name="name" value="" required>
+                <input type="text" class="form-control name caps" placeholder="Tax Name" name="name" value="" <?php echo Mandatoryfields::validation('tax_taxname');?> autofocus>
               
               </div>
             </div>
           </div>
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('tax_remark');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" placeholder="Remark" name="remark" value="" >
+                <input type="text" class="form-control remark" placeholder="Remark" name="remark" value="" <?php echo Mandatoryfields::validation('tax_remark');?>>
                 
               </div>
             </div>

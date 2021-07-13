@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -58,22 +61,41 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 <form  method="post" class="form-horizontal" action="{{ route('sales_estimation.store') }}" id="dataInput" enctype="multipart/form-data">
       {{csrf_field()}}
 
+
+                      <div class="row col-md-12">
+
+                          <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Voucher Type<?php echo Mandatoryfields::mandatory('salesestimation_vouchertype');?></label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-8">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select voucher_type" onchange="voucher_types()" name="voucher_type" id="voucher_type" <?php echo Mandatoryfields::validation('salesestimation_vouchertype');?> autofocus>
+                           <option value="">Choose Voucher Type</option>
+                           @foreach($voucher_type as $voucher_types)
+                           <option value="{{ $voucher_types->id }}">{{ $voucher_types->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                     
+                  </div>
+               </div>
+               </div>
       
-                       <div class="row col-md-10">
+                       <div class="row col-md-12">
 
                                 <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
                                   <div class="">
-                                    <!-- <input type="text" readonly="" class="form-control proof_file  required_for_proof_valid" id="voucher_no" placeholder="Auto Generate Voucher No" name="voucher_no" value=""> -->
-                                    <font size="2">{{ $voucher_no }}</font>
+
+                                    <font size="2" class="vouchers"></font>
+                                    <input type="hidden" class="form-control voucher_no  required_for_proof_valid" value="">
                                   </div>
                                 
                                  
                                 </div>
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
-                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                                  <label style="font-family: Times new roman;">Voucher Date<?php echo Mandatoryfields::mandatory('salesestimation_voucherdate');?></label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" <?php echo Mandatoryfields::validation('salesestimation_voucherdate');?>>
                                  
                                 </div>
                                 <!-- <div class="col-md-3">
@@ -90,10 +112,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 </div> -->
 
                 <div class="col-md-4">
-                  <label style="font-family: Times new roman;">Customer Name</label><br>
+                  <label style="font-family: Times new roman;">Customer Name<?php echo Mandatoryfields::mandatory('salesestimation_customerid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_details()" name="customer_id" id="customer_id" <?php echo Mandatoryfields::validation('salesestimation_customerid');?>>
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $customers)
                            <option value="{{ $customers->id }}">{{ $customers->name }}</option>
@@ -124,10 +146,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                 <div class="row col-md-12">
 
                     <div class="col-md-3">
-                  <label style="font-family: Times new roman;">Sales Men Name</label><br>
+                  <label style="font-family: Times new roman;">Sales Men Name<?php echo Mandatoryfields::mandatory('salesestimation_salesmenid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select salesmen_id" name="salesmen_id" id="salesmen_id" <?php echo Mandatoryfields::validation('salesestimation_salesmenid');?>>
                            <option value="">Choose Sales Men Name</option>
                            @foreach($sales_man as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -141,10 +163,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                </div>
 
                     <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Agent Name</label><br>
+                    <label style="font-family: Times new roman;">Agent Name<?php echo Mandatoryfields::mandatory('salesestimation_agentid');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select agent_id" name="agent_id" id="agent_id" <?php echo Mandatoryfields::validation('salesestimation_agentid');?>>
                            <option value="">Choose Agent Name</option>
                            @foreach($agent as $agents)
                            <option value="{{ $agents->id }}">{{ $agents->name }}</option>
@@ -231,17 +253,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         
                         <div class="form-row">
                             <div class="col-md-12">
-                              <table class="item_code_table" style="width: 100%;">
+                              <table class="item_code_table" id="myTable" style="width: 100%;">
                                   <thead>
+
                                   <th style="font-family: Times New Roman;">Select One</th>
-                                  <th style="font-family: Times New Roman;">Item Code</th>
-                                  <th style="font-family: Times New Roman;">Item Name</th>
-                                  <th style="font-family: Times New Roman;">MRP</th>
-                                  <th style="font-family: Times New Roman;">UOM</th>
-                                  <th style="font-family: Times New Roman;">Brand</th>
-                                  <th style="font-family: Times New Roman;">Category</th>
+                                  <th style="font-family: Times New Roman;">Item Code<input type="text" class="form-control" id="item_table_code" onkeyup="myFunction()" placeholder="Search Item Code" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Item Name<input type="text" id="item_table_name" class="form-control" onkeyup="myFunction1()" placeholder="Search Item Name" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">MRP<input type="text" id="item_table_mrp" class="form-control" onkeyup="myFunction2()" placeholder="Search MRP" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">UOM<input type="text" id="item_table_uom" class="form-control" onkeyup="myFunction3()" placeholder="Search UOM" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Brand<input type="text" id="item_table_brand" class="form-control" onkeyup="myFunction4()" placeholder="Search Brand" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Category<input type="text" id="item_table_category" class="form-control" onkeyup="myFunction5()" placeholder="Search Category" title="Type in a name" style="height: 20px;"></th>
                                   <!-- <th style="font-family: Times New Roman;">PTC Code</th> -->
-                                  <th style="font-family: Times New Roman;">Barcode</th>
+                                  <th style="font-family: Times New Roman;">Barcode<input type="text" id="item_table_barcode" class="form-control" onkeyup="myFunction6()" placeholder="Search Barcode" title="Type in a name" style="height: 20px;"></th>
                                   
                                 </thead>
                                 <tbody class="append_item">
@@ -568,8 +591,8 @@ table, th, td {
                       <input type="number" readonly="" class="form-control total_discount" id="total_discount" name="total_discount" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
                       </div>
                       <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Overall Discount</label>
-                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
+                        <label style="font-family: Times new roman;">Overall Discount<?php echo Mandatoryfields::mandatory('salesestimation_overall_discount');?></label>
+                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0" <?php echo Mandatoryfields::validation('salesestimation_overall_discount');?>>
                       </div>
                     </div>
 
@@ -669,6 +692,30 @@ table, th, td {
 
                        </div>
 
+                       <div class="row col-md-12 append_upload">
+
+                          <div class="row col-md-12 upload">
+                            <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-12">
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">
+                     </div>
+                  </div>
+               </div>
+                      
+                      <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Upload Document</label>
+                      <input type="file" class="form-control" name="document[]">
+
+                      </div>
+                      <div class="col-md-2">
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">
+                    </div>
+                       </div>
+                  </div>
+
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
                             
@@ -688,8 +735,226 @@ table, th, td {
       </form>
                        
         <script type="text/javascript">
+
+          function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('sales_estimation/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
           var i=1;
           var discount_total = 0;
+
+          function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_code");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction1() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_name");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction2() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_mrp");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[3];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction3() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_uom");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[4];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction4() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_brand");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[5];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction5() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_category");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[6];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction6() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_barcode");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[7];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 
 function calculate_total_net_price(){
   var total_net_price=0;
@@ -1522,6 +1787,47 @@ $(document).on("click",".remove_expense",function(){
   overall_discounts();
   individual_expense();
   roundoff_cal();
+
+  });
+
+  function upload_add()
+{
+  var upload_details='<div class="row col-md-12 upload">\
+                            <div class="col-md-3">\
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>\
+                  <div class="form-group row">\
+                     <div class="col-sm-12">\
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">\
+                     </div>\
+                  </div>\
+               </div>\
+                      \
+                      <div class="col-md-4">\
+                        <label style="font-family: Times new roman;">Upload Document</label>\
+                      <input type="file" class="form-control" name="document[]">\
+\
+                      </div>\
+                      <div class="col-md-2">\
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>\
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">\
+                    </div>\
+                       </div>';
+
+  $('.append_upload').append(upload_details);
+  $("select").select2();
+
+}
+
+$(document).on("click",".remove_upload",function(){
+
+  if($(".remove_upload").length > 1){
+
+    $(this).closest('.upload').remove();
+  }
+  else{
+    alert("Atleast One row present");
+
+  }
 
   });
 

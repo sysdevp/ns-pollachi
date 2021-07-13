@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class SalesMan extends Model
 {
-    //
+    protected $fillable = ['id','name','code','address','phone_no','email'];
 }

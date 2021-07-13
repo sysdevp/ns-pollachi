@@ -1,0 +1,4 @@
+Sno,Voucher name,Purchase type,prefix,suffix,starting_no,no_digits,,,
+2,Credit Note,Test,JUST,FINAL,10,6,,,
+3,Sales Estimation,Sale Est,SALE,EST,120,5,,,
+5,Payment Process,Test Payment Type 1,test,latest,20,5,,,

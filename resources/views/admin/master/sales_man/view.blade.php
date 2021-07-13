@@ -12,6 +12,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/sales_man/import-data')}}"><i class="fa fa-plus"></i> Bulk Import</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{route('sales_man.create')}}">Add Sales Men</a></button></li>
           </ul>
         </div>
@@ -19,7 +20,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover SalesMen">
         <thead>
           <tr>
             <th>S.No</th>

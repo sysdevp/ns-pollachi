@@ -19,7 +19,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover AdvancePaymentfromCustomers">
         <thead>
           <tr>
             <th>S.No</th>
@@ -35,10 +35,10 @@
           @foreach($advances as $key=>$value)
             <tr>
               <td>{{ $key+1 }}</td>
-              <td>{{ $value->customer->name}}</td>
-              <td>{{ $value->receipt_date}}</td>
-              <td>{{ $value->voucher_no}}</td>
-              <td>{{ $value->advance_amount}}</td>
+              <td>{{ @$value->customer->name}}</td>
+              <td>{{ @$value->receipt_date}}</td>
+              <td>{{ @$value->voucher_no}}</td>
+              <td>{{ @$value->advance_amount}}</td>
                <td class="icon">
 	<span class="tdshow">
                

@@ -1,0 +1,9 @@
+salutation,company_name,name,code,phone_no,whatsapp_no,email,pan_card,gst_no,max_credit_limit,max_credit_days,opening_balance,remark,price_level,salesman,customer_mode,status,active_status,address_line_1,address_line_2,land_mark,state name,district name,city name,postal code,active_status,created_by,updated_by,created_at,updated_at,deleted_at
+Mr,tset,test,NULL,7965823654,NULL,tst@gmail.com,1458,2563,1000,10,200,NULL,3,NULL,2,0,1,"jjhjn,m",hghjgh,hgfhhj,1,2,NULL,1212,1,0,0,05-04-2020 18:28,05-04-2020 18:28,NULL
+Mr,New Company,Arjun,NULL,2564789563,NULL,Testing@email.gom,8569,555,1000,10,25545,NULL,3,NULL,3,0,1,jhkhkj,hgjhjh,gfhgfg,2,NULL,NULL,124578,1,0,0,10-04-2020 15:58,10-04-2020 15:58,NULL
+Mr,Erre,Rvcdfcvdfv,NULL,8569325458,NULL,tata@gmail.com,8547,9654,1000,10,1000,NULL,2,4,1,0,1,hghj,jhgjjbk,NULL,2,NULL,NULL,12458,1,0,0,10-04-2020 16:08,10-04-2020 16:08,NULL
+Mr,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4,NULL,0,1,"jjhjn,m",hghjgh,NULL,1,NULL,NULL,1212,1,0,0,10-04-2020 16:18,10-04-2020 16:18,NULL
+Mr,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,,,,,,,,,,,,,
+Mr,Testing,Newone,NULL,7542632589,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4,NULL,0,1,,,,,,,,,,,,,
+Mr,Gtasdgfer,NULL,NULL,2565452211,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,4,NULL,0,1,,,,,,,,,,,,,
+Mr,Tfdfvxvsvd,Ffvdvdfv,NULL,3265874596,NULL,sd@gmail.com,77854,33201,1000,20,2000,NULL,3,4,NULL,0,1,,,,,,,,,,,,,

@@ -1,0 +1,5 @@
+"id","offer_name","offer_code","valid_from","valid_to","buy_item_id","buy_item_quantity","get_item_id","get_item_quantity","remark","created_by","created_at","updated_by","updated_at","deleted_by","deleted_at","active_status"
+"1","Test","test","2021-01-12","2021-01-15","1","2","2","1","test","0","2021-01-12 11:30:47","0","2021-01-12 15:21:29",NULL,"2021-01-12 15:21:29","1"
+"2","Test  123","test123","2021-01-25","2021-01-27","27","2","23","1","test","0","2021-01-12 14:17:54","0","2021-01-25 16:09:44",NULL,NULL,"1"
+"3","New Offer","New Offer123","2021-01-18","2021-01-19","26","1","25","5","item wise offer test","0","2021-01-18 17:48:40","0","2021-01-18 17:48:40",NULL,NULL,"1"
+"4","Offers","55855","2021-01-25","2021-01-29","1","3","2","1","item wise offer testing","0","2021-01-19 12:30:45","0","2021-01-25 16:42:36",NULL,NULL,"1"

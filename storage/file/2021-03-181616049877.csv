@@ -1,0 +1,4 @@
+"id","name","description","remark","active_status","created_by","updated_by","deleted_by","created_at","updated_at","deleted_at"
+"1","Nos","numbers",NULL,"1","0","0",NULL,"2020-06-14 16:29:22","2020-06-14 16:29:22",NULL
+"2","box","box",NULL,"1","0","0",NULL,"2020-06-14 16:29:32","2020-06-14 16:29:32",NULL
+"3","pack","package",NULL,"1","0","0",NULL,"2020-06-14 16:29:44","2020-06-14 16:29:44",NULL

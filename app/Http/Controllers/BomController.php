@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Uom;
 use App\Models\Bom;
 use App\Models\BomItem;
+use App\Models\AccountGroup;
 use App\Models\Tax;
 use App\Models\ItemTaxDetails;
 use Carbon\Carbon;
@@ -39,8 +40,9 @@ class BomController extends Controller
         $item = Item::all();
         $brand = Brand::all();
         $categories = Category::all();
+        $account_group = AccountGroup::where('under',"Expense")->get();
 
-       return view('admin.master.bom.add',compact('item','categories','brand'));
+       return view('admin.master.bom.add',compact('item','categories','brand','account_group'));
     }
 
     /**
@@ -51,12 +53,16 @@ class BomController extends Controller
      */
     public function store(Request $request)
     {
+       // print_r($request->account_group);exit;
+        $account_group = implode(",",$request->account_group);
+       // print_r($account_group);exit;
         $date = date('Y-m-d');
 
         $bom = new Bom();
 
         $bom->product_item_id = $request->itemname;
         $bom->date = $date;
+        $bom->account_group = $account_group;
         $bom->save();
 
         $bom_id = $bom->id;
@@ -69,6 +75,8 @@ class BomController extends Controller
         $bom_item->item_id = $value;
         $bom_item->qty = $request->quantity[$key];
         $bom_item->uom_id = $request->uom[$key];
+        $bom_item->min_qty = $request->min_qty[$key];
+        $bom_item->max_qty = $request->max_qty[$key];
         $bom_item->save();
         
         }
@@ -106,7 +114,11 @@ class BomController extends Controller
         $item = Item::all();
         $brand = Brand::all();
         $categories = Category::all();
-        return view('admin.master.bom.edit',compact('bom','bom_items','item','brand','categories','count'));
+        $account_group = AccountGroup::where('under',"Expense")->get();
+        $explode = explode(",",$bom->account_group);
+        $explode_counts = count($explode);
+       // print_r($explode);exit;
+        return view('admin.master.bom.edit',compact('explode','bom','bom_items','item','brand','categories','count','account_group','explode_counts'));
     }
 
     /**
@@ -119,8 +131,18 @@ class BomController extends Controller
     public function update(Request $request, $id)
     {
         // echo $id; exit();
-        $bom_data = Bom::where('id',$id)->first();
+        $bom_data = Bom::find($id);
+        
+
         $bom_item_data = BomItem::where('bom_id',$id);
+        $account_group = implode(",",$request->account_group);
+        $date = date('Y-m-d');
+
+        $bom_data->product_item_id = $request->itemname;
+        $bom_data->date = $date;
+        $bom_data->account_group = $account_group;
+        $bom_data->save();
+       // print_r($account_group);exit;
 
         if($bom_data)
         {
@@ -128,22 +150,20 @@ class BomController extends Controller
         }
 
 
-        $date = date('Y-m-d');
-
-        $bom_data->product_item_id = $request->itemname;
-        $bom_data->date = $date;
-        $bom_data->save();
-
-        // $bom_id = $bom->id;
+        // $account_group = implode(",",$request->account_group);
+       // print_r($account_group);exit;
+        
 
         foreach ($request->item_code as $key => $value) {
         
         $bom_item = new BomItem();
 
-        $bom_item->bom_id = $bom_data->id;
+        $bom_item->bom_id = $id;
         $bom_item->item_id = $value;
         $bom_item->qty = $request->quantity[$key];
         $bom_item->uom_id = $request->uom[$key];
+        $bom_item->min_qty = $request->min_qty[$key];
+        $bom_item->max_qty = $request->max_qty[$key];
         $bom_item->save();
         
         }

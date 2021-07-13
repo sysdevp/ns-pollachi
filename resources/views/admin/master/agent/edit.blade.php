@@ -36,7 +36,7 @@
             <div class="col-sm-8">
           <div class="input-group">
           <div class="input-group-prepend">
-            <select class="form-control required_for_valid salutation" name="salutation" error-data="Enter valid Salutation" >
+            <select class="form-control required_for_valid salutation" name="salutation" error-data="Enter valid Salutation" autofocus>
                 <option value="Mr" {{ old('salutation',$agent->salutation) == 'Mr' ? 'selected' : '' }}>Mr</option>
                 <option value="Mrs" {{ old('salutation',$agent->salutation) == 'Mrs' ? 'selected' : '' }} >Mrs</option>
             </select>

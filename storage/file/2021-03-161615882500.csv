@@ -1,0 +1,4 @@
+"id","name","remark","active_status","created_by","updated_by","created_at","updated_at","deleted_at"
+"1","Godown","Godown","1",NULL,NULL,"2020-03-30 11:35:29","2020-03-30 11:35:29",NULL
+"2","Super Market","Super Market","1",NULL,NULL,"2020-03-30 11:35:30","2020-03-30 11:35:30",NULL
+"3","Head Office",NULL,"1","0",NULL,"2020-05-01 16:57:09","2020-05-01 16:57:09",NULL

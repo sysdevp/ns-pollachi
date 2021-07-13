@@ -9,7 +9,7 @@ use App\Models\PaymentProcess;
 use App\Models\PurchaseEntry;
 use App\Models\AdvanceSettlementSupplier;
 use App\Models\PaymentProcessAdjustments;
-
+use App\Models\PaymentVoucherType;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,7 +38,8 @@ class PaymentProcessController extends Controller
         $supplier = Supplier::all();
         $payment_req = PaymentRequest::all();
         $purchase_entry = PurchaseEntry::all();
-        return view('admin.payment_process.add',compact('supplier','date','payment_req','purchase_entry'));
+        $type = PaymentVoucherType::where('name','Payment Process')->get();
+        return view('admin.payment_process.add',compact('supplier','date','payment_req','purchase_entry','type'));
     }
 
     /**
@@ -93,6 +94,53 @@ class PaymentProcessController extends Controller
         }
        
         if($payment_process) {
+
+            $voucher_type = $request->voucher_type;
+
+        $voucher_num = PaymentVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=PaymentProcess::orderBy('created_at','DESC')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         } 
+
+            PaymentVoucherType::where('id',$request->voucher_type)
+                        ->update(['updated_no' => $current_voucher_num]);
+
             return Redirect::back()->with('success', 'Successfully created');
         }
          else {
@@ -142,7 +190,57 @@ class PaymentProcessController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = PaymentProcess::find($id);
+
+        $delete->delete();
+
+        return Redirect::back()->with('success','Deleted Successfully');
+    }
+
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = PaymentVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=PaymentProcess::orderBy('created_at','DESC')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
     }
 
      public function advance_entry_det(Request $request)

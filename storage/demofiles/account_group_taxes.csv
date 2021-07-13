@@ -1,0 +1,2 @@
+Sno,Account Group,Tax name,Tax Value,"Debit or Credit(1=> credit, 2=>debit)"
+1,Salary Account,igst,10,1

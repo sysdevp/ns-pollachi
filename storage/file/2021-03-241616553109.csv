@@ -1,0 +1,4 @@
+Sno,Account Head Name,Under,Opening balance,"Debit or Credit(1=>debit , 2=>credit)","Tax include(1=>included, 0=>not included)",,
+1,Test,Primary,10,2,1,,
+2,Arjun,2,10,1,0,,
+3,Tesing,Incomes,10,1,1,,

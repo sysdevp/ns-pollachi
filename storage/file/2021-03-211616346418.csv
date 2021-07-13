@@ -1,0 +1,8 @@
+"id","salutation","name","code","phone_no","email","dob","father_name","blood_group","material_status","profile","active_status","created_by","updated_by","deleted_by","created_at","updated_at","deleted_at"
+"1","Mr","Arjun K V","123","2589632548","arjunkvalsakumar@gmail.com","2011-03-02","valsan","Ab+","Single","2020-05-131589342079.jpg","1","0","0",NULL,"2020-05-13 09:24:39","2020-05-13 09:24:39",NULL
+"2","Mr","Agent","007","9457863245","agent@gmail.com","1999-01-13","test","a+ve","Single","2020-05-171589728584.png","1","0","0",NULL,"2020-05-17 20:46:24","2020-05-17 20:46:24",NULL
+"3","Mr","test agent","1212","2357896542","t@gmail.com","2020-06-15","hgghfhg","jhgh","Single","2020-06-151592217815.png","1","0","0",NULL,"2020-06-15 16:13:35","2020-06-15 16:13:35",NULL
+"4","Mr","tttttt","555","3256895214",NULL,"2020-06-18","hghgh","kk","Single","2020-06-181592470577.png","1","0","0",NULL,"2020-06-18 14:26:17","2020-06-18 14:26:17",NULL
+"5","Mr","New Agent","123356","6325874589","N@gmail.com","2020-09-01","Just","O","Single","2020-09-011598955444.png","1","0","0",NULL,"2020-09-01 15:47:24","2020-09-01 15:54:50","2020-09-01 15:54:50"
+"6","Mr",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,,"1","0","0",NULL,"2021-02-06 10:17:12","2021-02-06 10:17:12",NULL
+"7","Mr",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,,"1","0","0",NULL,"2021-02-06 10:19:59","2021-02-06 10:19:59",NULL

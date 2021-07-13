@@ -30,7 +30,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" required tabindex="1" autofocus>
                   <option value="">Choose States</option>
                   @foreach($state as $value)
                       <option value="{{ $value->id }}" {{ old('state_id', $city->state_id) == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
@@ -52,7 +52,7 @@
               <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label"> District <span class="mandatory">*</span></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 form-control custom-select district_id" placeholder="Choose District" name="district_id" required>
+                <select class="js-example-basic-multiple col-12 form-control custom-select district_id" placeholder="Choose District" name="district_id" required tabindex="2">
                   <option value="">Choose District</option>
                   </select>
                 <span class="mandatory"> {{ $errors->first('district_id')  }} </span>
@@ -71,7 +71,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">City Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="City Name" name="name" value="{{old('name',$city->name)}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="City Name" name="name" value="{{old('name',$city->name)}}" required tabindex="3">
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid City Name
@@ -84,14 +84,14 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Remark </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" name="remark" value="{{old('remark',$city->remark)}}" placeholder="Remark">
+                <input type="text" class="form-control remark" name="remark" value="{{old('remark',$city->remark)}}" placeholder="Remark" tabindex="4">
               </div>
             </div>
           </div>
         </div>
         
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" type="submit">Submit</button>
+          <button class="btn btn-success" type="submit" tabindex="5">Submit</button>
         </div>
       </form>
     </div>

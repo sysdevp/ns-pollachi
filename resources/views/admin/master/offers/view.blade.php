@@ -8,10 +8,11 @@
     <div class="card-header px-2">
       <div class="row">
         <div class="col-4">
-          <h3>List Gift Voucher</h3>
+          <h3>List Offers</h3>
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/offers/import-data')}}"><i class="fa fa-plus"></i>  Import Data</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/offers/create')}}">Create Offers</a></button></li>
           </ul>
         </div>
@@ -20,7 +21,7 @@
 
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover Offers">
         <thead>
           <tr>
             <th>S.No</th>

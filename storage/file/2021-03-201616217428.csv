@@ -1,0 +1,4 @@
+id,name,country_id,state_id,remark,active_status,created_by,updated_by,created_at,updated_at,deleted_at
+1,Coimbatore,1,Tamilnadu,Just,1,0,0,05-04-2020 18:26,01-09-2020 13:38,NULL
+2,Palakkad,1,Kerala,NULL,1,0,0,13-05-2020 9:23,13-05-2020 9:23,NULL
+3,S,1,Tamilnadu,NULL,1,0,0,04-03-2021 11:35,04-03-2021 11:35,NULL

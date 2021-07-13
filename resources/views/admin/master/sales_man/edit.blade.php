@@ -30,7 +30,7 @@
               <label for="validationCustom01" class="col-sm-4 col-form-label">Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
                 <input type="text" class="form-control name only_allow_alp_num_dot_com_amp" placeholder="Brand Name" name="name" value="{{old('name', $sales_man->name)
-}}" required>
+}}" required autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Sales Man Name

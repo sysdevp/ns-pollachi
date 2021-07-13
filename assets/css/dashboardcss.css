@@ -12,7 +12,6 @@
   display: none;
   visibility: hidden;
 }
-
 .acnav {
   width: 100%;
 }
@@ -25,17 +24,17 @@
   /* border: 1px solid #fcfcfc; */
 }
 .has-children > .acnav__label::before {
-  content: "\f100";
+  content: "\f101";
   display: inline-block;
   font: normal normal normal 18px/1 FontAwesome;
   font-size: inherit;
   text-rendering: auto;
   margin-right: 1em;
   transition: transform .3s;
-  float: right;
+  float: left;
 }
 .has-children.is-open > .acnav__label::before {
-  transform: rotate(270deg);
+  transform: rotate(90deg);
 }
 .acnav__link, .acnav__label {
   display: block;
@@ -177,12 +176,13 @@ body {
 }
 /*----------------show sidebar button----------------*/
 #show-sidebar {
-  position: fixed;
-  left: 0;
-  top: 10px;
-  border-radius: 0 4px 4px 0px;
-  width: 35px;
-  transition-delay: 0.3s;
+ position: fixed;
+    left: 0;
+    top: 10px;
+    border-radius: 0 4px 4px 0px;
+    width: 40px;
+    transition-delay: 0.3s;
+    color: #fff;
 }
 .page-wrapper.toggled #show-sidebar {
   left: -40px;
@@ -195,7 +195,7 @@ body {
   max-height: 100%;
   position: fixed;
   top: 0;
-  left: -300px;
+  left: -213px;
   z-index: 999;
 }
 
@@ -442,7 +442,7 @@ body {
 .page-wrapper .page-content {
   display: inline-block;
   width: 100%;
-  padding-left: 0px;
+  padding-left: 50px;
 }
 
 .page-wrapper .page-content > div {
@@ -544,8 +544,8 @@ body {
 .chiller-theme .sidebar-wrapper .sidebar-dropdown .sidebar-submenu li a:hover:before,
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu:focus+span,
 .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active a i {
-    color: #16c7ff;
-    text-shadow:0px 0px 10px rgba(22, 199, 255, 0.5);
+    color: #323232;
+    /*text-shadow:0px 0px 10px rgba(22, 199, 255, 0.5);*/
 }
 
 .chiller-theme .sidebar-wrapper .sidebar-menu ul li a i,
@@ -573,3 +573,10 @@ body {
     border-right: none;
 }
 .dashboardlog{    width: 75%;}
+
+.fonticonright{right: 17px;  position: absolute;}
+.sublisticon{right: 0; position: absolute;
+    color: #000 !important;
+    background: none !important;
+    font-size: 16px !important;}
+	.sublisticon:hover{color:#f20;}

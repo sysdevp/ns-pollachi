@@ -20,6 +20,7 @@ use App\Models\Tax;
 use App\Models\Location;
 use App\Models\AccountHead;
 use Carbon\Carbon;
+use App\Models\VoucherNumbering;
 use App\Models\ReceiptNote; 
 use App\Models\ReceiptNoteBeta;
 use App\Models\ReceiptNoteItem;
@@ -48,7 +49,11 @@ use App\Models\RejectionOutExpense;
 use App\Models\RejectionOutBetaExpense;
 use App\Models\RejectionOutTax;
 use App\Models\RejectionOutBetaTax;
+use App\Models\PurchaseVoucherType;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\UploadDocument;
+use App\Models\MarginSetup;
+use App\Models\VendorMarginSetup;
 
 
 class ReceiptNoteController extends Controller
@@ -209,6 +214,7 @@ class ReceiptNoteController extends Controller
         $tax = Tax::all();
         $account_head = AccountHead::all();
         $location = Location::all();
+        $voucher_type = PurchaseVoucherType::where('name','Receipt Note')->get();
         
         // $voucher_num=ReceiptNote::orderBy('rn_no','DESC')
         //                    ->select('rn_no')
@@ -228,26 +234,70 @@ class ReceiptNoteController extends Controller
          
         //  }
 
-        $voucher_num=ReceiptNote::orderBy('created_at','DESC')->select('id')->first();
-        $append = "RN";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
+        // $voucher_num=ReceiptNote::orderBy('created_at','DESC')->select('id')->first();
+        // $append = "RN";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=$append.'1';
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
+        //      $voucher_no = $append.$next_no;
         
          
-         }
+        //  }
         // $voucher_no = str_random(6);
 
-        return view('admin.receipt_note.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','purchaseorder','rejection_out','tax','account_head','location'));
+        $voucher_num=VoucherNumbering::where('id',3)
+                           ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=ReceiptNote::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
+         {
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->starting_no != null && $vouchers == null)
+         {
+            $next_no=$starting_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+
+        return view('admin.receipt_note.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','purchaseorder','rejection_out','tax','account_head','location','voucher_type'));
     }
 
     /**
@@ -276,30 +326,65 @@ class ReceiptNoteController extends Controller
         //  }
       if($request->has('check'))
       {
-        $voucher_num=ReceiptNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+        // $voucher_num=ReceiptNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+        $vouchers=ReceiptNoteBeta::orderBy('created_at','DESC')->select('voucher_no')->first();
       }
       else
       {
-        $voucher_num=ReceiptNote::orderBy('created_at','DESC')->select('id')->first();
+        // $voucher_num=ReceiptNote::orderBy('created_at','DESC')->select('id')->first();
+        $vouchers=ReceiptNote::orderBy('created_at','DESC')->select('voucher_no')->first();
       }
         
         $tax = Tax::all();
-        $append = "RN";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
 
-                             
+        $voucher_type = $request->voucher_type;
+
+
+        $voucher_num=PurchaseVoucherType::where('id',$voucher_type)
+                                        ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $updated_no = $voucher_num->updated_no;   
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=ReceiptNote::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $voucher_num != null) 
+         {
+             $current_voucher_num=1;
+             $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
          }                  
+         else if($voucher_num->updated_no != null && $voucher_num == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
          else
          {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
-        
-         
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
          }
+
+          PurchaseVoucherType::where('id',$voucher_type)
+                             ->update(['updated_no' => $current_voucher_num]);
+
 
 
         
@@ -337,6 +422,26 @@ class ReceiptNoteController extends Controller
             
         }
 
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
         if($request->has('check'))
         {
           $receipt_note = new ReceiptNoteBeta();
@@ -347,7 +452,7 @@ class ReceiptNoteController extends Controller
         }
 
          
-
+        $receipt_note->voucher_no = $current_voucher_num;
          $receipt_note->rn_no = $voucher_no;
          $receipt_note->rn_date = $voucher_date;
          $receipt_note->po_no = $request->po_no;
@@ -577,6 +682,7 @@ class ReceiptNoteController extends Controller
         $receipt_note_items = ReceiptNoteItem::where('rn_no',$id)->get();
         $receipt_note_expense = ReceiptNoteExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteTax::where('rn_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
 
         //echo "<pre>"; print_r($receipt_note_items);exit;
@@ -683,7 +789,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.show',compact('receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.receipt_note.show',compact('receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
     public function show_beta($id)
@@ -828,7 +934,8 @@ class ReceiptNoteController extends Controller
                                 ->get();
         $receipt_note_expense = ReceiptNoteExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteTax::where('rn_no',$id)->get();
-
+        $upload = UploadDocument::where('voucher_no',$id)->get();
+        
         $estimation_no = $receipt_note->estimation_no;
         $estimation_date = $receipt_note->estimation_date;
         $no_items = count($receipt_note_items);
@@ -962,7 +1069,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value'));
+        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value','upload'));
     }
 
     public function edit_beta($id)
@@ -986,6 +1093,7 @@ class ReceiptNoteController extends Controller
                                 ->get();
         $receipt_note_expense = ReceiptNoteBetaExpense::where('rn_no',$id)->get();
         $tax = ReceiptNoteBetaTax::where('rn_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $estimation_no = $receipt_note->estimation_no;
         $estimation_date = $receipt_note->estimation_date;
@@ -1120,7 +1228,7 @@ class ReceiptNoteController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value'));
+        return view('admin.receipt_note.edit',compact('date','categories','supplier','agent','brand','expense_type','item','estimation','rejection_out','purchaseorders','receipt_note','receipt_note_items','receipt_note_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','estimation_no','estimation_date','type','purchaseorder_date','no_items','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','account_head','location','beta_checking_value','upload'));
 
     }
 
@@ -1147,6 +1255,9 @@ class ReceiptNoteController extends Controller
 
           $receipt_note_expense_data = ReceiptNoteBetaExpense::where('rn_no',$id);
           $receipt_note_expense_data->delete();
+
+          $receipt_note_upload_data = UploadDocument::where('voucher_no',$id);
+          $receipt_note_upload_data->delete(); 
         }
         else
         {
@@ -1161,6 +1272,9 @@ class ReceiptNoteController extends Controller
 
           $receipt_note_expense_data = ReceiptNoteExpense::where('rn_no',$id);
           $receipt_note_expense_data->delete();
+
+          $receipt_note_upload_data = UploadDocument::where('voucher_no',$id);
+          $receipt_note_upload_data->delete();
         }
         
 
@@ -1168,6 +1282,42 @@ class ReceiptNoteController extends Controller
         $voucher_no = $request->voucher_no;
 
         $tax = Tax::all();
+
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
 
         if($request->r_out_no != '')
@@ -1206,7 +1356,7 @@ class ReceiptNoteController extends Controller
           $receipt_note = new ReceiptNote();
         }
          
-
+         $receipt_note->voucher_no = $request->voucher_number;
          $receipt_note->rn_no = $voucher_no;
          $receipt_note->rn_date = $voucher_date;
          $receipt_note->po_no = $request->po_no;
@@ -1485,6 +1635,52 @@ class ReceiptNoteController extends Controller
          }   
         
         return Redirect::back()->with('success', 'Deleted Successfully');
+    }
+
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=ReceiptNote::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
     }
 
 
@@ -3095,6 +3291,19 @@ echo "<pre>"; print_r($data); exit;
     $location = Location::all();
         return view('admin.receipt_note.view',compact('receipt_note','receipt_note_beta','check_id','taxable_value','tax_value','total','expense_total','total_discount','taxable_value_beta','tax_value_beta','total_beta','expense_total_beta','total_discount_beta','cond','from','to','supplier','location'));
       }
+
+    public function margin_check(Request $request)
+    {
+
+        $margin = MarginSetup::where('item_id',$request->item_id)->where('supplier_id',$request->supplier_id)->where('status',1)->first();
+
+        $margin_setup = VendorMarginSetup::first();
+
+        $margin_data['buying_price'] = @$margin->buying_price;
+        $margin_data['setup'] = @$margin_setup->setup;
+
+        return @$margin_data;
+    }
 
 
 }

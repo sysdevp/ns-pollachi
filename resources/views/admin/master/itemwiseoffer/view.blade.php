@@ -12,6 +12,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/itemwiseoffer/import-data')}}"><i class="fa fa-plus"></i>  Bulk Import</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/itemwiseoffer/create')}}">Add Itemwise Offers</a></button></li>
           </ul>
         </div>
@@ -19,7 +20,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-striped table-bordered" style="width:100%">
+      <table id="master" class="table table-striped table-bordered ItemWiseOffer" style="width:100%">
         <thead>
           <tr>
             <th>S.No</th>

@@ -8,8 +8,6 @@ use Spatie\Permission\Models\Permission;
 use DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Customer;
-
 
 class RoleController extends Controller
 {
@@ -47,6 +45,14 @@ class RoleController extends Controller
         return Redirect::back()->with('success', 'Successfully created');
     }
 
+    // public function show($id)
+    // {
+    //     $role = Role::find($id);
+    //     $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
+    //         ->where("role_has_permissions.role_id",$id)
+    //         ->get();
+    //     return view('admin.master.role.show',compact('role','rolePermissions'));
+    // }
     public function show($id)
     {
         // $role = Role::find($id);

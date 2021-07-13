@@ -11,7 +11,7 @@
           <h3>List Denomination</h3>
         </div>
         <div class="col-8 mr-auto">
-          <ul class="h-right-btn mb-0 pl-0">
+          <ul class="h-right-btn mb-0 pl-0"><li><button type="button" class="btn"><a target="_blank" href="{{url('master/denomination/import-data')}}"><i class="fa fa-plus"></i>Bulk Import</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/denomination/create')}}">Add Denomination</a></button></li>
           </ul>
         </div>
@@ -19,7 +19,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover Denomination">
         <thead>
           <tr>
             <th>S.No</th>

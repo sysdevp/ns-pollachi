@@ -1,5 +1,6 @@
 @extends('admin.layout.app')
 @section('content')
+<?php use App\Mandatoryfields;  ?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,10 +27,10 @@
         <div class="form-row">
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Name <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Name <?php echo Mandatoryfields::mandatory('bank_name');?></label>
               <div class="col-sm-8">
                 <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Bank Name" name="name" value="{{old('name', $bank->name)
-}}" required>
+}}" <?php echo Mandatoryfields::validation('bank_name');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Bank Name
@@ -39,9 +40,9 @@
           </div>
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Code <span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Code <?php echo Mandatoryfields::mandatory('bank_code');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control code only_allow_alp_num_dot_com_amp" placeholder="Bank Code" name="code" value="{{old('code',$bank->code)}}"  required>
+                <input type="text" class="form-control code only_allow_alp_num_dot_com_amp" placeholder="Bank Code" name="code" value="{{old('code',$bank->code)}}"  <?php echo Mandatoryfields::validation('bank_code');?> tabindex="2">
                 <span class="mandatory"> {{ $errors->first('code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Bank Code
@@ -52,7 +53,7 @@
          
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" type="submit">Submit</button>
+          <button class="btn btn-success" type="submit" tabindex="3">Submit</button>
         </div>
       </form>
     </div>

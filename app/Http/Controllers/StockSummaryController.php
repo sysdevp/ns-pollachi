@@ -340,7 +340,7 @@ class StockSummaryController extends Controller
       $from_date = date('Y-m-01');
       $to_date = date('Y-m-31');
 
-      $current_month_received_amount = ReceiptProcess::whereBetween('voucher_date', [$from_date, $to_date]);->sum('receipt_amount');
+      $current_month_received_amount = ReceiptProcess::whereBetween('voucher_date', [$from_date, $to_date])->sum('receipt_amount');
 
       $current_month_payment_amount = PaymentProcess::whereBetween('voucher_date',[$from_date, $to_date])->sum('payment_amount');
 

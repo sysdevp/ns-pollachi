@@ -1,0 +1,9 @@
+Sno,salutation,company_name,name,code,phone_no,whatsapp_no,email,gst_no,opening_balance,remark,address_line_1,address_line_2,land_mark,state name,district name,city name,postal code,Bank Name,Branch Name,IFSC ,Account Type,Account Holder Name,Account No
+,Mr,solution,shahanaz,NULL,8759652147,5896325478,shan@gmail.com,11,8564,NULL,"jjhjn,m",hghjgh,hgfhhj,1,2,NULL,1212,,,,,,
+,Mr,softroniics,manikandan,NULL,7589632541,2589632547,mani@gmail.com,13,7486,NULL,jhkhkj,hgjhjh,gfhgfg,2,NULL,NULL,124578,,,,,,
+,Mr,maze,ajay,NULL,2589632548,5896325478,arjunkvalsakumar@gmail.com,12,25545,NULL,hghj,jhgjjbk,NULL,2,NULL,NULL,12458,,,,,,
+,Mr,Test SUpplioer,Test Supplier,NULL,9876543210,NULL,supplier@gmail.com,44556,4500,test,"jjhjn,m",hghjgh,NULL,1,NULL,NULL,1212,,,,,,
+,Mr,test,tester,NULL,7856235968,7589653254,tester@gmail.com,555,25545,NULL,,,,,,,,,,,,,
+,Mr,completed,testing,NULL,1478523695,NULL,NULL,586,25545,NULL,,,,,,,,,,,,,
+,Mr,yy,yyyy,NULL,9562586523,NULL,NULL,5668,25545,NULL,,,,,,,,,,,,,
+,Mr,NULL,NULL,NULL,NULL,NULL,NULL,NULL,25545,NULL,,,,,,,,,,,,,

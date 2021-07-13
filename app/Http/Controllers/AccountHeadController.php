@@ -42,7 +42,7 @@ class AccountHeadController extends Controller
     public function store(Request $request)
     {
 
-            echo $request->check; die();
+            // echo $request->check; die();
             if($request->has('check'))
             {
                 $account_head = new AccountHead;
@@ -143,5 +143,89 @@ class AccountHeadController extends Controller
 
         $account_head->delete();
         return Redirect::back()->with('success','Deleted Successfully');
+    }
+
+    public function import()
+    {
+       return view('admin.master.account_head.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $name=$filesop[1];   echo "</br>";
+                    $under=$filesop[2];   echo "</br>";
+                    $opening_balance=$filesop[3];   echo "</br>";
+                    $dr_or_cr=$filesop[4];   echo "</br>";+
+                    $status=$filesop[5];   echo "</br>";
+                    
+                    $name = str_replace(' ', '', $name);
+                    $name_duplicate=AccountHead::whereRaw("REPLACE(`name`, ' ' ,'') = '".$name."'")->count();
+
+                    if($name_duplicate == 0)
+                    {
+                        $account_head = new AccountHead;
+                        $account_head->name = $name;
+                        $account_head->under = $under;
+                        $account_head->opening_balance = $opening_balance;
+                        $account_head->dr_or_cr = $dr_or_cr;
+                        $account_head->status = $status;
+                        $account_head->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Account Heads Imported successfully');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 }

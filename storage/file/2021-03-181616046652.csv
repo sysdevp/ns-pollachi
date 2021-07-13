@@ -1,0 +1,5 @@
+id,offer_name,offer_code,valid_from,valid_to,buy_item_id,buy_item_quantity,get_item_id,get_item_quantity,remark,created_by,created_at,updated_by,updated_at,deleted_by,deleted_at,active_status
+1,Test,test,2021-01-12,2021-01-15,1,2,2,1,test,0,12-01-2021 11:30,0,12-01-2021 15:21,0,12-01-2021 15:21,1
+2,Test  123,test123,2021-01-25,2021-01-27,27,2,23,1,test,0,12-01-2021 14:17,0,25-01-2021 16:09,0,13-01-2021 15:21,1
+3,New Offer,New Offer123,2021-01-18,2021-01-19,26,1,25,5,item wise offer test,0,18-01-2021 17:48,0,18-01-2021 17:48,0,14-01-2021 15:21,1
+4,Offers,55855,2021-01-25,2021-01-29,1,3,2,1,item wise offer testing,0,19-01-2021 12:30,0,25-01-2021 16:42,0,15-01-2021 15:21,1

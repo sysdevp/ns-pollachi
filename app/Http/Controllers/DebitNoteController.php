@@ -19,6 +19,7 @@ use App\Models\Tax;
 use App\Models\Location;
 use App\Models\AccountHead;
 use Carbon\Carbon;
+use App\Models\VoucherNumbering;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseOrderBlackItem;
@@ -48,6 +49,9 @@ use App\Models\RejectionOutExpense;
 use App\Models\RejectionOutBetaExpense;
 use App\Models\RejectionOutTax;
 use App\Models\RejectionOutBetaTax;
+use App\Models\PurchaseVoucherType;
+use App\Models\UploadDocument;
+
 
 class DebitNoteController extends Controller
 {
@@ -89,7 +93,7 @@ class DebitNoteController extends Controller
         $tax = Tax::all();
         $account_head = AccountHead::all();
         $location = Location::all();
-        
+        $voucher_type = PurchaseVoucherType::where('name','Debit Note')->get();
 
         // $voucher_num=DebitNote::orderBy('dn_no','DESC')
         //                    ->select('dn_no')
@@ -109,25 +113,68 @@ class DebitNoteController extends Controller
          
         //  }
 
-        $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
-        $append = "DBN";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
+        // $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
+        // $append = "DBN";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=$append.'1';
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
+        //      $voucher_no = $append.$next_no;
         
          
+        //  }
+
+        $voucher_num=VoucherNumbering::where('id',6)
+                           ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=DebitNote::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
+         {
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->starting_no != null && $vouchers == null)
+         {
+            $next_no=$starting_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
          }
 
-        return view('admin.debit_note.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','rejection_out','purchase_entry','tax','account_head','location'));
+        return view('admin.debit_note.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','rejection_out','purchase_entry','tax','account_head','location','voucher_type'));
     }
 
     /**
@@ -156,29 +203,78 @@ class DebitNoteController extends Controller
         //  }
         if($request->has('check'))
         {
-            $voucher_num=DebitNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+            // $voucher_num=DebitNoteBeta::orderBy('created_at','DESC')->select('id')->first();
+            $vouchers=DebitNoteBeta::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         else
         {
-            $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
+            // $voucher_num=DebitNote::orderBy('created_at','DESC')->select('id')->first();
+            $vouchers=DebitNote::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         
-        $append = "DBN";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
+        // $append = "DBN";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=$append.'1';
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
+        //      $voucher_no = $append.$next_no;
         
          
+        //  }
+
+        $voucher_type = $request->voucher_type;
+
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=DebitNote::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
          }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+            
+        PurchaseVoucherType::where('id',$voucher_type)
+                            ->update(['updated_no' => $current_voucher_num]);
+
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
 
@@ -302,6 +398,26 @@ class DebitNoteController extends Controller
         }
     }
 
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
         if($request->has('check'))
         {
             $debit_note = new DebitNoteBeta();
@@ -312,7 +428,7 @@ class DebitNoteController extends Controller
         }
 
          
-
+        $debit_note->voucher_no = $current_voucher_num;
          $debit_note->dn_no = $voucher_no;
          $debit_note->dn_date = $voucher_date;
          $debit_note->p_no = $request->p_no;
@@ -1295,12 +1411,58 @@ class DebitNoteController extends Controller
     }
 
 
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = PurchaseVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=DebitNote::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
+    }
+
+
     public function address_details(Request $request)
     {
        $supplier_id = $request->supplier_id;
 
-       $getdata = AddressDetails::
-       join('suppliers','suppliers.id','=','address_details.address_ref_id')
+       $getdata = AddressDetails::join('suppliers','suppliers.id','=','address_details.address_ref_id')
        ->where('address_details.address_table','=','Supplier')
        ->where('address_details.address_ref_id','=',$supplier_id)
        ->first();

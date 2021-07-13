@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -26,9 +29,9 @@
         <iv class="form-row">
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Belongs To<span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Belongs To<?php echo Mandatoryfields::mandatory('category_parentid');?></label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple form-control col-12 custom-select parent_id" name="parent_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select parent_id" name="parent_id" <?php echo Mandatoryfields::validation('category_parentid');?> autofocus>
                   <option value="">Choose Category</option>
                   <option value="0" {{ old('parent_id',$category->parent_id) == 0 ? 'selected' : '' }}>Parent</option>
                   @foreach($category_all as $value)
@@ -45,9 +48,9 @@
 
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Name<span class="mandatory">*</span></label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Name<?php echo Mandatoryfields::mandatory('category_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Name" name="name" value="{{old('name',$category->name)}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Name" name="name" value="{{old('name',$category->name)}}" <?php echo Mandatoryfields::validation('category_name');?>>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Name
@@ -59,9 +62,9 @@
 
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">HSN</label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">HSN<?php echo Mandatoryfields::mandatory('category_hsn');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control hsn" placeholder="HSN" name="hsn" value="{{old('hsn',$category->hsn)}}">
+                <input type="text" class="form-control hsn" placeholder="HSN" name="hsn" value="{{old('hsn',$category->hsn)}}" <?php echo Mandatoryfields::validation('category_hsn');?>>
               </div>
             </div>
           </div>
@@ -69,9 +72,9 @@
 
           <div class="col-md-7">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">GST %</label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">GST %<?php echo Mandatoryfields::mandatory('category_gstno');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control gst_no" placeholder="GST %" onkeypress="return isNumberKey(event)" name="gst_no" value="{{old('gst_no',$category->gst_no)}}">
+                <input type="text" class="form-control gst_no" placeholder="GST %" onkeypress="return isNumberKey(event)" name="gst_no" value="{{old('gst_no',$category->gst_no)}}" <?php echo Mandatoryfields::validation('category_gstno');?>>
               </div>
             </div>
           </div>
@@ -80,9 +83,9 @@
 
             <div class="col-md-7">
                 <div class="form-group row">
-                  <label for="validationCustom01" class="col-sm-4 col-form-label"> Remark </label>
+                  <label for="validationCustom01" class="col-sm-4 col-form-label"> Remark <?php echo Mandatoryfields::mandatory('category_remark');?></label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control remark only_allow_alp_num_dot_com_amp" placeholder="Remark" name="remark" value="{{old('remark',$category->remark)}}">
+                    <input type="text" class="form-control remark only_allow_alp_num_dot_com_amp" placeholder="Remark" name="remark" value="{{old('remark',$category->remark)}}" <?php echo Mandatoryfields::validation('category_remark');?>>
                     <span class="mandatory"> {{ $errors->first('remark')  }} </span>
                     <div class="invalid-feedback">
                       Enter valid Remark

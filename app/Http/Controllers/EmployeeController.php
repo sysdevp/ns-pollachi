@@ -10,6 +10,8 @@ use App\Models\Employee;
 use App\Models\LocationType;
 use App\Models\ProofDetails;
 use App\Models\State;
+use App\Models\District;
+use App\Models\City;
 use Carbon\Carbon;
 use App\User;
 use Illuminate\Http\Request;
@@ -37,7 +39,7 @@ class EmployeeController extends Controller
     }
 
    
-    public function store(EmployeeCreateRequest $request)
+    public function store(Request $request)
     {
 
         $employee = new Employee();
@@ -54,7 +56,8 @@ class EmployeeController extends Controller
         $employee->code      =  $request->code;
         $employee->phone_no      =  $request->phone_no;
         $employee->email      =  $request->email;
-        $employee->dob      =  isset($request->dob) && $request->dob !="" ? date('Y-m-d',strtotime($request->dob)) : "" ;
+        $dob = ($request->dob !="")  ? $dob = date('Y-m-d',strtotime($request->dob)) :$dob = null ;
+        $employee->dob      =  $dob;
         $employee->department_id      =  $request->department_id;
         $employee->father_name      =  $request->father_name;
         $employee->blood_group      =  $request->blood_group;
@@ -153,7 +156,7 @@ class EmployeeController extends Controller
     }
 
     
-    public function update(EmployeeCreateRequest $request, Employee $employee,$id)
+    public function update(Request $request, Employee $employee,$id)
     { 
        // echo "<pre>";print_r($request->all());exit;
 
@@ -181,7 +184,8 @@ class EmployeeController extends Controller
     $employee->code      =  $request->code;
     $employee->phone_no      =  $request->phone_no;
     $employee->email      =  $request->email;
-    $employee->dob      =  isset($request->dob) && $request->dob !="" ? date('Y-m-d',strtotime($request->dob)) : "" ;
+    $dob = ($request->dob !="")  ? $dob = date('Y-m-d',strtotime($request->dob)) :$dob = null ;
+        $employee->dob      =  $dob;
     $employee->department_id      =  $request->department_id;
     $employee->father_name      =  $request->father_name;
     $employee->blood_group      =  $request->blood_group;
@@ -324,6 +328,132 @@ class EmployeeController extends Controller
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
     }
+
+    public function import()
+    {
+       return view('admin.master.employee.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+           // exit();
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+        if(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+        { 
+
+                    $salutation=$filesop[0];   echo "</br>";
+                    $name=$filesop[1];   echo "</br>";
+                    $code=$filesop[2];   echo "</br>";
+                    $phone_no=$filesop[3];   echo "</br>";
+                    $email=$filesop[4];   echo "</br>";
+                    $dob=$filesop[5];   echo "</br>";
+                    $department_id=$filesop[6];   echo "</br>";
+                    $father_name=$filesop[7];   echo "</br>";
+                    $blood_group=$filesop[8];   echo "</br>";
+                    $material_status=$filesop[9];   echo "</br>";
+                    $access_no=$filesop[10];   echo "</br>";
+
+                    $insert  = TRUE;
+                   
+        }
+        if($insert == 1)
+        {
+            while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                    $salutation=$filesop[1];   echo "</br>";
+                    $name=$filesop[2];   echo "</br>";
+                    $code=$filesop[3];   echo "</br>";
+                    $phone_no=$filesop[4];   echo "</br>";
+                    $email=$filesop[5];   echo "</br>";
+                    $dob=$filesop[6];   echo "</br>";
+                    $department_name=$filesop[7];   echo "</br>";
+                    $father_name=$filesop[8];   echo "</br>";
+                    $blood_group=$filesop[9];   echo "</br>";
+                    $material_status=$filesop[10];   echo "</br>";
+                    $access_no=$filesop[11];   echo "</br>";
+                    // echo $dob;
+                    $department = Department::where('name',$department_name)->first();
+                    $depart_id = @$department->id;
+
+                    $employee =new Employee();
+
+                    $employee->name       = $name;
+                    $employee->code      =  $code;
+                    $employee->phone_no      =  $phone_no;
+                    $employee->email      =  $email;
+                    $employee->dob      =  $dob;
+                    $employee->department_id      =  $depart_id;
+                    $employee->father_name      =  $father_name;
+                    $employee->blood_group      =  $blood_group;
+                    $employee->material_status      =  $material_status;
+                    $employee->access_no      =  $access_no;
+
+                    // $employee->save();
+
+                    if($employee->save())
+                    {
+                        $address_line_1=$filesop[12];   echo "</br>";
+                        $address_line_2=$filesop[13];   echo "</br>";
+                        $land_mark=$filesop[14];   echo "</br>";
+                        $state_name=$filesop[15];   echo "</br>";
+                        $district_name=$filesop[16];   echo "</br>";
+                        $city_name=$filesop[17];   echo "</br>";
+                        $postal_code=$filesop[18];   echo "</br>";
+                        $proof_name=$filesop[19];   echo "</br>";
+                        $proof_number=$filesop[20];   echo "</br>";
+
+                        $state = State::where('name',$state_name)->first();
+                        $state_id = @$state->id;
+
+                        $district = District::where('name',$district_name)->first();
+                        $district_id = @$district->id;
+
+                        $city = City::where('name',$city_name)->first();
+                        $city_id = @$city->id;
+
+                        $employee_address =new AddressDetails();
+
+                        $employee_address->address_table='Emp';
+                        $employee_address->address_ref_id=$employee->id;
+                        $employee_address->address_line_1=$address_line_1;
+                        $employee_address->address_line_2=$address_line_2;
+                        $employee_address->land_mark=$land_mark;
+                        $employee_address->state_id=$state_id;
+                        $employee_address->district_id=$district_id;
+                        $employee_address->city_id=$city_id;
+                        $employee_address->postal_code=$postal_code;
+
+                        $employee_address->save();
+
+                        $employee_proof =new ProofDetails();
+
+                        $employee_proof->proof_table='Emp';
+                        $employee_proof->proof_ref_id=$employee->id;
+                        $employee_proof->name=$proof_name;
+                        $employee_proof->number=$proof_number;
+
+                        $employee_proof->save();
+
+                    }
+
+            }
+            // exit();
+        }
+
+        return Redirect::back()->with('success', 'Uploaded');    
+    }
+
 
     public function delete_employee_address_details(Request $request){
         $address_details_id=$request->address_details_id;

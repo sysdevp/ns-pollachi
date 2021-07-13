@@ -112,24 +112,34 @@ class OffersController extends Controller
      */
     public function update(Request $request, Offers $offers, $id)
     {
-        $giftvoucher = Offers::find($id);
-                $validator = Validator::make($request->all(), [
-                    'name' => 'required|unique:giftvouchers,name,'.$id.',id,deleted_at,NULL',
-                    'code' => 'required|unique:giftvouchers,code,'.$id.',id,deleted_at,NULL',
-                    'value' => 'required',
-                    'valid_from' => 'required',
-                    'valid_to' => 'required',
+        $offers = Offers::find($id);
+                // $validator = Validator::make($request->all(), [
+                //     'name' => 'required|unique:giftvouchers,name,'.$id.',id,deleted_at,NULL',
+                //     'code' => 'required|unique:giftvouchers,code,'.$id.',id,deleted_at,NULL',
+                //     'value' => 'required',
+                //     'valid_from' => 'required',
+                //     'valid_to' => 'required',
                     
-                 ])->validate();
-                $giftvoucher->name       = $request->name;
-                $giftvoucher->code       = $request->code;
-                $giftvoucher->value       = $request->value;
-                $giftvoucher->valid_from       = date('Y-m-d',strtotime($request->valid_from));
-                $giftvoucher->valid_to       = date('Y-m-d',strtotime($request->valid_to));
-                $giftvoucher->remark      =  $request->remark;
-                $giftvoucher->created_by = 0;
-                $giftvoucher->updated_by = 0;
-              if ($giftvoucher->save()) {
+                //  ])->validate();
+                // $offers->offers_category_id = $request->parent_id;
+                $offers->offer_name = $request->name;
+                // $offers->item_id = $myJSON;
+                $offers->offer_type = $request->offer_type;
+                $offers->valid_from = date('Y-m-d',strtotime($request->valid_from));
+                $offers->valid_to = date('Y-m-d',strtotime($request->valid_to));
+                // $offers->day_range_offers = $myJSONDateRange;
+                $offers->variable =  $request->variable;
+                if ($request->offer_type == "time") {
+                    $offers->from_time = $request->from_time;
+                    $offers->to_time = $request->to_time;
+                }
+                if ($request->variable == "percentage") {
+                    $offers->percentage =  $request->value;
+                } else {
+                    $offers->fixed_amount =  $request->value;
+                }
+                $offers->comments =  $request->comments;
+              if ($offers->save()) {
                     return Redirect::back()->with('success', 'Updated Successfully');
                 } else {
                     return Redirect::back()->with('failure', 'Something Went Wrong..!');
@@ -150,6 +160,59 @@ class OffersController extends Controller
         } else {
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
+    }
+
+    public function import()
+    {
+       return view('admin.master.offers.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+           // exit();
+
+        $file = storage_path('file/'.$profile_name);
+
+        $customerArr = $this->csvToArray($file);
+
+        for ($i = 0; $i < count($customerArr); $i ++)
+        {
+            Offers::firstOrCreate($customerArr[$i]);
+        }
+
+        return Redirect::back()->with('success', 'Uploaded');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 
     public function getItem(Category $category_id)

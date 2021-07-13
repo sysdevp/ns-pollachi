@@ -1,0 +1,4 @@
+id,name,under,tax,name_of_tax,rate_of_tax,type,opening_balance,dr_or_cr,status,created_at,updated_at
+1,Test,Primary,1,1,0,1,10,2,1,03-10-2020 15:17,03-10-2020 15:35
+2,Arjun,2,3,1,10,1,10,1,0,03-10-2020 16:10,03-10-2020 16:36
+3,Tesing,Incomes,2,1,5,1,10,1,1,03-10-2020 16:16,03-10-2020 16:17

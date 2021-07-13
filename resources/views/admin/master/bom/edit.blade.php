@@ -222,6 +222,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       <input type="hidden" class="form-control uom_id  required_for_proof_valid"  placeholder="UOM" id="uom_id" name="uom_id" value="">
                        
                       </div>
+                      <div class="col-md-2">
+                      <label style="font-family: Times new roman;">Min Qty</label>
+                      <input type="number" class="form-control min_qty required_for_proof_valid"  placeholder="Min Qty" id="min_qty" name="min_qtys" value="">
+
+                       
+                      </div>
+                      <div class="col-md-2">
+                      <label style="font-family: Times new roman;">Max Qty</label>
+                      <input type="number" class="form-control max_qty required_for_proof_valid"  placeholder="Max Qty" id="max_qty" name="max_qtys" value="">
+
+                       
+                      </div>
                       </div>
                       
                       <!-- <div class="col-md-12 row">
@@ -258,15 +270,17 @@ table, th, td {
                     <th> Item Code</th>
                     <th> Item Name</th>
                     <th> Quantity</th>
+                    <th>Min Qty </th>
+                    <th>Max Qty </th>
                     <th> UOM</th>
-                    <th> Action </th>
+                    <th>Action </th>
                   </thead>
                   <tbody class="append_proof_details" id="mytable">
                     
                   <input type="hidden" name="counts" value="{{ $count }}" id="counts">
 
                   @foreach($bom_items as $key => $value)
-                    <tr id="row{{$key}}" class="{{$key}} tables"><td><span class="item_s_no"> {{$key+1}} </span></td><td><font class="items{{$key}}">{{$value->items->code}}</font></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code{{$key}}" value="{{$value->item_id}}" name="item_code[]"><input type="hidden" class="items_id" value="'{{$value->item_id}}'"><input class="item_name{{ $key }}" type="hidden" value="{{$value->items->name}}" name="item_name[]"><font class="font_item_name{{$key}}">{{$value->items->name}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity{{$key}}" value="{{$value->qty}}" name="quantity[]"><font class="font_quantity{{$key}}">{{$value->qty}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom{{$key}}" value="{{$value->uom_id}}" name="uom[]"><font class="font_uom{{$key}}">{{$value->uoms->name}}</font></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="{{$key}}" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="{{$key}}" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="{{$key}}" aria-hidden="true"></i></td></tr>
+                    <tr id="row{{$key}}" class="{{$key}} tables"><td><span class="item_s_no"> {{$key+1}} </span></td><td><font class="items{{$key}}">{{$value->items->code}}</font></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="item_code{{$key}}" value="{{$value->item_id}}" name="item_code[]"><input type="hidden" class="items_id" value="{{$value->item_id}}"><input class="item_name{{ $key }}" type="hidden" value="{{$value->items->name}}" name="item_name[]"><font class="font_item_name{{$key}}">{{$value->items->name}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity{{$key}}" value="{{$value->qty}}" name="quantity[]"><font class="font_quantity{{$key}}">{{$value->qty}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="min_qty{{$key}}" value="{{$value->min_qty}}" name="min_qty[]"><font class="font_min_qty{{$key}}">{{$value->min_qty}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="max_qty{{$key}}" value="{{$value->max_qty}}" name="max_qty[]"><font class="font_max_qty{{$key}}">{{$value->max_qty}}</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom{{$key}}" value="{{$value->uom_id}}" name="uom[]"><font class="font_uom{{$key}}">{{$value->uoms->name}}</font></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info rounded show_items" id="{{$key}}" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success rounded edit_items" id="{{$key}}" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger rounded remove_items" id="{{$key}}" aria-hidden="true"></i></td></tr>
                     @endforeach
 
                   </tbody>
@@ -284,6 +298,25 @@ table, th, td {
                 </table>
                 
                        </div>
+
+                       <div class="row col-md-12 text-center">
+                       <div class="col-md-12 row">
+                        <div class="col-md-4">
+                          <label style="font-family: Times new roman;">Expense Type</label>
+                        
+                       <select class="js-example-basic-multiple col-12 form-control custom-select itemname" required="" name="account_group[]" id="account_group" multiple>
+                           <option value="">Choose AccountGroup Name</option>
+                           @foreach($account_group as $value)
+                           @for($i=0;$i < $explode_counts;$i++)
+                           <?php $selected = ($explode[$i]==$value->id)? $selected = "selected": $selected = ""; ?>
+                           <option value="{{ $value->id }}" <?php echo $selected;?> >{{ $value->name }}</option>
+
+                           @endfor
+                           @endforeach
+                           
+                        </select>
+                        </div>
+                      </div>
 
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
@@ -318,7 +351,6 @@ table, th, td {
         <script type="text/javascript">
 
           var i=1;
-var counts = $('#counts').val();
 
 function add_items()
 {
@@ -333,6 +365,8 @@ function add_items()
  var item_name=$('.item_name').val();
  var mrp=$('.mrp').val();
  var quantity=$('.quantity').val();
+ var min_qty=$('.min_qty').val();
+ var max_qty=$('.max_qty').val();
  
 
  if(item_code == '' || quantity == '')
@@ -350,7 +384,7 @@ function add_items()
  {
 
  
-  var items='<tr id="row'+counts+'" class="'+counts+' tables"><td><span class="item_s_no"> 1 </span></td><td><font class="items'+counts+'">'+item_code+'</font></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+counts+'" type="hidden" value="'+item_name+'" name="item_name[]"><input type="hidden" class="item_code'+counts+'" value="'+items_codes+'" name="item_code[]"><input type="hidden" class="items_id" value="'+items_codes+'"><font class="font_item_name'+counts+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+counts+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+counts+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+counts+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+counts+'">'+uom_name+'</font></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+counts+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+counts+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+counts+'" aria-hidden="true"></i></td></tr>'
+  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><font class="items'+i+'">'+item_code+'</font></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><input type="hidden" class="items_id" value="'+items_codes+'"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="min_qty'+i+'" value="'+min_qty+'" name="min_qty[]"><font class="font_min_qty'+i+'">'+min_qty+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="max_qty'+i+'" value="'+max_qty+'" name="max_qty[]"><font class="font_max_qty'+i+'">'+max_qty+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><i class="fa fa-pencil px-2 py-1 bg-success rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>'
 
 var result_val;
 
@@ -401,6 +435,9 @@ $('.item_code').val('');
 $('.uom_name').val('');
 $('.uom_id').val('');
 $("select").select2();
+$("select").select2();
+$(".min_qty").val('');
+$(".max_qty").val('');
 }
 } 
 $(document).on("click",".add_items",function(){
@@ -417,10 +454,35 @@ $(document).on("click",".remove_items",function(){
      var invoice_no=$('.invoice_no'+button_id).val();
 
      $('#row'+button_id).remove();
+     var q=calculate_total_discount();
+     $('#total_discount').val(q.toFixed(2));
+     $('#disc_total').val(q.toFixed(2));
      var counts = $('#counts').val();
      $('#counts').val(counts-1); 
      item_details_sno();
 
+       
+        
+        
+
+    var total_net_price=calculate_total_net_price();
+    var to_html_total_net = total_net_price.toFixed(2);
+
+    $(".total_net_price").html(parseFloat(to_html_total_net));
+
+    var total_amount=calculate_total_amount();
+    var to_html_total_amount = total_amount.toFixed(2);
+    $(".total_amount").html(parseFloat(to_html_total_amount));
+    $(".total_net_value").text(to_html_total_net);
+    var total_gst=calculate_total_gst();
+
+    $("#total_price").val(total_net_price.toFixed(2));
+    $("#total_amount").val(total_amount.toFixed(2));
+    $("#total_gst").val(total_gst.toFixed(2));
+    $("#igst").val(total_gst.toFixed(2));
+    var half_gst = parseFloat(total_gst)/2;
+    $("#cgst").val(half_gst.toFixed(2));
+    $("#sgst").val(half_gst.toFixed(2));
     
     $('#cat').hide();
     $('.item_sno').val('');
@@ -465,28 +527,76 @@ $(document).on("click",".edit_items",function(){
   $('.update_items').show();
   $('.add_items').hide();
 
+
   var id = $(this).attr("id");
   $('#dummy_table_id').val(id);
+  var invoice_no = $('.invoice_no'+id).val(); 
   var item_code_id = $('.item_code'+id).val();
   var item_code_name = $('.items'+id).text(); 
   var item_name = $('.item_name'+id).val();
-  alert(item_name);
-
+  var hsn = $('.hsn'+id).val(); 
+  var mrp = $('.mrp'+id).val();
+  var discount_val = $('.discount_val'+id).val(); 
+  var exclusive = $('.exclusive'+id).val();
+  var inclusive = $('.inclusive'+id).val(); 
   var quantity = $('.quantity'+id).val();
   var uom = $('.uom'+id).val(); 
   var uom_name = $('.font_uom'+id).text();
+  var amnt = $('#amnt'+id).val();
+  var tax = $('#tax'+id).val(); 
+  var tax_gst = $('.tax_gst'+id).val();
+  var net_price = $('#net_price'+id).val(); 
+  var last_purchase_rate = $('.last_purchase'+id).text();
 
+  var min_qty=$('.min_qty'+id).val();
+ var max_qty=$('.max_qty'+id).val();
+
+  $('.exclusive_rate').val(exclusive);
+  $('.inclusive_rate').val(inclusive);
+  $('.item_sno').val(invoice_no);
   $('.items_codes').val(item_code_id);
   $('.item_name').val(item_name);
   $('.item_code').val(item_code_name);
+  $('.mrp').val(mrp);
+  $('.hsn').val(hsn);
   $('.quantity').val(quantity);
-  $('.uom').val(uom);
+  $('.tax_rate').val(tax_gst);
+  $('.amount').val(amnt);
+  $('.net_price').val(net_price);
+  $('.gst').val(tax);
+  $('.uom_id').val(uom);
   $('.uom_name').val(uom_name);
-  
+  $('#last_purchase_rate').val(last_purchase_rate);
+
+  $('.min_qty').val(min_qty);
+  $('.max_qty').val(max_qty);
+  var disc_value = parseFloat(discount_val)/parseFloat(quantity);
+   $('.discount_rs').val(disc_value.toFixed(2));
+   discount_calc();
+   
+  if(discount_val == 0)
+  {
+    $('.discount_percentage').val('');
+  $('.discount_rs').val('');
+  }
    // item_codes(item_code_id);
 
 });
 
+$(document).on("click",".refresh_supplier_id",function(){
+      var supplier_dets=refresh_supplier_master_details();
+      $(".supplier_id").html(supplier_dets);
+   });
+
+$(document).on("click",".refresh_agent_id",function(){
+      var agent_dets=refresh_agent_master_details();
+      $(".agent_id").html(agent_dets);
+   });
+
+$(document).on("click",".refresh_expense_type_id",function(){
+      var expense_type_dets=refresh_expense_type_master_details();
+      $(".expense_type").html(expense_type_dets);
+   });
 
 $(document).on("click",".update_items",function(){
   var discount_total = 0;
@@ -502,7 +612,7 @@ $(document).on("click",".update_items",function(){
  var inclusive=$('#inclusive').val();
  var net_price=$('.net_price').val();
   
-  if(item_code == '' || invoice_no == '' || quantity == '' || exclusive == '' && inclusive == '')
+  if(item_code == '' || quantity == '')
  {
   alert('Please Fill All The Input Fields');
  }
@@ -522,6 +632,10 @@ $(document).on("click",".update_items",function(){
  else
  {
   
+  $('.min_qty'+td_id).val($('.min_qty').val());
+  $('.font_min_qty'+td_id).text($('.min_qty').val());
+  $('.font_max_qty'+td_id).text($('.max_qty').val());
+  $('.max_qty'+td_id).val($('.max_qty').val());
   $('.invoice_no'+td_id).val($('.item_sno').val());
   $('.item_no'+td_id).text($('.item_sno').val());
   $('.item_code'+td_id).val($('.items_codes').val());
@@ -537,7 +651,7 @@ $(document).on("click",".update_items",function(){
   $('.inclusive'+td_id).val($('.inclusive_rate').val());
   $('.quantity'+td_id).val($('.quantity').val());
   $('.font_quantity'+td_id).text($('.quantity').val());
-  $('.uom'+td_id).val($('.uom').val());
+  $('.uom'+td_id).val($('.uom_id').val());
   $('.font_uom'+td_id).text($('.uom_name').val());
   $('#amnt'+td_id).val($('.amount').val());
   $('.font_amount'+td_id).text($('.amount').val());
@@ -547,7 +661,46 @@ $(document).on("click",".update_items",function(){
   $('.last_purchase'+td_id).text($('#last_purchase_rate').val());
 
 
-   
+   if($('.discount_percentage').val() == '' && $('.discount_rs').val() == '')
+   {
+    var discount=0;
+    $('.discount_val'+td_id).val(discount);
+    $('#font_discount'+td_id).text(discount);
+    $('#input_discount'+td_id).val(discount);
+    // $('#total_discount').val(q.toFixed(2));
+    // $('#disc_total').val(q.toFixed(2));
+
+   }
+   else
+   {
+    $('.discount_val'+td_id).val($('#discounts').val());
+    $('#font_discount'+td_id).text($('#discounts').val());
+    $('#input_discount'+td_id).val($('#discounts').val());
+    // $('#total_discount').val(q.toFixed(2));
+    // $('#disc_total').val(q.toFixed(2));
+   }
+
+  $('#net_price'+td_id).val($('.net_price').val());
+  $('.font_net_price'+td_id).text($('.net_price').val());
+
+  // var total_net_price=calculate_total_net_price();
+  // var total_amount=calculate_total_amount();
+  // var total_gst=calculate_total_gst();
+  // $("#total_price").val(total_net_price.toFixed(2));
+  // $(".total_net_value").text(total_net_price.toFixed(2));
+  // $("#total_amount").val(total_amount.toFixed(2));
+  // $("#total_gst").val(total_gst.toFixed(2));
+  // $("#igst").val(total_gst.toFixed(2));
+  // var half_gst = parseFloat(total_gst)/2;
+  // $("#cgst").val(half_gst.toFixed(2));
+  // $("#sgst").val(half_gst.toFixed(2));
+  // var to_html_total_net = total_net_price.toFixed(2);
+  // var to_html_total_amount = total_amount.toFixed(2);
+  // $(".total_net_price").html(parseFloat(to_html_total_net));
+  // $(".total_amount").html(parseFloat(to_html_total_amount));
+
+  
+
   
   $('.item_sno').val('');
   $('.items_codes').val('');
@@ -571,6 +724,8 @@ $(document).on("click",".update_items",function(){
   $("select").select2();
   $('.update_items').hide();
   $('.add_items').show();
+  $('.min_qty').val('');
+  $('.max_qty').val('');
   
   }
   

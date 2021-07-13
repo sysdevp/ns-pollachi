@@ -123,4 +123,87 @@ class DepartmentController extends Controller
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
     }
+
+    public function import()
+    {
+       return view('admin.master.department.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $name=$filesop[1];   echo "</br>";
+                    $short_name=$filesop[2];   echo "</br>";
+                    $remark=$filesop[3];   echo "</br>";
+                    
+                    $name = str_replace(' ', '', $name);
+                    $name_duplicate=Department::whereRaw("REPLACE(`name`, ' ' ,'') = '".$name."'")->count();
+
+                    if($name_duplicate == 0)
+                    {
+                        $department = new Department();
+                        $department->name       = $name;
+                        $department->short_name       = $short_name;
+                        $department->remark      =  $remark;
+                        $department->created_by = 0;
+                        $department->updated_by = 0;
+
+                        $department->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Department Imported successfully');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
 }

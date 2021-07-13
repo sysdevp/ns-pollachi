@@ -32,7 +32,7 @@ use App\Mandatoryfields;
               <label for="validationCustom01" class="col-sm-4 col-form-label">State Name <?php echo Mandatoryfields::mandatory('state_name');?></label>
               <div class="col-sm-8">
                 <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="State Name" name="name" value="{{old('name', $state->name)
-}}" <?php echo Mandatoryfields::validation('state_name');?>>
+}}" <?php echo Mandatoryfields::validation('state_name');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid State Name
@@ -44,7 +44,7 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">State Code <?php echo Mandatoryfields::mandatory('state_code');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control code only_allow_digit" placeholder="State Code" name="code" value="{{old('code',$state->code)}}"  <?php echo Mandatoryfields::validation('state_code');?>>
+                <input type="text" class="form-control code only_allow_digit" placeholder="State Code" name="code" value="{{old('code',$state->code)}}"  <?php echo Mandatoryfields::validation('state_code');?> tabindex="2">
                 <span class="mandatory"> {{ $errors->first('code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid State Code
@@ -56,13 +56,13 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('state_remark');?> </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" name="remark" value="{{old('remark',$state->remark)}}" placeholder="Remark" <?php echo Mandatoryfields::validation('state_remark');?>>
+                <input type="text" class="form-control remark" name="remark" value="{{old('remark',$state->remark)}}" placeholder="Remark" <?php echo Mandatoryfields::validation('state_remark');?> tabindex="3">
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" type="submit">Submit</button>
+          <button class="btn btn-success" type="submit" tabindex="4">Submit</button>
         </div>
       </form>
     </div>

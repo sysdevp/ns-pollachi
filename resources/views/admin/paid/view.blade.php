@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -30,11 +33,11 @@
   
 
                         <div class="row col-md-12">
-                        <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Account Holder <span class="mandatory">*</span></label>
+                        <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Account Holder <?php echo Mandatoryfields::mandatory('paidcleared_companybankid');?></label>
 
 
                        <div class="col-md-4">
-                            <select class="js-example-basic-multiple form-control bank" id="bank" name="company_bank_id" style="width: 100%;" style="margin-left: 50%;" data-placeholder="Choose Bank Name" required>
+                            <select class="js-example-basic-multiple form-control bank" id="bank" name="company_bank_id" style="width: 100%;" style="margin-left: 50%;" data-placeholder="Choose Bank Name" <?php echo Mandatoryfields::validation('paidcleared_companybankid');?>>
                           <option value="">Select</option>
                           @foreach($company_bank as $value)
                           <option value="{{ $value->id }}">{{ $value->holder_name }}  -{{$value->account_no}}</option>
@@ -48,18 +51,18 @@
                                 <br/><br/>
                           <div class="row col-md-12">
 
-                          <label for="validationCustom01" class="col-sm-4 col-form-label">Cleare Date <span class="mandatory">*</span></label>
+                          <label for="validationCustom01" class="col-sm-4 col-form-label">Cleare Date <?php echo Mandatoryfields::mandatory('paidcleared_cleareddate');?></label>
 
                   <div class="col-md-4">
-                          <input type="date" name="cleared_date" class="form-control" placeholder="Cheque Cleared Date" required>
+                          <input type="date" name="cleared_date" class="form-control" placeholder="Cheque Cleared Date" <?php echo Mandatoryfields::validation('paidcleared_cleareddate');?>>
 
                         </div>
 
                           </div><br/><br/>
                           <div class="row col-md-12">
-                          <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks </label>
+                          <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks <?php echo Mandatoryfields::mandatory('paidcleared_remarks');?></label>
                           <div class="col-md-4">
-                            <textarea id="remarks" name="remarks" rows="2" cols="50"></textarea>
+                            <textarea id="remarks" name="remarks" rows="2" cols="50" <?php echo Mandatoryfields::validation('paidcleared_remarks');?>></textarea>
                           </div>
                           </div>
                           
@@ -92,11 +95,11 @@
       <input type="hidden" name="status" value="2" />
 
                         <div class="row col-md-12">
-                        <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Account Holder <span class="mandatory">*</span></label>
+                        <label for="validationCustom01" class="col-sm-4 col-form-label">Bank Account Holder <?php echo Mandatoryfields::mandatory('paidreturned_companybankid');?></label>
 
 
                        <div class="col-md-4">
-                            <select class="js-example-basic-multiple form-control bank" id="district_id" name="company_bank_id" style="width: 100%;" style="margin-left: 50%;" data-placeholder="Choose Bank Name" required>
+                            <select class="js-example-basic-multiple form-control bank" id="district_id" name="company_bank_id" style="width: 100%;" style="margin-left: 50%;" data-placeholder="Choose Bank Name" <?php echo Mandatoryfields::validation('paidreturned_companybankid');?>>
                           <option value="">Select</option>
                           @foreach($company_bank as $value)
                           <option value="{{ $value->id }}">{{ $value->holder_name }}  -{{$value->account_no}}</option>
@@ -110,10 +113,10 @@
                                 <br/><br/>
                           <div class="row col-md-12">
 
-                          <label for="validationCustom01" class="col-sm-4 col-form-label">Cleare Date <span class="mandatory">*</span></label>
+                          <label for="validationCustom01" class="col-sm-4 col-form-label">Cleare Date <?php echo Mandatoryfields::mandatory('paidreturned_cleareddate');?></label>
 
                   <div class="col-md-4">
-                          <input type="date" name="cleared_date" class="form-control" placeholder="Cheque Cleared Date" required>
+                          <input type="date" name="cleared_date" class="form-control" placeholder="Cheque Cleared Date" <?php echo Mandatoryfields::validation('paidreturned_cleareddate');?>>
 
                         </div>
 
@@ -121,18 +124,18 @@
 
                           <div class="row col-md-12">
 
-                          <label for="validationCustom01" class="col-sm-4 col-form-label">Charge</label>
+                          <label for="validationCustom01" class="col-sm-4 col-form-label">Charge<?php echo Mandatoryfields::mandatory('paidreturned_charges');?></label>
 
                   <div class="col-md-4">
-                          <input type="number" name="charges" class="form-control" placeholder="Charges" >
+                          <input type="number" name="charges" class="form-control" placeholder="Charges" <?php echo Mandatoryfields::validation('paidreturned_charges');?>>
 
                         </div>
 
                           </div><br/><br/>
                           <div class="row col-md-12">
-                          <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks </label>
+                          <label for="validationCustom01" class="col-sm-4 col-form-label">Remarks <?php echo Mandatoryfields::mandatory('paidreturned_remarks');?></label>
                           <div class="col-md-4">
-                            <textarea id="remarks" name="remarks" rows="2" cols="50"></textarea>
+                            <textarea id="remarks" name="remarks" rows="2" cols="50" <?php echo Mandatoryfields::validation('paidreturned_remarks');?>></textarea>
                           </div>
                           </div>
                           

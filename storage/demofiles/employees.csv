@@ -1,0 +1,5 @@
+Sno,salutation,name,code,phone_no,email,dob(Y-m-d),department_id,father_name,blood_group,material_status,access_no,address_line_1,address_line_2,land_mark,state name,district name,city name,postal code,Proof Name,Proof Number
+,Mr,Arjun,4545,8569325458,Arjunkvalsakumaraaaaa@gmail.com,2020-09-01,Test,Sahgash,A+ve,Single,55,"jjhjn,m",hghjgh,hgfhhj,1,2,NULL,1212,,
+,Mr,Suhail,1245221,9586523255,suhailga@gmail.com,2020-09-02,Test,Sahgash,A+ve,Single,22,jhkhkj,hgjhjh,gfhgfg,2,NULL,NULL,124578,,
+,Mr,Testcreate,785423,9256324578,test@gmail.com,2020-09-03,Test,Sahgash,A+ve,Single,474747,hghj,jhgjjbk,NULL,2,NULL,NULL,12458,,
+,Mr,NULL,NULL,9256324578,test@gmail.com,2020-09-04,Test,Sahgash,A+ve,Single,33,"jjhjn,m",hghjgh,NULL,1,NULL,NULL,1212,,

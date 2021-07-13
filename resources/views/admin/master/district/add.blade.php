@@ -31,7 +31,7 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">District Name <?php echo Mandatoryfields::mandatory('district_name');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="District Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('district_name');?>>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="District Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('district_name');?> tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid District Name
@@ -44,7 +44,7 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <?php echo Mandatoryfields::mandatory('district_state_id');?></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" <?php echo Mandatoryfields::validation('district_state_id');?>>
+                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" <?php echo Mandatoryfields::validation('district_state_id');?> tabindex="2">
                   <option value="">Choose States</option>
                   @foreach($state as $value)
                   <option value="{{ $value->id }}" {{ old('state_id') == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
@@ -66,7 +66,7 @@ use App\Mandatoryfields;
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Remark <?php echo Mandatoryfields::mandatory('district_remark');?> </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark" <?php echo Mandatoryfields::validation('district_remark');?>>
+                <input type="text" class="form-control remark" name="remark" value="{{old('remark')}}" placeholder="Remark" <?php echo Mandatoryfields::validation('district_remark');?> tabindex="3">
               <div class="invalid-feedback">
                   Enter Remark
                 </div>
@@ -76,7 +76,7 @@ use App\Mandatoryfields;
           </div>
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="4">Submit</button>
         </div>
       </form>
     </div>

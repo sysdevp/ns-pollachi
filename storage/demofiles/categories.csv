@@ -1,0 +1,5 @@
+Sno,Category Name,Belongs To,HSN,GST Number,Remark
+16,Category A,0,NULL,3251,NULL
+17,Category B,0,NULL,3251,NULL
+18,sub category A,Category A,NULL,3251,NULL
+19,Category C,Category A,2215,117,

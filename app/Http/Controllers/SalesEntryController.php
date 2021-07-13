@@ -22,6 +22,7 @@ use App\Models\Customer;
 use App\Models\PriceLevel;
 use App\Models\ItemwiseOffer;
 use DB;
+use App\Models\VoucherNumbering;
 use Carbon\Carbon;
 use App\Models\PriceUpdation;
 use App\Models\SellingPriceSetup;
@@ -75,6 +76,8 @@ use App\Models\CreditNoteBetaTax;
 use App\Models\ReceiptProcessAdjustments;
 use App\Models\ReceiptProcess;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\SalesVoucherType;
+use App\Models\UploadDocument;
 
 class SalesEntryController extends Controller
 {
@@ -235,6 +238,7 @@ class SalesEntryController extends Controller
         $sales_man = SalesMan::all();
         $account_head = AccountHead::all();
         $location = Location::all();
+        $voucher_type = SalesVoucherType::where('name','Sales Entry')->get();
 
         // $voucher_num=SaleEntry::orderBy('s_no','DESC')
         //                    ->select('s_no')
@@ -254,27 +258,71 @@ class SalesEntryController extends Controller
          
         //  }
 
-        $voucher_num=SaleEntry::orderBy('created_at','DESC')->select('id')->first();
-        $append = "SE";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
+        // $voucher_num=SaleEntry::orderBy('created_at','DESC')->select('id')->first();
+        // $append = "SE";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=$append.'1';
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
+        //      $voucher_no = $append.$next_no;
         
          
-         }
+        //  }
         // $voucher_no = str_random(6);
 
+        $voucher_num=VoucherNumbering::where('id',10)
+                           ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=SaleEntry::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
+         {
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->starting_no != null && $vouchers == null)
+         {
+            $next_no=$starting_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+
         return view('admin.sales_entry.add',compact('date','categories','sale_estimation',
-'delivery_note','voucher_no','supplier','item','agent','brand','expense_type','estimation','saleorder','customer','tax','sales_man','account_head','location'));
+'delivery_note','voucher_no','supplier','item','agent','brand','expense_type','estimation','saleorder','customer','tax','sales_man','account_head','location','voucher_type'));
     }
 
     /**
@@ -303,32 +351,81 @@ class SalesEntryController extends Controller
         //  }
         if($request->has('check'))
         {
-            $voucher_num=SaleEntryBeta::orderBy('created_at','DESC')->select('id')->first();
+            // $voucher_num=SaleEntryBeta::orderBy('created_at','DESC')->select('id')->first();
+            $vouchers=SaleEntryBeta::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         else
         {
-            $voucher_num=SaleEntry::orderBy('created_at','DESC')->select('id')->first();
+            // $voucher_num=SaleEntry::orderBy('created_at','DESC')->select('id')->first();
+            $vouchers=SaleEntry::orderBy('created_at','DESC')->select('voucher_no')->first();
         }
         
         $tax = Tax::all();
-        $append = "SE";
-        if ($voucher_num == null) 
-         {
-             $voucher_no=$append.'1';
+        // $append = "SE";
+        // if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=$append.'1';
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->id;
-             $next_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->id;
+        //      $next_no=$current_voucher_num+1;
 
-             $voucher_no = $append.$next_no;
+        //      $voucher_no = $append.$next_no;
         
          
-         }
+        //  }
 
          // $voucher_no = str_random(6);
+
+        $voucher_type = $request->voucher_type;
+
+        $voucher_num = SalesVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=SaleEntry::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+            
+        SalesVoucherType::where('id',$voucher_type)
+                        ->update(['updated_no' => $current_voucher_num]);
+
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
 
@@ -352,6 +449,26 @@ class SalesEntryController extends Controller
             $delivery_tag = 0;
          }
 
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
+
          if($request->has('check'))
          {
             $sale_entry = new SaleEntryBeta();
@@ -362,7 +479,7 @@ class SalesEntryController extends Controller
          }
 
          
-
+         $sale_entry->voucher_no = $current_voucher_num;
          $sale_entry->s_no = $voucher_no;
          $sale_entry->s_date = $voucher_date;
          $sale_entry->so_no = $request->so_no;
@@ -680,6 +797,7 @@ class SalesEntryController extends Controller
         $sale_entry_items = SaleEntryItem::where('s_no',$id)->get();
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         //echo "<pre>"; print_r($purchase_entry_items);exit;
 
@@ -758,9 +876,13 @@ class SalesEntryController extends Controller
         {
             if($value->remaining_qty == 0)
             {
-                $item_net_value[] = 0;
-                $item_amount[] = 0;
-                $item_gst_rs[] = 0;
+                // $item_net_value[] = 0;
+                // $item_amount[] = 0;
+                // $item_gst_rs[] = 0;
+                $item_amount[] = ($value->remaining_qty + $value->rejected_qty) * $value->rate_exclusive_tax;
+                $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
+                $item_discount = $value->discount + $value->overall_disc;
+                $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
             }  
             else
             {
@@ -801,7 +923,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.show',compact('sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.sales_entry.show',compact('sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
 
@@ -889,9 +1011,13 @@ class SalesEntryController extends Controller
         {
             if($value->remaining_qty == 0)
             {
-                $item_net_value[] = 0;
-                $item_amount[] = 0;
-                $item_gst_rs[] = 0;
+                // $item_net_value[] = 0;
+                // $item_amount[] = 0;
+                // $item_gst_rs[] = 0;
+                $item_amount[] = ($value->remaining_qty + $value->rejected_qty) * $value->rate_exclusive_tax;
+                $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
+                $item_discount = $value->discount + $value->overall_disc;
+                $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
             }  
             else
             {
@@ -966,6 +1092,7 @@ class SalesEntryController extends Controller
         $sale_entry_expense = SaleEntryExpense::where('s_no',$id)->get();
         $tax = SaleEntryTax::where('s_no',$id)->get();
         $receipt_process = ReceiptProcess::where('s_no',$id)->first();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($sale_entry_items);
         $expense_row_count = count($sale_entry_expense);
@@ -1043,9 +1170,13 @@ class SalesEntryController extends Controller
 
             if($value->remaining_qty == 0)
             {
-                $item_net_value[] = 0;
-                $item_amount[] = 0;
-                $item_gst_rs[] = 0;
+                // $item_net_value[] = 0;
+                // $item_amount[] = 0;
+                // $item_gst_rs[] = 0;
+                $item_amount[] = ($value->remaining_qty + $value->rejected_qty) * $value->rate_exclusive_tax;
+                $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
+                $item_discount = $value->discount + $value->overall_disc;
+                $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
             }  
             else
             {
@@ -1089,7 +1220,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process','upload'));
     }
 
     public function edit_beta($id)
@@ -1117,6 +1248,7 @@ class SalesEntryController extends Controller
         $sale_entry_expense = SaleEntryBetaExpense::where('s_no',$id)->get();
         $tax = SaleEntryBetaTax::where('s_no',$id)->get();
         $receipt_process = ReceiptProcess::where('s_no',$id)->first();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($sale_entry_items);
         $expense_row_count = count($sale_entry_expense);
@@ -1193,9 +1325,13 @@ class SalesEntryController extends Controller
         {
             if($value->remaining_qty == 0)
             {
-                $item_net_value[] = 0;
-                $item_amount[] = 0;
-                $item_gst_rs[] = 0;
+                // $item_net_value[] = 0;
+                // $item_amount[] = 0;
+                // $item_gst_rs[] = 0;
+                $item_amount[] = ($value->remaining_qty + $value->rejected_qty) * $value->rate_exclusive_tax;
+                $item_gst_rs[] = $item_amount[$key] * $value->gst / 100;
+                $item_discount = $value->discount + $value->overall_disc;
+                $item_net_value[] = $item_amount[$key] + $item_gst_rs[$key] - $item_discount + $value->expenses;
             }  
             else
             {
@@ -1236,7 +1372,7 @@ class SalesEntryController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process'));
+        return view('admin.sales_entry.edit',compact('date','customer','categories','supplier','agent','brand','expense_type','item','estimation','saleorder','sale_estimation','delivery_note','sale_entry','sale_entry_items','sale_entry_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','receipt_process','upload'));
     }
 
     /**
@@ -1265,6 +1401,9 @@ class SalesEntryController extends Controller
             $sale_entry_receipt_data = ReceiptProcess::where('voucher_no',$id);
             $sale_entry_receipt_data->delete();
 
+            $sale_entry_upload_data = UploadDocument::where('voucher_no',$id);
+            $sale_entry_upload_data->delete();
+
         }
         else
         {
@@ -1282,11 +1421,49 @@ class SalesEntryController extends Controller
 
             $sale_entry_receipt_data = ReceiptProcess::where('voucher_no',$id);
             $sale_entry_receipt_data->delete();
+
+            $sale_entry_upload_data = UploadDocument::where('voucher_no',$id);
+            $sale_entry_upload_data->delete();
         }
         
 
         $voucher_date = $request->voucher_date;
         $voucher_no = $request->voucher_no;
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
         if($request->d_no)
          {
@@ -1309,7 +1486,7 @@ class SalesEntryController extends Controller
             $sale_entry = new SaleEntry();
         }
          
-
+         $sale_entry->voucher_no = $request->voucher_number;
          $sale_entry->s_no = $voucher_no;
          $sale_entry->s_date = $voucher_date;
          $sale_entry->so_no = $request->so_no;
@@ -1713,6 +1890,54 @@ class SalesEntryController extends Controller
         return Redirect::back()->with('success', 'Deleted Successfully');
     }
 
+
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = SalesVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=SaleEntry::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
+    }
+
+
     public function address_details(Request $request)
     {
        $customer_id = $request->customer_id;
@@ -1946,7 +2171,9 @@ $count=0;
         
     // }
 
-        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+        @$selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+
+        @$default_selling_price = Item::where('id',$id)->select('default_selling_price')->first();
 
         if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
         {
@@ -1983,7 +2210,7 @@ $count=0;
 
             if(@$updated_selling_price == '')
             {
-                $data['selling_price'] = @$items->default_selling_price;
+                $data['selling_price'] = @$default_selling_price->default_selling_price;
             }
             else
             {
@@ -2016,10 +2243,10 @@ $count=0;
         }  
         else
         {
-            $data['selling_price'] = @$items->default_selling_price;
+            $data['selling_price'] = @$default_selling_price->default_selling_price;
         }
 
-        $data['selling_price_type'] = $selling_price_setup->setup;
+        $data['selling_price_type'] = @$selling_price_setup->setup;
 
 
         $request->customer_id;
@@ -2288,7 +2515,8 @@ $count=0;
         
     // }
 
-        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+        @$selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+        @$default_selling_price = Item::where('id',$id)->select('default_selling_price')->first();
 
         if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
         {
@@ -2325,7 +2553,7 @@ $count=0;
 
             if(@$updated_selling_price == '')
             {
-                $datas['selling_price'] = @$items->default_selling_price;
+                $datas['selling_price'] = @$default_selling_price->default_selling_price;
             }
             else
             {
@@ -2358,10 +2586,10 @@ $count=0;
         }  
         else
         {
-            $datas['selling_price'] = @$items->default_selling_price;
+            $datas['selling_price'] = @$default_selling_price->default_selling_price;
         }
 
-        $datas['selling_price_type'] = $selling_price_setup->setup;
+        $datas['selling_price_type'] = @$selling_price_setup->setup;
 
         $datas['get_qty'] = $get_qty;
         $datas['buy_qty'] = $buy_qty;

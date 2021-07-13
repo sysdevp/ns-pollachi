@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PriceLevel extends Model
 {
-    //
+    protected $fillable = ['id','level','type','value'];
 }

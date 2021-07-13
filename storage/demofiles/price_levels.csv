@@ -1,0 +1,4 @@
+sno,price Level ,Type( Enter '1' for Percentage or Enter '0' for Rupees),Value
+2,Price Level 1,0,200
+3,Price Level 2,0,20
+4,Price Level 3,0,10

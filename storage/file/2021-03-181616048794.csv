@@ -1,0 +1,4 @@
+id,name,level,parent_id,hsn,gst_no,remark,active_status,created_by,updated_by,deleted_by,created_at,updated_at,deleted_at
+16,Category A,0,0,NULL,3251,NULL,1,0,0,0,22-06-2020 14:55,14-07-2020 11:49,NULL
+17,Category B,0,0,NULL,3251,NULL,1,0,0,0,22-06-2020 14:56,22-06-2020 14:56,NULL
+18,sub category A,0,16,NULL,3251,NULL,1,0,0,0,22-06-2020 14:56,22-06-2020 14:56,NULL

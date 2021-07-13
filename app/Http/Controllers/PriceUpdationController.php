@@ -23,7 +23,10 @@ class PriceUpdationController extends Controller
     public function index()
     {
         $updations = PriceUpdation::where('status',1)->get();
-        foreach ($updations as $key => $value) 
+        if(count($updations) > 0)
+        {
+
+            foreach ($updations as $key => $value) 
         {
 
             $item_data = PurchaseEntryItem::where('item_id',$value->item_id)
@@ -84,6 +87,14 @@ class PriceUpdationController extends Controller
                @$selling_price[] = number_format($total, 2, '.', ',');
             }
         }
+
+        }
+        else
+        {
+            $selling_price[] = 0;
+            $last_purchase_cost[] = 0;
+        }
+        
         // exit();
 
                                     

@@ -16,7 +16,6 @@ class UserController extends Controller
     public function index()
     {
         $users=User::all();
-//print_r($users);exit;
         return view('admin.master.user.view',compact('users'));
     }
 
@@ -102,6 +101,79 @@ class UserController extends Controller
          }else{
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
+    }
+
+    public function import()
+    {
+
+       return view('admin.master.user.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $name=$filesop[1];   echo "</br>";
+                    $password=$filesop[2];   echo "</br>";
+                    $employee_name=$filesop[3];   echo "</br>";
+                    $role_name=$filesop[4];   echo "</br>";
+
+                    $employee_name = str_replace(' ', '', $employee_name);
+                    $employees=Employee::whereRaw("REPLACE(`name`, ' ' ,'') = '".$employee_name."'")->first();
+
+                    $role_name = str_replace(' ', '', $role_name);
+                    $roles=Role::whereRaw("REPLACE(`name`, ' ' ,'') = '".$role_name."'")->first();
+
+                    $employee_id = @$employees->id;
+                    $employee_email = @$employees->email;
+                    $role_id = @$roles->id;
+                    
+                    $name = str_replace(' ', '', $name);
+                    $name_duplicate=User::whereRaw("REPLACE(`user_name`, ' ' ,'') = '".$name."'")->count();
+
+                    if($name_duplicate == 0 && $employees != '' && $roles != '')
+                    {
+                        $user = new User();
+                        $user->employee_id       = $employee_id;
+                        $user->user_name       = $name;
+                        $user->password       = Hash::make($password);
+                        $user->role_id       = $role_id;
+                        $user->email =  $employee_email;
+                        $user->created_by = 0;
+                        $user->updated_by = 0;
+
+                        $user->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Users Imported successfully');    
     }
 
 

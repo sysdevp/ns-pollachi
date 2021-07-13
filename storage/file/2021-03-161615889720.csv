@@ -1,0 +1,4 @@
+"id","name","location_type_id","address_line_1","address_line_2","land_mark","country_id","state_id","district_id","city_id","postal_code","active_status","created_by","updated_by","created_at","updated_at","deleted_at"
+"1","pollachi","2","kalmandapam,palakkad","pochinki","JM mahal","1","2",NULL,NULL,"6008","1","0","0","2020-05-03 17:29:19","2020-05-03 20:34:28",NULL
+"2","jaya","2","kkkkkkkk",NULL,NULL,"1","2",NULL,NULL,"8888","1","0","0","2020-05-03 21:15:33","2020-05-03 21:15:33",NULL
+"3","ajay","1","lklk",NULL,NULL,"1","1","1",NULL,"333","1","0","0","2020-05-03 21:16:49","2020-05-03 21:16:49",NULL

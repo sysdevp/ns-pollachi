@@ -1,0 +1,8 @@
+Sno,salutation,name,code,phone_no,email,dob,father_name,blood_group,material_status,address_line_1,address_line_2,land_mark,state name,district name,city name,postal code,Proof Name,Proof Number
+,Mr,Arjun K V,123,2589632548,arjunkvalsakumar@gmail.com,02-03-2011,valsan,Ab+,Single,"jjhjn,m",hghjgh,hgfhhj,1,2,NULL,1212,,
+,Mr,Agent,7,9457863245,agent@gmail.com,13-01-1999,test,a+ve,Single,jhkhkj,hgjhjh,gfhgfg,2,NULL,NULL,124578,,
+,Mr,test agent,1212,2357896542,t@gmail.com,15-06-2020,hgghfhg,jhgh,Single,hghj,jhgjjbk,NULL,2,NULL,NULL,12458,,
+,Mr,tttttt,555,3256895214,NULL,18-06-2020,hghgh,kk,Single,"jjhjn,m",hghjgh,NULL,1,NULL,NULL,1212,,
+,Mr,New Agent,123356,6325874589,N@gmail.com,01-09-2020,Just,O,Single,,,,,,,,,
+,Mr,NULL,NULL,NULL,NULL,02-09-2020,NULL,NULL,Single,,,,,,,,,
+,Mr,NULL,NULL,NULL,NULL,03-09-2020,NULL,NULL,Single,,,,,,,,,

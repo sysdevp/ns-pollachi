@@ -1,0 +1,8 @@
+salutation,name,code,phone_no,email,dob,father_name,blood_group,material_status,active_status,address_line_1,address_line_2,land_mark,state name,district name,city name,postal code,active_status,created_by,updated_by,created_at,updated_at,deleted_at
+Mr,Arjun K V,123,2589632548,arjunkvalsakumar@gmail.com,2011-03-02,valsan,Ab+,Single,1,"jjhjn,m",hghjgh,hgfhhj,1,2,NULL,1212,1,0,0,05-04-2020 18:28,05-04-2020 18:28,NULL
+Mr,Agent,7,9457863245,agent@gmail.com,1999-01-13,test,a+ve,Single,1,jhkhkj,hgjhjh,gfhgfg,2,NULL,NULL,124578,1,0,0,10-04-2020 15:58,10-04-2020 15:58,NULL
+Mr,test agent,1212,2357896542,t@gmail.com,2020-06-15,hgghfhg,jhgh,Single,1,hghj,jhgjjbk,NULL,2,NULL,NULL,12458,1,0,0,10-04-2020 16:08,10-04-2020 16:08,NULL
+Mr,tttttt,555,3256895214,NULL,2020-06-18,hghgh,kk,Single,1,"jjhjn,m",hghjgh,NULL,1,NULL,NULL,1212,1,0,0,10-04-2020 16:18,10-04-2020 16:18,NULL
+Mr,New Agent,123356,6325874589,N@gmail.com,2020-09-01,Just,O,Single,1,,,,,,,,,,,,,
+Mr,NULL,NULL,NULL,NULL,2020-09-02,NULL,NULL,NULL,1,,,,,,,,,,,,,
+Mr,NULL,NULL,NULL,NULL,2020-09-03,NULL,NULL,NULL,1,,,,,,,,,,,,,

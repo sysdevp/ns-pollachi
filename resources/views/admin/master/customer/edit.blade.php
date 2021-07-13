@@ -32,7 +32,7 @@
               <div class="form-group row">
                 <label for="validationCustom01" class="col-sm-4 col-form-label">Company Name<span class="mandatory">*</span></label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp company_name required_for_valid" error-data="Enter valid Company Name" placeholder="Company Name" name="company_name" value="{{old('company_name',$customer->company_name)}}" >
+                  <input type="text" class="form-control only_allow_alp_num_dot_com_amp company_name " error-data="Enter valid Company Name" placeholder="Company Name" name="company_name" value="{{old('company_name',@$customer->company_name)}}" autofocus>
                   <span class="mandatory"> {{ $errors->first('company_name')  }} </span>
                   <div class="invalid-feedback">
                     Enter valid Company Name
@@ -47,13 +47,13 @@
                 <div class="col-sm-8">
                   <div class="form-check d-inline">
                     <label class="form-check-label">
-                      <input type="radio" class="form-check-input customer_type" value="1" {{ old('customer_type',$customer->customer_type) == 1 ? 'checked' : '' }} name="customer_type">Exist
+                      <input type="radio" class="form-check-input customer_type" value="1" {{ old('customer_type',@$customer->customer_type) == 1 ? 'checked' : '' }} name="customer_type">Exist
                     </label>
                   </div>
   
                   <div class="form-check d-inline mx-4 ">
                     <label class="form-check-label">
-                      <input type="radio" class="form-check-input customer_type" value="0" {{ old('customer_type',$customer->customer_type) == 0 ? 'checked' : '' }} name="customer_type">New
+                      <input type="radio" class="form-check-input customer_type" value="0" {{ old('customer_type',@$customer->customer_type) == 0 ? 'checked' : '' }} name="customer_type">New
                     </label>
                   </div>
   
@@ -71,12 +71,12 @@
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <select class="form-control  salutation" name="salutation" error-data="Enter valid Salutation">
-                        <option value="Mr" {{ old('salutation',$customer->salutation) == 'Mr' ? 'selected' : '' }}>Mr</option>
-                        <option value="Mrs" {{ old('salutation',$customer->salutation) == 'Mrs' ? 'selected' : '' }}>Mrs</option>
+                        <option value="Mr" {{ old('salutation',@$customer->salutation) == 'Mr' ? 'selected' : '' }}>Mr</option>
+                        <option value="Mrs" {{ old('salutation',@$customer->salutation) == 'Mrs' ? 'selected' : '' }}>Mrs</option>
                       </select>
                       <span class="mandatory"> {{ $errors->first('salutation')  }} </span>
                     </div>
-                    <input type="text" class="form-control only_allow_alp_num_dot_com_amp name caps" name="name" error-data="Customer Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value={{old('name',$customer->name)}}>
+                    <input type="text" class="form-control only_allow_alp_num_dot_com_amp name caps" name="name" error-data="Customer Name Field is required" onchange="checkname()" aria-label="Text input with dropdown button" value={{old('name',@$customer->name)}}>
   
                     <div class="invalid-feedback">
                       Enter valid Customer Name
@@ -97,8 +97,8 @@
                 <div class="col-sm-6">
                   <select class="js-example-basic-multiple col-12 form-control exist_customer_name select custom-select" error-data="Enter valid Customer" data-placeholder="Choose Customer" name="exist_customer_name">
                     <option value="">Choose Customer</option>
-  @foreach ($exist_customer_dets as $value)
-                  <option value="{{ $value->id }}" {{ old('exist_customer_name',$customer->customer_id) == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
+  @foreach (@$exist_customer_dets as $value)
+                  <option value="{{ $value->id }}" {{ old('exist_customer_name',@$customer->customer_id) == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
   @endforeach
        </select>
   
@@ -113,18 +113,13 @@
               </div>
             </div>
             
-  
-  
-            
-
-         
 
 
           <div class="col-md-6">
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Phone No <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  phone_no only_allow_digit required_for_valid" input-type="phone_no" pattern="[1-9]{1}[0-9]{9}" error-data="Enter valid Phone No" placeholder="Phone No" name="phone_no" value="{{old('phone_no',$customer->phone_no)}}" >
+                <input type="text" class="form-control  phone_no only_allow_digit " input-type="phone_no" pattern="[1-9]{1}[0-9]{9}" error-data="Enter valid Phone No" placeholder="Phone No" name="phone_no" value="{{old('phone_no',@$customer->phone_no)}}" >
                 <span class="mandatory"> {{ $errors->first('phone_no')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Phone No
@@ -137,7 +132,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Whatsapp No </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control whatsapp_no only_allow_digit" input-type="phone_no" pattern="[1-9]{1}[0-9]{9}" error-data="Enter valid Whatsapp No" placeholder="Whatsapp No" name="whatsapp_no" value="{{old('whatsapp_no',$customer->whatsapp_no)}}" >
+                <input type="text" class="form-control whatsapp_no only_allow_digit" input-type="phone_no" pattern="[1-9]{1}[0-9]{9}" error-data="Enter valid Whatsapp No" placeholder="Whatsapp No" name="whatsapp_no" value="{{old('whatsapp_no',@$customer->whatsapp_no)}}" >
                 <span class="mandatory"> {{ $errors->first('whatsapp_no')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Whatsapp No
@@ -150,7 +145,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Email <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="email" class="form-control email required_for_valid" input-type="email" error_data="Enter valid Email" placeholder="Email" name="email" value="{{old('email',$customer->email)}}" >
+                <input type="email" class="form-control email " input-type="email" error_data="Enter valid Email" placeholder="Email" name="email" value="{{old('email',@$customer->email)}}" >
                 <span class="mandatory"> {{ $errors->first('email')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Email
@@ -163,7 +158,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Pan Card No <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control pan_card required_for_valid" input-type="pan_card" error_data="Enter valid Pancard No" placeholder="Pan Card No" name="pan_card" value="{{old('pan_card',$customer->pan_card)}}" >
+                <input type="text" class="form-control pan_card " input-type="pan_card" error_data="Enter valid Pancard No" placeholder="Pan Card No" name="pan_card" value="{{old('pan_card',@$customer->pan_card)}}" >
                 <span class="mandatory"> {{ $errors->first('pan_card')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Pan Card
@@ -176,7 +171,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Gst No <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control gst_no required_for_valid" style="text-transform: uppercase;" maxlength="15" input-type="gst_no" error_data="Enter valid Gst No" placeholder="Gst No" name="gst_no" value="{{old('gst_no',$customer->gst_no)}}" >
+                <input type="text" class="form-control gst_no " style="text-transform: uppercase;" maxlength="15" input-type="gst_no" error_data="Enter valid Gst No" placeholder="Gst No" name="gst_no" value="{{old('gst_no',@$customer->gst_no)}}" >
                 <span class="mandatory"> {{ $errors->first('gst_no')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Gst No
@@ -189,7 +184,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Maximum Credit Limit  <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control max_credit_limit only_allow_digit required_for_valid"  error_data="Enter valid Maximum Credit Limit" placeholder="Maximum Credit Limit" name="max_credit_limit" value="{{old('max_credit_limit',$customer->max_credit_limit)}}" >
+                <input type="text" class="form-control max_credit_limit only_allow_digit "  error_data="Enter valid Maximum Credit Limit" placeholder="Maximum Credit Limit" name="max_credit_limit" value="{{old('max_credit_limit',@$customer->max_credit_limit)}}" >
                 <span class="mandatory"> {{ $errors->first('max_credit_limit')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Maximum Credit Limit
@@ -202,7 +197,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Maximum Credit Days  <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control max_credit_days only_allow_digit required_for_valid"  error_data="Enter valid Maximum Credit Days" placeholder="Maximum Credit Days" name="max_credit_days" value="{{old('max_credit_days',$customer->max_credit_days)}}" >
+                <input type="text" class="form-control max_credit_days only_allow_digit "  error_data="Enter valid Maximum Credit Days" placeholder="Maximum Credit Days" name="max_credit_days" value="{{old('max_credit_days',@$customer->max_credit_days)}}" >
                 <span class="mandatory"> {{ $errors->first('max_credit_days')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Maximum Credit Days
@@ -215,7 +210,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Opening Balance <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control  only_allow_digit required_for_valid" input-type="opening_balance" error_data="Enter valid Opening Balance" placeholder="Opening Balance" name="opening_balance" value="{{old('opening_balance',$customer->opening_balance)}}" >
+                <input type="text" class="form-control  only_allow_digit " input-type="opening_balance" error_data="Enter valid Opening Balance" placeholder="Opening Balance" name="opening_balance" value="{{old('opening_balance',@$customer->opening_balance)}}" >
                 <span class="mandatory"> {{ $errors->first('opening_balance')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Opening Balance
@@ -228,7 +223,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Remark</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control remark" input-type="remark" error_data="Enter valid Remark" placeholder="Remark" name="remark" value="{{old('remark',$customer->remark)}}" >
+                <input type="text" class="form-control remark" input-type="remark" error_data="Enter valid Remark" placeholder="Remark" name="remark" value="{{old('remark',@$customer->remark)}}" >
                 <span class="mandatory"> {{ $errors->first('remark')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Remark
@@ -242,10 +237,10 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Price Level <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-              <select class="js-example-basic-multiple col-12 form-control price_level select custom-select required_for_valid" 
+              <select class="js-example-basic-multiple col-12 form-control price_level select custom-select " 
               error-data="Enter valid Price Level" data-placeholder="Choose Price Level " name="price_level" >
               <option value="{{ @$customer->price_level }}">{{ @$customer->pricelevel->level }}</option>
-              @foreach($price_level as $value)
+              @foreach(@$price_level as $value)
               <option value="{{ $value->id }}">{{ $value->level }}</option>
               @endforeach
                   
@@ -258,7 +253,27 @@
               </div>
             </div>
           </div>
-</div>
+
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Sales Man </label>
+              <div class="col-sm-8">
+                <select class="js-example-basic-multiple col-12 form-control salesman select custom-select " error-data="Enter valid Sales Man" data-placeholder="Choose Sales Man " name="salesman">
+                  <option value="{{ @$customer->salesman }}">{{ @$customer->sales_man->name }}</option>
+                  @foreach(@$salesman as $value)
+                  <option value="{{ $value->id }}">{{ $value->name }}</option>
+                  @endforeach
+                </select>
+
+                <span class="mandatory"> </span>
+                <div class="invalid-feedback">
+                  Enter valid Price Level
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
 
 
 
@@ -278,7 +293,7 @@
            </div>
            <div class="common_address_div">
              <!-- Exist Address Details Grid Start Here -->
-            @foreach($customer_address_details as $key=>$values)
+            @foreach(@$customer_address_details as $key=>$values)
             <div class="form-row address_div">
                 <div class="col-md-7">
                     <div class="form-group row">
@@ -294,9 +309,9 @@
                         <div class="form-group row">
                         <label for="validationCustom01" class="col-sm-4 col-form-label">Address Type <span class="mandatory">*</span></label>
                           <div class="col-sm-6">
-                          <select class="js-example-basic-multiple col-12 form-control custom-select old_address_type_id required_for_valid required_for_address_valid" error-data="Enter valid Address Type" name="old_address_type_id[]">
+                          <select class="js-example-basic-multiple col-12 form-control custom-select old_address_type_id  " error-data="Enter valid Address Type" name="old_address_type_id[]">
                               <option value="">Choose Address Type</option>
-                              @foreach($address_type as $value)
+                              @foreach(@$address_type as $value)
                               <option value="{{ $value->id }}" {{ old('old_address_type_id.'.$key,$values->address_type_id) == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
                               @endforeach
                             </select>
@@ -314,7 +329,7 @@
                         <div class="form-group row">
                           <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
                           <div class="col-sm-8">
-                          <input type="text" class="form-control old_address_line_1 required_for_valid required_for_address_valid" error-data="Enter valid Address" placeholder="Address Line 1" name="old_address_line_1[]" value="{{ old('old_address_line_1.'.$key,$values->address_line_1) }}" >
+                          <input type="text" class="form-control old_address_line_1  " error-data="Enter valid Address" placeholder="Address Line 1" name="old_address_line_1[]" value="{{ old('old_address_line_1.'.$key,@$values->address_line_1) }}" >
                             <span class="mandatory"> {{ $errors->first('old_address_line_1.'.$key)  }} </span>
                             <div class="invalid-feedback">
                             Enter valid Address
@@ -326,7 +341,7 @@
                         <div class="form-group row">
                           <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 2 </label>
                           <div class="col-sm-8">
-                            <input type="text" class="form-control old_address_line_2" placeholder="Address Line 2" name="old_address_line_2[]" value="{{ old('old_address_line_2.'.$key,$values->address_line_2) }}">
+                            <input type="text" class="form-control old_address_line_2" placeholder="Address Line 2" name="old_address_line_2[]" value="{{ old('old_address_line_2.'.$key,@$values->address_line_2) }}">
                             <span class="mandatory"> {{ $errors->first('old_address_line_2.'.$key)  }} </span>
                             <div class="invalid-feedback">
                             Enter valid Address
@@ -338,7 +353,7 @@
                         <div class="form-group row">
                           <label for="land_mark" class="col-sm-4 col-form-label">Land Mark </label>
                           <div class="col-sm-8">
-                            <input type="text" class="form-control old_land_mark" placeholder="Land Mark" name="old_land_mark[]" value="{{ old('old_land_mark.'.$key,$values->land_mark) }}">
+                            <input type="text" class="form-control old_land_mark" placeholder="Land Mark" name="old_land_mark[]" value="{{ old('old_land_mark.'.$key,@$values->land_mark) }}">
                             <span class="mandatory"> {{ $errors->first('old_land_mark.'.$key)  }} </span>
                             <div class="invalid-feedback">
                             Enter valid Land Mark
@@ -356,9 +371,9 @@
                         <div class="form-group row">
                           <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
                           <div class="col-sm-6">
-                            <select class="js-example-basic-multiple col-12 form-control custom-select state_id old_state_id required_for_valid required_for_address_valid" error-data="Enter valid State" name="old_state_id[]" >
+                            <select class="js-example-basic-multiple col-12 form-control custom-select state_id old_state_id  " error-data="Enter valid State" name="old_state_id[]" >
                               <option value="">Choose State</option>
-                              @foreach($state as $value)
+                              @foreach(@$state as $value)
                               <option value="{{ $value->id }}" {{ old('old_state_id.'.$key,$values->state_id) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
                               @endforeach
                             </select>
@@ -410,7 +425,7 @@
                         <div class="form-group row">
                           <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
                           <div class="col-sm-8">
-                          <input type="text" class="form-control old_postal_code  only_allow_digit required_for_valid required_for_address_valid" error-data="Enter valid Postal Code" placeholder="Postal Code" name="old_postal_code[]" value="{{ old('old_postal_code.'.$key,$values->postal_code) }}" >
+                          <input type="text" class="form-control old_postal_code  only_allow_digit  " error-data="Enter valid Postal Code" placeholder="Postal Code" name="old_postal_code[]" value="{{ old('old_postal_code.'.$key,@$values->postal_code) }}" >
                             <span class="mandatory"> {{ $errors->first('old_postal_code.'.$key)  }} </span>
                             <div class="invalid-feedback">
                               Enter valid Postal Code
@@ -434,9 +449,9 @@
                         <div class="form-group row">
                         <label for="validationCustom01" class="col-sm-4 col-form-label">Address Type <span class="mandatory">*</span></label>
                           <div class="col-sm-6">
-                          <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id required_for_valid required_for_address_valid" error-data="Enter valid Address Type" name="address_type_id[]">
+                          <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id  " error-data="Enter valid Address Type" name="address_type_id[]">
                               <option value="">Choose Address Type</option>
-                              @foreach($address_type as $value)
+                              @foreach(@$address_type as $value)
                               <option value="{{ $value->id }}" {{ old('address_type_id.'.$key) == $value->id ? 'selected' : '' }} >{{ $value->name }}</option>
                               @endforeach
                             </select>
@@ -454,7 +469,7 @@
                         <div class="form-group row">
                           <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
                           <div class="col-sm-8">
-                          <input type="text" class="form-control address_line_1 required_for_valid required_for_address_valid" error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="{{ old('address_line_1.'.$key) }}" >
+                          <input type="text" class="form-control address_line_1  " error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="{{ old('address_line_1.'.$key) }}" >
                             <span class="mandatory"> {{ $errors->first('address_line_1.'.$key)  }} </span>
                             <div class="invalid-feedback">
                             Enter valid Address
@@ -495,9 +510,9 @@
                         <div class="form-group row">
                           <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
                           <div class="col-sm-6">
-                            <select class="js-example-basic-multiple col-12 form-control custom-select state_id required_for_valid required_for_address_valid" error-data="Enter valid State" name="state_id[]" >
+                            <select class="js-example-basic-multiple col-12 form-control custom-select state_id  " error-data="Enter valid State" name="state_id[]" >
                               <option value="">Choose State</option>
-                              @foreach($state as $value)
+                              @foreach(@$state as $value)
                               <option value="{{ $value->id }}" {{ old('state_id.'.$key) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
                               @endforeach
                             </select>
@@ -549,7 +564,7 @@
                         <div class="form-group row">
                           <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
                           <div class="col-sm-8">
-                          <input type="text" class="form-control postal_code only_allow_digit required_for_valid required_for_address_valid" error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="{{ old('postal_code.'.$key) }}" >
+                          <input type="text" class="form-control postal_code only_allow_digit  " error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="{{ old('postal_code.'.$key) }}" >
                             <span class="mandatory"> {{ $errors->first('postal_code.'.$key)  }} </span>
                             <div class="invalid-feedback">
                               Enter valid Postal Code
@@ -588,21 +603,21 @@
                  </thead>
                  <tbody class="append_bank_details">
 
-                  @foreach ($customer_bank_details as $bank_key=>$bank_value)
+                  @foreach (@$customer_bank_details as $bank_key=>$bank_value)
                     <tr>
                       <td><span class="bank_s_no"> {{ $bank_key+1}} </span>
                       <input type="hidden" name="bank_details_id[]" value="{{$bank_value->id }}">
-                      <input type="hidden" class="exist_old_bank_id" value="{{ old('old_bank_id.'.$bank_key,$bank_value->bank_id)}}">
-                      <input type="hidden" class="exist_old_branch_id" value="{{ old('old_branch_id.'.$bank_key,$bank_value->branch_id)}}">
+                      <input type="hidden" class="exist_old_bank_id" value="{{ old('old_bank_id.'.$bank_key,@$bank_value->bank_id)}}">
+                      <input type="hidden" class="exist_old_branch_id" value="{{ old('old_branch_id.'.$bank_key,@$bank_value->branch_id)}}">
                     </td>
 
                       <td>
                         <div class="form-group row">
                             <div class="col-sm-8">
-                              <select class="js-example-basic-multiple col-12 form-control custom-select bank_id old_bank_id required_for_valid" error-data="Enter valid Bank" name="old_bank_id[]" >
+                              <select class="js-example-basic-multiple col-12 form-control custom-select bank_id old_bank_id " error-data="Enter valid Bank" name="old_bank_id[]" >
                                 <option value="">Choose Bank</option>
-                                @foreach($bank as $value)
-                                <option value="{{ $value->id }}" {{ old('old_bank_id.'.$bank_key,$bank_value->bank_id) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
+                                @foreach(@$bank as $value)
+                                <option value="{{ $value->id }}" {{ old('old_bank_id.'.$bank_key,@$bank_value->bank_id) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
                                 @endforeach
                               </select>
                               <span class="mandatory"> {{ $errors->first('old_bank_id.'.$bank_key)  }} </span>
@@ -619,7 +634,7 @@
                        <td>
                         <div class="form-group row">
                             <div class="col-sm-8">
-                              <select class="js-example-basic-multiple col-12 form-control custom-select branch_id old_branch_id required_for_valid" error-data="Enter valid Branch Name" name="old_branch_id[]" >
+                              <select class="js-example-basic-multiple col-12 form-control custom-select branch_id old_branch_id " error-data="Enter valid Branch Name" name="old_branch_id[]" >
                                 <option value="">Choose Branch Name</option>
                                 </select>
                               <span class="mandatory"> {{ $errors->first('old_branch_id.'.$bank_key)  }} </span>
@@ -637,7 +652,7 @@
                       <td>
                         <div class="form-group row">
                           <div class="col-sm-12">
-                          <input type="text" class="form-control ifsc old_ifsc" error-data="Enter valid Ifsc Code" readonly placeholder="IFSC Code" name="old_ifsc[]" value="{{ old('old_ifsc.'.$bank_key,$bank_value->ifsc) }}" >
+                          <input type="text" class="form-control ifsc old_ifsc" error-data="Enter valid Ifsc Code" readonly placeholder="IFSC Code" name="old_ifsc[]" value="{{ old('old_ifsc.'.$bank_key,@$bank_value->ifsc) }}" >
                             <span class="mandatory"> {{ $errors->first('old_ifsc.'.$bank_key)  }} </span>
                             <div class="invalid-feedback">
                               Enter valid IFSC Code
@@ -649,10 +664,10 @@
                       <td>
                         <div class="form-group row">
                             <div class="col-sm-8">
-                              <select class="js-example-basic-multiple col-12 form-control custom-select account_type_id old_account_type_id required_for_valid" error-data="Enter valid Account Type" name="old_account_type_id[]" >
+                              <select class="js-example-basic-multiple col-12 form-control custom-select account_type_id old_account_type_id " error-data="Enter valid Account Type" name="old_account_type_id[]" >
                                 <option value="">Choose Account Type</option>
-                                @foreach($account_type as $value)
-                                <option value="{{ $value->id }}" {{ old('old_account_type_id.'.$bank_key,$bank_value->account_type_id) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
+                                @foreach(@$account_type as $value)
+                                <option value="{{ $value->id }}" {{ old('old_account_type_id.'.$bank_key,@$bank_value->account_type_id) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
                                 @endforeach
                               </select>
                               <span class="mandatory"> {{ $errors->first('old_account_type_id.'.$bank_key)  }} </span>
@@ -669,7 +684,7 @@
                       <td>
                         <div class="form-group row">
                           <div class="mm">
-                          <input type="text" class="form-control account_holder_name old_account_holder_name " error-data="Enter valid Account Holder Name" placeholder="Account Holder Name" name="old_account_holder_name[]" value="{{ old('old_account_holder_name.'.$bank_key,$bank_value->account_holder_name) }}" >
+                          <input type="text" class="form-control account_holder_name old_account_holder_name " error-data="Enter valid Account Holder Name" placeholder="Account Holder Name" name="old_account_holder_name[]" value="{{ old('old_account_holder_name.'.@$bank_key,$bank_value->account_holder_name) }}" >
                             <span class="mandatory"> {{ $errors->first('old_account_holder_name.'.$bank_key)  }} </span>
                             <div class="invalid-feedback">
                               Enter valid Account Holder Name
@@ -681,8 +696,8 @@
                       <td>
                         <div class="form-group row">
                           <div class="mm">
-                          <input type="text" class="form-control account_no old_account_no " error-data="Enter valid Account No"  placeholder="Account No" name="old_account_no[]" value="{{ old('old_account_no.'.$bank_key,$bank_value->account_no) }}" >
-                            <span class="mandatory"> {{ $errors->first('old_account_no.'.$key)  }} </span>
+                          <input type="text" class="form-control account_no old_account_no " error-data="Enter valid Account No"  placeholder="Account No" name="old_account_no[]" value="{{ old('old_account_no.'.$bank_key,@$bank_value->account_no) }}" >
+                            <span class="mandatory"> {{ $errors->first('old_account_no.'.$bank_key)  }} </span>
                             <div class="invalid-feedback">
                               Enter valid Account No
                             </div>
@@ -717,9 +732,9 @@
                         <td>
                           <div class="form-group row">
                               <div class="col-sm-8">
-                                <select class="js-example-basic-multiple col-12 form-control custom-select bank_id required_for_valid" error-data="Enter valid Bank" name="bank_id[]" >
+                                <select class="js-example-basic-multiple col-12 form-control custom-select bank_id " error-data="Enter valid Bank" name="bank_id[]" >
                                   <option value="">Choose Bank</option>
-                                  @foreach($bank as $value)
+                                  @foreach(@$bank as $value)
                                   <option value="{{ $value->id }}" {{ old('bank_id.'.$key) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
                                   @endforeach
                                 </select>
@@ -737,7 +752,7 @@
                          <td>
                           <div class="form-group row">
                               <div class="col-sm-8">
-                                <select class="js-example-basic-multiple col-12 form-control custom-select branch_id required_for_valid" error-data="Enter valid Branch Name" name="branch_id[]" >
+                                <select class="js-example-basic-multiple col-12 form-control custom-select branch_id " error-data="Enter valid Branch Name" name="branch_id[]" >
                                   <option value="">Choose Branch Name</option>
                                   </select>
                                 <span class="mandatory"> {{ $errors->first('branch_id.'.$key)  }} </span>
@@ -755,7 +770,7 @@
                         <td>
                           <div class="form-group row">
                             <div class="col-sm-12">
-                            <input type="text" class="form-control ifsc  required_for_proof_valid" error-data="Enter valid Ifsc Code" readonly placeholder="IFSC Code" name="ifsc[]" value="{{ old('ifsc.'.$key) }}" >
+                            <input type="text" class="form-control ifsc  " error-data="Enter valid Ifsc Code" readonly placeholder="IFSC Code" name="ifsc[]" value="{{ old('ifsc.'.$key) }}" >
                               <span class="mandatory"> {{ $errors->first('ifsc.'.$key)  }} </span>
                               <div class="invalid-feedback">
                                 Enter valid IFSC Code
@@ -767,9 +782,9 @@
                         <td>
                           <div class="form-group row">
                               <div class="col-sm-8">
-                                <select class="js-example-basic-multiple col-12 form-control custom-select account_type_id required_for_valid" error-data="Enter valid Account Type" name="account_type_id[]" >
+                                <select class="js-example-basic-multiple col-12 form-control custom-select account_type_id " error-data="Enter valid Account Type" name="account_type_id[]" >
                                   <option value="">Choose Account Type</option>
-                                  @foreach($account_type as $value)
+                                  @foreach(@$account_type as $value)
                                   <option value="{{ $value->id }}" {{ old('account_type_id.'.$key) == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
                                   @endforeach
                                 </select>
@@ -787,7 +802,7 @@
                         <td>
                           <div class="form-group row">
                             <div class="mm">
-                            <input type="text" class="form-control account_holder_name required_for_proof_valid" error-data="Enter valid Account Holder Name" placeholder="Account Holder Name" name="account_holder_name[]" value="{{ old('account_holder_name.'.$key) }}" >
+                            <input type="text" class="form-control account_holder_name " error-data="Enter valid Account Holder Name" placeholder="Account Holder Name" name="account_holder_name[]" value="{{ old('account_holder_name.'.$key) }}" >
                               <span class="mandatory"> {{ $errors->first('account_holder_name.'.$key)  }} </span>
                               <div class="invalid-feedback">
                                 Enter valid Account Holder Name
@@ -799,7 +814,7 @@
                         <td>
                           <div class="form-group row">
                             <div class="mm">
-                            <input type="text" class="form-control account_no required_for_proof_valid" error-data="Enter valid Account No"  placeholder="Account No" name="account_no[]" value="{{ old('account_no.'.$key) }}" >
+                            <input type="text" class="form-control account_no " error-data="Enter valid Account No"  placeholder="Account No" name="account_no[]" value="{{ old('account_no.'.$key) }}" >
                               <span class="mandatory"> {{ $errors->first('account_no.'.$key)  }} </span>
                               <div class="invalid-feedback">
                                 Enter valid Account No
@@ -839,25 +854,25 @@
 
 
                        <div class="state_id_div" style="display:none">
-                          @foreach ($state as $value)
+                          @foreach (@$state as $value)
                           <option value="{{ $value->id }}" >{{ $value->name }}</option>\
                           @endforeach
                         </div>
                         
                         <div class="address_type_id_div" style="display:none">
-                            @foreach ($address_type as $value)
+                            @foreach (@$address_type as $value)
                             <option value="{{ $value->id }}" >{{ $value->name }}</option>\
                             @endforeach
                           </div>
                         
                           <div class="bank_id_div" style="display:none">
-                              @foreach ($bank as $value)
+                              @foreach (@$bank as $value)
                               <option value="{{ $value->id }}" >{{ $value->name }}</option>\
                               @endforeach
                             </div>
                         
                             <div class="account_type_id_div" style="display:none">
-                                @foreach ($account_type as $value)
+                                @foreach (@$account_type as $value)
                                 <option value="{{ $value->id }}" >{{ $value->name }}</option>\
                                 @endforeach
                               </div>
@@ -1075,23 +1090,24 @@ function validation(){
 
 
    $(document).on("click",".submit",function(){
-    var error_count=validation();
-    var address_error_count=address_details_validation();
-    var common_error_count=parseInt(error_count)+parseInt(address_error_count);
-    if(common_error_count == 0){
-      if($(".required_for_address_valid").length >0){
+    $("form").submit();
+    // var error_count=validation();
+    // var address_error_count=address_details_validation();
+    // var common_error_count=parseInt(error_count)+parseInt(address_error_count);
+    // if(common_error_count == 0){
+    //   if($(".required_for_address_valid").length >0){
       
-    }else{
-      common_error_count++;
-      alert("Please Add Atleast One Address ");
+    // }else{
+    //   common_error_count++;
+    //   alert("Please Add Atleast One Address ");
      
-    }
-    if(common_error_count == 0){
+    // }
+    // if(common_error_count == 0){
 
-      $("form").submit();
-    }
+    //   $("form").submit();
+    // }
 
-    }
+    // }
 
    });
   
@@ -1268,7 +1284,7 @@ var address='';
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Type <span class="mandatory">*</span></label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id required_for_valid required_for_address_valid" error-data="Enter valid Address Type" name="address_type_id[]">\
+                <select class="js-example-basic-multiple col-12 form-control custom-select address_type_id  " error-data="Enter valid Address Type" name="address_type_id[]">\
                   <option value="">Choose Address Type</option>\
                   @foreach($address_type as $value)\
                   <option value="{{ $value->id }}" >{{ $value->name }}</option>\
@@ -1287,7 +1303,7 @@ var address='';
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>\
               <div class="col-sm-8">\
-                <input type="text" class="form-control address_line_1 required_for_valid required_for_address_valid" error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="" >\
+                <input type="text" class="form-control address_line_1  " error-data="Enter valid Address" placeholder="Address Line 1" name="address_line_1[]" value="" >\
                <div class="invalid-feedback">\
                 Enter valid Address\
                 </div>\
@@ -1320,7 +1336,7 @@ var address='';
             <div class="form-group row">\
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>\
               <div class="col-sm-6">\
-                <select class="js-example-basic-multiple col-12 form-control custom-select state_id required_for_valid required_for_address_valid" error-data="Enter valid State" name="state_id[]" >\
+                <select class="js-example-basic-multiple col-12 form-control custom-select state_id  " error-data="Enter valid State" name="state_id[]" >\
                   <option value="">Choose State</option>\
                   @foreach($state as $value)\
                   <option value="{{ $value->id }}" >{{ $value->name }}</option>\
@@ -1371,7 +1387,7 @@ var address='';
             <div class="form-group row">\
               <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>\
               <div class="col-sm-8">\
-                <input type="text" class="form-control postal_code only_allow_digit required_for_valid required_for_address_valid" error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="" >\
+                <input type="text" class="form-control postal_code only_allow_digit  " error-data="Enter valid Postal Code" placeholder="Postal Code" name="postal_code[]" value="" >\
               <div class="invalid-feedback">\
                   Enter valid Postal Code\
                 </div>\

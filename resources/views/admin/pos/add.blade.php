@@ -1,5 +1,61 @@
 @extends('admin.layout.app1')
 @section('content')
+<link href="{{asset('assets/keyboards/docs/css/jquery-ui.min.css')}}" rel="stylesheet">
+
+<!-- <script src="{{asset('assets/keyboards/docs/js/jquery-latest-slim.min.js')}}"></script> -->
+<!-- <script src="{{asset('assets/keyboards/docs/js/jquery-migrate-3.1.0.min.js')}}"></script>
+<script src="{{asset('assets/keyboards/docs/js/jquery-ui-custom.min.js')}}"></script> -->
+
+<!-- keyboard widget css & script (required) -->
+<link href="{{asset('assets/keyboards/css/keyboard.css')}}" rel="stylesheet">
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.js')}}"></script>
+
+<!-- keyboard extensions (optional) -->
+<!-- <script src="{{asset('assets/keyboards/js/jquery.mousewheel.js')}}"></script>
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.extension-typing.js')}}"></script>
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.extension-autocomplete.js')}}"></script>
+<script src="{{asset('assets/keyboards/js/jquery.keyboard.extension-caret.js')}}"></script> -->
+
+<!-- demo only -->
+<!-- <link rel="stylesheet" href="{{asset('assets/keyboards/docs/css/bootstrap.min.css')}}"> -->
+<link rel="stylesheet" href="{{asset('assets/keyboards/docs/css/font-awesome.min.css')}}">
+<!-- <link href="{{asset('assets/keyboards/docs/css/demo.css')}}" rel="stylesheet"> -->
+<!-- <link href="{{asset('assets/keyboards/docs/css/tipsy.css')}}" rel="stylesheet"> -->
+<!-- <link href="{{asset('assets/keyboards/docs/css/prettify.css')}}" rel="stylesheet"> -->
+<!-- <script src="{{asset('assets/keyboards/docs/js/bootstrap.min.js')}}"></script> -->
+<!-- working -->
+<link rel="stylesheet" href="{{asset('assets/keyboard/css/keyboard.css')}}" media="screen" />
+    <!-- scripts -->
+<style>
+            .page-container {
+                text-align: center;
+                margin: 150px 0px 0px 0px;
+            }
+            .input-container {
+                position: relative;
+                max-width: 400px;
+                margin: auto;
+                background: linear-gradient(to bottom right, #3F51B5 , #7E57C2);
+                -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+                padding: 50px;
+            }
+            .input-container > input {
+                padding: 10px;
+                outline: none !important;
+                box-shadow: none !important;
+                text-align: center;
+            }
+
+            span.tap {
+                font-size: 22px;
+            }
+
+        </style>
+<link rel="stylesheet" href="{{asset('assets/keyboard/css/easy-numpad')}}.css">
+
+<!-- keyboard -->
 <main class="page-content">
 <style type="text/css">
   tbody#team-list {
@@ -58,12 +114,12 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
     width: 100% !important;
   }
 </style>
-
+<link rel="stylesheet" href="assets/jquery.virtualKeyboard.css">
 
 <form  method="post" class="form-horizontal" action="{{ route('pos.store') }}" id="dataInput" enctype="multipart/form-data">
       {{csrf_field()}}
 <input type="hidden" id="hold_trans_id" name="hold_trans_id" value=""/>
-      
+
          <div class="row col-md-12">
 
                   <div class="col-md-2">
@@ -77,7 +133,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                   <div class="col-md-2">
                     <label style="font-family: Times new roman;">Voucher Date</label><br>
-                  <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                  <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" autofocus="">
                    
                   </div>
 
@@ -85,7 +141,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                   <label style="font-family: Times new roman;">Customer Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_data()" name="customer_id" id="customer_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select customer_id" onchange="customer_data($(this).val())" name="customer_id" id="customer_id">
                            <option value="">Choose Customer Name</option>
                            @foreach($customer as $customers)
                            <option value="{{ $customers->id }}">{{ $customers->name }}({{$customers->phone_no}})</option>
@@ -124,6 +180,42 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                   
                   
                </div>
+
+               <div class="cat" id="cust_details" style="display: none;" title="Customer Details">
+                        <div class="row col-md-8">
+
+          <table class="table-responsive" style="width: 860px;">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+           <th>Phone No </th>
+           <th>Email </th>
+           <th>Pan Card </th>
+           <th>Gst </th>
+           <th>Opening Balance </th>
+           <th>Price Level </th>
+           <th>Value </th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td><font id="cust_name"></font></td>
+              <td><font id="cust_mobile"></font></td>
+              <td><font id="cust_mail"></font></td>
+              <td><font id="cust_pan"></font></td>
+              <td><font id="cust_gst_no"></font></td>
+              <td><font id="cust_op_balance"></font></td>
+              <td><font id="cust_level"></font></td>
+              <td><font id="cust_value"></font></td>
+            </tr>
+         
+        </tbody>
+      </table>
+                          
+                        </div>
+    
+                            
+                      </div>
                   <!-- <div class="col-md-2">
                     <label style="font-family: Times new roman;">Sale Estimation No</label><br>
                   <select class="js-example-basic-multiple col-12 form-control custom-select estimation_no" onchange="estimation_details()" name="estimation_no" id="estimation_no">
@@ -207,6 +299,15 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                          </div>
               </div>
 
+              <!-- <div class="row col-md-12">
+                    <div class="col-md-12">
+              <label style="font-family: Times new roman;">Item Code 123</label>
+              <input type="text" class="virtualKeyboard form-control" placeholder="input with virtual keyboard..." style="width: 250px;">
+   
+            </div>
+            </div> -->
+
+
       <div class="row col-md-12">
         <!-- <div class="col-md-2">
           <label style="font-family: Times new roman;">Item Bill S.No</label>
@@ -214,9 +315,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
          
         </div> -->
 
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label style="font-family: Times new roman;">Item Code</label>
-          <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
+          <input type="text" class="virtualKeyboard form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
+         <!-- <button type="button"  id="keyboard" > <i class="fa fa-keyboard-o"  aria-hidden="true"></i> </button>-->
 
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
                
@@ -360,17 +462,19 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       </div>
 
 
-                      <div class="col-md-2">
+                    <div class="col-md-2">
                         <label><font color="white" style="font-family: Times new roman;">Find</font></label><br>
                       <input type="button" onclick="find_cat()" class="btn btn-info" value="Find" name="" id="find">
                     </div>
+
+
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">Item Name</label>
                       <input type="text" class="form-control item_name  required_for_proof_valid" id="item_name" placeholder="Item Name" name="item_name" readonly="" id="item_name" value="">
                     </div>
                     <div class="col-md-2">
                       <label style="font-family: Times new roman;">MRP</label>
-                      <input type="number" class="form-control mrp required_for_proof_valid" placeholder="MRP" id="mrp" name="mrp" value="">
+                      <input type="number" class="form-control mrp required_for_proof_valid" placeholder="MRP" id="mrp" name="mrp" value="" readonly="">
                        
                       </div>
 
@@ -383,15 +487,20 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                     <div class="col-md-2">
                         <label style="font-family: Times new roman;">Quantity</label>
                       <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" oninput="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
-                      </div>
-                      </div>
+                      <!-- <input type="text" class="easy-put" readonly="true"/> -->
+
+                      <button type="button" class="numkeyboard" value="quantity"> <i class="fa fa-keyboard-o"  aria-hidden="true"></i> </button>
+                   
+                    </div>
+  
+                  </div>
                       
 
 
                       <div class="row col-md-12">
                         <div class="col-md-2">
                         <label style="font-family: Times new roman;">Tax Rate%</label>
-                      <input type="number" class="form-control tax_rate  required_for_proof_valid"  placeholder="Tax Rate%" oninput="gst_calc()" name="tax_rate" value="" id="tax_rate">
+                      <input type="number" class="form-control tax_rate  required_for_proof_valid"  placeholder="Tax Rate%" oninput="gst_calc()" name="tax_rate" value="" id="tax_rate" readonly="">
                       </div>
                       <input type="hidden" class="form-control gst  required_for_proof_valid" readonly="" placeholder="Tax Rate" name="gst" value="" id="gst">
 
@@ -402,10 +511,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <div class="col-sm-12">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <select class="form-control uom_exclusive" name="uom_exclusive" onchange="uom_details_exclusive()">
+                                <select class="form-control uom_exclusive" name="uom_exclusive" onchange="uom_details_exclusive()" readonly="">
                                 </select>
                               </div>
-                              <input type="number" class="form-control exclusive_rate" id="exclusive" placeholder="Exclusive Tax" oninput="calc_exclusive()" name="exclusive" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" aria-label="Text input with dropdown button" value="">
+                              <input type="number" class="form-control exclusive_rate" id="exclusive" placeholder="Exclusive Tax" oninput="calc_exclusive()" name="exclusive" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" aria-label="Text input with dropdown button" value="" readonly="">
 
                             </div>
                             
@@ -421,10 +530,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <div class="col-sm-12">
                             <div class="input-group">
                               <div class="input-group-prepend">
-                                <select class="form-control  uom_inclusive" name="uom_inclusive" onchange="uom_details_inclusive()">
+                                <select class="form-control  uom_inclusive" name="uom_inclusive" onchange="uom_details_inclusive()" readonly="">
                                 </select>
                               </div>
-                              <input type="number" class="form-control inclusive_rate" id="inclusive" placeholder="Inclusive Tax" oninput="calc_inclusive()" name="inclusive" pattern="[0-9][0-9 . 0-9]{0,100}" aria-label="Text input with dropdown button" title="Numbers Only" value="">
+                              <input type="number" class="form-control inclusive_rate" id="inclusive" placeholder="Inclusive Tax" oninput="calc_inclusive()" name="inclusive" pattern="[0-9][0-9 . 0-9]{0,100}" aria-label="Text input with dropdown button" title="Numbers Only" value="" readonly="">
 
                             </div>
                             
@@ -435,7 +544,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
                       <div class="col-md-2">
                         <label style="font-family: Times new roman;">Discount %</label>
-                      <input type="number" class="form-control discount_percentage" oninput="discount_calc1()" id="discount_percentage"  placeholder="Discount %" name="discount_percentage" pattern="[0-9]{0,100}" title="Numbers Only" value="">
+                      <input type="number" class="form-control discount_percentage" oninput="discount_calc1()" id="discount_percentage"  placeholder="Discount %" name="discount_percentage" pattern="[0-9]{0,100}" title="Numbers Only" value="" readonly="">
                       </div>
 
                       <input type="hidden" class="form-control amount  required_for_proof_valid" placeholder="Amount" id="amount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="amount" value="" >
@@ -443,13 +552,13 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       
                       <div class="col-md-2">
                           <label style="font-family: Times new roman;">Discount Rs</label>
-                        <input type="number" class="form-control discount_rs  required_for_proof_valid" placeholder="Discount Rs" id="discount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" oninput="discount_calc()" name="discount" value="" >
+                        <input type="number" class="form-control discount_rs  required_for_proof_valid" placeholder="Discount Rs" id="discount" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" oninput="discount_calc()" name="discount" value="" readonly="">
                         </div>
 
-                        <div class="col-md-2">
+                       <!--  <div class="col-md-2">
                           <label style="font-family: Times new roman;">Batch No</label>
                         <input type="number" class="form-control batch_no required_for_proof_valid" placeholder="Batch No" id="batch_no" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="batch_no" value="" >
-                        </div>
+                        </div> -->
 
                         <input type="hidden" name="discounts" id="discounts" value="0">
                         <input type="hidden" name="disc_total" id="disc_total" value="0">
@@ -457,7 +566,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         <input type="hidden" class="form-control net_price  required_for_proof_valid" id="net_price" placeholder="Net Price" pattern="[0-9][0-9 . 0-9]{0,100}" title="Numbers Only" name="net_price" value="">
 
                     </div>
-                    <div class="col-md-12 row" id="b_w">
+                    <!-- <div class="col-md-12 row" id="b_w">
                         <div class="col-md-2">
                           <label style="font-family: Times new roman;">Quantity OR Rating</label>
                         <select class="form-control" id="b_or_w">
@@ -465,7 +574,7 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                           <option value="0">B</option>
                        </select>
                         </div>
-                      </div>
+                      </div> -->
 
 
                       <!-- itemwise offer hidden values -->
@@ -841,8 +950,29 @@ table, th, td {
         <script type="text/javascript">
     $('#customer_id').removeAttr('required');
 
-function customer_data()
+function customer_data(id)
 {
+    $.ajax({
+           type: "POST",
+            url: "{{ url('pos/cust_datas/') }}",
+            data: {id : id},
+           success: function(data) {
+            $('#cust_name').text(data.name);
+            $('#cust_mobile').text(data.phone_no);
+            $('#cust_mail').text(data.email);
+            $('#cust_pan').text(data.pan_card);
+            $('#cust_gst_no').text(data.gst_no);
+            $('#cust_op_balance').text(data.opening_balance);
+            $('#cust_level').text(data.level);
+            $('#cust_value').text(data.value);
+             
+           }
+           
+        });
+
+  $('#cust_details').show();
+  $('#cust_details').dialog({width:900},{height:250}).prev(".ui-dialog-titlebar").css("background","#28a745").prev(".ui-dialog.ui-widget-content");
+
   var customer_id= $('#customer_id').val();
   if(customer_id!="")
   {
@@ -2931,8 +3061,7 @@ else
              {
               var tax_master_id = data[1].tax_master[new_val];
 
-              var tax_master_input_val = $('#'+tax_master_id);
-            //  var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
 
               if(tax_master_id == tax_master_input_val)
               {
@@ -3085,7 +3214,6 @@ function itemwise_offers(id,get_item_qty,buy_item_qty)
 
 function get_details()
 {
-
   var item_code=$('#item_code').val();
   //$('#item_code').val('');
   $('#items_codes').val('');
@@ -3102,11 +3230,12 @@ var row_id=$('#last').val();
       $.ajax({  
         
         type: "GET",
-        url: "{{ url('estimation/getdata_item/{id}') }}",
+        url: "{{ url('pos/getdata_item/{id}') }}",
         data: { id: item_code },             
                         
         success: function(data){
          console.log(data);
+         // return false;
              if(data[3]==1)
              {
               // $('.uom_exclusive').children('option').remove();
@@ -3445,7 +3574,7 @@ function estimation_details()
 
   $.ajax({
            type: "POST",
-            url: "{{ url('sales_order/estimation_details/') }}",
+            url: "{{ url('pos/estimation_details/') }}",
             data: { estimation_no : estimation_no },
            success: function(data) {
             $('.tables').remove();
@@ -3603,16 +3732,38 @@ item_codes(uom_exclusive);
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet"/>
 <script src="jquery.ui.position.js"></script>
 
+<script src="{{asset('assets/keyboard/js/easy-numpad.js')}}"></script>
 
 <style type="text/css">
   .ui-dialog.ui-widget-content { background: #a3d072; }
 </style>
+<script src="{{asset('assets/keyboards/docs/js/demo.js')}}"></script>
 
         
+<script type="text/javascript" src="{{asset('assets/keyboard/js/jquery.keyboard.js')}}"></script>
+<script language="javascript" type="text/javascript">
+        $(function() {
 
+            $("#keyboardInput").attachKeyboard(
+                {
+                   // iconLocation: 'img/keyboard_key.png',
+                    topOffset : -42,
+                    leftOffset : 20
+                }
+            );
+
+        });
+    </script>
     </div>
     <!-- card body end@ -->
   </div>
 </div>
+<!-- <script src="{{asset('assets/keyboards/docs/js/jquery.tipsy.min.js')}}"></script>
+<script src="{{asset('assets/keyboards/docs/js/prettify.js')}}"></script>  --><!-- 
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script> -->
+    <script src="assets/jquery.virtualKeyboard.js"></script>
+    <script>
+        $('.virtualKeyboard').vkb();
+    </script>
 @endsection
 

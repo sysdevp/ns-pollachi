@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -59,11 +62,27 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
       {{csrf_field()}}
 
                         <div class="row col-md-12">
-                                <div class="col-md-4">
-                  <label style="font-family: Times new roman;">Party Name</label><br>
+
+                          <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Voucher Type<?php echo Mandatoryfields::mandatory('receiptnote_vouchertype');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select voucher_type" onchange="voucher_types()" name="voucher_type" id="voucher_type" <?php echo Mandatoryfields::validation('receiptnote_vouchertype');?> autofocus>
+                           <option value="">Choose Voucher Type</option>
+                           @foreach($voucher_type as $voucher_types)
+                           <option value="{{ $voucher_types->id }}">{{ $voucher_types->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                     
+                  </div>
+               </div>
+
+                                <div class="col-md-4">
+                  <label style="font-family: Times new roman;">Party Name<?php echo Mandatoryfields::mandatory('receiptnote_supplierid');?></label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-8">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_details()" name="supplier_id" id="supplier_id" <?php echo Mandatoryfields::validation('receiptnote_supplierid');?>>
                            <option value="">Choose Supplier Name</option>
                            @foreach($supplier as $suppliers)
                            <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -83,23 +102,24 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                                     
                                   </div>
                                 </div>
-                                <input type="checkbox" name="check" class="po_alpha_beta" value="1">
+                                <input type="checkbox" name="check" id="check" class="po_alpha_beta" value="1">
                               </div>
                               <br>
                        <div class="row col-md-12">
 
                         <div class="col-md-2">
                                   <label style="font-family: Times new roman;">Voucher No</label><br>
-                                  <div class="">
-                                    <font size="2" id="voucher_no">{{$voucher_no}}</font>
+                                  <div >
+                                    <font size="2" id="voucher_no" class="vouchers">{{$voucher_no}}</font>
+                                    <input type="hidden" class="form-control voucher_no  required_for_proof_valid" value="">
                                   </div>
                                 
                                  
                                 </div>
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Voucher Date</label><br>
-                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}">
+                                  <label style="font-family: Times new roman;">Voucher Date<?php echo Mandatoryfields::mandatory('receiptnote_voucherdate');?></label><br>
+                                <input type="date" class="form-control voucher_date  required_for_proof_valid" id="voucher_date" placeholder="Voucher Date" name="voucher_date" value="{{ $date }}" <?php echo Mandatoryfields::validation('receiptnote_voucherdate');?>>
                                  
                                 </div>
 
@@ -204,9 +224,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                               <div class="row col-md-12">
 
                                 <div class="col-md-2">
-                                  <label style="font-family: Times new roman;">Company Location</label><br>
+
+                                  <label style="font-family: Times new roman;">Company Location<?php echo Mandatoryfields::mandatory('receiptnote_location');?></label><br>
                                 <select class="js-example-basic-multiple form-control location" 
-                                data-placeholder="Choose Company Location" id="location" name="location" required="">
+                                data-placeholder="Choose Company Location" id="location" name="location" <?php echo Mandatoryfields::validation('receiptnote_location');?>>
                                 <option></option>
                                 @foreach($location as $key => $value)
                                 <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -302,17 +323,18 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                         
                         <div class="form-row">
                             <div class="col-md-12">
-                              <table class="item_code_table" style="width: 100%;">
+                              <table class="item_code_table" id="myTable" style="width: 100%;">
                                   <thead>
+
                                   <th style="font-family: Times New Roman;">Select One</th>
-                                  <th style="font-family: Times New Roman;">Item Code</th>
-                                  <th style="font-family: Times New Roman;">Item Name</th>
-                                  <th style="font-family: Times New Roman;">MRP</th>
-                                  <th style="font-family: Times New Roman;">UOM</th>
-                                  <th style="font-family: Times New Roman;">Brand</th>
-                                  <th style="font-family: Times New Roman;">Category</th>
+                                  <th style="font-family: Times New Roman;">Item Code<input type="text" class="form-control" id="item_table_code" onkeyup="myFunction()" placeholder="Search Item Code" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Item Name<input type="text" id="item_table_name" class="form-control" onkeyup="myFunction1()" placeholder="Search Item Name" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">MRP<input type="text" id="item_table_mrp" class="form-control" onkeyup="myFunction2()" placeholder="Search MRP" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">UOM<input type="text" id="item_table_uom" class="form-control" onkeyup="myFunction3()" placeholder="Search UOM" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Brand<input type="text" id="item_table_brand" class="form-control" onkeyup="myFunction4()" placeholder="Search Brand" title="Type in a name" style="height: 20px;"></th>
+                                  <th style="font-family: Times New Roman;">Category<input type="text" id="item_table_category" class="form-control" onkeyup="myFunction5()" placeholder="Search Category" title="Type in a name" style="height: 20px;"></th>
                                   <!-- <th style="font-family: Times New Roman;">PTC Code</th> -->
-                                  <th style="font-family: Times New Roman;">Barcode</th>
+                                  <th style="font-family: Times New Roman;">Barcode<input type="text" id="item_table_barcode" class="form-control" onkeyup="myFunction6()" placeholder="Search Barcode" title="Type in a name" style="height: 20px;"></th>
                                   
                                 </thead>
                                 <tbody class="append_item">
@@ -530,6 +552,7 @@ table, th, td {
                   <input type="hidden" name="total_gst" value="0" id="total_gst">
                   <input type="hidden" name="total_price" value="0" id="total_price">
                   <input type="hidden" name="last_purchase_rate" value="0" id="last_purchase_rate">
+                  <input type="hidden" name="margin_block" id="margin_block" value="0"> 
 
                   <div class="item_show" id="item_show" style="display: none;" title="Item Details">
                     <div class="row col-md-12">
@@ -611,8 +634,8 @@ table, th, td {
                       <input type="number" readonly="" class="form-control total_discount" id="total_discount" name="total_discount" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
                       </div>
                       <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Overall Discount</label>
-                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0">
+                        <label style="font-family: Times new roman;">Overall Discount<?php echo Mandatoryfields::mandatory('receiptnote_overall_discount');?></label>
+                      <input type="number" class="form-control overall_discount" id="overall_discount" name="overall_discount" oninput="overall_discounts()" pattern="[0-9]{0,100}" title="Numbers Only" value="0" <?php echo Mandatoryfields::validation('receiptnote_overall_discount');?>>
                       </div>
                     </div>
 
@@ -693,6 +716,30 @@ table, th, td {
 
                        </div>
 
+                       <div class="row col-md-12 append_upload">
+
+                          <div class="row col-md-12 upload">
+                            <div class="col-md-3">
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>
+                  <div class="form-group row">
+                     <div class="col-sm-12">
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">
+                     </div>
+                  </div>
+               </div>
+                      
+                      <div class="col-md-4">
+                        <label style="font-family: Times new roman;">Upload Document</label>
+                      <input type="file" class="form-control" name="document[]">
+
+                      </div>
+                      <div class="col-md-2">
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">
+                    </div>
+                       </div>
+                  </div>
+
                        <div class="row col-md-12 text-center">
                           <div class="col-md-12">
                             
@@ -709,8 +756,226 @@ table, th, td {
       </form>
                        
         <script type="text/javascript">
+
+          function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('receipt_note/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
           var i=1;
           var discount_total = 0;
+
+  function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_code");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction1() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_name");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction2() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_mrp");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[3];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction3() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_uom");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[4];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction4() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_brand");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[5];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction5() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_category");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[6];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function myFunction6() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("item_table_barcode");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[7];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 
 
 $(document).on('click','.po_alpha_beta',function(){
@@ -954,6 +1219,7 @@ function add_items()
  var discount_percentage=$('.discount_percentage').val();
  var discount_rs=$('.discount_rs').val();
  var net_price=$('.net_price').val();
+ var margin_block = $('#margin_block').val();
 
  if($('.discount_percentage').val() == '' && $('.discount_rs').val() == '')
   {
@@ -980,21 +1246,14 @@ function add_items()
   $("#item_code").focus();
  }
 
- // else if(parseFloat(net_price)>parseFloat(mrp) && parseFloat(mrp) != 0)
- // {
- //  alert('The Total Net Value Exceeds The MRP!!');
- //    $('#discount').val('');
- //    $('.discount_percentage').val('');
- //    $('#exclusive').val('');
- //    $('#inclusive').val('');
- //    $('.amount').val('');
- //    $('.net_price').val('');
- //    $('.gst').val('');
- // }
+ else if(margin_block == 1)
+ {
+  alert('Rate Exceeds The Margin Value');
+ }
  else
  {
 
-
+  $('#margin_block').val(0);
   var last_purchase_rate = $('#last_purchase_rate').val();
  
   var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><div class="form-group row"><div class="col-sm-12"><input class="invoice_no'+i+'" type="hidden" id="invoice'+i+'" value="'+invoice_no+'" name="invoice_sno[]"><font class="item_no'+i+'">'+invoice_no+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="items_id" value="'+items_codes+'"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><font class="items'+i+'">'+item_code+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input class="hsn'+i+'" type="hidden" value="'+hsn+'" name="hsn[]"><font class="font_hsn'+i+'">'+hsn+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="mrp'+i+'" value="'+mrp+'" name="mrp[]"><font class="font_mrp'+i+'">'+mrp+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12" id="unit_price"><input type="hidden" class="exclusive'+i+'" value="'+exclusive+'" name="exclusive[]"><font class="font_exclusive'+i+'">'+exclusive+'</font><input type="hidden" class="inclusive'+i+'" value="'+inclusive+'" name="inclusive[]"></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_amount" id="amnt'+i+'" value="'+amount+'" name="amount[]"><font class="font_amount'+i+'">'+amount+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="input_discounts '+i+'" value="'+discounts+'" id="input_discount'+i+'" ><input class="discount_val'+i+'" type="hidden" value="'+discounts+'" name="discount[]"><font class="font_discount" id="font_discount'+i+'">'+discounts+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="overall_disc" id="overall_disc'+i+'" value="0" name="overall_disc[]"><font class="font_overall_disc'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="expenses '+i+'" id="expenses'+i+'" value="0" name="expenses[]"><font class="font_expenses'+i+'">0</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_gst" id="tax'+i+'" value="'+gst+'" name="gst[]"><input type="hidden" class="tax_gst'+i+'"  value="'+tax_rate+'" name="tax_rate[]"><font class="font_gst'+i+'">'+gst+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="table_net_price" id="net_price'+i+'" value="'+net_price+'" name="net_price[]"><input type="hidden" class="black_or_white'+i+'"  value="'+black_or_white+'" name="black_or_white[]"><font class="font_net_price'+i+'">'+net_price+'</font></div></div></td><td style="background-color: #FAF860;"><div class="form-group row"><div class="col-sm-12"><center><font class="last_purchase'+i+'">'+last_purchase_rate+'</font></center></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>';
@@ -1185,6 +1444,46 @@ $(document).on("click",".add_items",function(){
     item_details_sno();
 
   });
+
+function margin_checking()
+{
+  var supplier_id = $('.supplier_id').val();
+  var item_id=$('#items_codes').val();
+  var exclusive = $('#exclusive').val();
+  $.ajax({
+
+    type:"POST",
+    url:"{{url('receipt_note/margin_check/')}}",
+    data:{supplier_id: supplier_id, item_id: item_id},
+    success:function(data)
+    {
+      if(data['buying_price'] == null)
+      {
+        
+      }
+      else
+      {
+
+        if(data['setup'] == 2 && exclusive > data['buying_price'])
+      {
+        alert('Rate Exceeds The Margin Value, Margin Value Set For This Item Is :'+data['buying_price']);
+      }
+      else if((data['setup'] == 1 && exclusive > data['buying_price']))
+      {
+        $('#margin_block').val(1);
+      }
+      else
+      {
+        $('#margin_block').val(0);
+      }
+
+      }
+      
+
+    }
+
+  });
+}
 
 $(document).on("click",".remove_items",function(){
   
@@ -1569,6 +1868,47 @@ $(document).on("click",".remove_expense",function(){
 
   });
 
+function upload_add()
+{
+  var upload_details='<div class="row col-md-12 upload">\
+                            <div class="col-md-3">\
+                    <label style="font-family: Times new roman;">Name Of Document</label><br>\
+                  <div class="form-group row">\
+                     <div class="col-sm-12">\
+                      <input type="text" class="form-control" placeholder="Name Of Document" name="documentname[]">\
+                     </div>\
+                  </div>\
+               </div>\
+                      \
+                      <div class="col-md-4">\
+                        <label style="font-family: Times new roman;">Upload Document</label>\
+                      <input type="file" class="form-control" name="document[]">\
+\
+                      </div>\
+                      <div class="col-md-2">\
+                        <label style="font-family: Times new roman; color: white;">Upload</label><br>\
+                      <input type="button" class="btn btn-success" value="+" onclick="upload_add()" name="" id="add_upload">&nbsp;<input type="button" class="btn btn-danger remove_upload" value="-" name="" id="remove_upload">\
+                    </div>\
+                       </div>';
+
+  $('.append_upload').append(upload_details);
+  $("select").select2();
+
+}
+
+$(document).on("click",".remove_upload",function(){
+
+  if($(".remove_upload").length > 1){
+
+    $(this).closest('.upload').remove();
+  }
+  else{
+    alert("Atleast One row present");
+
+  }
+
+  });
+
 function item_details_sno(){
   $(".item_s_no").each(function(key,index){
       $(this).html((key+1));
@@ -1636,6 +1976,7 @@ function calc_exclusive()
   var rate_inclusive = $('#inclusive').val();
   var tax_rate = $('.tax_rate').val();
   var mrp = $('.mrp').val();
+  var checkbox = $('#check').prop('checked');
 
 
 
@@ -1646,27 +1987,9 @@ function calc_exclusive()
     $('#inclusive').val('');
     $('#quantity').focus();
   }
-
-  // else if(mrp == '')
-  // {
-  //   alert('Please Select Any Item');
-  //   $('#exclusive').val('');
-  //   $('#inclusive').val('');
-  // }
-  // else if(parseFloat(rate_inclusive)>parseFloat(mrp))
-  // {
-  //   alert('Rate Exceeds The MRP!!');
-  //   $('#exclusive').val('');
-  //   $('#inclusive').val('');
-  // }
   
-  else
+  else if (checkbox == false)
   {
-    // if(quantity == 0)
-    // {
-    //   quantity =1;
-    //   $('#quantity').val(1);
-    // }
   
       var total = parseInt(quantity)*parseFloat(rate_exclusive);
     
@@ -1717,6 +2040,52 @@ function calc_exclusive()
     }
 
    } 
+
+   else
+   {
+  
+      var total = parseInt(quantity)*parseFloat(rate_exclusive);
+    
+    $('#amount').val(total.toFixed(2));
+
+    if(tax_rate == '')
+    {
+      $('#net_price').val(total.toFixed(2));
+    }
+    else
+    {
+
+      var rate = parseFloat(tax_rate)/100;
+      var gst_rate = parseFloat(rate_exclusive)*parseFloat(rate);
+      var gst_rate_inclusive = parseFloat(rate_exclusive)+parseFloat(gst_rate);
+      $('#inclusive').val(gst_rate_inclusive.toFixed(2));
+      if($('#inclusive').val()>parseFloat(mrp))
+      {
+        if(mrp == 0 || mrp == '')
+        {
+          $('.gst').val(0);
+          $('#net_price').val(total.toFixed(2));
+        }
+        else
+        {
+          alert('Rate Exceeds The MRP!!');
+        $('#exclusive').val('');
+        $('#inclusive').val('');
+        }
+        
+      }
+      else
+      {
+      $('.gst').val(0);
+
+      $('#net_price').val(total.toFixed(2));
+      }
+      
+
+    }
+
+   } 
+   margin_checking();
   
 }
 
@@ -1728,6 +2097,7 @@ function calc_inclusive()
   var rate_inclusive = $('#inclusive').val();
   var mrp = $('.mrp').val();
   var tax_rate = $('.tax_rate').val();
+  var checkbox = $('#check').prop('checked');
   
 
   if (quantity == '') 
@@ -1737,39 +2107,14 @@ function calc_inclusive()
     $('#inclusive').val('');
     $('#quantity').focus();
   }
-  // else if(mrp == '')
-  // {
-  //   alert('Please Select Any Item');
-  //   $('#exclusive').val('');
-  //   $('#inclusive').val('');
-  // }
-  
-  // else if(parseFloat(rate_inclusive)>parseFloat(mrp))
-  // {
-  //   if(mrp == 0 || mrp == '')
-  //       {
-
-  //       }
-  //       else
-  //       {
-  //         alert('Rate Exceeds The MRP!!');
-  //       $('#exclusive').val('');
-  //       $('#inclusive').val('');
-  //       }
-  // }
-    else
+    else if (checkbox == false)
     {
     if(tax_rate == '')
     {
       $('#net_price').val(total.toFixed(2));
     }
-    else
+    else 
     {
-      // if(quantity == 0)
-      // {
-      //   quantity =1;
-      //   $('#quantity').val(1);
-      // }
 
       var rate=parseFloat(tax_rate)/100+1;
       var actual_tax = parseFloat(tax_rate)/100;
@@ -1798,6 +2143,44 @@ function calc_inclusive()
     }
 
   }
+
+  else
+  {
+    if(tax_rate == '')
+    {
+      $('#net_price').val(total.toFixed(2));
+    }
+    else 
+    {
+
+      var rate=parseFloat(tax_rate)/100+1;
+      var actual_tax = parseFloat(tax_rate)/100;
+      var gst_rate = parseFloat(rate_inclusive)/parseFloat(rate);
+      var total = parseInt(quantity)*parseFloat(gst_rate.toFixed(2));
+      $('#amount').val(total.toFixed(2));
+      $('#exclusive').val(gst_rate.toFixed(2));
+      if(parseFloat(rate_inclusive)>parseFloat(mrp))
+      {
+        if(mrp == 0 || mrp == '')
+            {
+
+            }
+            else
+            {
+              alert('Rate Exceeds The MRP!!');
+            $('#exclusive').val('');
+            $('#inclusive').val('');
+            }
+      }
+      var net_val = parseFloat(total)*parseFloat(actual_tax);
+      $('.gst').val(0);
+      $('#net_price').val(total.toFixed(2));
+
+    }
+
+  }  
+
+  margin_checking();
     
   
 }
@@ -1832,6 +2215,7 @@ function discount_calc()
 {
   var discount = $(".discount_rs").val();
   var discount_percentage = $(".discount_percentage").val();
+  var checkbox = $('#check').prop('checked');
   //alert(discount_percentage);
   var amount = $("#amount").val();
   var quantity = $("#quantity").val();
@@ -1857,14 +2241,9 @@ function discount_calc()
     
   }
 
-  else
+  else if (checkbox == false)
   {
 
-  // var rate_exclusive_disc_val = parseFloat(exclusive) - parseFloat(discount);
-  // var rate_inclusive_disc_val = parseFloat(inclusive) - parseFloat(discount);
-
-  // $('#rate_exclusive_disc_val').val(rate_exclusive_disc_val.toFixed(2));
-  // $('#rate_inclusive_disc_val').val(rate_inclusive_disc_val.toFixed(2));
   var disc_amount_exclusive = parseFloat(discount)*100/parseFloat(exclusive);
 
    $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
@@ -1882,11 +2261,32 @@ function discount_calc()
   $('#net_price').val(total_net_val.toFixed(2));
 
   }
+
+  else
+  {
+
+  var disc_amount_exclusive = parseFloat(discount)*100/parseFloat(exclusive);
+
+   $(".discount_percentage").val(disc_amount_exclusive.toFixed(2));
+
+  calc_exclusive();
+  var amount = $(".amount").val();
+  var discounts = parseInt(quantity)*parseFloat(discount);
+  $('#discounts').val(discounts.toFixed(2));
+  var rate=parseFloat(tax_rate)/100;
+  var net_val = parseFloat(amount)*parseFloat(rate);
+  $('.gst').val(0);
+  $('#net_price').val(amount.toFixed(2));
+
+  }
   
 }
 
 function discount_calc1()
 {
+
+  var checkbox = $('#check').prop('checked');
+
   var discount = $(".discount_rs").val();
   var discount_percentage = $(".discount_percentage").val();
   var amount = $("#amount").val();
@@ -1911,7 +2311,7 @@ function discount_calc1()
 
   }
   
-  else
+  else if (checkbox == false)
   {
 
   var disc_rate = parseFloat(discount_percentage)/100;
@@ -1935,6 +2335,29 @@ function discount_calc1()
   $('#net_price').val(total_net_val.toFixed(2));
 
   }
+
+  else
+  {
+
+  var disc_rate = parseFloat(discount_percentage)/100;
+  var disc_val_exclusive = parseFloat(exclusive)*parseFloat(disc_rate);
+  var disc_val_inclusive = parseFloat(inclusive)*parseFloat(disc_rate);
+  
+  var disc_amount_exclusive = parseFloat(exclusive)-parseFloat(disc_val_exclusive);
+  var disc_amount_inclusive = parseFloat(inclusive)-parseFloat(disc_val_inclusive);
+
+  $(".discount_rs").val(disc_val_exclusive.toFixed(2));
+  calc_exclusive();
+  var amount = $(".amount").val();
+  var discounts = parseInt(quantity)*parseFloat(disc_val_exclusive.toFixed(2));
+  $('#discounts').val(discounts.toFixed(2));
+  var rate=parseFloat(tax_rate)/100;
+  var net_val = parseFloat(amount)*parseFloat(rate);
+  $('.gst').val(0);
+
+  $('#net_price').val(amount.toFixed(2));
+
+  }
   
   
   
@@ -1942,6 +2365,8 @@ function discount_calc1()
 
 function item_codes(item_code,append_value)
 {
+
+  var checkbox = $('#check').prop('checked');
 
 if(append_value == 1)
 {
@@ -1971,7 +2396,9 @@ if(append_value == 1)
              igst =data[1].igst;
              barcode = data[2].barcode;
 
-             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             if (checkbox == false) 
+             {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
               var tax_master_id = data[1].tax_master[new_val];
 
@@ -1989,6 +2416,28 @@ if(append_value == 1)
               }
 
              }
+             }
+             else
+            {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(0);
+              }
+              else
+              {
+
+              }
+
+             }
+            }
 
               var first_data='<option value="'+id+'">'+uom_name+'</option>';
               $('.uom_exclusive').append(first_data);
@@ -2087,7 +2536,9 @@ else
              igst =data[1].igst;
              barcode = data[2].barcode;
 
-             for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             if (checkbox == false) 
+             {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
              {
               var tax_master_id = data[1].tax_master[new_val];
 
@@ -2105,6 +2556,28 @@ else
               }
 
              }
+             }
+             else
+            {
+              for(var new_val = 0; new_val < data[1].cnt; new_val++)
+             {
+              var tax_master_id = data[1].tax_master[new_val];
+
+              var tax_master_input_val = $('#'+tax_master_id).attr('class').split(' ')[1];
+
+              if(tax_master_id == tax_master_input_val)
+              {
+                var sum = parseFloat($('#'+tax_master_id).val()) + parseFloat(data[1].tax_val[new_val]);
+
+                $('#'+tax_master_id).val(0);
+              }
+              else
+              {
+
+              }
+
+             }
+            }
               
               var first_data='<option value="'+id+'">'+uom_name+'</option>';
               //console.log(first_data);
@@ -2334,7 +2807,20 @@ function item_with_same_data(item_code)
 
 function find_cat()
 {
-  
+
+  var supplier_id =  $('#supplier_id').val();
+  if(supplier_id == '')
+  {
+    alert('Please Select Party Name First');
+  }
+  else
+  {
+
+  $('#margin_block').val(0);   
+  $('#exclusive').val('');
+  $('#inclusive').val('');
+  $('#exclusive').focus();  
+
   $('#categories').val("");
   $('#brand').val("");
   $("select").select2();
@@ -2343,6 +2829,8 @@ function find_cat()
   $('.row_brand').remove(); 
   $('.row_category').remove();
   $('#cat').dialog({width:900},{height:250}).prev(".ui-dialog-titlebar").css("background","#28a745").prev(".ui-dialog.ui-widget-content");
+
+  }
     
 }
 
@@ -2520,6 +3008,23 @@ function code_check()
 function supplier_details()
 {
 
+  $( "#discount_div" ).load(window.location.href + " #discount_div" );
+  $( "#team-list" ).load(window.location.href + " #team-list" );
+  $( ".append_expense" ).load(window.location.href + " .append_expense" );
+  $( ".taxes" ).load(window.location.href + " .taxes" );
+  $('.total_net_value').text('00.00');
+  $('.round_off').val('0');
+  
+  $('.no_items').text('');
+  $('.invoice_val').text('');
+  $('.purchase_type').text('');
+  $('.purchase_date').text('');
+  $('.estimation_no').text('');
+  $('.estimation_date').text('');
+  $('.p_estimation_date').val('');
+  $('.po_date').val('');
+  $('.receipt_date').val('');
+
   var supplier_id=$('.supplier_id').val();
 
 
@@ -2546,11 +3051,7 @@ function estimation_details()
 
   var p_estimation_no=$('.p_estimation_no').val();
   
-  $('.po_no').val('');
-  $('.po_date').val('');
-  $('.r_out_no').val('');
-  $('.r_out_date').val('');
-  $('select').select2();
+  
 
   $.ajax({
            type: "POST",
@@ -2561,6 +3062,11 @@ function estimation_details()
             $('.expense').remove();
             $('.purchase_type').hide();
             $('.purchase_date').hide();
+            $('.po_no').val('');
+            $('.po_date').val('');
+            $('.r_out_no').val('');
+            $('.r_out_date').val('');
+            $('select').select2();
             // $('.purchase_order').hide();
             var result=JSON.parse(data);
             if(result.status>0){
@@ -2643,13 +3149,7 @@ function po_details()
   }
 
   var po_no=$('.po_no').val();
-  $('.purchase_type').show();
-  $('.purchase_date').show();
-  $('.p_estimation_no').val('');
-  $('.p_estimation_date').val('');
-  $('.r_out_no').val('');
-  $('.r_out_date').val('');
-  $('select').select2();
+  
 
   $.ajax({
            type: "POST",
@@ -2658,6 +3158,15 @@ function po_details()
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
+
+            $('.purchase_type').show();
+            $('.purchase_date').show();
+            $('.p_estimation_no').val('');
+            $('.p_estimation_date').val('');
+            $('.r_out_no').val('');
+            $('.r_out_date').val('');
+            $('select').select2();
+
             var result=JSON.parse(data);
             if(result.status>0){
 $('.append_proof_details').append(result.data);
@@ -2742,17 +3251,7 @@ function r_out_details()
   }
 
   var r_out_no=$('.r_out_no').val();
-  $('.p_estimation_no').val('');
-  $('.p_estimation_date').val('');
-  $('.po_no').val('');
-  $('.po_date').val('');
-  $('actual_qty').val('');
-  $('select').select2();
-
-  $('.purchase_type').text('');
-  $('.purchase_date').text('');
-  $('.estimation_date').text('');
-  $('.estimation_no').text('');
+  
 
 
   $.ajax({
@@ -2762,6 +3261,19 @@ function r_out_details()
            success: function(data) {
             $('.tables').remove();
             $('.expense').remove();
+
+            $('.p_estimation_no').val('');
+            $('.p_estimation_date').val('');
+            $('.po_no').val('');
+            $('.po_date').val('');
+            $('actual_qty').val('');
+            $('select').select2();
+
+            $('.purchase_type').text('');
+            $('.purchase_date').text('');
+            $('.estimation_date').text('');
+            $('.estimation_no').text('');
+            
             var result=JSON.parse(data);
             if(result.status>0){
 $('.append_proof_details').append(result.data);

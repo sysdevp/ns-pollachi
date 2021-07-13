@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -12,7 +15,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
-            <li><button type="button" class="btn btn-success"><a href="">Back</a></button></li>
+            <li><button type="button" class="btn btn-success"><a href="{{route('payment_process.index')}}">Back</a></button></li>
           </ul>
         </div>
       </div>
@@ -24,20 +27,37 @@
       {{csrf_field()}}
 
         <div class="form-row">
+
+          <div class="col-md-6">
+                  <div class="form-group row">
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher Types :<?php echo Mandatoryfields::mandatory('paymentprocess_vouchertype');?></label>
+                     <div class="col-md-8">
+                      <select class="js-example-basic-multiple col-md-12 form-control custom-select voucher_type" name="voucher_type" onchange="voucher_types()" id="voucher_type" <?php echo Mandatoryfields::validation('paymentprocess_vouchertype');?> autofocus>
+                           <option value="">Choose Voucher Types</option>
+                           @foreach($type as $value)
+                           <option value="{{ $value->id }}">{{ $value->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                  </div>
+               </div>
+
           <div class="col-md-6">
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher No:</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control voucher_no" placeholder="Voucher No" name="voucher_no" value="">
+                <input type="hidden" class="form-control voucher_no" placeholder="Voucher No" name="voucher_no" value="">
+
+                <font size="2" id="voucher_no" class="vouchers"></font>
                 
               </div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher Date :</label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher Date :<?php echo Mandatoryfields::mandatory('paymentprocess_voucherdate');?></label>
               <div class="col-sm-8">
-                <input type="date" class="form-control date" placeholder="Date" value="{{ $date }}" name="payment_date" value="" >
+                <input type="date" class="form-control date" placeholder="Date" value="{{ $date }}" name="payment_date" value="" <?php echo Mandatoryfields::validation('paymentprocess_voucherdate');?>>
                 
               </div>
             </div>
@@ -45,9 +65,9 @@
 
           <div class="col-md-6">
                   <div class="form-group row">
-                    <label for="validationCustom01" class="col-sm-4 col-form-label">Party Name :</label>
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Party Name :<?php echo Mandatoryfields::mandatory('paymentprocess_supplierid');?></label>
                      <div class="col-sm-6">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_det()"  name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" onchange="supplier_det()"  name="supplier_id" id="supplier_id" <?php echo Mandatoryfields::validation('paymentprocess_supplierid');?>>
                            <option value="">Choose Supplier Name</option>
                            @foreach($supplier as $suppliers)
                            <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -66,9 +86,9 @@
         <div class="form-row">
         <div class="col-md-6">
             <div class="form-group row">
-              <label class="col-sm-4 col-form-label" for="validationCustom01">Purchase Entry No</label><br>
+              <label class="col-sm-4 col-form-label" for="validationCustom01">Purchase Entry No<?php echo Mandatoryfields::mandatory('paymentprocess_purchaseentryno');?></label><br>
               <div class="col-sm-8">
-				 <select class="js-example-basic-multiple col-12 form-control custom-select purchase_entry_no" name="p_no" onchange="purchase_det()" id="purchase_entry_no">
+				 <select class="js-example-basic-multiple col-12 form-control custom-select purchase_entry_no" name="p_no" onchange="purchase_det()" id="purchase_entry_no" <?php echo Mandatoryfields::validation('paymentprocess_purchaseentryno');?>>
                            <option value="">Choose Purcahse Entry No</option>
                            @foreach($purchase_entry as $purchase_entries)
                            <option value="{{ $purchase_entries->p_no }}">{{ $purchase_entries->p_no }}</option>
@@ -82,9 +102,9 @@
         <div class="form-row">
         <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Ledger : </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Ledger : <?php echo Mandatoryfields::mandatory('paymentprocess_nature');?></label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature">
+                <select class="js-example-basic-multiple col-12 form-control custom-select nature"  name="nature" id="nature" <?php echo Mandatoryfields::validation('paymentprocess_nature');?>>
                            <option value="">Ledger</option>
                            <option value="1">Pending</option>
                            <option value="2">Advance</option>
@@ -94,9 +114,9 @@
           </div>
            <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode : </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label">Mode :<?php echo Mandatoryfields::mandatory('paymentprocess_mode');?> </label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode">
+                <select class="js-example-basic-multiple col-12 form-control custom-select mode" onchange="payment_mode(this.value)"  name="mode" id="mode" <?php echo Mandatoryfields::validation('paymentprocess_mode');?>>
                            <option value="">Choose Mode</option>
                            <option value="1">Cash</option>
                            <option value="2">Bank</option>
@@ -111,9 +131,9 @@
          <div class="form-row" id="cash_bill">
         <div class="col-md-6">
             <div class="form-group row">
-              <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : </label>
+              <label for="validationCustom01" class="col-sm-4 col-form-label"> Bill Amount : <?php echo Mandatoryfields::mandatory('paymentprocess_billamount');?></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control amount" name="bill_amount" value="0">
+                <input type="text" class="form-control amount" name="bill_amount" value="0" <?php echo Mandatoryfields::validation('paymentprocess_billamount');?>>
               </div>
             </div>
           </div>
@@ -211,6 +231,98 @@
 </div>
 
 <script type="text/javascript">
+
+  function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('payment_process/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
   $(document).on("click",".refresh_supplier_id",function(){
       var supplier_dets=refresh_supplier_master_details();
       $(".supplier_id").html(supplier_dets);

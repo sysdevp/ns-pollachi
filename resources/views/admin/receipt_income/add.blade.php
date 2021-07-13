@@ -23,6 +23,22 @@
       <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('payment_request.store')}}" enctype="multipart/form-data">
       {{csrf_field()}}
 
+      <div class="form-row">
+      <div class="col-md-6">
+                  <div class="form-group row">
+                    <label for="validationCustom01" class="col-sm-4 col-form-label">Voucher Types :</label>
+                     <div class="col-md-8">
+                      <select class="js-example-basic-multiple col-md-12 form-control custom-select voucher_type" name="voucher_type" onchange="voucher_types()" id="voucher_type" >
+                           <option value="">Choose Voucher Types</option>
+                           @foreach($type as $value)
+                           <option value="{{ $value->id }}">{{ $value->type }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
         <div class="form-row">
           <div class="col-md-6">
             <div class="form-group row">
@@ -378,6 +394,98 @@
 </div>
 
 <script type="text/javascript">
+
+  function voucher_types(){
+
+
+var voucher_type = $('.voucher_type').val();
+
+
+  $.ajax({
+                type: "POST",
+                url: "{{ url('receipt_income/voucher_type/') }}",
+                data: { voucher_type : voucher_type},
+                success: function(data) 
+                {
+
+                  $('.voucher_no').val(data);
+                  $('.vouchers').text(data);
+                  // alert(data);
+                  return false;
+
+                  var prefix = data.prefix;
+                  var suffix = data.suffix;
+                  var starting = data.starting_no;
+                  var digits = data.no_digits;
+
+                  if (starting == '') 
+                  {
+                    var starting = 1;
+
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    $('.voucher_no').val(prefix+preview+suffix);
+                    $('.vouchers').text(prefix+preview+suffix);
+                  }
+                  else
+                  {
+                    var length = starting.toString().length;
+                    if (length >= digits) 
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length >= max ? str: '';
+                    }
+
+                    var preview = pad( starting, digits);
+
+                    }
+                    else
+                    {
+
+                      function pad (str, max) {
+                      str = str.toString();
+                      return str.length < max ? pad("0" + str, max) : str;
+                    }
+
+                    var preview = pad("0" + starting, digits);
+
+                    }
+
+                    var voucher = prefix+preview+suffix;
+                    $('.voucher_no').val(voucher);
+                    $('.vouchers').text(voucher);
+                  }
+
+
+                }
+        });
+
+}
+
   $(document).on("click",".refresh_supplier_id",function(){
       var supplier_dets=refresh_supplier_master_details();
       $(".supplier_id").html(supplier_dets);

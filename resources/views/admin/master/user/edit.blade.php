@@ -33,7 +33,7 @@
                   <div class="form-group row">
                   <label for="validationCustom01" class="col-sm-4 col-form-label">Name<span class="mandatory">*</span></label>
                     <div class="col-sm-8">
-                    <select class="js-example-basic-multiple col-12 form-control custom-select employee_id required_for_valid" error-data="Enter Name" name="employee_id" required>
+                    <select class="js-example-basic-multiple col-12 form-control custom-select employee_id required_for_valid" error-data="Enter Name" name="employee_id" required tabindex="1" autofocus>
                         <option value="">Choose Name</option>
                         @foreach ($employee as $value)
                     <option value="{{$value->id}}" {{ old('employee_id',$user->employee_id) == $value->id ? 'selected' : '' }} >{{$value->name}}</option>
@@ -52,7 +52,7 @@
                   <div class="form-group row">
                     <label for="validationCustom01" class="col-sm-4 col-form-label">User Name<span class="mandatory">*</span></label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control user_name only_allow_alp_num_dot_com_amp" placeholder="User Name" name="user_name" value="{{old('user_name',$user->user_name)}}" required>
+                      <input type="text" class="form-control user_name only_allow_alp_num_dot_com_amp" placeholder="User Name" name="user_name" value="{{old('user_name',$user->user_name)}}" required tabindex="2">
                       <span class="mandatory"> {{ $errors->first('user_name')  }} </span>
                       <div class="invalid-feedback">
                         Enter valid User Name
@@ -91,7 +91,7 @@
                   <div class="form-group row">
                   <label for="validationCustom01" class="col-sm-4 col-form-label">Role<span class="mandatory">*</span></label>
                     <div class="col-sm-8">
-                    <select class="js-example-basic-multiple col-12 form-control custom-select role_id required_for_valid" error-data="Enter Role" name="role_id" >
+                    <select class="js-example-basic-multiple col-12 form-control custom-select role_id required_for_valid" error-data="Enter Role" name="role_id" tabindex="3">
                         <option value="">Choose Role</option>
                         @foreach ($role as $value)
                     <option value="{{$value->id}}"  {{ old('role_id',$user->role_id) == $value->id  ? 'selected' : '' }}>{{$value->name}}</option>
@@ -107,7 +107,7 @@
   
     </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" type="submit">Submit</button>
+          <button class="btn btn-success" type="submit" tabindex="4">Submit</button>
         </div>
       </form>
     </div>

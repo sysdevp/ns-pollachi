@@ -1,0 +1,2 @@
+id,entry_date,location_id,item_id,quantity,remark,created_by,created_at,updated_by,updated_at,deleted_by,deleted_at,active_status,uom_id
+1,2021-01-12,1,1,21,test,0,12-01-2021 15:22,0,12-01-2021 15:22,NULL,NULL,1,1

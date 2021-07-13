@@ -29,7 +29,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Item Name</label>
               <div class="col-sm-8">
-                <select class="js-example-basic-multiple form-control col-12 custom-select item_id" name="item_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select item_id" name="item_id" required autofocus>
                   <option value="{{ $item_tax_details->item->id }}">{{ $item_tax_details->item->name }}</option>
                   @foreach($item as $key=> $value)
                   <option value="{{ $value->id }}" >{{ $value->name }}</option>

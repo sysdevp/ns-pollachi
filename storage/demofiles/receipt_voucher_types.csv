@@ -1,0 +1,4 @@
+"id","name","type","prefix","suffix","starting_no","updated_no","no_digits","created_at","updated_at"
+"2","Credit Note","Test","JUST","FINAL","10",NULL,"6","2021-02-16 18:07:48","2021-02-16 18:07:48"
+"5","Payment Request","Test Payment Type 1","test","latest","20","20","5","2021-02-24 11:47:50","2021-02-24 12:07:23"
+"6","Receipt Of Income","Asasd","JUST","FINAL","30","30","6","2021-02-24 13:13:27","2021-02-24 17:01:51"

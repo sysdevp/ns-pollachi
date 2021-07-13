@@ -113,4 +113,94 @@ class AccountGroupTaxController extends Controller
         return Redirect::back()->with('success','Deleted Successfully');
 
     }
+
+    public function import()
+    {
+       return view('admin.master.account_group_tax.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $account_group=$filesop[1];   echo "</br>";
+                    $tax=$filesop[2];   echo "</br>";
+                    $tax_value=$filesop[3];   echo "</br>";
+                    $type=$filesop[4];   echo "</br>";
+
+                    $account_group = str_replace(' ', '', $account_group);
+                    $account_groups=AccountGroup::whereRaw("REPLACE(`name`, ' ' ,'') = '".$account_group."'")->first();
+
+                    $tax = str_replace(' ', '', $tax);
+                    $taxs=Tax::whereRaw("REPLACE(`name`, ' ' ,'') = '".$tax."'")->first();
+
+                    $tax_id = @$taxs->id;
+                    $account_group_id = @$account_groups->id;
+
+                    if($account_groups != '' && $taxs != '')
+                    {
+                        $insert = new AccountGroupTax();
+
+                        $insert->account_group = $account_group_id;
+                        $insert->tax_id  = $tax_id;
+                        $insert->tax_value = $tax_value;
+                        $insert->type = $type;
+
+                        $insert->save();
+                        $total_count++;
+
+                    }
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Account Group Taxes Imported successfully');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
 }

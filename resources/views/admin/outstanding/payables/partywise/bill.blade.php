@@ -88,7 +88,7 @@ table, th, td {
                   <label style="font-family: Times new roman;">Party Name</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id" autofocus="">
                            <option value="">Choose Party Name</option>
                            @foreach($supplier as $suppliers)
                            <option value="{{ $suppliers->id }}">{{ $suppliers->name }}</option>
@@ -259,18 +259,18 @@ table, th, td {
                    @foreach($purchaseentry_datas as $key=> $value)
                     <tr>
                       <td>{{ $key+1 }}</td>
-                      <td>{{ $value->p_no }}</td>
-                      <td>{{ $value->p_date }}</td>
-                      <td>{{ $value->supplier->name }}</td>
-                      <td>{{ $value->total_net_value }}</td>
-                      <td>{{ $value->paid_amount }}</td>
-                      <td>{{ $value->pending_amount }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->no_of_days }}</td>
-                      <td>{{ $value->supplier->name }}</td>
-                      <td>{{ $value->supplier->phone_no }}</td>
-                      <td>{{ $value->supplier->email }}</td>
+                      <td>{{ @$value->p_no }}</td>
+                      <td>{{ @$value->p_date }}</td>
+                      <td>{{ @$value->supplier->name }}</td>
+                      <td>{{ @$value->total_net_value }}</td>
+                      <td>{{ @$value->paid_amount }}</td>
+                      <td>{{ @$value->pending_amount }}</td>
+                      <td>{{ @$value->no_of_days }}</td>
+                      <td>{{ @$value->no_of_days }}</td>
+                      <td>{{ @$value->no_of_days }}</td>
+                      <td>{{ @$value->supplier->name }}</td>
+                      <td>{{ @$value->supplier->phone_no }}</td>
+                      <td>{{ @$value->supplier->email }}</td>
                      
             </tr>
          @endforeach

@@ -8,11 +8,15 @@ use App\Models\AccountType;
 use App\Models\AddressDetails;
 use App\Models\AddressType;
 use App\Models\Bank;
+use App\Models\Bankbranch;
 use App\Models\BankDetails;
 use App\Models\Customer;
 use App\Models\CustomerSupplier;
 use App\Models\State;
+use App\Models\District;
+use App\Models\City;
 use App\Models\PriceLevel;
+use App\Models\SalesMan;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Redirect;
@@ -34,12 +38,13 @@ class CustomerController extends Controller
         $bank = Bank::all();
         $price_level = PriceLevel::all();
         $account_type = AccountType::all();
+        $salesman = SalesMan::all();
         $exist_customer_dets = CustomerSupplier::where('type', 'Customer')->get();
-        return view('admin.master.customer.add', compact('address_type', 'state', 'bank', 'account_type', 'exist_customer_dets','price_level'));
+        return view('admin.master.customer.add', compact('address_type', 'state', 'bank', 'account_type', 'exist_customer_dets','price_level','salesman'));
     }
 
 
-    public function store(CustomerRequest $request)
+    public function store(Request $request)
     {
         $customer_id = "";
         if ($request->customer_type == 0) {
@@ -68,6 +73,7 @@ class CustomerController extends Controller
         $customer->opening_balance = $request->opening_balance;
         $customer->remark = $request->remark;
         $customer->price_level = $request->price_level;
+        $customer->salesman = $request->salesman;
         $customer->customer_mode = $request->customer_mode;
         $customer->created_by = 0;
         $customer->updated_by = 0;
@@ -76,6 +82,7 @@ class CustomerController extends Controller
         if ($customer->save()) {
 
             $batch_insert_array = array();
+            if($request->has('address_line_1')){
             foreach ($request->address_type_id as $key => $value) {
                 $data_to_store = array(
                     'address_table' => "Cus",
@@ -95,6 +102,7 @@ class CustomerController extends Controller
                     'updated_at' => $now,
                 );
                 $batch_insert_array[] = $data_to_store;
+            }
             }
             $batch_insert_for_bank_details = [];
             if ($request->has('bank_id')) {
@@ -150,14 +158,16 @@ class CustomerController extends Controller
         $account_type = AccountType::all();
         $customer = Customer::find($id);
         $price_level = PriceLevel::all();
+        $salesman = SalesMan::all();
+        // echo '<pre>';print_r($customer); exit();
         $exist_customer_dets = CustomerSupplier::where('type', 'Customer')->get();
         $customer_bank_details = BankDetails::where('bank_ref_id', $id)->where('ref_table', 'Cus')->get();
         $customer_address_details = AddressDetails::where('address_ref_id', $id)->where('address_table', 'Cus')->get();
-        return view('admin.master.customer.edit', compact('exist_customer_dets', 'customer', 'customer_bank_details', 'customer_address_details', 'address_type', 'state', 'bank', 'account_type','price_level'));
+        return view('admin.master.customer.edit', compact('exist_customer_dets', 'customer', 'customer_bank_details', 'customer_address_details', 'address_type', 'state', 'bank', 'account_type','price_level','salesman'));
     }
 
 
-    public function update(CustomerRequest $request, Customer $customer, $id)
+    public function update(Request $request, Customer $customer, $id)
     {
         $customer = Customer::find($id);
         $customer_id = "";
@@ -195,6 +205,7 @@ class CustomerController extends Controller
         $customer->opening_balance = $request->opening_balance;
         $customer->remark = $request->remark;
         $customer->price_level = $request->price_level;
+        $customer->salesman = $request->salesman;
         $customer->updated_by = 0;
         $now = Carbon::now()->toDateTimeString();
 
@@ -324,6 +335,162 @@ class CustomerController extends Controller
         } else {
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
+    }
+
+    public function import()
+    {
+       return view('admin.master.customer.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+           // exit();
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+        if(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+        { 
+
+                    $salutation=$filesop[1];   echo "</br>";
+                    $company_name=$filesop[2];   echo "</br>";
+                    $name=$filesop[3];   echo "</br>";
+                    $code=$filesop[4];   echo "</br>";
+                    $phone_no=$filesop[5];   echo "</br>";
+                    $whatsapp_no=$filesop[6];   echo "</br>";
+                    $email=$filesop[7];   echo "</br>";
+                    $pan_card=$filesop[8];   echo "</br>";
+                    $gst_no=$filesop[9];   echo "</br>";
+                    $max_credit_limit=$filesop[10];   echo "</br>";
+                    $max_credit_days=$filesop[11];   echo "</br>";
+                    $opening_balance=$filesop[12];   echo "</br>";
+                    $remark=$filesop[13];   echo "</br>";
+                    // $price_level=$filesop[14];   echo "</br>";
+                    // $salesman=$filesop[15];   echo "</br>";
+
+                    $insert  = TRUE;
+                   
+        }
+        if($insert == 1)
+        {
+            while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                    $salutation=$filesop[1];   echo "</br>";
+                    $company_name=$filesop[2];   echo "</br>";
+                    $name=$filesop[3];   echo "</br>";
+                    $code=$filesop[4];   echo "</br>";
+                    $phone_no=$filesop[5];   echo "</br>";
+                    $whatsapp_no=$filesop[6];   echo "</br>";
+                    $email=$filesop[7];   echo "</br>";
+                    $pan_card=$filesop[8];   echo "</br>";
+                    $gst_no=$filesop[9];   echo "</br>";
+                    $max_credit_limit=$filesop[10];   echo "</br>";
+                    $max_credit_days=$filesop[11];   echo "</br>";
+                    $opening_balance=$filesop[12];   echo "</br>";
+                    $remark=$filesop[13];   echo "</br>";
+                    // $price_level=$filesop[14];   echo "</br>";
+                    // $salesman=$filesop[15];   echo "</br>";
+
+                    $customer =new Customer();
+
+                    $customer->company_name       = $company_name;
+                    $customer->name       = $name;
+                    $customer->code      =  $code;
+                    $customer->phone_no      =  $phone_no;
+                    $customer->email      =  $email;
+                    $customer->whatsapp_no      =  $whatsapp_no;
+                    $customer->pan_card      =  $pan_card;
+                    $customer->gst_no      =  $gst_no;
+                    $customer->max_credit_limit      =  $max_credit_limit;
+                    $customer->max_credit_days      =  $max_credit_days;
+                    $customer->opening_balance      =  $opening_balance;
+                    $customer->remark      =  $remark;
+                    // $customer->price_level      =  $price_level;
+                    // $customer->salesman      =  $salesman;
+
+                    // $customer->save();
+
+                    if($customer->save())
+                    {
+                        $address_line_1=$filesop[16];   echo "</br>";
+                        $address_line_2=$filesop[17];   echo "</br>";
+                        $land_mark=$filesop[18];   echo "</br>";
+                        $state_name=$filesop[19];   echo "</br>";
+                        $district_name=$filesop[20];   echo "</br>";
+                        $city_name=$filesop[21];   echo "</br>";
+                        $postal_code=$filesop[22];   echo "</br>";
+
+                        $bank_name=$filesop[23];   echo "</br>";
+                        $branch_name=$filesop[24];   echo "</br>";
+                        $ifsc=$filesop[25];   echo "</br>";
+                        $account_type=$filesop[26];   echo "</br>";
+                        $account_holder_name=$filesop[27];   echo "</br>";
+                        $account_no=$filesop[28];   echo "</br>";
+
+                        $state = State::where('name',$state_name)->first();
+                        $state_id = @$state->id;
+
+                        $district = District::where('name',$district_name)->first();
+                        $district_id = @$district->id;
+
+                        $city = City::where('name',$city_name)->first();
+                        $city_id = @$city->id;
+
+                        $bank_name = str_replace(' ', '', $bank_name);
+                        $banks=Bank::whereRaw("REPLACE(`name`, ' ' ,'') = '".$bank_name."'")->first();
+
+                        $branch_name = str_replace(' ', '', $branch_name);
+                        $branches=Bankbranch::whereRaw("REPLACE(`name`, ' ' ,'') = '".$branch_name."'")->first();
+
+                        $account_type = str_replace(' ', '', $account_type);
+                        $accounttypes=AccountType::whereRaw("REPLACE(`name`, ' ' ,'') = '".$account_type."'")->first();
+
+                        $bank_id = @$banks->id;
+                        $branch_id = @$branches->id;
+                        $account_type_id = @$accounttypes->id;
+
+                        $customer_address =new AddressDetails();
+
+                        $customer_address->address_table='Cus';
+                        $customer_address->address_ref_id=$customer->id;
+                        $customer_address->address_line_1=$address_line_1;
+                        $customer_address->address_line_2=$address_line_2;
+                        $customer_address->land_mark=$land_mark;
+                        $customer_address->state_id=$state_id;
+                        $customer_address->district_id=$district_id;
+                        $customer_address->city_id=$city_id;
+                        $customer_address->postal_code=$postal_code;
+
+                        $customer_address->save();
+
+                        $bank_details =new BankDetails();
+
+                        $bank_details->ref_table='Cus';
+                        $bank_details->bank_ref_id=$customer->id;
+                        $bank_details->bank_id=$bank_id;
+                        $bank_details->branch_id=$branch_id;
+                        $bank_details->account_type_id=$account_type_id;
+                        $bank_details->ifsc=$ifsc;
+                        $bank_details->account_holder_name=$account_holder_name;
+                        $bank_details->account_no=$account_no;
+                        
+                        $bank_details->save();
+
+                    }
+
+            }
+            // exit();
+        }
+
+        return Redirect::back()->with('success', 'Uploaded');    
     }
 
     public function checkname(Request $request)

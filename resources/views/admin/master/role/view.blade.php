@@ -19,7 +19,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover UserAccess">
         <thead>
           <tr>
             <th>S.No</th>
@@ -34,11 +34,15 @@
               <td>{{ $key+1 }}</td>
               <td>{{ $value->name}}</td>
               <td class="icon">
-	<span class="tdshow">
+	             <span class="tdshow">
+                @if($value->id == 1)
+                <a href="{{url('master/role/show/'.$value->id )}}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
+                @else
                 <a href="{{url('master/role/show/'.$value->id )}}" class="px-1 py-0 text-white rounded" title="View">><i class="fa fa-eye" aria-hidden="true"></i></a>
                 <a href="{{url('master/role/edit/'.$value->id )}}" class="px-1 py-0  text-white rounded" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a onclick="return confirm('Are you sure ?')" href="{{url('master/role/delete/'.$value->id )}}" class="px-1 py-0  text-white rounded" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
-				</span>
+                @endif
+				      </span>
               </td>
             </tr>
           @endforeach

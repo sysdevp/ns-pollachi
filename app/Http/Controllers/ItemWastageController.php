@@ -105,7 +105,7 @@ class ItemWastageController extends Controller
         $itemwastage->location_id      = $request->location_id;
         $itemwastage->entry_date      = date("Y-m-d", strtotime($request->entry_date));
         $itemwastage->item_id = $request->item_id;
-        $itemwastage->quantity = $request->_quantity;
+        $itemwastage->quantity = $request->quantity;
         $itemwastage->remark = $request->remark;
         $itemwastage->created_by = 0;
         $itemwastage->updated_by = 0;
@@ -131,6 +131,101 @@ class ItemWastageController extends Controller
         } else {
             return Redirect::back()->with('failure', 'Something Went Wrong..!');
         }
+    }
+
+    public function import()
+    {
+       return view('admin.master.item_wastage.index');
+    }
+
+    public function importCsv(Request $request)
+    {
+
+        $profile_name="";
+         $destinationPath = 'storage/file/';
+         if ($request->hasFile('profile')) {
+            $profile = $request->file('profile');
+            $profile_name = date('Y-m-d').time().'.'.$profile->getClientOriginalExtension();
+            $profile->move($destinationPath, $profile_name);
+           }
+
+        $file = storage_path('file/'.$profile_name);
+
+        $handle = fopen($file, "r");
+
+$i = 0;
+$total_count = 0;
+        while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
+            {
+                if($i >0)
+                {
+
+                    $entry_date=$filesop[1];   echo "</br>";
+                    $location_name=$filesop[2];   echo "</br>";
+                    $item_name=$filesop[3];   echo "</br>";
+                    $quantity=$filesop[4];   echo "</br>";
+                    $remark=$filesop[5];   echo "</br>";
+                    $uom_name=$filesop[6];   echo "</br>";
+
+                    $location_name = str_replace(' ', '', $location_name);
+                    $locations=Location::whereRaw("REPLACE(`name`, ' ' ,'') = '".$location_name."'")->first();
+
+                    $item_name = str_replace(' ', '', $item_name);
+                    $items=Item::whereRaw("REPLACE(`name`, ' ' ,'') = '".$item_name."'")->first();
+
+                    $uom_name = str_replace(' ', '', $uom_name);
+                    $uoms=Uom::whereRaw("REPLACE(`name`, ' ' ,'') = '".$uom_name."'")->first();
+
+                    $location_id = @$locations->id;
+                    $item_id = @$items->id;
+                    $uom_id = @$uoms->id;
+
+                        $itemwastage = new ItemWastage();
+                        $itemwastage->location_id      = $location_id;
+                        $itemwastage->entry_date      = date("Y-m-d", strtotime($entry_date));
+                        $itemwastage->item_id = $item_id;
+                        $itemwastage->quantity = $quantity;
+                        $itemwastage->uom_id = $uom_id;
+                        $itemwastage->remark = $remark;
+                        $itemwastage->created_by = 0;
+                        $itemwastage->updated_by = 0;
+
+                        $itemwastage->save();
+                        $total_count++;
+
+                }
+                $i++;
+
+
+            }
+
+
+
+        return Redirect::back()->with('success', $total_count.'     Item Wastages Imported successfully');    
+    }
+
+    function csvToArray($filename = '', $delimiter = ',')
+    {
+        // echo $filename; exit();
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                     
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 
     

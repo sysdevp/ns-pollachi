@@ -74,7 +74,7 @@
     
     <!-- card header end@ -->
     <div class="card-body" id="DivIdToPrint">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover Estimation">
         <thead>
           <tr>
             <th>S.No</th>

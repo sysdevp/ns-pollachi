@@ -24,6 +24,7 @@ use App\Models\SaleEstimationItem;
 use App\Models\SaleEstimationExpense;
 use App\Models\Customer;
 use DB;
+use App\Models\VoucherNumbering;
 use App\Models\PriceLevel;
 use App\Models\SalesMan;
 use Carbon\Carbon;
@@ -42,6 +43,8 @@ use App\Models\SaleOrderItem;
 use App\Models\SaleOrderBetaItem;
 use App\Models\SaleOrderExpense;
 use App\Models\SaleOrderBetaExpense;
+use App\Models\SalesVoucherType;
+use App\Models\UploadDocument;
 
 class SalesOrderController extends Controller
 {
@@ -200,28 +203,72 @@ class SalesOrderController extends Controller
         $sales_man = SalesMan::all();
         $account_head = AccountHead::all();
         $location = Location::all();
-        
+        $voucher_type = SalesVoucherType::where('name','Sales Order')->get();
 
-        $voucher_num=SaleOrder::orderBy('so_no','DESC')
-                           ->select('so_no')
-                           ->first();
+        // $voucher_num=SaleOrder::orderBy('so_no','DESC')
+        //                    ->select('so_no')
+        //                    ->first();
 
-         if ($voucher_num == null) 
-         {
-             $voucher_no=1;
+        //  if ($voucher_num == null) 
+        //  {
+        //      $voucher_no=1;
 
                              
-         }                  
-         else
-         {
-             $current_voucher_num=$voucher_num->so_no;
-             $voucher_no=$current_voucher_num+1;
+        //  }                  
+        //  else
+        //  {
+        //      $current_voucher_num=$voucher_num->so_no;
+        //      $voucher_no=$current_voucher_num+1;
         
          
+        //  }
+
+        $voucher_num=VoucherNumbering::where('id',8)
+                           ->first();
+
+
+        $digits = $voucher_num->digits;  
+        $starting_no = $voucher_num->starting_no;   
+        $numlength = strlen((string)$voucher_num->starting_no);   
+
+        $vouchers=SaleOrder::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->starting_no == null && $vouchers != null) 
+         {
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->starting_no != null && $vouchers == null)
+         {
+            $next_no=$starting_no+1;
+
+            if($numlength >= $voucher_num->digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$vouchers->voucher_no == null ? $next_no = 1 : $next_no = $vouchers->voucher_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
          }
 
 
-        return view('admin.sales_order.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','customer','tax','sales_man','account_head','location'));
+
+        return view('admin.sales_order.add',compact('date','categories','voucher_no','supplier','item','agent','brand','expense_type','estimation','customer','tax','sales_man','account_head','location','voucher_type'));
     }
 
     /**
@@ -235,34 +282,102 @@ class SalesOrderController extends Controller
 
         if($request->has('check'))
          {
-            $so_no=SaleOrderBeta::orderBy('so_no','DESC')
-                           ->select('so_no')
-                           ->first();
+            // $so_no=SaleOrderBeta::orderBy('so_no','DESC')
+            //                ->select('so_no')
+            //                ->first();
+            $vouchers=SaleOrderBeta::orderBy('created_at','DESC')->select('voucher_no')->first();
          }
          else
          {
-            $so_no=SaleOrder::orderBy('so_no','DESC')
-                           ->select('so_no')
-                           ->first();
+            // $so_no=SaleOrder::orderBy('so_no','DESC')
+            //                ->select('so_no')
+            //                ->first();
+            $vouchers=SaleOrder::orderBy('created_at','DESC')->select('voucher_no')->first();                           
          }
         
 
         $tax = Tax::all();
 
-         if ($so_no == null) 
-         {
-             $voucher_no=1;
+        $voucher_type = $request->voucher_type;
 
-                             
-         }                  
-         else
+        $voucher_num = SalesVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=SaleOrder::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
          {
-             $current_voucher_num=$so_no->so_no;
-             $voucher_no=$current_voucher_num+1;
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
         
          }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+            
+        SalesVoucherType::where('id',$voucher_type)
+                        ->update(['updated_no' => $current_voucher_num]);
+
+         // if ($so_no == null) 
+         // {
+         //     $voucher_no=1;
+
+                             
+         // }                  
+         // else
+         // {
+         //     $current_voucher_num=$so_no->so_no;
+         //     $voucher_no=$current_voucher_num+1;
+        
+         // }
          $voucher_date = $request->voucher_date;
          $estimation_date = $request->estimation_date;
+
+         /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $voucher_no;
+               $upload_document->voucher_date = $voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/
 
          if($request->has('check'))
          {
@@ -275,7 +390,7 @@ class SalesOrderController extends Controller
 
 
          
-
+         $saleorder->voucher_no = $current_voucher_num;
          $saleorder->so_no = $voucher_no;
          $saleorder->so_date = $voucher_date;
          $saleorder->estimation_no = $request->estimation_no;
@@ -499,6 +614,7 @@ class SalesOrderController extends Controller
         $saleorder_items = SaleOrderItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderExpense::where('so_no',$id)->get();
         $tax = SaleOrderTax::where('so_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($saleorder_items);
         $expense_row_count = count($saleorder_expense);
@@ -602,7 +718,7 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.show',compact('saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax'));
+        return view('admin.sales_order.show',compact('saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','tax','upload'));
     }
 
     public function show_beta($id)
@@ -743,6 +859,7 @@ class SalesOrderController extends Controller
         $saleorder_items = SaleOrderItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderExpense::where('so_no',$id)->get();
         $tax = SaleOrderTax::where('so_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($saleorder_items);
         $expense_row_count = count($saleorder_expense);
@@ -846,7 +963,7 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','upload'));
     }
 
     public function edit_beta($id)
@@ -869,6 +986,7 @@ class SalesOrderController extends Controller
         $saleorder_items = SaleOrderBetaItem::where('so_no',$id)->get();
         $saleorder_expense = SaleOrderBetaExpense::where('so_no',$id)->get();
         $tax = SaleOrderBetaTax::where('so_no',$id)->get();
+        $upload = UploadDocument::where('voucher_no',$id)->get();
 
         $item_row_count = count($saleorder_items);
         $expense_row_count = count($saleorder_expense);
@@ -972,7 +1090,7 @@ class SalesOrderController extends Controller
         $item_sgst = $item_gst_rs_sum/2;
         $item_cgst = $item_gst_rs_sum/2;    
 
-        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value'));
+        return view('admin.sales_order.edit',compact('date','categories','supplier','customer','agent','brand','expense_type','item','estimation','saleorder','saleorder_items','saleorder_expense','address','net_value','item_gst_rs','item_amount','item_net_value','item_amount_sum','item_net_value_sum','item_gst_rs_sum','item_discount_sum','item_sgst','item_cgst','expense_row_count','item_row_count','tax','sales_man','account_head','location','beta_checking_value','upload'));
 
     }
 
@@ -998,6 +1116,9 @@ class SalesOrderController extends Controller
 
             $saleorder_expense_data = SaleOrderBetaExpense::where('so_no',$id);
             $saleorder_expense_data->delete();
+
+            $saleorder_upload_data = UploadDocument::where('voucher_no',$id);
+            $saleorder_upload_data->delete();
         }
         else
         {
@@ -1012,6 +1133,9 @@ class SalesOrderController extends Controller
 
             $saleorder_expense_data = SaleOrderExpense::where('so_no',$id);
             $saleorder_expense_data->delete();
+
+            $saleorder_upload_data = UploadDocument::where('voucher_no',$id);
+            $saleorder_upload_data->delete();
         }
         
 
@@ -1019,6 +1143,41 @@ class SalesOrderController extends Controller
         $voucher_no = $request->voucher_no;
 
         $tax = Tax::all();
+
+        if($request->doc_count >0)
+        {
+           foreach ($request->doc_name as $key => $value) {
+            $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->doc_name[$key];
+               $upload_document->document = $request->documents[$key];
+
+               $upload_document->save();
+        } 
+        }
+        
+
+        /*Document Upload*/
+
+        if($files=$request->file('document')){
+            foreach($files as $key => $file){
+                $name=pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).date('Y-m-d').time().'.'.$file->getClientOriginalExtension();
+                $file->move('storage/documents/',$name);
+
+                $upload_document = new UploadDocument(); 
+
+               $upload_document->voucher_no = $request->voucher_no;
+               $upload_document->voucher_date = $request->voucher_date;
+               $upload_document->document_name = $request->documentname[$key];
+               $upload_document->document = $name;
+
+               $upload_document->save();
+            }
+        }        
+
+        /*Document Upload*/ 
 
         if($request->beta_checking_value == 1)
         {
@@ -1029,7 +1188,7 @@ class SalesOrderController extends Controller
             $saleorder = new SaleOrder();
         }
          
-
+         $saleorder->voucher_no = $request->voucher_number;
          $saleorder->so_no = $voucher_no;
          $saleorder->so_date = $voucher_date;
          $saleorder->estimation_no = $request->estimation_no;
@@ -1294,6 +1453,54 @@ class SalesOrderController extends Controller
         return Redirect::back()->with('success', 'Deleted Successfully');
     }
 
+
+    public function voucher_type(Request $request)
+    {
+        $voucher_num = SalesVoucherType::where('id',$request->voucher_type)->first();
+
+        $digits = $voucher_num->no_digits;  
+        $updated_no = $voucher_num->updated_no; 
+        $numlength = strlen((string)$voucher_num->updated_no);   
+
+        $vouchers=SaleOrder::orderBy('created_at','DESC')->select('voucher_no')->first();                  
+
+         if($voucher_num->updated_no == null && $vouchers != null) 
+         {
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+              
+         }                  
+         else if($voucher_num->updated_no != null && $vouchers == null)
+         {
+            $next_no=$updated_no+1;
+
+            if($numlength >= $voucher_num->no_digits) 
+            {
+                $current_voucher_num = $next_no;
+            }
+            else
+            {
+                $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+                
+            }
+          
+
+          $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+        
+         }
+         else 
+         {
+
+            @$voucher_num->updated_no == null ? $next_no = 1 : $next_no = $voucher_num->updated_no+1;
+            $current_voucher_num = str_pad($next_no, $digits, '0', STR_PAD_LEFT);
+            $voucher_no = $voucher_num->prefix.$current_voucher_num.$voucher_num->suffix;
+         }
+
+        return $voucher_no;
+    }
+
+
     public function address_details(Request $request)
     {
        $customer_id = $request->customer_id;
@@ -1382,82 +1589,86 @@ class SalesOrderController extends Controller
 
         if(isset($items->category->gst_no) && $items->category->gst_no != '' && $items->category->gst_no != 0)
         {
-            $tax_master_cgst = Tax::where('name','cgst')->first();
-            $tax_master_sgst = Tax::where('name','sgst')->first();
+            @$tax_master_cgst = Tax::where('name','cgst')->first();
+            @$tax_master_sgst = Tax::where('name','sgst')->first();
 
-            $tax_date = ItemTaxDetails::where('item_id',$id)
+            @$tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
-            $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+            @$tax_value =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
 
             /* start dynamic tax value */                    
-            $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+            @$tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
-            foreach ($tax_view as $key => $value) 
+            foreach (@$tax_view as $key => $value) 
             {
-              $tax_val[] = $value->value;
-              $tax_master[] = $value->tax_master_id;
+              @$tax_val[] = @$value->value;
+              @$tax_master[] = @$value->tax_master_id;
             }      
 
             $cnt = count($tax_master);               
 
             /* end dynamic tax value */                    
 
-            $sum = $tax_value + $items->category->gst_no;                            
-            $data[] = array('igst' => $sum,'tax_val' => $tax_val,'tax_master' =>$tax_master,'cnt' => $cnt);
+            $sum = @$tax_value + $items->category->gst_no;                            
+            $data[] = array('igst' => @$sum,'tax_val' => @$tax_val,'tax_master' =>@$tax_master,'cnt' => @$cnt);
             
             
         }  
         else
         {
-            $tax_master_cgst = Tax::where('name','cgst')->first();
-            $tax_master_sgst = Tax::where('name','sgst')->first();
+            @$tax_master_cgst = Tax::where('name','cgst')->first();
+            @$tax_master_sgst = Tax::where('name','sgst')->first();
 
-            $tax_date = ItemTaxDetails::where('item_id',$id)
+            @$tax_date = ItemTaxDetails::where('item_id',$id)
                                         ->orderBy('valid_from','DESC')
                                         ->whereDate('valid_from', '<=', Carbon::now())
-                                        ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                        ->where('tax_master_id','!=',$tax_master_sgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                        ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                         ->first('valid_from');
 
-            $tax_value =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
-                                ->where('tax_master_id','!=',$tax_master_cgst->id)
-                                ->where('tax_master_id','!=',$tax_master_sgst->id)
+           @$tax_value =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',@$tax_date->valid_from)
+                                ->where('tax_master_id','!=',@$tax_master_cgst->id)
+                                ->where('tax_master_id','!=',@$tax_master_sgst->id)
                                 ->sum('value');
+
+
 
 
             /* start dynamic tax value */
 
-            $tax_view =ItemTaxDetails::where('item_id','=',$id)
-                                ->where('valid_from',$tax_date->valid_from)
+            @$tax_view =ItemTaxDetails::where('item_id','=',$id)
+                                ->where('valid_from',@$tax_date->valid_from)
                                 ->get();
 
-            foreach ($tax_view as $key => $value) 
+            foreach (@$tax_view as $key => $value) 
             {
-              $tax_val[] = $value->value;
-              $tax_master[] = $value->tax_master_id;
+              @$tax_val[] = @$value->value;
+              @$tax_master[] = @$value->tax_master_id;
             }      
 
-            $cnt = count($tax_master);               
+            $cnt = count(@$tax_master);               
 
             /* end dynamic tax value */                     
 
-            $data[] = array('igst' => $tax_value,'tax_val' => $tax_val,'tax_master' =>$tax_master, 'cnt' => $cnt);    
+            $data[] = array('igst' => @$tax_value,'tax_val' => @$tax_val,'tax_master' =>@$tax_master, 'cnt' => @$cnt); 
+
+
 
         }          
          
-        $data[] =ItemBracodeDetails::where('item_id','=',$id)
+        @$data[] =ItemBracodeDetails::where('item_id','=',$id)
                                     ->select('barcode')
                                     ->first();
  
@@ -1509,42 +1720,48 @@ class SalesOrderController extends Controller
         
     }
 
-        $selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+        @$selling_price_setup = SellingPriceSetup::where('id',1)->first(); 
+
+        @$default_selling_price = Item::where('id',$id)->select('default_selling_price')->first();
+
 
         if(@$selling_price_setup != '' && @$selling_price_setup->setup == 2)
         {
-            $item_data = PurchaseEntryItem::where('item_id',$id)
+            @$item_data = PurchaseEntryItem::where('item_id',$id)
                                     ->orderBy('updated_at','DESC')
                                     ->latest()
                                     ->first();
 
-            $updated_selling_price = PriceUpdation::where('item_id',$id)
+
+            @$updated_selling_price = PriceUpdation::where('item_id',$id)
                                         ->where('status',1)
                                         ->whereDate('effective_from', '<=', Carbon::now())
                                         ->orderBy('updated_at','DESC')
                                         ->latest()
                                         ->select('mark_up_value','mark_up_type','mark_down_type','mark_down_value')
                                         ->first();
-            
+
             if($item_data == '')
             {
                 $unit_price = 0;
                 $discount = 0;
                 $item_rate = 0;
                 $tax = 0;
-            }
+            }  
             else
             {
                 $unit_price = @$item_data->rate_inclusive_tax;
                 $discount = @$item_data->discount / @$item_data->qty;
                 $item_rate = $unit_price - $discount;
 
-                $tax = @$item_data->gst;
-            }    
+                $tax = @$item_data->gst; 
+            }                                      
+
             
+
             if(@$updated_selling_price == '')
             {
-                $data['selling_price'] = @$items->default_selling_price;
+                $data['selling_price'] = @$default_selling_price->default_selling_price;
             }
             else
             {
@@ -1577,11 +1794,15 @@ class SalesOrderController extends Controller
         }  
         else
         {
-            $data['selling_price'] = @$items->default_selling_price;
+            
+            // echo($default_selling_price->default_selling_price); exit();
+
+            $data['selling_price'] = @$default_selling_price->default_selling_price;
+
         }
+        // echo(@$selling_price_setup->setup); exit();
 
-        $data['selling_price_type'] = $selling_price_setup->setup;
-
+        $data['selling_price_type'] = @$selling_price_setup->setup;
 
         $request->customer_id;
 
@@ -1611,39 +1832,42 @@ class SalesOrderController extends Controller
 
         }
 
-        $offers = DB::table('offers')->whereRaw('FIND_IN_SET(?,item_id)', [$id])->count();
+        @$offers = DB::table('offers')->whereRaw('FIND_IN_SET(?,item_id)', [$id])->count();
+        
         if($offers > 0)
         {
-            $offer_data = DB::table('offers')
+            @$offer_data = DB::table('offers')
                                 ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
                                 ->whereDate('valid_from', '<=', Carbon::now())
                                 ->whereDate('valid_to', '>=',Carbon::now())
                                 ->first();
-                                           
+            
+            // print_r($current_date); exit();                                
 
-         if($offer_data->offer_type == 'time')
+         if(@$offer_data->offer_type == 'time')
          {
                 $current_time = date('H:i:s');
 
-                if(strtotime($offer_data->from_time) <= strtotime($current_time) && strtotime($offer_data->to_time) >= strtotime($current_time))
+                if(strtotime(@$offer_data->from_time) <= strtotime($current_time) && strtotime(@$offer_data->to_time) >= strtotime($current_time))
                 {
-                    if($offer_data->variable == 'percentage')
+                    // print_r('hi'); exit();  
+                    if(@$offer_data->variable == 'percentage')
                     {
-                        $data['discount'] = $offer_data->percentage;
+                        $data['discount'] = @$offer_data->percentage;
                         $data['variable'] = '1';
                     }
                     else
                     {
-                        $data['discount'] = $offer_data->fixed_amount;
+                        $data['discount'] = @$offer_data->fixed_amount;
                         $data['variable'] = '0';
                     }
                 }
          }  
-         else if($offer_data->offer_type == 'day')
+         else if(@$offer_data->offer_type == 'day')
          {
             $current_date = date('d-m-Y');
               
-            $offer_datas = DB::table('offers')
+            @$offer_datas = DB::table('offers')
                                 ->whereRaw('FIND_IN_SET(?,item_id)', [$id])
                                 ->whereRaw('FIND_IN_SET(?,day_range_offers)', [$current_date])
                                 ->whereDate('valid_from', '<=', Carbon::now())
@@ -1651,34 +1875,140 @@ class SalesOrderController extends Controller
                                 ->first();
 
 
-             if($offer_datas->variable == 'percentage')
+             if(@$offer_datas->variable == 'percentage')
                 {
-                    $data['discount'] = $offer_datas->percentage;
+                    $data['discount'] = @$offer_datas->percentage;
                     $data['variable'] = '1';
                 }
                 else
                 {
-                    $data['discount'] = $offer_datas->fixed_amount;
+                    $data['discount'] = @$offer_datas->fixed_amount;
                     $data['variable'] = '0';
                 }                   
 
          }
-         else if($offer_data->offer_type == 'date')   
+         else if(@$offer_data->offer_type == 'date')   
          {
-            if($offer_data->variable == 'percentage')
+            if(@$offer_data->variable == 'percentage')
                 {
-                    $data['discount'] = $offer_data->percentage;
+                    $data['discount'] = @$offer_data->percentage;
                     $data['variable'] = '1';
                 }
                 else
                 {
-                    $data['discount'] = $offer_data->fixed_amount;
+                    $data['discount'] = @$offer_data->fixed_amount;
                     $data['variable'] = '0';
                 }
          }                  
 
         }
 
+
+        // SELECT count(id) as cid FROM offers WHERE FIND_IN_SET(1, `item_id`) > 0
+
+        // $data['offers'] = $offers;
+        // array_search($id, $offers);
+        // $array_data = array();
+        // $array_data_date = array();
+        // $new_arrray_data = [];
+        // foreach ($offers as $key => $value) 
+        // { 
+        //     $data['offers'] = $value->item_id;
+        //     $data['day_range_offers'] = $value->day_range_offers;
+        //     $data['offer_id'] = $value->id;
+
+        // }
+        // // array_push($new_arrray_data,$data['offers']);
+        // $array_data = explode(',',$data['offers']);
+        // $array_data_date = explode(',',$data['day_range_offers']);
+
+        // if(in_array($id,$array_data))
+        // {
+        //     $offer_id = $data['offer_id'];
+
+        //     $offer_data = DB::table('offers')->find($offer_id);
+
+            
+        //         $current_time = date('H:i:s');
+        //         $current_date = date('d-m-Y');
+
+        //         if($offer_data->valid_from <= $current_date && $offer_data->valid_to >= $current_date)
+        //         {
+        //             if($offer_data->offer_type == 'time')
+        //             {
+        //                 // return $data['discount_val'] = 'time';
+        //                 if(strtotime($offer_data->from_time) <= strtotime($current_time) && strtotime($offer_data->to_time) >= strtotime($current_time))
+        //                 {
+        //                     if($offer_data->variable == 'percentage')
+        //                     {
+        //                         $data['discount'] = $offer_data->percentage;
+        //                         $data['variable'] = '1';
+        //                     }
+        //                     else
+        //                     {
+        //                         $data['discount'] = $offer_data->fixed_amount;
+        //                         $data['variable'] = '0';
+        //                     }
+        //                 }
+        //             }
+        //                 else if($offer_data->offer_type == 'day')
+        //                 {
+        //                     // return $data['discount_val'] = 'day';
+        //                     if(in_array($current_date,$array_data_date))
+        //                     {
+        //                         return $data['discount_val'] = 'day';
+        //                         if($offer_data->variable == 'percentage')
+        //                         {
+        //                             $data['discount'] = $offer_data->percentage;
+        //                             $data['variable'] = '1';
+        //                         }
+        //                         else
+        //                         {
+        //                             $data['discount'] = $offer_data->fixed_amount;
+        //                             $data['variable'] = '0';
+        //                         }
+        //                     }
+        //                     else
+        //                     {
+        //                         return $data['discount_val'] = 'no';
+        //                     }
+        //                 }
+        //                 else if($offer_data->offer_type == 'date')
+        //                 {
+        //                     return $data['discount_val'] = 'date';
+        //                     // if($offer_data->valid_from <= $current_date && $offer_data->valid_to >= $current_date)
+        //                     // {
+        //                     //     if($offer_data->variable == 'percentage')
+        //                     //     {
+        //                     //         $data['discount'] = $offer_data->percentage;
+        //                     //         $data['variable'] = '1';
+        //                     //     }
+        //                     //     else
+        //                     //     {
+        //                     //         $data['discount'] = $offer_data->fixed_amount;
+        //                     //         $data['variable'] = '0';
+        //                     //     }
+        //                     // }
+        //                     // else
+        //                     // {
+
+        //                     // }
+
+        //                 }
+
+        //             }
+
+                
+
+        //         }
+            
+            // $data['offer_data'] = $offer_data;
+        // }
+        // else
+        // {
+        //     $data['new'] = 'no';
+        // }
+        
 
         return $data;
 

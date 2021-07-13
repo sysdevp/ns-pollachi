@@ -10,6 +10,8 @@ class Item extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = ['id','name','code','item_type','weight_in_grams','weight_in_kg','bulk_item_id','child_unit','child_item_id','uom_for_repack_item','category_id','brand_id','print_name_in_english','print_name_in_language_1','print_name_in_language_2','print_name_in_language_3','hsn','supplier_id','mrp','default_selling_price','uom_id','rate','amount','applicable_date','is_minimum_sales_qty_applicable','minimum_sales_price','minimum_sales_qty','uom_for_minimum_sales_item','is_expiry_date','is_machine_weight_applicable','expiry_date','remark','active_status','created_by','updated_by'];
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');

@@ -42,41 +42,33 @@ table, th, td {
 }*/
 /*#master_wrapper div.dt-buttons {
   z-index: 10;
-}*/
+}* {{route('individual_ledger.store')}} search_individual_ledger/
 </style>
     <div class="card-body">
     
-      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{route('stock_ageing.store')}}" enctype="multipart/form-data">
+      <form  method="post" class="form-horizontal needs-validation" novalidate action="{{url('ledger_report')}}" enctype="multipart/form-data">
       {{csrf_field()}}
-
         <div class="form-row mb-3">
-
         
-
           <div class="col-md-12 form-row mb-3">
-
             <div class="col-md-4">
                   <label style="font-family: Times new roman;">Head</label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" id="supplier_id">
+                      <select class="js-example-basic-multiple col-12 form-control custom-select head_id" name="head_id" id="head_id">
                            <option value="">Choose Head Name</option>
                            @foreach($head as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
                            @endforeach
                         </select>
                      </div>
-                     <a href="{{ route('account_head.create')}}" target="_blank">
-                     <button type="button"  class="px-2 btn btn-success ml-2" title="Add Supplier"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></a>
-                     <button type="button"  class="px-2 btn btn-success mx-2 refresh_supplier_id" title="Add Brand"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                 
                   </div>
                </div>
-
             <div class="col-md-2">
               <label>From</label>
             <input type="date" class="form-control from" name="from" id="from">
             </div>
-
             <div class="col-md-2">
               <label>To</label>
             <input type="date" class="form-control to" name="to" id="to">
@@ -86,10 +78,10 @@ table, th, td {
           </div>
           <div class="col-md-12 mb-3">
             <div class="col-md-2">
-            <input type="button" class="btn btn-success" value="Submit">
+            <input type="submit" class="btn btn-success" name="add" value="Submit">
             </div>
           </div>
-
+</form>
           <div class="col-md-12">
             <table class="table table-striped table-bordered" id="ageing_report">
                   <thead>
@@ -102,40 +94,38 @@ table, th, td {
                     
                   </thead>
                   <tbody>
-
+                    
+                   @foreach($array_details as $key=> $value)
+                  <tr>
+                      
+                      <td>{{ $key+1 }}</td>
+                      <td>{{ $value['date'] }}</td>
+                      <td>{{ $value['particular_db'] }}</td>
+                      <td>{{ $value['debit'] }}</td>
+                      <td>{{ $value['particular_cd'] }}</td>
+                      <td>{{ $value['credit'] }}</td>
+                    </tr>
+                    @endforeach
                   </tbody>
                   
                 </table>
           </div>
-
-          <div class="col-md-12 mb-3">
-          <table class="table table-striped table-bordered" id="day_book">
-                  <thead>
-                    <th> S.no </th>
-                    <th id="balnce">Opening Balance</th>
-                    <th id="debit"> Debit</th>
-                    <th id="crediit">Credit</th>
-                    <th id="closing"> Closing Balance</th>
-                    
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                  
-                </table>
-        </div>
+         
           
           
         </div>
         <!-- <div class="col-md-7 text-right">
           <button class="btn btn-success" name="add" type="submit">Submit</button>
         </div> -->
-      </form>
+      
     </div>
     <script src="{{asset('assets/js/master/capitalize.js')}}"></script>
     <script src="{{asset('assets/js/ageing_analysis/ageing.js')}}"></script>
-
     <script>
+      $(document).ready(function(){
+      
+       // alert();
+        });
       function hide_column()
       {
         $('input[type=checkbox]').each(function(){
@@ -145,7 +135,6 @@ table, th, td {
                 }
               });
       }
-
       function show_column()
       {
         $('input[type=checkbox]').each(function(){
@@ -162,4 +151,3 @@ table, th, td {
   </div>
 </div>
 @endsection
-

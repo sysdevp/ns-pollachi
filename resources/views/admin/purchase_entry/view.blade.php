@@ -79,7 +79,7 @@
     @endif
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover PurchaseEntry">
         <thead>
           <tr>
             <th>S.No</th>
@@ -147,6 +147,7 @@
                 @else
                 <a href="{{ url('purchase_entry/retrieve/'.$value->p_no) }}" class="px-2 py-1 bg-primary text-white rounded">Retrieve</a>
                 @endif
+				<a href="{{ url('purchase_entry/print_batchcode/'.$value->p_no) }}" class="px-1 py-0 bg-info text-white rounded" title="Print"><i class="fa fa-print" aria-hidden="true"></i></a>
 				</span>
               </td>
             </tr>

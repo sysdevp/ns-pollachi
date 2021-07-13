@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <style type="text/css">
@@ -60,10 +63,10 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
 <div class="col-md-12 row mb-3">
       <div class="col-md-3">
-                    <label style="font-family: Times new roman;">Item Name</label><br>
+                    <label style="font-family: Times new roman;">Item Name<?php echo Mandatoryfields::mandatory('bom_itemname');?></label><br>
                   <div class="form-group row">
                      <div class="col-sm-8">
-                      <select class="js-example-basic-multiple col-12 form-control custom-select itemname" name="itemname" id="itemname" >
+                      <select class="js-example-basic-multiple col-12 form-control custom-select itemname" name="itemname" required="" id="itemname" <?php //echo Mandatoryfields::validation('bom_itemname');?> autofocus >
                            <option value="">Choose Item Name</option>
                            @foreach($item as $value)
                            <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -87,8 +90,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
       <div class="row col-md-12">
 
         <div class="col-md-2">
-          <label style="font-family: Times new roman;">Item Code</label>
-          <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()">
+          <label style="font-family: Times new roman;">Item Code<?php echo Mandatoryfields::mandatory('bom_itemcode');?></label>
+          <input type="text" class="form-control item_code  required_for_proof_valid" placeholder="Item Code" id="item_code" name="item_code" value="" oninput="get_details()" <?php //echo Mandatoryfields::validation('bom_itemcode');?>>
 
           <input type="hidden" class="form-control items_codes  required_for_proof_valid" placeholder="Item Code" id="items_codes" name="items_codes" value="">
                
@@ -210,8 +213,8 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
 
 
                     <div class="col-md-2">
-                        <label style="font-family: Times new roman;">Quantity</label>
-                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="">
+                        <label style="font-family: Times new roman;">Quantity<?php //echo Mandatoryfields::mandatory('bom_quantity');?></label>
+                      <input type="number" class="form-control quantity" id="quantity"  placeholder="Quantity" name="quantity" onchange="qty()" pattern="[0-9]{0,100}" title="Numbers Only" value="" <?php //echo Mandatoryfields::validation('bom_quantity');?>>
                       </div>
 
                       <div class="col-md-2">
@@ -221,6 +224,19 @@ tbody#team-list tr:nth-child(n+1) td:first-child::before {
                       <input type="hidden" class="form-control uom_id  required_for_proof_valid"  placeholder="UOM" id="uom_id" name="uom_id" value="">
                        
                       </div>
+
+                      <div class="col-md-2">
+                      <label style="font-family: Times new roman;">Min Qty</label>
+                      <input type="number" class="form-control min_qty required_for_proof_valid"  placeholder="Min Qty" id="min_qty" name="min_qtys" value="">
+                       
+                      </div>
+                      <div class="col-md-2">
+                      <label style="font-family: Times new roman;">Max Qty</label>
+                      <input type="number" class="form-control max_qty required_for_proof_valid"  placeholder="Max Qty" id="max_qty" name="max_qtys" value="">
+
+                       
+                      </div>
+
                       </div>
                       
                       <!-- <div class="col-md-12 row">
@@ -249,7 +265,7 @@ table, th, td {
 </style>
 <div class="form-row">
              
-              <div class="col-md-3" id="middlecol">
+              <div class="col-md-5" id="middlecol">
                 
                 <table class="table table-responsive" style="float: right;" id="team-list">
                   <thead>
@@ -257,6 +273,8 @@ table, th, td {
                     <th> Item Code</th>
                     <th> Item Name</th>
                     <th> Quantity</th>
+                    <th>Min Qty </th>
+                    <th>Max Qty </th>
                     <th> UOM</th>
                     <th>Action </th>
                   </thead>
@@ -274,6 +292,8 @@ table, th, td {
                       <th></th>
                       <th></th>
                       <th></th>
+                      <th></th>
+                      <th></th>
                       
                     </tr>
                   </tfoot>
@@ -283,6 +303,22 @@ table, th, td {
                        </div>
 
                        <div class="row col-md-12 text-center">
+                       <div class="col-md-12 row">
+                        <div class="col-md-4">
+                          <label style="font-family: Times new roman;">Expense Type</label>
+                        <!-- <select class="form-control" name="black_or_white[]" multiple>
+                          <option value="1">W</option>
+                          <option value="0">B</option>
+                       </select> -->
+
+                       <select class="js-example-basic-multiple col-12 form-control custom-select itemname" name="account_group[]" id="account_group" multiple>
+                           <option value="">Choose AccountGroup Name</option>
+                           @foreach($account_group as $value)
+                           <option value="{{ $value->id }}">{{ $value->name }}</option>
+                           @endforeach
+                        </select>
+                        </div>
+                      </div>
                           <div class="col-md-12">
                             
                           <p>
@@ -329,6 +365,8 @@ function add_items()
  var item_name=$('.item_name').val();
  var mrp=$('.mrp').val();
  var quantity=$('.quantity').val();
+ var min_qty=$('.min_qty').val();
+ var max_qty=$('.max_qty').val();
  
 
  if(item_code == '' || quantity == '')
@@ -346,7 +384,7 @@ function add_items()
  {
 
  
-  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><font class="items'+i+'">'+item_code+'</font></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><input type="hidden" class="items_id" value="'+items_codes+'"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><i class="fa fa-eye px-2 py-1 bg-info  text-white rounded show_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-pencil px-2 py-1 bg-success  text-white rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger  text-white rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>'
+  var items='<tr id="row'+i+'" class="'+i+' tables"><td><span class="item_s_no"> 1 </span></td><td><font class="items'+i+'">'+item_code+'</font></td><td><div class="form-group row"><div class="col-sm-12"><input class="item_name'+i+'" type="hidden" value="'+item_name+'" name="item_name[]"><input type="hidden" class="item_code'+i+'" value="'+items_codes+'" name="item_code[]"><input type="hidden" class="items_id" value="'+items_codes+'"><font class="font_item_name'+i+'">'+item_name+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="quantity'+i+'" value="'+quantity+'" name="quantity[]"><font class="font_quantity'+i+'">'+quantity+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="min_qty'+i+'" value="'+min_qty+'" name="min_qty[]"><font class="font_min_qty'+i+'">'+min_qty+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="max_qty'+i+'" value="'+max_qty+'" name="max_qty[]"><font class="font_max_qty'+i+'">'+max_qty+'</font></div></div></td><td><div class="form-group row"><div class="col-sm-12"><input type="hidden" class="uom'+i+'" value="'+uom_id+'" name="uom[]"><font class="font_uom'+i+'">'+uom_name+'</font></div></div></td><td><i class="fa fa-pencil px-2 py-1 bg-success rounded edit_items" id="'+i+'" aria-hidden="true"></i><i class="fa fa-trash px-2 py-1 bg-danger rounded remove_items" id="'+i+'" aria-hidden="true"></i></td></tr>'
 
 var result_val;
 
@@ -397,6 +435,9 @@ $('.item_code').val('');
 $('.uom_name').val('');
 $('.uom_id').val('');
 $("select").select2();
+$("select").select2();
+$(".min_qty").val('');
+$(".max_qty").val('');
 }
 } 
 $(document).on("click",".add_items",function(){
@@ -486,6 +527,7 @@ $(document).on("click",".edit_items",function(){
   $('.update_items').show();
   $('.add_items').hide();
 
+
   var id = $(this).attr("id");
   $('#dummy_table_id').val(id);
   var invoice_no = $('.invoice_no'+id).val(); 
@@ -506,6 +548,9 @@ $(document).on("click",".edit_items",function(){
   var net_price = $('#net_price'+id).val(); 
   var last_purchase_rate = $('.last_purchase'+id).text();
 
+  var min_qty=$('.min_qty'+id).val();
+ var max_qty=$('.max_qty'+id).val();
+
   $('.exclusive_rate').val(exclusive);
   $('.inclusive_rate').val(inclusive);
   $('.item_sno').val(invoice_no);
@@ -522,6 +567,9 @@ $(document).on("click",".edit_items",function(){
   $('.uom').val(uom);
   $('.uom_name').val(uom_name);
   $('#last_purchase_rate').val(last_purchase_rate);
+
+  $('.min_qty').val(min_qty);
+  $('.max_qty').val(max_qty);
   var disc_value = parseFloat(discount_val)/parseFloat(quantity);
    $('.discount_rs').val(disc_value.toFixed(2));
    discount_calc();
@@ -564,7 +612,7 @@ $(document).on("click",".update_items",function(){
  var inclusive=$('#inclusive').val();
  var net_price=$('.net_price').val();
   
-  if(item_code == '' || invoice_no == '' || quantity == '' || exclusive == '' && inclusive == '')
+  if(item_code == '' || quantity == '')
  {
   alert('Please Fill All The Input Fields');
  }
@@ -584,6 +632,10 @@ $(document).on("click",".update_items",function(){
  else
  {
   
+  $('.min_qty'+td_id).val($('.min_qty').val());
+  $('.font_min_qty'+td_id).text($('.min_qty').val());
+  $('.font_max_qty'+td_id).text($('.max_qty').val());
+  $('.max_qty'+td_id).val($('.max_qty').val());
   $('.invoice_no'+td_id).val($('.item_sno').val());
   $('.item_no'+td_id).text($('.item_sno').val());
   $('.item_code'+td_id).val($('.items_codes').val());
@@ -615,9 +667,8 @@ $(document).on("click",".update_items",function(){
     $('.discount_val'+td_id).val(discount);
     $('#font_discount'+td_id).text(discount);
     $('#input_discount'+td_id).val(discount);
-    var q=calculate_total_discount();
-    $('#total_discount').val(q.toFixed(2));
-    $('#disc_total').val(q.toFixed(2));
+    // $('#total_discount').val(q.toFixed(2));
+    // $('#disc_total').val(q.toFixed(2));
 
    }
    else
@@ -625,29 +676,28 @@ $(document).on("click",".update_items",function(){
     $('.discount_val'+td_id).val($('#discounts').val());
     $('#font_discount'+td_id).text($('#discounts').val());
     $('#input_discount'+td_id).val($('#discounts').val());
-    var q=calculate_total_discount();
-    $('#total_discount').val(q.toFixed(2));
-    $('#disc_total').val(q.toFixed(2));
+    // $('#total_discount').val(q.toFixed(2));
+    // $('#disc_total').val(q.toFixed(2));
    }
 
   $('#net_price'+td_id).val($('.net_price').val());
   $('.font_net_price'+td_id).text($('.net_price').val());
 
-  var total_net_price=calculate_total_net_price();
-  var total_amount=calculate_total_amount();
-  var total_gst=calculate_total_gst();
-  $("#total_price").val(total_net_price.toFixed(2));
-  $(".total_net_value").text(total_net_price.toFixed(2));
-  $("#total_amount").val(total_amount.toFixed(2));
-  $("#total_gst").val(total_gst.toFixed(2));
-  $("#igst").val(total_gst.toFixed(2));
-  var half_gst = parseFloat(total_gst)/2;
-  $("#cgst").val(half_gst.toFixed(2));
-  $("#sgst").val(half_gst.toFixed(2));
-  var to_html_total_net = total_net_price.toFixed(2);
-  var to_html_total_amount = total_amount.toFixed(2);
-  $(".total_net_price").html(parseFloat(to_html_total_net));
-  $(".total_amount").html(parseFloat(to_html_total_amount));
+  // var total_net_price=calculate_total_net_price();
+  // var total_amount=calculate_total_amount();
+  // var total_gst=calculate_total_gst();
+  // $("#total_price").val(total_net_price.toFixed(2));
+  // $(".total_net_value").text(total_net_price.toFixed(2));
+  // $("#total_amount").val(total_amount.toFixed(2));
+  // $("#total_gst").val(total_gst.toFixed(2));
+  // $("#igst").val(total_gst.toFixed(2));
+  // var half_gst = parseFloat(total_gst)/2;
+  // $("#cgst").val(half_gst.toFixed(2));
+  // $("#sgst").val(half_gst.toFixed(2));
+  // var to_html_total_net = total_net_price.toFixed(2);
+  // var to_html_total_amount = total_amount.toFixed(2);
+  // $(".total_net_price").html(parseFloat(to_html_total_net));
+  // $(".total_amount").html(parseFloat(to_html_total_amount));
 
   
 

@@ -12,6 +12,7 @@
         </div>
         <div class="col-8 mr-auto">
           <ul class="h-right-btn mb-0 pl-0">
+            <li><button type="button" class="btn"><a target="_blank" href="{{url('master/location/import-data')}}"><i class="fa fa-plus"></i>  Bulk Import</a></button></li>
             <li><button type="button" class="btn btn-success"><a href="{{url('master/location/create')}}">Add Location</a></button></li>
           </ul>
         </div>
@@ -19,7 +20,7 @@
     </div>
     <!-- card header end@ -->
     <div class="card-body">
-      <table id="master" class="table table-bordered table-hover">
+      <table id="master" class="table table-bordered table-hover CompanyLocation">
         <thead>
           <tr>
             <th>S.No</th>

@@ -1,5 +1,8 @@
 @extends('admin.layout.app')
 @section('content')
+<?php
+use App\Mandatoryfields;
+?>
 <main class="page-content">
 
 <div class="col-12 body-sec">
@@ -24,9 +27,9 @@
             <div class="form-row mb-6">
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Item Name <?php echo Mandatoryfields::mandatory('item_name');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Item Name" name="name" value="{{old('name')}}" required>
+                        <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Item Name" name="name" value="{{old('name')}}" <?php echo Mandatoryfields::validation('item_name');?> autofocus>
                         <span class="mandatory"> {{ $errors->first('name')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Item Name
@@ -36,9 +39,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Item Code <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Item Code <?php echo Mandatoryfields::mandatory('item_code');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control code only_allow_alp_num_dot_com_amp" placeholder="Item Code" name="code" value="{{old('code')}}" required>
+                        <input type="text" class="form-control code only_allow_alp_num_dot_com_amp" placeholder="Item Code" name="code" value="{{old('code')}}" <?php echo Mandatoryfields::validation('item_code');?>>
                         <span class="mandatory"> {{ $errors->first('code')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Item Code
@@ -48,9 +51,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label"> Brand <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label"> Brand <?php echo Mandatoryfields::mandatory('item_brandid');?></label>
                      <div class="col-sm-6">
-                        <select class="js-example-basic-multiple col-12 form-control custom-select brand_id" name="brand_id" required>
+                        <select class="js-example-basic-multiple col-12 form-control custom-select brand_id" name="brand_id" <?php echo Mandatoryfields::validation('item_brandid');?>>
                            <option value="">Choose Brand</option>
                            <option value="0" {{ old('brand_id') == "0" ? 'selected' : '' }}> Not Applicable </option>
                            @foreach ($brand as $value)
@@ -69,9 +72,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label"> Category <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label"> Category <?php echo Mandatoryfields::mandatory('item_categoryid');?></label>
                      <div class="col-sm-6">
-                        <select class="js-example-basic-multiple col-12 form-control custom-select category_id" name="category_id" required>
+                        <select class="js-example-basic-multiple col-12 form-control custom-select category_id" name="category_id" <?php echo Mandatoryfields::validation('item_categoryid');?>>
                            <option value="">Choose Category</option>
                            @foreach ($category as $value)
                            <option value="{{ $value->id }}" {{ old('category_id') == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
@@ -89,9 +92,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label"> Item Type <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label"> Item Type <?php echo Mandatoryfields::mandatory('item_itemtype');?></label>
                      <div class="col-sm-8">
-                        <select class="js-example-basic-multiple col-12 form-control custom-select item_type" name="item_type" required>
+                        <select class="js-example-basic-multiple col-12 form-control custom-select item_type" name="item_type" <?php echo Mandatoryfields::validation('item_itemtype');?>>
                            <option value="">Choose Item Type</option>
                            <option value="Direct" selected  {{ old('item_type') == "Direct" ? 'selected' : '' }}  >Direct</option>
                            <option value="Bulk" {{ old('item_type') == "Bulk" ? 'selected' : '' }}  >Bulk</option>
@@ -181,9 +184,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Weight In Grams <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Weight In Grams <?php echo Mandatoryfields::mandatory('item_weightingrams');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control weight_in_grams only_allow_digit_and_dot" placeholder="Weight In Grams " name="weight_in_grams" value="{{old('weight_in_grams')}}" >
+                        <input type="text" class="form-control weight_in_grams only_allow_digit_and_dot" placeholder="Weight In Grams " name="weight_in_grams" value="{{old('weight_in_grams')}}" <?php echo Mandatoryfields::validation('item_weightingrams');?>>
                         <span class="mandatory"> {{ $errors->first('weight_in_grams')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Weight In Grams
@@ -193,9 +196,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in English <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in English <?php echo Mandatoryfields::mandatory('item_printnameinenglish');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control print_name_in_english only_allow_alp_num_dot_com_amp" placeholder="Print Name in English " name="print_name_in_english" value="{{old('print_name_in_english')}}" required>
+                        <input type="text" class="form-control print_name_in_english only_allow_alp_num_dot_com_amp" placeholder="Print Name in English " name="print_name_in_english" value="{{old('print_name_in_english')}}" <?php echo Mandatoryfields::validation('item_printnameinenglish');?>>
                         <span class="mandatory"> {{ $errors->first('print_name_in_english')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Print Name in English 
@@ -210,9 +213,9 @@
                @endphp
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in {{$language_1}}</label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in {{$language_1}}<?php echo Mandatoryfields::mandatory('item_printnameinlanguage1');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control print_name_in_language_1 only_allow_alp_num_dot_com_amp" placeholder="Print Name in {{ $language_1 }}" name="print_name_in_language_1" value="{{old('print_name_in_language_1')}}" >
+                        <input type="text" class="form-control print_name_in_language_1 only_allow_alp_num_dot_com_amp" placeholder="Print Name in {{ $language_1 }}" name="print_name_in_language_1" value="{{old('print_name_in_language_1')}}" <?php echo Mandatoryfields::validation('item_printnameinlanguage1');?>>
                         <span class="mandatory"> {{ $errors->first('print_name_in_language_1')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Print Name in {{ $language_1 }}
@@ -222,9 +225,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in {{$language_2}} </label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in {{$language_2}} <?php echo Mandatoryfields::mandatory('item_printnameinlanguage2');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control print_name_in_language_2 only_allow_alp_num_dot_com_amp" placeholder="Print Name in {{ $language_2 }}" name="print_name_in_language_2" value="{{old('print_name_in_language_2')}}" >
+                        <input type="text" class="form-control print_name_in_language_2 only_allow_alp_num_dot_com_amp" placeholder="Print Name in {{ $language_2 }}" name="print_name_in_language_2" value="{{old('print_name_in_language_2')}}" <?php echo Mandatoryfields::validation('item_printnameinlanguage2');?>>
                         <span class="mandatory"> {{ $errors->first('print_name_in_language_2')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Print Name in {{ $language_2 }}
@@ -234,9 +237,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in {{$language_3}} </label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Print Name in {{$language_3}} <?php echo Mandatoryfields::mandatory('item_printnameinlanguage3');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control print_name_in_language_3 only_allow_alp_num_dot_com_amp" placeholder="Print Name in {{ $language_3 }}" name="print_name_in_language_3" value="{{old('print_name_in_language_3')}}">
+                        <input type="text" class="form-control print_name_in_language_3 only_allow_alp_num_dot_com_amp" placeholder="Print Name in {{ $language_3 }}" name="print_name_in_language_3" value="{{old('print_name_in_language_3')}}" <?php echo Mandatoryfields::validation('item_printnameinlanguage3');?>>
                         <span class="mandatory"> {{ $errors->first('print_name_in_language_3')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Print Name in {{ $language_3 }}
@@ -259,9 +262,9 @@
                
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Hsn Code </label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Hsn Code <?php echo Mandatoryfields::mandatory('item_hsn');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control hsn only_allow_alp_num_dot_com_amp" placeholder="Hsn Code" name="hsn" value="{{old('hsn')}}">
+                        <input type="text" class="form-control hsn only_allow_alp_num_dot_com_amp" placeholder="Hsn Code" name="hsn" value="{{old('hsn')}}" <?php echo Mandatoryfields::validation('item_hsn');?>>
                         <span class="mandatory"> {{ $errors->first('hsn')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Hsn Code 
@@ -271,9 +274,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">MRP <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">MRP <?php echo Mandatoryfields::mandatory('item_mrp');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control only_allow_digit_and_dot mrp only_allow_alp_num_dot_com_amp" placeholder="MRP" name="mrp" value="{{old('mrp')}}" required>
+                        <input type="text" class="form-control only_allow_digit_and_dot mrp only_allow_alp_num_dot_com_amp" placeholder="MRP" name="mrp" value="{{old('mrp')}}" <?php echo Mandatoryfields::validation('item_mrp');?>>
                         <span class="mandatory"> {{ $errors->first('mrp')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid MRP 
@@ -283,9 +286,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Default Selling Price <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Default Selling Price <?php echo Mandatoryfields::mandatory('item_defaultsellingprice');?></label>
                      <div class="col-sm-8">
-                        <input type="text" class="form-control only_allow_digit_and_dot default_selling_price only_allow_alp_num_dot_com_amp" placeholder="Default Selling Price" name="default_selling_price" value="{{old('default_selling_price')}}" required>
+                        <input type="text" class="form-control only_allow_digit_and_dot default_selling_price only_allow_alp_num_dot_com_amp" placeholder="Default Selling Price" name="default_selling_price" value="{{old('default_selling_price')}}" <?php echo Mandatoryfields::validation('item_defaultsellingprice');?>>
                         <span class="mandatory"> {{ $errors->first('default_selling_price')  }} </span>
                         <div class="invalid-feedback">
                            Enter valid Default Selling Price 
@@ -295,9 +298,9 @@
                </div>
                <div class="col-md-6">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">UOM <span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">UOM <?php echo Mandatoryfields::mandatory('item_uomid');?></label>
                      <div class="col-sm-6">
-                        <select class="js-example-basic-multiple col-12 form-control custom-select uom_id" name="uom_id" required>
+                        <select class="js-example-basic-multiple col-12 form-control custom-select uom_id" name="uom_id" <?php echo Mandatoryfields::validation('item_uomid');?>>
                            <option value="">Choose UOM</option>
                            @foreach ($uom as $value)
                            <option value="{{ $value->id }}" {{ old('uom_id') == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
@@ -447,9 +450,9 @@
                
                <div class="col-md-6 mb-3">
                   <div class="form-group row">
-                     <label for="validationCustom01" class="col-sm-4 col-form-label">Supplier</label>
+                     <label for="validationCustom01" class="col-sm-4 col-form-label">Supplier<?php echo Mandatoryfields::mandatory('item_supplierid');?></label>
                      <div class="col-sm-6">
-                        <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id">
+                        <select class="js-example-basic-multiple col-12 form-control custom-select supplier_id" name="supplier_id" <?php echo Mandatoryfields::validation('item_supplierid');?>>
                            <option value="">Choose Supplier</option>
                            @foreach ($supplier as $value)
                            <option value="{{ $value->id }}" {{ old('supplier_id') == $value->id ? 'selected' : '' }}  >{{ $value->name }}</option>
@@ -499,9 +502,9 @@
 
                   <div class="col-md-2">
                   <!-- <div class="form-group row"> -->
-                     <label for="validationCustom01" class="">Opening Quantity<span class="mandatory">*</span></label>
+                     <label for="validationCustom01" class="">Opening Quantity</label>
                      <!-- <div class="col-sm-8"> -->
-                       <input type="number" required="" id="quantity" placeholder="Opening Quantity" name="quantity[]" class="form-control quantity mandatory" >
+                       <input type="number" id="quantity" placeholder="Opening Quantity" name="quantity[]" value="0" class="form-control quantity" >
                      <!-- </div> -->
                      <span class="mandatory"> {{ $errors->first('quantity')}} </span>
                      <div class="invalid-feedback">
@@ -515,7 +518,7 @@
                   <!-- <div class="form-group row"> -->
                      <label for="validationCustom01" class="">Rate</label>
                      <!-- <div class="col-sm-8"> -->
-                       <input type="text" placeholder="Rate" id="rate" name="rate[]" class="form-control rate" >
+                       <input type="text" placeholder="Rate" id="rate" name="rate[]" value="0" class="form-control rate" >
                      <!-- /div>
                      
                   </div> -->
@@ -525,7 +528,7 @@
                   <!-- <div class="form-group row"> -->
                      <label for="validationCustom01" class="">Amount</label>
                      <!-- <div class="col-sm-8"> -->
-                       <input type="text" name="amount[]" readonly="" id="amount" placeholder="Amount" class="form-control amount" >
+                       <input type="text" name="amount[]" value="0" readonly="" id="amount" placeholder="Amount" class="form-control amount" >
                      <!-- </div>
                      
                   </div> -->
@@ -920,9 +923,9 @@ $(document).on('click','#add_opening',function(){
                </div>\
                   <div class="col-md-2">\
                   <!-- <div class="form-group row"> -->\
-                     <label for="validationCustom01" class="">Opening Quantity<span class="mandatory">*</span></label>\
+                     <label for="validationCustom01" class="">Opening Quantity</label>\
                      <!-- <div class="col-sm-8"> -->\
-                       <input type="text" required="" placeholder="Opening Quantity" name="quantity[]" class="form-control quantity mandatory" >\
+                       <input type="text" placeholder="Opening Quantity" value="0" name="quantity[]" class="form-control quantity" >\
                      <!-- </div> -->\
                      <span class="mandatory"> </span>\
                      <div class="invalid-feedback">\
@@ -934,7 +937,7 @@ $(document).on('click','#add_opening',function(){
                   <!-- <div class="form-group row"> -->\
                      <label for="validationCustom01" class="">Rate</label>\
                      <!-- <div class="col-sm-8"> -->\
-                       <input type="text" placeholder="Rate" name="rate[]" class="form-control rate" >\
+                       <input type="text" placeholder="Rate" value="0" name="rate[]" class="form-control rate" >\
                      <!-- /div>\
                   </div> -->\
                </div>\
@@ -942,7 +945,7 @@ $(document).on('click','#add_opening',function(){
                   <!-- <div class="form-group row"> -->\
                      <label for="validationCustom01" class="">Amount</label>\
                      <!-- <div class="col-sm-8"> -->\
-                       <input type="text" name="amount[]" readonly placeholder="Amount" class="form-control amount" >\
+                       <input type="text" name="amount[]" value="0" readonly placeholder="Amount" class="form-control amount" >\
                      <!-- </div>\
                      \
                   </div> -->\

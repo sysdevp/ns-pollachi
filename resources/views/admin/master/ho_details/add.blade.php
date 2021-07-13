@@ -28,7 +28,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Location Name <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Location Name" name="name" value="{{old('name')}}" required>
+                <input type="text" class="form-control name only_allow_alp_num_dot_com_amp caps" placeholder="Location Name" name="name" value="{{old('name')}}" required tabindex="1" autofocus>
                 <span class="mandatory"> {{ $errors->first('name')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Location Name
@@ -41,7 +41,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">GST Number <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control gst_number" style="text-transform: uppercase;" placeholder="Gst Number" name="gst_number" value="{{old('gst_number')}}" maxlength="15" required>
+                <input type="text" class="form-control gst_number" style="text-transform: uppercase;" placeholder="Gst Number" name="gst_number" value="{{old('gst_number')}}" maxlength="15" required tabindex="2">
                 <span class="mandatory"> {{ $errors->first('gst_number')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid GST Number
@@ -54,7 +54,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 1 <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_1 caps" placeholder="Address Line 1" name="address_line_1" value="{{old('address_line_1')}}" required>
+                <input type="text" class="form-control address_line_1 caps" placeholder="Address Line 1" name="address_line_1" value="{{old('address_line_1')}}" required tabindex="3">
                 <span class="mandatory"> {{ $errors->first('address_line_1')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -67,7 +67,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">Address Line 2 </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control address_line_2 caps" placeholder="Address Line 2" name="address_line_2" value="{{old('address_line_2')}}">
+                <input type="text" class="form-control address_line_2 caps" placeholder="Address Line 2" name="address_line_2" value="{{old('address_line_2')}}" tabindex="4">
                 <span class="mandatory"> {{ $errors->first('address_line_2')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Address
@@ -80,7 +80,7 @@
             <div class="form-group row">
               <label for="land_mark" class="col-sm-4 col-form-label">Land Mark </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control land_mark caps" placeholder="Land Mark" name="land_mark" value="{{old('land_mark')}}">
+                <input type="text" class="form-control land_mark caps" placeholder="Land Mark" name="land_mark" value="{{old('land_mark')}}" tabindex="5">
                 <span class="mandatory"> {{ $errors->first('land_mark')  }} </span>
                 <div class="invalid-feedback">
                 Enter valid Land Mark
@@ -94,7 +94,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">State <span class="mandatory">*</span></label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" required>
+                <select class="js-example-basic-multiple form-control col-12 custom-select state_id" name="state_id" required tabindex="6">
                   <option value="">Choose State</option>
                   @foreach($state as $value)
                   <option value="{{ $value->id }}" {{ old('state_id') == $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
@@ -116,7 +116,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">District </label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 custom-select district_id" name="district_id">
+                <select class="js-example-basic-multiple col-12 custom-select district_id" name="district_id" tabindex="7">
                   <option value="">Choose District</option>
                   
                 </select>
@@ -137,7 +137,7 @@
             <div class="form-group row">
               <label for="validationCustom01" class="col-sm-4 col-form-label">City </label>
               <div class="col-sm-6">
-                <select class="js-example-basic-multiple col-12 custom-select city_id" name="city_id" >
+                <select class="js-example-basic-multiple col-12 custom-select city_id" name="city_id" tabindex="8">
                   <option value="">Choose City</option>
                  </select>
                 <span class="mandatory"> {{ $errors->first('city_id')  }} </span>
@@ -157,7 +157,7 @@
             <div class="form-group row">
               <label for="land_mark" class="col-sm-4 col-form-label">Postal Code <span class="mandatory">*</span></label>
               <div class="col-sm-8">
-                <input type="text" class="form-control only_allow_digit postal_code" placeholder="Postal Code" name="postal_code" value="{{old('postal_code')}}" maxlength="6" required>
+                <input type="text" class="form-control only_allow_digit postal_code" placeholder="Postal Code" name="postal_code" value="{{old('postal_code')}}" maxlength="6" required tabindex="9">  
                 <span class="mandatory"> {{ $errors->first('postal_code')  }} </span>
                 <div class="invalid-feedback">
                   Enter valid Postal Code
@@ -168,7 +168,7 @@
 
         </div>
         <div class="col-md-7 text-right">
-          <button class="btn btn-success" name="add" type="submit">Submit</button>
+          <button class="btn btn-success" name="add" type="submit" tabindex="10">Submit</button>
         </div>
       </form>
     </div>
